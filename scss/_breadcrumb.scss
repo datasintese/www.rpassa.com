@@ -1,0 +1,181 @@
+/* Find Car Banner Area css
+============================================================================================ */
+.find_car_area{
+	background: url(../img/home-banner/car-rental-banner.jpg) no-repeat scroll center center;
+	min-height: 900px;
+	display: flex;
+		align-self: center;
+	.container{
+		align-self: center;
+		display: flex;
+		vertical-align: middle;
+		justify-content: center;
+		height: 100%;
+		.find_car_inner{
+			text-align: center;
+			width: 100%;
+			h2{
+				color: #fff;
+				font: bold 60px $bar;
+				margin-bottom: 15px;
+			}
+			p{
+				color: #fff;
+				font: normal 24px $bar;
+				margin-bottom: 52px;
+			}
+		}
+		.search_car_box{
+			background: rgba(0, 0, 0, .5);
+			padding: 50px 28px;
+			width: 100%;
+			display: flex;
+			flex-wrap: wrap;
+			.search_car_item{
+				padding: 0px 2px;
+				flex: 0 0 37.5%;
+				max-width: 37.5%;
+				input{
+					height: 60px;
+					border-radius: 0px;
+					outline: none;
+					box-shadow: none;
+					padding: 0px 20px;
+					font: normal 16px/60px $bar;
+					color: $pfont;
+					border: none;
+					@include placeholder{
+						font: normal 16px/60px $bar;
+						color: $pfont;
+					}
+				}
+				&:nth-child(2){
+					flex: 0 0 22.5%;
+					max-width: 22.5%;
+				}
+				&:nth-child(3){
+					flex: 0 0 22.5%;
+					max-width: 22.5%;
+				}
+				&:nth-child(4){
+					flex: 0 0 17.5%;
+					max-width: 17.5%;
+				}
+				.form-group{
+					position: relative;
+					.input-group{
+						height: 60px;
+					}
+					.text_div{
+						background: #fff;
+						display: block;
+						width: 100%;
+						position: absolute;
+						left: 0px;
+						top: 0px;
+						height: 60px;
+						text-align: left;
+						padding-left: 50px;
+						font: 600 16px/60px $bar;
+						color: $dip;
+						span{
+							font-weight: normal;
+							color: $pfont;
+							float: right;
+							padding-right: 20px;
+						}
+					}
+					.input-group-text{
+						position: absolute;
+						left: 18px;
+						top: 50%;
+						transform: translateY(-50%);
+						z-index: 5;
+						background: transparent;
+						border: none;
+						padding: 0px;
+						font-size: 20px;
+						color: $dip;
+					}
+					input{
+						position: absolute;
+						left: 0px;
+						top: 0px;
+						background: transparent;
+						width: 100%;
+						height: 60px;
+						border: none;
+						padding-left: 50px;
+						line-height: 60px;
+						outline: none;
+						box-shadow: none;
+						&:focus{
+							background: #fff;
+						}
+						&.white{
+							background: #fff;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+/* End Find Car Banner Area css
+============================================================================================ */
+
+/* BreadCrumb Area css
+============================================================================================ */
+.breadcrumb_area{
+	background-size: cover !important;
+	padding: 120px 0px 118px 0px;
+	position: relative;
+	z-index: 2;
+	background-repeat: no-repeat !important;
+	&:before{
+		content: "";
+		background: rgba(0, 0, 0, .5);
+		position: absolute;
+		left: 0px;
+		top: 0px;
+		height: 100%;
+		width: 100%;
+		z-index: -1;
+	}
+	.breadcrumb_inner{
+		text-align: center;
+		color: #fff;
+		h3{
+			font: bold 60px $bar;
+			margin-bottom: 12px;
+		}
+		.link{
+			a{
+				color: #fff;
+				font: normal 18px $bar;
+				margin-right: 12px;
+				display: inline-block;
+				position: relative;
+				&:before{
+					content: "\f105";
+					font-family: 'icomoon' !important;
+					color: #fff;
+					font-size: 16px;
+					position: absolute;
+					right: -11px;
+					top: 50%;
+					transform: translateY(-50%);
+				}
+				&:last-child{
+					margin-right: 0px;
+					&:before{
+						display: none;
+					}
+				}
+			}
+		}
+	}
+}
+/* End BreadCrumb Area css
+============================================================================================ */

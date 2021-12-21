@@ -1,0 +1,1012 @@
+/* Find Car Form Area css
+============================================================================================ */
+.find_form{
+	margin-top: -50px;
+	position: relative;
+	.find_title{
+		display: inline-block;
+		color: #fff;
+		font: bold 20px/50px $bar;
+		padding: 0px 30px;
+		
+		i{
+			padding-right: 5px;
+		}
+	}
+	&.pest_form{
+		.find_title{
+			background: $pest;
+			font-weight: bold;
+		}
+		.find_form_inner{
+			background: $pest;
+			.find_item{
+				.submit_btn{
+					border: none;
+					line-height: 50px;
+					&:hover{
+						color: #fff;
+						background: #e4390c;
+						border-color: #e4390c; 
+					}
+				}
+			}
+		}
+	}
+}
+.find_form_inner{
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-top: 50px;
+	padding-bottom: 50px;
+	box-shadow: 0px 20px 75px 0px rgba(86, 96, 100, 0.1);
+}
+.find_item{
+    flex: 0 0 20%;
+    max-width: 20%;
+    padding-left: 10px;
+    padding-right: 10px;
+    .nice_select{
+        width: 100%;
+        background: #fff;
+        border-radius: 0px;
+        height: 50px;
+        line-height: 50px;
+        padding: 0px 20px;
+        outline: non !important;
+        box-shadow: none !important;
+        .current{
+            font: normal 16px $bar;
+            color: $dip;
+        }
+        .list{
+            border: none;
+            border-radius: 0px;
+            width: 100%;
+        }
+        &:after{
+            content: "\f107";
+            font: normal normal normal 14px/1 FontAwesome;
+            border: none;
+            transform: rotate(0);
+            right: 22px;
+            margin-top: -5px;
+        }
+    }
+    .submit_btn{
+        line-height: 48px;
+        background: #1e1e1e;
+        border-color: #1e1e1e;
+        &:hover{
+            color: #fff;
+            box-shadow: 0px 10px 10px 3px rgba(0,0,0,0.10) !important; 
+        }
+    }
+}
+/*========== day_picker css =======*/
+.day_picker{
+    float: none;
+    display: inline-block;
+    border-radius: 0px;
+    border-color: #e0e0e0;
+    height: 30px;
+    line-height: 28px;
+    padding-left: 9px;
+    margin-right: 15px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    width: 115px;
+    &:focus{
+        border-color: #e0e0e0;
+    }
+    &:after{
+        margin-top: -3px;
+    }
+    ul{
+        li.option{
+            font-size: 14px;
+            color: #34373b;
+            font-weight: 500;
+            line-height: 30px;
+            padding-left: 10px;
+            min-height: 30px;
+            padding-right: 23px;
+            border-radius: 0px;
+        }
+    }
+}
+/* End Find Car Form Area css
+============================================================================================ */
+
+/* Contact Form Area css
+============================================================================================ */
+.contact_form{
+	.form-group{
+		margin-bottom: 25px;
+		input{
+			height: 50px;
+			border: none;
+			border-radius: 0px;
+			background: #f3f3f8;
+			padding: 0px 24px;
+			font: normal 16px/50px $bar;
+			color: $pfont;
+			outline: none;
+            border: 1px solid transparent;
+			box-shadow: none;
+            transition: all 0.2s linear;
+			@include placeholder{
+				font: normal 16px/50px $bar;
+				color: $pfont;
+			}
+		}
+		textarea{
+			height: 250px;
+			border: none;
+			border-radius: 0px;
+			background: #f3f3f8;
+			padding: 20px 24px;
+			font: normal 16px $bar;
+			color: $pfont;
+			outline: none;
+			box-shadow: none;
+			resize: none;
+            border: 1px solid transparent;
+            transition: all 0.2s linear;
+			@include placeholder{
+				font: normal 16px $bar;
+				color: $pfont;
+			}
+            &:focus{
+                border-color: $baseColor;
+            }
+		}
+		.nice_select{
+			border: none;
+			box-shadow: none;
+			border-radius: 0px;
+			width: 100%;
+			background: #f3f3f8;
+			height: 50px;
+			padding-top: 0px;
+			padding-bottom: 0px;
+			padding-left: 24px;
+			padding-right: 24px;
+			line-height: 50px;
+			.current{
+				font: normal 16px $bar;
+				color: $pfont;
+			}
+			&:after{
+				content: "\f0d7";
+				font-family: 'icomoon' !important;
+				transform: rotate(0);
+				border: none;
+				font-size: 16px;
+				color: $pfont;
+				margin-top: -24px;
+				right: 25px;
+			}
+			.list{
+				width: 100%;
+				border-radius: 0px;
+			}
+		}
+		.submit_btn{
+			width: 100%;
+			line-height: 48px;
+			border-radius: 0px;
+			&:hover{
+				
+			}
+		}
+		&:last-child{
+			margin-bottom: 0px;
+		}
+	}
+}
+/* End Contact Form Area css
+============================================================================================ */
+
+/* Contact Directly Area css
+============================================================================================ */
+.contact_directly_area{
+	padding-left: 100px;
+	padding-right: 100px;
+	.contact_directly_bg{
+		background: url(../img/c-directly-bg.jpg) no-repeat scroll center center;
+		background-size: cover;
+		position: relative;
+		.reg_form_inner{
+			background: #fff;
+			max-width: 500px;
+			padding-left: 65px;
+			padding-right: 65px;
+			padding-top: 40px;
+			padding-bottom: 45px;
+			margin-bottom: -68px;
+			h2{
+				font: normal 30px $bar;
+				color: #101010;
+				margin-bottom: 20px;
+			}
+			.contact_form{
+				.form-group{
+					margin-bottom: 20px;
+					input{
+						background: transparent;
+						border-bottom: 1px solid #e7e8e9;
+						padding: 0px 0px;
+						height: 50px;
+					}
+					.border_btn{
+						width: 100%;
+					}
+					&:last-child{
+						margin-top: 20px;
+					}
+				}
+			}
+		}
+		.contact_info{
+			margin-top: 50px;
+			h2{
+				font: normal 48px $bar;
+				color: #fff;
+				margin-bottom: 55px;
+				position: relative;
+				&:before{
+					content: "";
+					height: 2px;
+					width: 50px;
+//					background: $baseColor;
+					position: absolute;
+					left: 0px;
+					bottom: -30px;
+				}
+			}
+			h3{
+				font: normal 24px $bar;
+				color: #fff;
+				margin-bottom: 15px;
+			}
+			p{
+				position: relative;
+				padding-left: 30px;
+				color: #fff;
+				margin-bottom: 16px;
+				i{
+					position: absolute;
+					left: 0px;
+					top: 7px;
+//					color: $baseColor;
+				}
+			}
+			h5{
+				font-weight: normal;
+				position: relative;
+				margin-bottom: 18px;
+				display: block;
+				i{
+					position: absolute;
+					left: 0px;
+					top: 7px;
+					color: $baseColor;
+					font-size: 14px;
+				}
+			}
+			a{
+				position: relative;
+				padding-left: 30px;
+				color: #fff;
+				display: block;
+				font-size: 16px;
+				text-decoration: underline;
+			}
+		}
+	}
+}
+/* End Contact Directly Area css
+============================================================================================ */
+
+/* Hire Truck Form Area css
+============================================================================================ */
+.hire_truck_area{
+	
+}
+.hire_truck_inner{
+	background: #fff;
+	box-shadow: 0px 10px 50px 0px rgba(0, 0, 0, 0.08);
+	margin-top: -60px;
+	z-index: 2;
+	position: relative;
+	padding: 50px;
+	h3{
+		color: $dip;
+		font: bold 36px $bar;
+		margin-bottom: 25px;
+	}
+	.contact_form{
+		.form-group{
+			margin-bottom: 30px;
+			&:last-child{
+				margin-bottom: 0px;
+			}
+			input{
+				background: transparent;
+				border-bottom: 1px solid #ededed;
+				padding: 0px 10px;
+			}
+			.nice_select{
+				background: transparent;
+				border-bottom: 1px solid #ededed;
+				padding-left: 10px;
+				padding-right: 10px;
+				&:after{
+					right: 10px;
+				}
+			}
+			
+			.input-group.date{
+				position: relative;
+				.input-group-append{
+					position: absolute;
+					right: 10px;
+					top: 50%;
+					transform: translateY(-50%);
+					.input-group-text{
+						border: none;
+						border-radius: 0px;
+						padding: 0px;
+						background: transparent;
+						color: $pfont;
+					}
+				}
+			}
+			.submit_btn{
+				background: #020d26;
+				width: auto;
+				border-color: #020d26;
+				border-radius: 0px;
+				line-height: 58px;
+				padding: 0px 42px;
+				&:hover{
+					background: $or;
+					border-color: $or;
+					color: #fff;
+				}
+			}
+		}
+	}
+}
+/* End Hire Truck Form Area css
+============================================================================================ */
+
+/* Find Yacht Area css
+============================================================================================ */
+.find_yacht_area{
+	.find_yacht_inner{
+		background: #fff;
+		padding: 60px 50px 60px 50px;
+		box-shadow: 0px 10px 50px 0px rgba(0, 0, 0, 0.08);
+		margin-top: -55px;
+		position: relative;
+		z-index: 4;
+		.contact_form{
+			margin-bottom: -50px;
+			.form-group{
+				margin-bottom: 50px;
+				.price_range{
+					margin-right: -15px;
+					margin-top: 8px;
+					label{
+						color: $dip;
+						text-transform: uppercase;
+						font: bold 16px $bar;
+						margin-bottom: 20px;
+					}
+					input{
+						background: transparent;
+						padding: 0px;
+						height: auto;
+						width: auto;
+						display: inline-block;
+						float: right;
+						text-align: right;
+						margin-bottom: -3px;
+						position: relative;
+						bottom: -5px;
+						font: normal 16px $bar;
+						color: $pfont;
+						@include placeholder{
+							font: normal 16px $bar;
+							color: $pfont;
+						}
+					}
+					&.size{
+						margin-left: 35px;
+						margin-right: -50px;
+					}
+					.ui-slider{
+						border-radius: 0px;
+						border: none;
+						background: #e8e8e8;
+						height: 2px;
+						.ui-slider-handle{
+							height: 20px;
+							width: 20px;
+							border-radius: 50%;
+							border: 3px solid #fff;
+							box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.14);
+							top: -9px;
+							outline: none !important;
+							cursor: pointer;
+							&:nth-child(2){
+								margin-left: -1px;
+							}
+						}
+					}
+				}
+				&:last-child{
+					text-align: right;
+					.submit_btn{
+						width: auto;
+						border-radius: 0px;
+						line-height: 58px;
+						padding: 0px 47px;
+					}
+				}
+			}
+		}
+	}
+	&.orange{
+		.find_yacht_inner{
+			.form-group{
+				.price_range{
+					.ui-slider{
+						.ui-slider-range{
+							background: $or;
+						}
+						.ui-slider-handle{
+							background: $or;
+						}
+					}
+				}
+				input{
+					border-color: transparent;
+				}
+				.submit_btn{
+					background: #020d26;
+					border-color: #020d26;
+					&:hover{
+						background: $or;
+						border-color: $or;
+						color: #fff;
+					}
+				}
+			}
+		}
+	}
+}
+/* End Find Yacht Area css
+============================================================================================ */
+
+/* Contact Information Area css
+============================================================================================ */
+.contact_information{
+	
+}
+.contact_info_inner{
+	.contact_info_item{
+		text-align: center;
+		i{
+			font-size: 40px;
+			margin-bottom: 20px;
+			display: inline-block;
+		}
+		h4{
+			color: $dip;
+			font: bold 20px $bar;
+			margin-bottom: 17px;
+		}
+		h5{
+			margin-bottom: 5px;
+			& + h5{
+				margin-bottom: 0px;
+			}
+			a{
+				color: $pfont;
+				font: normal 16px $bar;
+			}
+			span{
+				font: normal 16px $bar;
+			}
+		}
+		p{
+			margin-bottom: 0px;
+		}
+		.nav{
+			li{
+				margin-right: 20px;
+				a{
+					color: $baseColor;
+					i{
+						font-size: 18px;
+					}
+				}
+				&:first-child{
+					a{
+						i{
+							color: #ff23ce;
+						}
+					}
+				}
+				&:nth-child(3){
+					a{
+						i{
+							color: #475993;
+						}
+					}
+				}
+				&:last-child{
+					margin-right: 0px;
+					a{
+						i{
+							color: #5f9dec;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+.map_area{
+	.mapBox{
+		min-height: 505px;
+	}
+}
+.main_contact_area{
+}
+.main_contact_inner{
+    max-width: 980px;
+    margin: auto;
+    .contact_form{
+        .form-group{
+            margin-bottom: 30px;
+            &:last-child{
+                margin-bottom: 0px;
+            }
+            input{
+                background: #f5f7f7;
+            }
+            textarea{
+                background: #f5f7f7;
+                height: 140px;
+            }
+            .submit_btn{
+                height: auto;
+                line-height: 48px;
+                border-radius: 0px;
+            }
+        }
+    }
+}
+#contactPopup,.form_container{
+    max-width: 1110px;
+    padding: 85px 65px 100px;
+    background: #fff;
+}
+.form_container{
+    padding: 110px 65px 100px;
+    .find_item{
+        max-width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+        .nice_select{
+            background: #f5f7f7;
+            &:after{
+                margin-top: -9px;
+                color: #777777;
+            }
+        } 
+    }
+    .form-group{
+        .date{
+            height: 50px;
+            .form-control{
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                background: transparent;
+                width: 100%;
+                height: 50px;
+                border: none;
+                padding-left: 50px;
+                line-height: 60px;
+                outline: none;
+                -webkit-box-shadow: none;
+                box-shadow: none;
+                &:focus,&.white{
+                    background: #f5f7f7;
+                    & + .text_div{
+                        opacity: 0;
+                    }
+                }
+            }
+            .input-group-text{
+                position: absolute;
+                right: 18px;
+                top: 50%;
+                -webkit-transform: translateY(-50%);
+                -ms-transform: translateY(-50%);
+                transform: translateY(-50%);
+                z-index: 5;
+                background: transparent;
+                border: none;
+                padding: 0px;
+                font-size: 18px;
+                color: #888888;
+            }
+            .text_div{
+                background: #f5f7f7;
+                display: block;
+                width: 100%;
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                height: 50px;
+                text-align: left;
+                padding-left: 24px;
+                font: 400 16px/50px "Barlow", sans-serif;
+                color: #777;
+            }
+        }
+    }
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance:textfield;
+}
+/* End Contact Information Area css
+============================================================================================ */
+
+/* Faq Question Area css
+============================================================================================ */
+.general_ques_area{
+	
+}
+.general_ques_inner{
+	max-width: 920px;
+	margin: auto;
+	.accordion{
+		.card{
+			border: none;
+			border-radius: 0px;
+			border-bottom: 1px solid #e4e4e4 !important;
+			.card-header{
+				border: none;
+				padding: 0px;
+				background: transparent;
+				button{
+					padding: 20px 0px;
+					display: block;
+					text-align: left;
+					width: 100%;
+					position: relative;
+					text-decoration: none;
+					font: 600 18px $bar;
+					i{
+						position: absolute;
+						right: 0px; 
+						top: 50%;
+						transform: translateY(-50%);
+						display: none;
+						& + i{
+							display: inline-block;
+						}
+					}
+					&.collapsed{
+						color: $dip;
+						i{
+							display: inline-block;
+							& + i{
+								display: none;
+							}
+						}
+					}
+				}
+			}
+			.card-body{
+				padding-left: 0px;
+				padding-top: 0px;
+				padding-bottom: 25px;
+			}
+			&:first-child{
+				border-top: 1px solid #e4e4e4 !important;
+			}
+		}
+	}
+}
+.qustion_form_area{
+	.question_form_inner{
+		max-width: 635px;
+		margin: auto;
+		.contact_form{
+			.form-group{
+				input{
+					background: #f5f7f7;
+				}
+				.nice_select{
+					background: #f5f7f7;
+				}
+				textarea{
+					background: #f5f7f7;
+					height: 140px;
+				}
+				.submit_btn{
+					height: auto;
+					line-height: 48px;
+					width: 170px;
+					border-radius: 0px;
+					margin: auto;
+				}
+				&:last-child{
+					text-align: center;
+				}
+			}
+		}
+	}
+}
+.faq_counter_area{
+	.single_text_faq{
+		font: normal 20px/32px $bar;
+		color: $pfont;
+		max-width: 850px;
+		margin: 0px auto 42px; 
+		text-align: center;
+	}
+	&.bg_gray{
+		background: #f5f7f7;
+	}
+}
+/* End Faq Question Area css
+============================================================================================ */
+
+/* Find Dealer Area css
+============================================================================================ */
+.find_dealer_form_area{
+	background: #222222;
+	padding: 33px 0px;
+	.find_d_form_inner{
+		p{
+			margin-bottom: 0px;
+			color: #fff;margin-top: 12px;
+		}
+		.input-group{
+			position: relative;
+			input{
+				height: 55px;
+				border-radius: 0px;
+				outline: none;
+				box-shadow: none;
+				background: #656565;
+				border: none;
+				padding: 0px 20px;
+				font: normal 16px/55px $bar;
+				color: #fff;
+				@include placeholder{
+					font: normal 16px/55px $bar;
+					color: #fff;
+				}
+			}
+			.input-group-append{
+				position: absolute;
+				right: 15px;
+				top: 50%;
+				transform: translateY(-50%);
+				z-index: 3;
+				button{
+					border: none;
+					padding: 0px;
+					outline: none !important;
+					font-size: 20px;
+					color: #fff;
+					box-shadow: none;
+					background: transparent;
+				}
+			}
+		}
+	}
+}
+.find_map_area{
+	overflow: hidden;
+	.finding_list{
+	}
+	.finding_map{
+		margin-left: -83px;
+		#map-canvas{
+			min-height: 875px;
+		}
+	}
+}
+.finding_list{
+	padding: 0px 30px;
+	max-width: 405px;
+	padding-top: 50px;
+	max-height: 875px;
+	.find_loc_itme{
+		margin-bottom: 55px;
+		.media{
+			.d-flex{
+				padding-right: 15px;
+			}
+			.media-body{
+				h4{
+					color: $dip;
+					font: bold 24px $bar;
+					margin-bottom: 20px;
+				}
+				p{
+					margin-bottom: 4px;
+				}
+				h5{
+					color: $pfont;
+					font: normal 16px $bar;
+					span{
+						font-weight: 600;
+					}
+					& + h5{
+						margin-bottom: 25px;
+					}
+				}
+			}
+		}
+		.main_btn{
+			text-transform: uppercase;
+			padding: 0px 18px;
+			font-weight: bold;
+			margin-right: 20px;
+			& + .main_btn{
+				margin-right: 0px;
+			}
+		}
+	}
+}
+/* End Find Dealer Area css
+============================================================================================ */
+
+/* Create Account Area css
+============================================================================================ */
+.create_account_area{
+	
+}
+.create_account_box{
+	max-width: 600px;
+	margin: auto;
+	box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.05);
+	border-top: 4px solid transparent;
+	padding-left: 80px;
+	padding-right: 80px;
+	text-align: center;
+	padding-top: 50px;
+	padding-bottom: 55px;
+	h6{
+		font: normal 20px $bar;
+		color: $dip;
+		margin-bottom: 25px;
+	}
+	.social_singup{
+		display: flex;
+		flex-wrap: wrap;
+		margin-left: -10px;
+		margin-right: -10px;
+		margin-bottom: 32px;
+		a{
+			flex: 0 0 33.33%;
+			max-width: 33.33%;
+			text-align: center;
+			padding-left: 10px;
+			padding-right: 10px;
+			i{
+				background: $baseColor;
+				width: 100%;
+				color: #fff;
+				line-height: 50px;
+				font-size: 22px;
+				&.fa-facebook{
+					background: #3b5998;
+				}
+				&.fa-twitter{
+					background: #55acee;
+				}
+			}
+		}
+	}
+	.or{
+		border-top: 2px solid #eaeaea;
+		position: relative;
+		margin-bottom: 32px;
+		p{
+			margin-bottom: 0px;
+			height: 45px;
+			width: 45px;
+			background: #fff;
+			text-align: center;
+			line-height: 45px;
+			position: absolute;
+			left: 50%;
+			top: -25px;
+			border-radius: 50%;
+			transform: translateX(-50%);
+		}
+	}
+	.contact_form{
+		.form-group{
+			input{
+				background: #f5f7f7;
+			}
+			.submit_btn{
+				border-radius: 0px;
+				height: auto;
+			}
+			h5{
+				font: normal 16px $bar;
+				color: $pfont;
+				margin-top: 25px;
+				a{
+					color: $dip;
+					font-weight: 600;
+					text-decoration: underline;
+				}
+			}
+			.creat_account{
+				text-align: left;
+				position: relative;
+				display: inline-block;
+				width: auto;
+				float: left;
+				margin-top: 20px;
+				margin-bottom: -21px;
+				input{
+					height: auto;
+				}
+				label{
+					color: $pfont;
+				}
+			}
+			.forgot{
+				text-align: right;
+				display: inline-block;
+				float: right;
+				font: 600 16px $bar;
+				color: $dip;
+				margin-top: 22px;
+			}
+		}
+	}
+}
+/* End Create Account Area css
+============================================================================================ */
+
+#success, #error {
+    position: relative;
+    top: 10px;
+    display: block;
+    right: 0;
+    left: 0;
+    bottom: -15px;
+    display: none;
+    font-weight: 600;
+}
+#success {
+  color: lawngreen;
+}
+#error {
+  color: orangered;
+}

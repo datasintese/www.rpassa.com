@@ -1,0 +1,159 @@
+/*================== Start color css ===================*/ 
+
+/*================== Start green color css ===================*/
+.main_menu .navbar.navbar-expand-lg .navbar-nav li:hover a, .main_menu .navbar.navbar-expand-lg .navbar-nav li.active a,.single_title h2 span,.choose_item .icon i,.find_us_text h2 span,.find_us_text .list_finding .nav li a:hover,.drive_item .left .nav li a.active,.drive_item .left .nav li:hover a,.drive_item .right .hourly_toggle .nice_select .current,.drive_item .right .hourly_toggle .nice_select:after,.car_product_item .product_content .title h3:hover,.car_product_item .product_content .title h4,.top_ques_inner .accordion .card .card-header button,.about_widget i,.link_widget .nav li:hover a,.footer_copyright .copyright_inner .left p a,.footer_copyright .copyright_inner .right .nav li a:hover,.header_area.navbar_fixed .main_menu .navbar.navbar-expand-lg .nav.navbar-nav > li:hover > a,.header_area.navbar_fixed .main_menu .navbar.navbar-expand-lg .nav.navbar-nav > li.active > a,.quickly_text_part h3 span,.quickly_item .media .d-flex i{
+    color: $green;
+}
+.main_menu .navbar.navbar-expand-lg .navbar-nav li.submenu .dropdown-menu li:hover a{
+    background: $green;
+    color: #fff;
+}
+.main_btn,.submit_btn,.subscribe_widget .input-group .input-group-append button{
+    background: $green;
+    color: #fff;
+    border-color: $green;
+    &:hover {
+        color: #fff;
+        background: #0ab12d;
+        border-color: #0ab12d;
+    }
+}
+.find_us_text .list_finding .nav li a:hover:before,.drive_item .left .nav li a:before{
+    background: $green;
+}
+.download_app_area:before{
+    background: rgba(12, 197, 51, 0.85);
+}
+/*================== End green color css ===================*/
+
+
+/*================== Start baseColor color css ===================*/
+.top_menu,.header_area.menu_three .main_menu .navbar.navbar-expand-lg .nav.navbar-nav.navbar-right li .cart:before,.main_slider_area .slider_nav i:hover,.market_inner .car_img .nav li:hover,.client_slider .owl-dots .owl-dot:hover, .client_slider .owl-dots .owl-dot.active,.l_blog_item .blog_img .cat,.l_blog_item:hover .blog_content h3:before,.subscribe_widget .input-group .input-group-append button.red,.menu_two .navbar-light .navbar-toggler span,.menu_two .navbar-light .navbar-toggler.collapsed span,.menu_two .navbar-light .navbar-toggler span:before,.menu_two .navbar-light .navbar-toggler span:after,.auto_market_area .market_inner .market_text .nav.nav-tabs li a:before,.testi_slider .owl-dots .owl-dot.active,.testimonials_area.testi_red .testi_slider .owl-dots .owl-dot.active,.service_button .nav li a:hover, .service_button .nav li a.active,.find_us_red .find_us_text .list_finding .nav li a:hover:before,.red_truck_type .truck_type_slider .t_type_itme .t_type_text .left h4,.red_truck_type .truck_type_slider .owl-dots .owl-dot.active,.best_servicing_inner .twentytwenty-handle:before,.best_servicing_inner .twentytwenty-handle:after,.left_product_sidebar .accordion .card .card-body .price_wd_inner .ui-slider .ui-slider-handle,.left_product_sidebar .accordion .card .card-body .price_wd_inner .ui-slider .ui-slider-range,.pagination ul li:hover a, .pagination ul li.active a,.product_details_left .product_info a:hover,.specification_area .left_spec .nav a:hover, .specification_area .left_spec .nav a.active,.shipping .radio_group:checked + label:after, .shipping .radio_group:not(:checked) + label:after,.blog_item .blog_text .cat_area .cat_list a,.search_widget .input-group .input-group-append button,.s_comment_area .s_comment_inner .contact_form .form-group .submit_btn:hover,.main_slider.luxuary_slider .slider_item .slider_text p:before,.luxuary_video_area .car_video .play_btn,.get_cars_area .get_car_text h2:before,.header_area.menu_seven .main_menu .navbar.navbar-expand-lg .navbar-nav li.submenu .dropdown-menu li:hover a,.header_area.menu_seven .main_menu .navbar.navbar-expand-lg .navbar-nav li.submenu .dropdown-menu .submenu .dropdown-menu li:hover a,.header_area.menu_seven .main_menu .navbar.navbar-expand-lg .nav.navbar-nav.navbar-right li .cart:before,.contact_directly_area .contact_directly_bg .contact_info h2:before,.l_bus_item:hover .l_bus_text .read_btn:before{
+    background: $baseColor !important;
+}
+.top_menu .top_menu_inner .right a i,.top_menu .top_menu_inner .right a span,.header_area.menu_three .main_menu .navbar.navbar-expand-lg .navbar-nav li:hover > a, .header_area.menu_three .main_menu .navbar.navbar-expand-lg .navbar-nav li.active > a,.market_inner .car_img .nav li h4,.market_text h3 span,.market_text .maket_item_inner .media .d-flex i,.b_f_item h4:hover,.l_collection_item .text_body h5,.l_collection_item:hover .text_body h4,.car_c_item:hover h5,.l_blog_item:hover .blog_content h3,.l_blog_item .blog_content .date:hover,.red_footer_area .about_widget i,.red_footer_area .link_widget .nav li:hover a,.red_footer_area .footer_copyright .copyright_inner .left p a,.red_footer_area .footer_copyright .copyright_inner .right .nav li:hover a,.auto_market_area .market_inner .market_text h3 span,.auto_market_area .market_inner .market_text .tab-pane .media .d-flex i,.team_item .people_text h4:hover,.car_about_area.about_counter .counter_inner .counter_item h4,.car_comparisom_item .comparisom_text h6,.compare_item .left h4:hover,.compare_item .right h4:hover,.contact_info_inner .contact_info_item i,.counter_inner .counter_item.red h4,.general_ques_inner .accordion .card .card-header button,.client_item p:after,.testi_item i,.testimonials_area.testi_red .testi_item i,.create_account_box .contact_form .form-group .forgot:hover,.create_account_box .contact_form .form-group h5 a:hover,.quickly_red .quickly_text_part h3 span,.quickly_red .quickly_item .media .d-flex i,.car_budget_red .car_budget_inner .tab-pane .taxi_text .car_details a i,.quickly_red .quickly_inner h3 span,.find_us_red .find_us_text h2 span,.find_us_red .find_us_text .list_finding .nav li a:hover,.truck_type_slider .t_type_itme.red .right .nav li i,.most_service_area.red_most_service .most_service_inner .most_service_text h6,.white_budget_feature .b_feature_inner .b_f_item .icon,.left_product_sidebar .accordion .card .card-header button,.car_found .right .grid a.active,.l_collection_item.grid_four .text_body h5,.l_collection_item.grid_four .text_body h4:hover,.l_collection_item.red:hover .text_body h4,.left_product_sidebar .accordion .card .card-body .wd_scroll li .creat_account input[type=checkbox]:checked ~ label,.left_product_sidebar .accordion .card .card-body .wd_scroll li .creat_account input[type=checkbox]:checked ~ label span,.clear_filter .clear,.product_list_item:hover .media-body h4,.product_list_item .media-body h6 span,.product_details_left .price_title .right h4,.cart_details_area .cart_details_inner .table tbody tr td.price i:hover,.cart_details_area .cart_details_inner .table tfoot .table_footer td:last-child .main_btn,.billing_form .select_check .create_box label,.blog_item .blog_text .cat_area a:hover,.blog_item .blog_text h3:hover,.blog_item .blog_text .view_btn:hover,.categories_widget .list li:hover > a,.categories_widget .list li:hover > a span,.categories_widget .list li:hover > a i,.news_widget .news_inner .media .media-body h4:hover,.author_details .media .media-body h4:hover,.s_comment_list .s_comment_list_inner .media .media-body h4:hover,.s_comment_list .s_comment_list_inner .media .media-body .reply_btn:hover,.main_slider.luxuary_slider .slider_item .slider_text h5,.header_area.navbar_fixed.menu_seven .main_menu .navbar.navbar-expand-lg .nav.navbar-nav > li:hover > a, .header_area.navbar_fixed.menu_seven .main_menu .navbar.navbar-expand-lg .nav.navbar-nav > li.active > a,.contact_directly_area .contact_directly_bg .contact_info p i,.border_btn.red,.l_bus_item:hover .l_bus_text h3,.l_bus_item:hover .l_bus_text .read_btn,.l_link_widget .nav li:hover a,.luxuary_copyright .l_copyright_inner .nav li a:hover,.bike_type_item h5,.bike_type_item:hover h3,.header_area.menu_five.menu_four .main_menu .navbar.navbar-expand-lg .navbar-nav li:hover > a, .header_area.menu_five.menu_four .main_menu .navbar.navbar-expand-lg .navbar-nav li.active > a,.expert_area .expert_inner .expert_item i,.car_about_inner .c_ab_text h6,.title_two h5,.pr_rate .media-left p a{
+    color: $baseColor;
+}
+.main_btn.red,.feature_car_area .f_car_slider .car_arrow .owl-prev:hover, .feature_car_area .f_car_slider .car_arrow .owl-next:hover,.main_btn.border:hover,.main_btn.red.border:hover,.submit_btn.red,.creat_account input[type=checkbox]:checked ~ .check,.car_budget_red .car_budget_inner .nav.nav-tabs li a,.product_list_right .main_btn + .main_btn:hover,.cart_details_area .cart_details_inner .table tfoot .table_footer td:last-child .main_btn:hover,.cart_box .cart_list_inner .list_itme .right .form-group .submit_btn:hover,.tag_widget .nav li a:hover,.single_blog_inner .blog_item .blog_text .tags .nav li a:hover,.border_btn:hover,.border_btn.red:hover,.pr_rate .media-left p a:before{
+    background: $baseColor;
+    border-color: $baseColor;
+}
+.our_service_area.luxuary_s_car .or_service_inner .service_button .nav.nav-tabs li a.active,.our_service_area.luxuary_s_car .or_service_inner .service_button .nav.nav-tabs li a:hover{
+    background: transparent !important;
+}
+.main_btn.red:hover,.subscribe_widget .input-group .input-group-append button.red:hover,.submit_btn.red:hover{
+    background: #d12632;
+    border-color: #d12632;
+}
+.calculator_area .calculator_inner,.contact_form .form-group input:focus,.create_account_box,.car_budget_red .car_budget_inner .tab-pane .price_content .price_km,.best_servicing_inner .twentytwenty-handle,.search_widget .input-group input:focus,.border_btn.red,.shipping .radio_group:checked + label:before,.payment_options .shipping .radio_group:checked + label:before{
+    border-color: $baseColor;
+}
+.car_about_inner .c_ab_text .blockquote{
+    border-left-color: $baseColor;
+}
+.service_button .nav li a:before,.specification_area .left_spec .nav a:before{
+    border-color: transparent transparent transparent $baseColor;
+}
+.team_item .people_img:before{
+    background: rgba(255, 42, 57, 0.8);
+}
+.header_area.menu_five .top_menu .top_menu_inner .right .main_btn,.header_area.menu_five.menu_four .main_menu .navbar.navbar-expand-lg .navbar-nav li a:before,.header_area.menu_five.menu_four .main_menu .navbar.navbar-expand-lg .navbar-nav li.submenu .dropdown-menu li:hover a,.header_area.menu_five.menu_four .main_menu .navbar.navbar-expand-lg .navbar-nav li.submenu .dropdown-menu .submenu .dropdown-menu li:hover a,.process_left_text .media .d-flex i{
+    background: $baseColor;
+}
+.header_area.menu_five.menu_four .main_menu .navbar.navbar-expand-lg .navbar-nav li.submenu .dropdown-menu .submenu .dropdown-menu li a{
+    background: #fff;
+}
+/*================== End baseColor color css ===================*/
+.header_area.menu_two .main_menu .navbar.navbar-expand-lg .navbar-nav li.submenu .dropdown-menu li:hover a,.header_area.menu_two .main_menu .navbar.navbar-expand-lg .navbar-nav li.submenu .dropdown-menu .submenu .dropdown-menu li:hover a,.main_slider .slider_item .slider_text h6:before,.bike_type_area.red2 .g_fillter .nav li a:before,.l_blog_item.red2:hover .blog_content h3:before,.header_area.menu_two.menu_three .main_menu .navbar.navbar-expand-lg .navbar-nav li.submenu .dropdown-menu > li:hover > a,.header_area.menu_two.menu_three .main_menu .navbar.navbar-expand-lg .navbar-nav > li.submenu .dropdown-menu .submenu .dropdown-menu > li:hover a{
+    background: $red2;
+}
+.header_area.menu_two .main_menu .navbar.navbar-expand-lg .nav.navbar-nav.navbar-right li .cart:before,.header_area.menu_two .main_menu .navbar.navbar-expand-lg .nav.navbar-nav.navbar-right li .cart:before,.red2_footer_area .subscribe_widget .input-group .input-group-append button.red{
+    background: $red2 !important;
+}
+.main_slider .slider_item .slider_text .main_btn.white:hover,.main_btn.red2,.main_btn.red2{
+    background: $red2;
+    border-color: $red2;
+}
+.brand_inner .brand_item:hover h4,.feature_bike_area .feature_bike_slider .item .bike_s_item.red2 .bike_text h5,.view_btn.red2,.title_two.red2 h5,.bike_type_area.red2 .g_fillter .nav li:hover a, .bike_type_area.red2 .g_fillter .nav li.active a,.bike_type_item.red2:hover h3,.bike_type_item.red2 h5,.testimonials_area.red2 .testi_item i,.l_blog_item.red2:hover .blog_content h3,.red2_footer_area .about_widget i,.red2_footer_area .link_widget .nav li:hover a,.red2_footer_area .footer_copyright .copyright_inner .left p a,.red2_footer_area .footer_copyright .copyright_inner .right .nav li:hover a{
+    color: $red2;
+}
+.main_btn.red2:hover{
+    background: #d61919;
+    border-color: #d61919;
+}
+.find_form_inner,.find_form .find_title{
+    background: #dc3341;
+}
+.main_btn.orange,.top_six_menu .top_inner .right .main_btn,.main_slider.bus_slider .slider_item .slider_text .main_btn.orange + .main_btn.orange:hover{
+    background: $or;
+    border-color: $or;
+}
+.compare_item .right h5,.compare_item .left h5,.truck_service_inner .t_service_item i,.truck_service_inner .t_service_item:hover h6,.most_service_area .most_service_inner .most_service_text h6,.header_area.menu_six .main_menu .navbar.navbar-expand-lg .navbar-nav li:hover > a, .header_area.menu_six .main_menu .navbar.navbar-expand-lg .navbar-nav li.active > a,.main_slider.bus_slider .slider_item .slider_text h2 span,.find_form.pest_form .find_title span,.find_form.pest_form .find_title i,.car_collection .drive_item .left .nav li a:hover, .car_collection .drive_item .left .nav li a.active,.l_collection_item.orange .text_body h5,.l_collection_item.orange:hover .text_body h4,.car_company_area .car_c_item:hover h5,.quickly_area .quickly_inner h3 span,.classified_car_browse .car_c_item:hover h5,.l_blog_item.orange:hover .blog_content h3,.classic_footer_area .f_title h3,.classic_footer_area .about_widget i,.classic_footer_area .link_widget .nav li a:hover,.classic_footer_area .footer_copyright .copyright_inner .left p a,.classic_footer_area .footer_copyright .copyright_inner .right .nav li a:hover,.header_area.navbar_fixed.menu_two.menu_six .main_menu .navbar.navbar-expand-lg .nav.navbar-nav > li:hover > a, .header_area.navbar_fixed.menu_two.menu_six .main_menu .navbar.navbar-expand-lg .nav.navbar-nav > li.active > a,.header_area.menu_four .main_menu .navbar.navbar-expand-lg .navbar-nav > li:hover > a, .header_area.menu_four .main_menu .navbar.navbar-expand-lg .navbar-nav > li.active > a,.easy_way .easy_item_inner .easy_item:hover p,.easy_way .easy_item_inner .easy_item:hover p span,.orange_iso .g_fillter .nav li:hover a, .orange_iso .g_fillter .nav li.active a,.bus_item:hover .bus_body h4,.bus_item .bus_footer a i,.counter_inner .counter_item i,.title_two.orange h5,.lowest_price_area h4,.testimonials_area.testi_two_or .testi_item i,.latest_bus_blog .l_bus_item:hover .l_bus_text h3,.latest_bus_blog .l_bus_item:hover .l_bus_text .read_btn,.orange_footer_area .f_title h3,.orange_footer_area .about_widget i,.orange_footer_area .link_widget .nav li:hover a,.orange_footer_area .footer_copyright .copyright_inner .left p a,.orange_footer_area .footer_copyright .copyright_inner .right .nav li:hover a{
+    color: $or;
+}
+.comparisom_slider .owl-dots button.active,.truck_type_slider .t_type_itme .t_type_text .left h4,.header_area.menu_six .main_menu .navbar.navbar-expand-lg .navbar-nav li.submenu .dropdown-menu li:hover a,.header_area.menu_six .main_menu .navbar.navbar-expand-lg .navbar-nav li.submenu .dropdown-menu .submenu .dropdown-menu li:hover a,.header_area.menu_six .main_menu .navbar.navbar-expand-lg .nav.navbar-nav.navbar-right li .cart:before,.find_form.pest_form .find_form_inner .find_item .submit_btn,.car_collection .drive_item .left .nav li a:hover:before, .car_collection .drive_item .left .nav li a.active:before,.car_collection .drive_product_view .car_tab_slider .owl-dots button.active,.l_blog_item.orange:hover .blog_content h3:before,.l_blog_item.orange .blog_img .cat,.testimonials_area.testi_two_or .testi_slider .owl-dots .owl-dot.active,.latest_bus_blog .l_bus_item:hover .l_bus_text .read_btn:before{
+    background: $or !important;
+}
+.classic_footer_area .subscribe_widget .input-group .input-group-append button.orange,.header_area.menu_four .main_menu .navbar.navbar-expand-lg .navbar-nav > li > a:before,.header_area.menu_four .main_menu .navbar.navbar-expand-lg .navbar-nav > li.submenu .dropdown-menu li:hover a,.orange_iso .g_fillter .nav li:hover a:before, .orange_iso .g_fillter .nav li.active a:before,.bus_item .bus_body h3,.orange_footer_area .subscribe_widget .input-group .input-group-append button.orange{
+    background: $or;
+}
+.main_btn.orange:hover,.top_six_menu .top_inner .right .main_btn:hover,.find_form.pest_form .find_form_inner .find_item .submit_btn{
+    background: #e4390c;
+    border-color: #e4390c;
+}
+.main_btn.border,.cart_details_area .cart_details_inner .table tfoot .table_footer td:last-child .main_btn{
+    background: transparent;
+}
+.bus_item .bus_body h3:before{
+    border-color: transparent transparent #f75d34 transparent;
+}
+.car_about_area.truck_video .car_about_inner .c_ab_text .blockquote{
+    border-color: $or;
+}
+.top_menu_nine .top_menu_inner .right .nav li a:hover,.middle_menu .right .media .d-flex i,.explore_item .explore_text h6,.explore_item:hover .explore_text a,.tractor_green_bus .g_fillter .nav li:hover a, .tractor_green_bus .g_fillter .nav li.active a,.bus_item.green .bus_footer a i,.bus_item.green:hover .bus_body h4,.compare_item.green .right h5,.compare_item.green .left h5,.compare_item.green .right h4:hover,.compare_item.green .left h4:hover,.testimonials_area.green_testi .testi_item i,.taxi_l_item.green:hover .taxi_text h4,.green_footer .f_title h3,.green_footer .about_widget i,.green_footer .link_widget .nav li:hover a,.green_footer .footer_copyright .copyright_inner .left p a,.green_footer .footer_copyright .copyright_inner .right .nav li:hover a{
+    color: $green;
+}
+.header_area.menu_nine .main_menu .navbar.navbar-expand-lg .navbar-nav li:hover > a, .header_area.menu_nine .main_menu .navbar.navbar-expand-lg .navbar-nav li.active > a,.header_area.menu_nine .main_menu .navbar.navbar-expand-lg .navbar-nav li.submenu .dropdown-menu li:hover > a,.header_area.menu_two .main_menu .navbar.navbar-expand-lg .navbar-nav li.submenu .dropdown-menu li:hover a, .header_area.menu_two .main_menu .navbar.navbar-expand-lg .navbar-nav li.submenu .dropdown-menu .submenu .dropdown-menu li:hover a,.header_area.menu_two .main_menu .navbar.navbar-expand-lg .nav.navbar-nav.navbar-right li .cart:before,.tractor_brand_slider .owl-dots button.active,.tractor_green_bus .g_fillter .nav li a:before, .tractor_green_bus .g_fillter .nav li.active a:before,.bus_item.green .bus_body h3,.taxi_l_item.green .taxi_img .taxi_date,.green_footer .subscribe_widget .input-group .input-group-append button{
+    background: $green;
+}
+.car_comparisom_area.tractor_compare .comparisom_slider .owl-dots button.active,.testimonials_area.green_testi .testi_slider .owl-dots .owl-dot.active{
+    background: $green !important;
+}
+.bus_item.green .bus_body h3:before{
+    border-color: transparent transparent #0cc533 transparent;
+}
+.green_footer .subscribe_widget .input-group .input-group-append button:hover{
+    background: #0ab12d;
+    border-color: #0ab12d;
+}
+
+.header_area.menu_five .top_menu{
+    background: #002260 !important;
+}
+
+.header_area.menu_eleven .top_bus_menu{
+    background: #002e82;
+}
+.header_area.menu_eleven .main_menu .navbar.navbar-expand-lg .navbar-nav li:hover > a, .header_area.menu_eleven .main_menu .navbar.navbar-expand-lg .navbar-nav li.active > a,.boat_types_inner .boat_t_item:hover h4,.car_about_area .counter_inner .counter_item h4,.f_yacht_slider .bus_item.per:hover .bus_body h4,.f_yacht_slider .bus_item.per .bus_footer a i,.bike_type_area.all_yacht .g_fillter li:hover a, .bike_type_area.all_yacht .g_fillter li.active a,.all_yacht_item:hover .yacht_text h3:hover,.all_yacht_item .view_btn:hover,.taxi_l_item.per:hover .taxi_text h4,.yacht_footer .f_title h3,.yacht_footer .about_widget i,.yacht_footer .link_widget .nav li:hover a,.yacht_footer .footer_copyright .copyright_inner .left p a,.yacht_footer .footer_copyright .copyright_inner .right .nav li:hover a{
+    color: $per;
+}
+.header_area.menu_eleven .main_menu .navbar.navbar-expand-lg .navbar-nav li a:before,.header_area.menu_eleven .main_menu .navbar.navbar-expand-lg .navbar-nav li.submenu .dropdown-menu li:hover a,.header_area.menu_eleven .main_menu .navbar.navbar-expand-lg .navbar-nav li.submenu .dropdown-menu .submenu .dropdown-menu li:hover a,.header_area.menu_eleven .main_menu .navbar.navbar-expand-lg .nav.navbar-nav.navbar-right li .main_btn,.find_yacht_area .find_yacht_inner .contact_form .form-group .price_range .ui-slider .ui-slider-handle,.find_yacht_area .find_yacht_inner .contact_form .form-group .price_range .ui-slider .ui-slider-range,.f_yacht_slider .bus_item.per .bus_body h3,.bike_type_area.all_yacht .g_fillter li:hover a:before, .bike_type_area.all_yacht .g_fillter li.active a:before,.tractor_brand_area.yacht_brand .tractor_brand_slider .owl-dots button.active,.taxi_l_item.per .taxi_img .taxi_date{
+    background: $per;
+}
+.header_area.menu_eleven .main_menu .navbar.navbar-expand-lg .nav.navbar-nav.navbar-right li .cart:before,.main_slider_area.yacht_slider_area .slider_nav i:hover{
+    background: $per !important;
+}
+.header_area.menu_two .main_menu .navbar.navbar-expand-lg .nav.navbar-nav.navbar-right li .main_btn:hover,.submit_btn.per:hover,.quickly_area.yacht_easily .quickly_inner .main_btn:hover{
+    background: #da464c;
+    border-color: #da464c;
+}
+.main_slider.truck_slider .slider_item .slider_text .main_btn.blue:hover,.submit_btn.per,.main_btn.per{
+    background: $per;
+    border-color: $per;
+}
+.f_yacht_slider .bus_item.per .bus_body h3:before {
+    border-color: transparent transparent #ff575d transparent;
+}
+.download_taxi_area:before {
+    background: rgba(0, 0, 0, 0.85);
+}

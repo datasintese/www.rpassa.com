@@ -1,0 +1,1185 @@
+/* Choose Area css
+============================================================================================ */
+.choose_area{
+	.single_title{
+		margin-bottom: 110px;
+	}
+}
+.choose_inner{}
+.choose_item{
+	text-align: center;
+	max-width: 272px;
+	margin: 0px auto 0px;
+	.icon{
+		margin-bottom: 30px;
+		position: relative;
+		i{
+			font-size: 70px;
+		}
+		&:before{
+			content: "";
+			background: url(../img/icon/choose-shap.png) no-repeat;
+			width: 120px;
+			height: 105px;
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+			bottom: 0px;
+			z-index: -1;
+		}
+	}
+	h4{
+		font: bold 24px/32px $bar;
+		color: $dip;
+        transition: color 0.2s linear;
+	}
+	p{
+		margin-bottom: 0px;
+	}
+}
+.how_item_work{
+	.choose_item{
+		.icon{
+			line-height: 96px;
+			img{
+				display: inline-block;
+			}
+			&:before{
+				display: none;
+			}
+		}
+	}
+}
+/* Find Choose Area css
+============================================================================================ */
+
+/* Ease Way Area css
+============================================================================================ */
+.easy_area{
+}
+.easy_way{
+	background: #fff;
+	box-shadow: 0px 10px 40px 0px rgba(19, 18, 47, 0.08);
+	margin-top: -90px;
+	z-index: 3;
+	position: relative;
+	.easy_text{
+		background: #002e82;
+		height: 100%;
+		padding: 60px 50px 60px 60px;
+		h4{
+			color: #fff;
+			font: bold 30px $bar;
+			margin-bottom: 25px;
+		}
+		p{
+			color: #fff;
+		}
+		.nav{
+			li{
+				position: relative;
+				padding-left: 28px;
+				color: #fff;
+				margin-bottom: 6px;
+				&:last-child{
+					margin-bottom: 0px;
+				}
+				i{
+					color: $green;
+					position: absolute;
+					left: 0px;
+					top: 7px;
+					font-size: 16px;
+				}
+			}
+		}
+	}
+	.easy_item_inner{
+		display: flex;
+		flex-wrap: wrap;
+		position: relative;
+		&:before{
+			content: "";
+			background: url(../img/icon/easy-br-2.png) no-repeat;
+			width: 605px;
+			height: 1px;
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%, -50%);
+		}
+		&:after{
+			content: "";
+			background: url(../img/icon/easy-br-1.png) no-repeat;
+			width: 1px;
+			height: 290px;
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%, -50%);
+		}
+		.easy_item{
+			flex: 0 0 50%;
+			max-width: 50%;
+			text-align: center;
+			padding: 40px 0px;
+			img{
+				margin-bottom: 16px;		
+			}
+			p{
+				margin-bottom: 0px;
+				@include transition;
+				color: $pfont;
+				span{
+					color: $dip;
+					font-weight: 600;
+					@include transition;
+				}
+			}
+		}
+	}
+}
+/* End Ease Way Area css
+============================================================================================ */
+
+/* Our Service Area css
+============================================================================================ */
+.our_service_area{
+	background: url(../img/services/our-service/service-bg.jpg) no-repeat scroll center center;
+	background-size: cover;
+	margin-bottom: 360px;
+	height: 500px;
+	position: relative;
+	z-index: 2;
+	&:before{
+		content: "";
+		background: rgba(0, 34, 96, .80);
+		position: absolute;
+		left: 0px;
+		top: 0px;
+		height: 100%;
+		width: 100%;
+		z-index: -1;
+	}
+	.or_service_inner{
+	}
+	&.luxuary_s_car{
+		background: transparent;
+		height: auto;
+		padding-top: 150px;
+		padding-bottom: 130px;
+		margin-bottom: 0px;
+		overflow: hidden;
+		position: relative;
+		.left_tiar{
+			height: 553px;
+			width: 487px;
+			position: absolute;
+			left: 0px;
+			bottom: 200px;
+			z-index: -1;
+		}
+		&:before{
+			display: none;
+		}
+		.or_service_inner{
+			position: relative;
+			.service_button{
+				margin-right: -60px;
+				background: transparent;
+				margin-top: 20px;
+				.nav.nav-tabs{
+					padding: 0px;
+					li{
+						margin-left: 0px;
+						margin-bottom: 40px;
+						a{
+							font-size: 20px;
+							color: rgba(255, 255, 255, .20);
+							padding: 0px;
+							font-weight: normal;
+							display: inline-block;
+							line-height: normal;
+							&:before{
+								content: "";
+								border: none;
+								height: 2px;
+								width: 94px;
+								background: $baseColor;
+								position: absolute;
+								top: 52%;
+								right: -107px;
+								z-index: 2;
+								@include transition;
+								transform: scaleX(0);
+								transform-origin: 0 50%;
+							}
+							&:hover, &.active{
+								background: transparent;
+								color: #fff;
+								font-size: 30px;
+								&:before{
+									transform: scaleX(1);
+								}
+							}
+						}
+						&:last-child{
+							margin-bottom: 0px;
+						}
+					}
+				}
+			}
+			.service_body{
+				margin-left: 40px;
+				.tab-content{
+					background: transparent;
+					
+				}
+				.tab-pane{
+					.service_ex{
+						overflow: visible;
+						.service_text{
+							background: #1f1f21;
+							overflow: visible;
+							padding-bottom: 25px;
+							padding-right: 290px;
+							padding-left: 40px;
+							&:before{
+								display: none;
+							}
+							h4{
+								color: #fff; 
+								font: normal 30px $bar;
+							}
+							p{
+								color: rgba(255, 255, 255, .5);
+							}
+							.main_btn{
+								line-height: 140px;
+								padding: 0px 52px;
+								margin-bottom: -35px;
+								float: none;
+								position: absolute;
+								right: 55px;
+								bottom: 0px;
+								margin-right: 0px;
+								font-size: 30px;
+								font-weight: bold;
+								i{
+									font-weight: bold;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		.view_all{
+			position: absolute;
+			right: 0px;
+			top: -150px;
+		}
+	}
+}
+.service_button{
+	background: #fff;
+	box-shadow: 0px 10px 50px 0px rgba(0, 34, 96, 0.08);
+	height: 100%;
+	margin-right: 30px;
+	.nav{
+		display: block;
+		border: none;
+		padding-top: 25px;
+		padding-bottom: 25px;
+		li{
+			margin-left: 25px;
+			a{
+				display: block;
+				border: none;
+				border-radius: 0px;
+				color: $pfont;
+				font: normal 16px/60px $bar;
+				padding: 0px 20px;
+				position: relative;
+				@include transition;
+				&:before{
+					content: "";
+					width: 0;
+					height: 0;
+					border-style: solid;
+					border-width: 30px 0 30px 20px;
+					position: absolute;
+					right: -20px;
+					top: 0px;
+					@include transition;
+					opacity: 0;
+				}
+				i{
+					padding-right: 12px;
+				}
+				&:hover, &.active{
+					color: #fff;
+					&:before{
+						opacity: 1;
+					}
+				}
+			}
+		}
+	}
+}
+.service_body{
+	margin-left: -30px;
+	.tab-content{
+		background: #fff;
+	}
+	.tab-pane{
+		box-shadow: 0px 10px 50px 0px rgba(0, 34, 96, 0.08);
+		&.active{
+			.service_ex{
+				
+			}
+		}
+		.service_ex{
+			overflow: hidden;
+			.service_text{
+				padding-left: 30px;
+				padding-right: 30px;
+				padding-top: 30px;
+				position: relative;
+				overflow: hidden;
+				.icon{
+					color: #000;
+					opacity: .10;
+					position: absolute;
+					right: -16px;
+					top: -14px;
+					font-size: 115px;
+				}
+				h4{
+					color: $dip;
+					font: bold 24px $bar;
+					margin-bottom: 15px;
+				}
+				p{
+					margin-bottom: 10px;
+				}
+				.main_btn{
+					float: right;
+					font-size: 22px;
+					line-height: 50px;
+					padding: 0px 19px;
+					margin-right: -30px;
+				}
+			}
+		}
+	}
+}
+.best_servicing_inner{
+	position: relative;
+	z-index: 5;
+	overflow: hidden;
+	max-width: 950px;
+	margin: auto;
+	.twentytwenty-overlay{
+		display: none;
+	}
+	.twentytwenty-handle{
+		height: 35px;
+		width: 35px;
+		background: #fff;
+		&:before, &:after{
+			box-shadow: none;
+		}
+		&:before{
+			margin-bottom: 20px;
+		}
+		&:after{
+			margin-top: 20px;
+		}
+		.twentytwenty-left-arrow{
+			border-right: 5px solid $baseColor !important;
+			border: 5px inset transparent;
+			margin-left: -14px;
+			margin-top: -4px;
+		}
+		.twentytwenty-right-arrow{
+			border-left: 5px solid $baseColor !important;
+			border: 5px inset transparent;
+			margin-right: -14px;
+			margin-top: -4px;
+		}
+	}
+}
+.service_two{
+	background: #fff;
+	height: auto;
+	margin-bottom: 0px;
+	&:before{
+		display: none;
+	}
+	&:after{
+		display: none;
+	}
+}
+/* End Our Service Area css
+============================================================================================ */
+
+/* Our Process Area css
+============================================================================================ */
+.our_process_area{
+	background: url(../img/process-bg.jpg) no-repeat scroll center center;
+	background-size: cover;
+	position: relative;
+	z-index: 2;
+	&:before{
+		content: "";
+		background: rgba(0, 34, 96, .90);
+		position: absolute;
+		left: 0px;
+		top: 0px;
+		height: 100%;
+		width: 100%;
+	}
+}
+.process_inner{
+	.title_two{
+		margin-bottom: 40px;
+	}
+}
+.process_left_text{
+	.media{
+		margin-bottom: 35px;
+		&:last-child{
+			margin-bottom: 0px;
+		}
+		.d-flex{
+			padding-right: 20px;
+			margin-top: 5px;
+			i{
+				height: 60px;
+				width: 60px;
+				border-radius: 50%;
+				color: #fff;
+				line-height: 60px;
+				text-align: center;
+				font-size: 30px;
+			}
+		}
+		.media-body{
+			h4{
+				color: #fff;
+				font: bold 24px $bar;
+			}
+			p{
+				color: #fff;
+				padding-right: 100px;
+				margin-bottom: 0px;
+			}
+		}
+	}
+}
+.process_form{
+	background: #fff;
+	padding: 35px 50px 45px 50px;
+	.single_simple_title{
+		margin-bottom: 35px;
+		h2{
+			font-size: 30px;
+			margin-bottom: 0px;
+		}
+	}
+}
+/* End Our Process Area css
+============================================================================================ */
+
+/* Expert Brand Area css
+============================================================================================ */
+.expert_brand_area{
+	.ex_brand_inner{
+		display: flex;
+		flex-wrap: wrap;
+		background: #fff;
+		box-shadow: 0px 0px 50px 0px rgba(13, 7, 65, 0.08);
+		.item{
+			flex: 0 0 20%;
+			max-width: 20%;
+			text-align: center;
+			line-height: 124px;
+			border-bottom: 1px solid #f2f2f2;
+			border-right: 1px solid #f2f2f2;
+			img{
+				display: inline-block;
+				@include transition;
+			}
+			&:hover{
+				img{
+					transform: scale(1.1);
+				}
+			}
+		}
+	}
+}
+/* End Expert Brand Area css
+============================================================================================ */
+
+/* Trusted Taxi Area css
+============================================================================================ */
+.trusted_taxi_area{
+	background: url(../img/trusted-bg.jpg) no-repeat center center;
+	background-size: cover;
+	position: relative;
+	padding-top: 65px;
+	padding-bottom: 75px;
+	&:before{
+		content: "";
+		background: rgba(0, 0, 0, .90);
+		position: absolute;
+		left: 0px;
+		top: 0px;
+		width: 100%;
+		height: 100%;
+	}
+	&:after{
+		content: "";
+		background: url(../img/trusted-border.jpg) no-repeat;
+		height: 24px;
+		width: 100%;
+		position: absolute;
+		left: 0px;
+		bottom: 0px;
+	}
+}
+.trusted_taxi_inner{
+	.col-lg-6{
+		display: flex;
+		vertical-align: middle;
+		align-self: center;
+	}
+	.trusted_text{
+		padding-right: 20px;
+		h4{
+			font: bold 44px $bar;
+			color: #fff;
+			margin-bottom: 25px;
+			span{
+				color: $yellow;
+			}
+		}
+		p{
+			color: rgba(255, 255, 255, .5);
+			margin-bottom: 32px;
+		}
+	}
+}
+/* End Trusted Taxi Area css
+============================================================================================ */
+
+/* Car Budget Area css
+============================================================================================ */
+.car_budget_area{
+	background: #f9f9f9;
+}
+.car_budget_inner{
+	background: #fff;
+	box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.08);
+	.nav.nav-tabs{
+		border: none;
+		li{
+			flex: 0 0 16.66%;
+			max-width: 16.66%;
+			a{
+				text-align: center;
+				padding: 0px 10px;
+				border: none;
+				border-radius: 0px;
+				background: $yellow;
+				font: 500 18px/55px $bar;
+				color: $dip;
+				border-right: 1px solid #e5b200;
+				&:hover, &.active{
+					background: #fff;
+					border-color: #fff;
+				}
+			}
+			&:last-child{
+				a{
+					border-right-color: transparent;
+				}
+			}
+		}
+	}
+	.tab-pane{
+		padding-left: 55px;
+		padding-right: 55px;
+		.row{
+			padding-top: 50px;
+			padding-bottom: 50px;
+		}
+		.taxi_text{
+			h3{
+				font: bold 24px $bar;
+				color: $dip;
+				margin-bottom: 15px;
+			}
+			p{
+				padding-right: 48px;
+				margin-bottom: 20px;
+			}
+			.nav{
+				li{
+					margin-bottom: 15px;
+					a{
+						font: 600 16px $bar;
+						color: $dip;
+						position: relative;
+						padding-left: 11px;
+						display: block;
+						&:before{
+							content: "";
+							height: 5px;
+							width: 5px;
+							background: $dip;
+							border-radius: 50%;
+							position: absolute;
+							left: 0px;
+							top: 8px;
+						}
+					}
+					&:last-child{
+						margin-bottom: 0px;
+					}
+				}
+			}
+			.car_details{
+				margin-top: 30px;
+				span{
+					display: inline-block;
+					margin-right: 50px;
+					font: normal 16px $bar;
+					color: $pfont;
+					i{
+						padding-right: 10px;
+						color: $yellow;
+						font: normal 16px $bar;
+					}
+				}
+			}
+		}
+		.price_content{
+			margin-left: -30px;
+			.price_km{
+				float: right;
+				height: 120px;
+				width: 120px;
+				background: #000;
+				border: 6px solid $yellow;
+				border-radius: 50%;
+				margin-bottom: -45px;
+				h6{
+					text-align: right;
+					color: #fff;
+					padding-right: 15px;
+					font: normal 16px $bar;
+					margin-bottom: 0px;
+					margin-top: 20px;
+				}
+				h5{
+					text-align: center;
+					color: #fff;
+					font: bold 36px $bar;
+					margin-bottom: 0px;
+					span{
+						font-size: 16px;
+						vertical-align: top;
+						margin-top: 7px;
+						display: inline-block;
+					}
+				}
+			}
+		}
+	}
+}
+.car_budget_red{
+	.car_budget_inner{
+		.nav.nav-tabs{
+			li{
+				a{
+					color: #fff;
+					border-right: 1px solid transparent;
+					&:hover, &.active{
+						background: #fff;
+						border-color: #fff;
+						color: $dip;
+					}
+				}
+				&:last-child{
+					a{
+						border-right-color: transparent;
+					}
+				}
+			}
+		}
+		.tab-pane{
+			.taxi_text{
+				.car_details{
+					a{
+                        color: #777777;
+						i{
+                            padding-right: 10px;
+						}
+					}
+				}
+			}
+			.price_content{
+				.price_km{
+					border: 6px solid transparent;
+					position: relative;
+					z-index: 2;
+				}
+			}
+		}
+	}
+}
+/* End Car Budget Area css
+============================================================================================ */
+
+/* Explore Area css
+============================================================================================ */
+.explore_area{
+	
+}
+.explore_inner{
+	margin-bottom: -30px;
+}
+.explore_item{
+	position: relative;
+	z-index: 2;
+	margin-bottom: 30px;
+	overflow: hidden;
+	.explore_img{
+		position: relative;
+		&:before{
+			content: "";
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			background-image: -moz-linear-gradient( 0deg, rgb(0,0,0) 0%, rgba(0,0,0,0) 100%);
+			background-image: -webkit-linear-gradient( 0deg, rgb(0,0,0) 0%, rgba(0,0,0,0) 100%);
+			background-image: -ms-linear-gradient( 0deg, rgb(0,0,0) 0%, rgba(0,0,0,0) 100%);
+			background-image: linear-gradient( 0deg, rgb(0,0,0) 0%, rgba(0,0,0,0) 100%);
+			width: 100%;
+			height: 100%;
+			opacity: .7;
+			z-index: 1;
+		}
+		img{
+			transition: all 300ms linear;
+		}
+	}
+	.explore_text{
+		position: absolute;
+		left: 0px;
+		top: 0px;
+		z-index: 1;
+		width: 100%;
+		padding-left: 30px;
+		padding-right: 30px;
+		padding-top: 35px;
+		height: 100%;
+		h4{
+			color: #fff;
+			font: bold 24px $bar;
+			margin-bottom: 10px;
+		}
+		h6{
+//			color: $green;
+			font: bold 20px $bar;
+			span{
+				font-size: 16px;
+				font-weight: normal;
+			}
+		}
+		.view{
+			color: #fff;
+			font: bold 16px $bar;
+			position: absolute;
+			left: 30px;
+			bottom: 24px;
+			i{
+				padding-left: 4px;
+			}
+		}
+	}
+	&:hover{
+		.explore_img{
+			img{
+				transform: scale(1.1);
+			}
+		}
+		.explore_text{
+			a{
+				color: $green;
+			}
+		}
+	}
+}
+/* End Explore Area css
+============================================================================================ */
+
+/* Tractor Brand Area css
+============================================================================================ */
+.tractor_brand_area{
+	background: #f1fbff;
+	&.yacht_brand{
+		.tractor_brand_slider{
+			.owl-dots{
+				button{
+					background: #b2b2b2;
+					&:last-child{
+						margin-right: 0px;
+					}
+					&.active{
+						transform: scale(1.8);
+					}
+				}
+			}
+		}
+	}
+}
+.tractor_brand_slider{
+	.owl-stage-outer{
+		box-shadow: 0px 0px 50px 0px rgba(0, 0, 0, 0.04);
+		background: #fff;
+	}
+	.t_brand_item{
+		text-align: center;
+		.t_b_1{
+			line-height: 122px;
+			border-bottom: 1px solid #f2f2f2;
+			img{
+				width: auto;
+				max-width: 100%;
+				display: inline-block;
+			}
+		}
+		.t_b_2{
+			line-height: 122px;
+			img{
+				width: auto;
+				max-width: 100%;
+				display: inline-block;
+			}
+		}
+	}
+	.owl-item.active{
+		& + .owl-item{
+			.t_brand_item{
+				border-left: 1px solid #f2f2f2;
+			}
+		}
+	}
+	.owl-dots{
+		text-align: center;
+		margin-top: 40px;
+		button{
+			height: 6px;
+			width: 6px;
+			background: #b2b2b2;
+			border-radius: 50%;
+			margin-right: 8px;
+			@include transition;
+			&:last-child{
+				margin-right: 0px;
+			}
+			&.active{
+				transform: scale(1.8);
+				background: $green;
+			}
+		}
+	}
+}
+/* End Tractor Brand Area css
+============================================================================================ */
+
+/* Tractor Quickly Area css
+============================================================================================ */
+.tractor_quickly_area{
+	background: url(../img/t-quickly-bg.jpg) no-repeat scroll center center;
+	background-size: cover;
+	position: relative;
+	z-index: 2;
+	&:before{
+		content: "";
+		background: rgba(0, 0, 0, .80);
+		position: absolute;
+		left: 0px;
+		top: 0px;
+		height: 100%;
+		width: 100%;
+		z-index: -1;
+	}
+}
+.quickly_text_part{
+	text-align: center;
+	color: #fff;
+	padding-top: 75px;
+	padding-bottom: 75px;
+	h3{
+		font: bold 44px $bar;
+		margin-bottom: 25px;
+	}
+	p{
+		font-size: 20px;
+		margin-bottom: 30px;
+	}
+	.main_btn{
+		text-transform: uppercase;
+		font-weight: bold;
+		padding: 0px 33px;
+	}
+}
+.quickly_item_inner{
+	border-top: 1px solid rgba(255, 255, 255, .20);
+}
+.quickly_item{
+	.media{
+		padding: 43px 0px;
+		.d-flex{
+			padding-right: 12px;
+			i{
+				font-size: 40px;
+				margin-top: 3px;
+			}
+		}
+		.media-body{
+			h4{
+				margin-bottom: 0px;
+				color: #fff;
+				text-transform: uppercase;
+			}
+			p{
+				margin-bottom: 0px;
+				color: rgba(255, 255, 255, .5);
+			}
+		}
+	}
+}
+.quickly_red{
+	background: url(../img/t-quickly-bg-2.jpg) no-repeat scroll center center;
+	background-size: cover;
+}
+/* End Tractor Quickly Area css
+============================================================================================ */
+
+/* Truck Service Area css
+============================================================================================ */
+.truck_service_area{
+	background: url(../img/truck-blue-bg.jpg) no-repeat scroll center center;
+	background-size: cover;
+	position: relative;
+	z-index: 2;
+	&:before{
+		content: "";
+		background: rgba(241, 251, 255, .95);
+		position: absolute;
+		left: 0px;
+		top: 0px;
+		width: 100%;
+		height: 100%;
+		z-index: -1;
+	}
+	&.extra_pad{
+		padding-bottom: 200px;
+	}
+}
+.truck_service_inner{
+	background: #fff;
+	box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.06);
+	.col-lg-2{
+		&:last-child{
+			.t_service_item{
+				&:before{
+					display: none;
+				}
+			}
+		}
+	}
+	.t_service_item{
+		text-align: center;
+		padding: 25px 0px;
+		position: relative;
+		&:before{
+			content: "";
+			height: 60px;
+			width: 1px;
+			background: #e7f1f5;
+			position: absolute;
+			right: -16px;
+			top: 50%;
+			transform: translateY(-50%);
+		}
+		i{
+			font-size: 70px;
+			margin-bottom: 20px;
+			display: inline-block;
+		}
+		h6{
+			color: $dip;
+			font: bold 20px $bar;
+			margin-bottom: 0px;
+			@include transition;
+		}
+		&.red{
+			i{
+				color: $baseColor;
+			}
+		}
+	}
+}
+
+.truck_check{
+	.truck_check_inner{
+		margin-top: -100px;
+		.truck_check_left{
+			background: url(../img/truck-check-bg.jpg) no-repeat scroll center center; 
+			background-size: cover;
+			padding-left: 206px;
+			position: relative;
+			padding-top: 43px;
+			padding-bottom: 43px;
+			z-index: 2;
+			img{
+				position: absolute;
+				left: -3px;
+				top: 50%;
+				transform: translateY(-50%);
+			}
+			h6{
+				color: $or;
+				font: normal 16px $bar;
+				text-transform: uppercase;
+				letter-spacing: 1.6px;
+			}
+			h4{
+				color: #fff;
+				padding-right: 30px;
+				font: bold 24px/30px $bar;
+				margin-bottom: 23px;
+			}
+			.main_btn{
+				padding: 0px 44px;
+				text-transform: uppercase;
+			}
+			&.red{
+				h6{
+					color: $baseColor;
+				}
+			}
+		}
+		.truck_check_right{
+			background-image: -moz-linear-gradient( 0deg, rgb(255,60,13) 0%, rgb(255,129,28) 100%);
+			background-image: -webkit-linear-gradient( 0deg, rgb(255,60,13) 0%, rgb(255,129,28) 100%);
+			background-image: -ms-linear-gradient( 0deg, rgb(255,60,13) 0%, rgb(255,129,28) 100%);
+			background-image: linear-gradient( 0deg, rgb(255,60,13) 0%, rgb(255,129,28) 100%);
+			box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.1);
+			padding-right: 170px;
+			position: relative;
+			height: 100%;
+			padding-left: 40px;
+			padding-top: 43px;
+			padding-bottom: 43px;
+			z-index: 2;
+			img{
+				position: absolute;
+				right: 0px;
+				top: 50%;
+				transform: translateY(-50%);
+				z-index: -1;
+			}
+			h6{
+				color: #fff;
+				font: normal 16px $bar;
+				text-transform: uppercase;
+				letter-spacing: 1.6px;
+			}
+			h4{
+				color: #fff;
+				padding-right: 30px;
+				font: bold 24px/30px $bar;
+				margin-bottom: 23px;
+			}
+			.main_btn{
+				padding: 0px 44px;
+				text-transform: uppercase;
+				background: #fff;
+				border-color: #fff;
+				color: $dip;
+				&:hover{
+					color: $dip;
+					box-shadow: 0px 7px 17px -3px rgba(0, 0, 0, 0.64);
+				}
+			}
+			&.red{
+				background: $baseColor;
+			}
+		}
+	}
+	&.ab_truck{
+		.truck_check_inner{
+			margin-top: 0px;
+			box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.1);
+		}
+	}
+}
+
+/* End Truck Service Area css
+============================================================================================ */
+
+/* Service Included Area css
+============================================================================================ */
+.service_included_area{
+	background: url(../img/included-bg.jpg) no-repeat scroll center center;
+	background-size: cover;
+	position: relative;
+	z-index: 2;
+	&:before{
+		content: "";
+		background: rgba(0, 0, 0, .85);
+		position: absolute;
+		left: 0px;
+		top: 0px;
+		width: 100%;
+		height: 100%;
+	}
+	.service_included_inner{
+		.nav{
+			li{
+				margin-bottom: 10px;
+				&:last-child{
+					margin-bottom: 0px;
+				}
+                position: relative;
+                padding-left: 30px;
+                color: #fff;
+                img{
+                    position: absolute;
+                    left: 0px;
+                    top: 6px;
+                }
+				a{
+					position: relative;
+					padding-left: 30px;
+					color: #fff;
+					img{
+						position: absolute;
+						left: 0px;
+						top: 2px;
+					}
+				}
+			}
+		}
+	}
+}
+/* End Service Included Area css
+============================================================================================ */
+

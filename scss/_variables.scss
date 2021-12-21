@@ -1,0 +1,38 @@
+/*font Variables*/
+$bar: 'Barlow', sans-serif;
+
+
+
+
+/*Color Variables*/
+$baseColor: #ff2a39; 
+$red2: #ea2626; 
+$green: #0cc533; 
+$pest: #153e4d;
+$per: #ff575d;
+$or: #f75d34;
+$yellow: #fecc18;
+$dip: #34373b;
+$pfont: #777777; 
+
+
+/*=================== fonts ====================*/
+@import url('https://fonts.googleapis.com/css?family=Barlow:300,400,400i,500,500i,600,600i,700,700i,800,900&display=swap');
+
+// Mixins
+@mixin transition($property: all, $duration: 300ms, $animate: linear, $delay:0s){
+    transition: $property $duration $animate $delay; 
+}
+
+// Placeholder Mixins
+
+@mixin placeholder {
+  &.placeholder { @content; }
+  &:-moz-placeholder { @content; }
+  &::-moz-placeholder { @content; }
+  &::-webkit-input-placeholder { @content; }
+}
+
+
+
+

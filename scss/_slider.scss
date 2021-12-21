@@ -1,0 +1,897 @@
+/* Budget Slider Area css
+============================================================================================ */
+.main_slider_area{
+	&.bike_slider{
+		.slider_nav{
+			i{
+				&:hover{
+					background: $red2;
+				}
+			}
+		}
+	}
+	&.bus_slider_area.repair_slider_area{
+		.slider_nav{
+			i{
+				&:hover{
+					background: $baseColor !important;
+				}
+			}
+		}
+	}
+}
+
+.main_slider{
+	height: 890px;
+	.slick-list{
+		height: 100%;
+		outline: none !important;
+		.slick-track{
+			height: 100%;
+			outline: none !important;
+		}
+	}
+	.slider_item{
+		outline: none !important;
+	}
+	.slider_item{
+		display: flex !important;
+		align-items: center;
+		position: relative;
+		.container{
+			
+		}
+		.slider_text{
+			margin-top: -100px;
+			img{
+				margin-bottom: 26px;
+				opacity: 0;
+			}
+			h6{
+				display: inline-block;
+				color: #fff;
+				font: italic 600 20px/45px $bar;
+				text-transform: uppercase;
+				position: relative;
+				padding: 0px 25px;
+				margin-bottom: 30px;
+				opacity: 0;
+				cursor: text;
+				&:before{
+					content: "";
+//					background: $red2;
+					position: absolute;
+					left: 0px;
+					top: 0px;
+					transform: skewX(-30deg);
+					height: 100%;
+					width: 100%;
+					z-index: -1;
+				}
+			}
+			h5{
+				font: normal 48px $bar;
+				color: #fff;
+				margin-bottom: 36px;
+				opacity: 0;
+				cursor: text;
+			}
+			h4{
+				font: bold 48px $bar;
+				color: #fff;
+				margin-bottom: 40px;
+				opacity: 0;
+				cursor: text;
+			}
+			.main_btn.white{
+				background: #fff;
+				color: $dip;
+				border-color: #fff;
+				text-transform: uppercase;
+				font: bold 16px/58px $bar;
+				padding: 0px 38px;
+				opacity: 0;
+				&:hover{
+//					background: $red2;
+//					border-color: $red2;
+					color: #fff;
+				}
+			}
+		}
+		.budget_brand{
+			position: relative;
+			display: inline-block;
+			img{
+				opacity: 0;
+			}
+			.km_text{
+				height: 122px;
+				width: 122px;
+				border: 6px solid rgb(255, 42, 57);
+				border-radius: 50%;
+				background: #fff;
+				color: $baseColor;
+				position: absolute;
+				right: 60px;
+				bottom: 0px;
+				padding-top: 20px;
+				opacity: 0;
+				cursor: text;
+				h4{
+					color: $baseColor;
+					font: bold 36px $bar;
+					text-align: center;
+					margin-bottom: 0px;
+					cursor: text;
+					span{
+						font-size: 18px;
+						vertical-align: top;
+					}
+				}
+				h5{
+					color: $baseColor;
+					font: normal 16px $bar;
+					text-align: right;
+					margin-bottom: 0px;
+					padding-right: 10px;
+					cursor: text;
+				}
+			}
+		}
+		&.slick-active{
+			.slider_text{
+				img{
+					opacity: 1;
+				}
+				h6{
+					opacity: 1;
+				}
+				h5{
+					opacity: 1;
+				}
+				h4{
+					opacity: 1;
+				}
+				.main_btn.white{
+					opacity: 1;
+				}
+				.budget_brand{
+					img{
+						opacity: 1;
+					}
+					.km_text{
+						opacity: 1;
+					}
+				}
+			}
+		}
+		.image_overlay{
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			height: 100%;
+			width: 100%;
+			z-index: -1;
+			background-size: cover !important;
+		}
+	}
+	&.budget_slider{
+		height: 780px;
+		.slider_item{
+			.image_overlay{
+				&:before{
+					content: "";
+					background: rgba(0, 0, 0, .1);
+					position: absolute;
+					left: 0px;
+					top: 0px;
+					height: 100%;
+					width: 100%;
+				}
+			}
+			.slider_text{
+				margin-top: -10px;
+			}
+		}
+	}
+	&.bus_slider{
+		.slider_item{
+			.image_overlay{
+				&:before{
+					content: "";
+					background: rgba(0, 0, 0, .2);
+					position: absolute;
+					left: 0px;
+					top: 0px;
+					height: 100%;
+					width: 100%;
+				}
+			}
+			.slider_text{
+				margin-top: -75px;
+				h2{
+					color: #fff;
+					font: bold 60px $bar;
+					margin-bottom: 5px;
+					opacity: 0;
+					cursor: text;
+					span{
+//						color: $or;
+						text-decoration: underline;
+					}
+				}
+				h6{
+					padding: 0px;
+					font: normal 30px $bar;
+					text-transform: none;
+					margin-bottom: 2px;
+					opacity: 0;
+					&:before{
+						display: none;
+					}
+				}
+				h3{
+					color: #fff;
+					font: 900 72px/70px $bar;
+					margin-bottom: 22px; 
+					opacity: 0;
+				}
+				p{
+					color: #fff;
+					font: normal 20px/36px $bar;
+					margin-bottom: 32px;
+					opacity: 0;
+					cursor: text;
+				}
+				.main_btn.orange{
+					text-transform: uppercase;
+					font: bold 16px/48px $bar; 
+					opacity: 0;
+					width: 180px; 
+					padding: 0px 15px;
+					text-align: center;
+					& + .main_btn.orange{
+						background: transparent;
+						margin-left: 25px;
+						&:hover{
+//							background: $or;
+							color: #fff;
+						}
+					}
+				}
+			}
+			&.slick-active{
+				.slider_text{
+					h2{
+						opacity: 1;
+					}
+					h6{
+						opacity: 1;
+					}
+					h3{
+						opacity: 1;
+						cursor: text;
+					}
+					p{
+						opacity: 1;
+					}
+					.main_btn{
+						opacity: 1;
+					}
+				}
+			}
+		}
+		&.classified_slider{
+			height: 770px;
+		}
+	}
+	&.repair_slider{
+		height: 825px;
+		.slider_item{
+			.slider_text{
+				h3{
+					font-weight: bold;
+					cursor: text;
+				}
+				.main_btn.red{
+					padding: 0px 32.5px;
+					text-transform: uppercase;
+					font-weight: 600;
+					opacity: 0;
+				}
+			}
+			&.slick-active{
+				.slider_text{
+					.main_btn{
+						opacity: 1;
+					}
+				}
+			}
+		}
+	}
+	&.taxi_slider{
+		height: 960px;
+	}
+	&.tractor_slider{
+		height: 740px;
+	}
+	&.truck_slider{
+		height: 825px;
+		.slider_item{
+			.image_overlay{
+				&:before{
+					display: none;
+				}
+			}
+			.slider_text{
+				margin-top: -60px;
+				h6{
+					font-size: 60px;
+					margin-bottom: 5px;
+					cursor: text;
+				}
+				h3{
+					margin-bottom: 30px;
+				}
+				p{
+					font-size: 30px;
+					margin-bottom: 40px;
+				}
+				.main_btn.orange{
+					line-height: 58px;
+				}
+				.main_btn.blue{
+					background: #002e82;
+					border-color: #002e82;
+					text-transform: uppercase;
+					&:hover{
+						color: #fff;
+					}
+				}
+			}
+			&.slick-active{
+				.slider_text{
+					h2{
+						opacity: 1;
+					}
+					h6{
+						opacity: 1;
+					}
+					h3{
+						opacity: 1;
+					}
+					p{
+						opacity: 1;
+					}
+					.main_btn{
+						opacity: 1;
+					}
+				}
+			}
+		}
+	}
+	&.bus_slider.truck_slider{
+		height: 750px;
+	}
+	&.luxuary_slider{
+		height: 850px;
+		.slider_item{
+			.slider_text{
+				position: relative;
+				&:before{
+					content: "B";
+					font-size: 500px;
+					color: #fff;
+					position: absolute;
+					left: 60px;
+					top: 124px;
+					font-weight: bold;
+					opacity: .03;
+					z-index: -1;
+					opacity: 0;
+					@include transition;
+				}
+				img{
+					opacity: 0;
+				}
+				h3{
+					text-transform: uppercase;
+					font: normal 18px $bar;
+					color: #fff;
+					opacity: 0;
+					cursor: text;
+				}
+				h2{
+					font: bold 100px $bar;
+					color: #fff;
+					text-transform: uppercase;
+					letter-spacing: 10px;
+					position: relative;
+					z-index: 2;
+					opacity: 0;
+					cursor: text;
+					&:before{
+						content: "";
+						background: $baseColor;
+						height: 112px;
+						width: 130px;
+						position: absolute;
+						left: 125px;
+						transform: skewX(25deg);
+						top: 6px;
+						z-index: -1;
+					}
+				}
+				h5{
+//					color: $baseColor;
+					font: 300 72px $bar;
+					text-transform: uppercase;
+					opacity: 0;
+					cursor: text;
+				}
+				p{
+					font: bold 16px $bar;
+					text-transform: uppercase;
+					position: relative;
+					padding-left: 24px;
+					margin-bottom: 0px;
+					color: #fff;
+					opacity: 0;
+					&:before{
+						content: "";
+						width: 17px;
+						height: 2px;
+//						background: $baseColor;
+						position: absolute;
+						left: 0px;
+						top: 50%;
+						transform: translateY(-50%);
+					}
+				}
+			}
+			&.slick-active{
+				.slider_text{
+					&:before{
+						opacity: .03;
+					}
+					img{
+						opacity: 1;
+					}
+					h3{
+						opacity: 1;
+					}
+					h2{
+						opacity: 1;
+					}
+					h5{
+						opacity: 1;
+					}
+					p{
+						opacity: 1;
+					}
+				}
+			}
+		}
+	}
+}
+.main_slider_area{
+	position: relative;
+	.slider_nav{
+		opacity: 0;
+		@include transition;
+		i{
+			position: absolute;
+			width: 50px;
+			height: 50px;
+			line-height: 50px;
+			text-align: center;
+			font-size: 14px;
+			color: $dip;
+			background: rgba(255, 255, 255, 1);
+			box-shadow: -1.71px 4.698px 20px 0px rgba(20, 91, 148, 0.1);
+			z-index: 1;
+			top: 50%;
+			transform: translateY(-50%);
+			transition: all 0.2s linear;
+			cursor: pointer;
+			&:hover{
+//				background: $baseColor;
+				color: #fff;
+			}
+		}
+		.arrow_left{
+			left: 70px;
+		}
+		.arrow_right{
+			right: 70px;
+		}
+	}
+	
+	&:hover{
+		.slider_nav{
+			opacity: 1;
+		}
+	}
+	&.bus_slider_area{
+		.slider_nav{
+			i{
+				&:hover{
+//					background: $or;
+					color: #fff;
+				}
+			}
+		}
+	}
+	&.yacht_slider_area{
+		.slider_nav{
+			i{
+				&:hover{
+//					background: $per;
+					color: #fff;
+				}
+			}
+		}
+	}
+}
+.truck_slider_area{
+	
+}
+.tractor_slider_area{
+	.taxi_slider_text{
+		padding-top: 155px;
+		.left_text{
+			margin: 0px;
+			h5{
+				color: #fff;
+				font: normal 60px $bar;
+				margin-bottom: 0px;
+			}
+			h3{
+				font: bold 72px/70px $bar;
+				margin-bottom: 30px;
+			}
+			p{
+				font-size: 30px;
+			}
+			.main_btn.white{
+				background: #fff;
+				color: $dip;
+				border-color: #fff;
+				font-weight: bold;
+				text-transform: uppercase;
+				line-height: 48px;
+				padding: 0px 42px;
+				&:hover{
+					background: $green;
+					color: #fff;
+					border-color: $green;
+				}
+			}
+		}
+		.taxi_s_form{
+			background: rgba(0, 0, 0, .8);
+			border: none;
+			border-radius: 0px;
+			margin-left: 0px;
+			padding: 25px 30px 40px 30px;
+			.single_title_form{
+				margin-bottom: 25px;
+				h2{
+					color: #fff;
+					margin-bottom: 0px;
+					font: bold 30px $bar;
+				}
+			}
+			.contact_form{
+				.form-group{
+					input{
+						height: 60px;
+						line-height: 60px;
+						background: #fff;
+						@include placeholder{
+							color: $pfont;
+						}
+					}
+					.nice_select{
+						height: 60px;
+						line-height: 60px;
+						&:after{
+							margin-top: -29px;
+						}
+					}
+					.submit_btn{
+						height: auto;
+						line-height: 58px;
+						border-radius: 0px;
+					}
+				}
+			}
+		}
+	}
+}
+.taxi_slider_text{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	padding-top: 250px;
+	.left_text{
+		align-self: center;
+		margin-top: -50px;
+		h3{
+			color: #fff;
+			font: bold 60px $bar;
+			margin-bottom: 22px;
+			span{
+				color: $yellow;
+			}
+		}
+		p{
+			color: #fff;
+			font-size: 24px;
+			margin-bottom: 40px;
+		}
+		.main_btn.yellow{
+			padding: 0px 27px;
+		}
+	}
+	.taxi_s_form{
+		background: #fff;
+		padding: 40px;
+		border-top: 5px solid $yellow;
+		border-radius: 5px;
+		margin-left: 45px;
+		padding-top: 16px;
+		.slider_form_title{
+			margin-bottom: 45px;
+			h2{
+				color: $dip;
+				text-align: center;
+				margin-bottom: 0px;
+				position: relative;
+				&:before{
+					content: "";
+					background: $yellow;
+					height: 2px;
+					width: 46px;
+					position: absolute;
+					left: 50%;
+					transform: translateX(-50%);
+					bottom: -19px;
+				}
+				&:after{
+					content: "";
+					background: $yellow;
+					height: 2px;
+					width: 22px;
+					position: absolute;
+					left: 50%;
+					transform: translateX(-50%);
+					bottom: -26px; 
+				}
+				span{
+					color: $yellow;
+				}
+			}
+		}
+		.contact_form{
+			.form-group{
+				margin-bottom: 18px;
+				&:last-child{
+					margin-bottom: 0px;
+				}
+				input{
+					height: 58px;
+					background: transparent;
+					border: 1px solid #ececec;
+					padding: 0px 20px;
+					font-family: $bar, icomoon;
+					color: $dip;
+					padding-right: 35px;
+					line-height: 58px;
+					@include placeholder{
+						font-family: $bar, icomoon;
+						color: #aeaeae;
+						line-height: 58px;
+					}
+				}
+				.time{
+					background: transparent;
+					border: 1px solid #ececec;
+					height: 58px;
+					line-height: 58px;
+					padding-left: 39px;
+					.current{
+						color: #aeaeae;
+					}
+					&:after{
+						color: #aeaeae;
+						margin-top: -28px;
+					}
+					&:before{
+						content: "\e919";
+						font-family: 'icomoon' !important;
+						color: #aeaeae;
+						position: absolute;
+						left: 20px;
+						top: 51%;
+						transform: translateY(-50%);
+						font-size: 14px;
+					}
+				}
+				.passengers{
+					background: transparent;
+					border: 1px solid #ececec;
+					height: 58px;
+					line-height: 58px;
+					padding-left: 39px;
+					.current{
+						color: #aeaeae;
+					}
+					&:after{
+						color: #aeaeae;
+						margin-top: -28px;
+					}
+					&:before{
+						content: "\f007";
+						font-family: 'icomoon' !important;
+						color: #aeaeae;
+						position: absolute;
+						left: 20px;
+						top: 51%;
+						transform: translateY(-50%);
+						font-size: 14px;
+					}
+				}
+				&.icon_add{
+					position: relative;
+					i{
+						position: absolute;
+						right: 35px;
+						top: 50%;
+						transform: translateY(-50%);
+						font-size: 15px;
+						color: #aeaeae;
+					}
+				}
+				.submit_btn.yellow{
+					background: #000;
+					color: #fff;
+					height: auto;
+					line-height: 53px;
+					border-color: #000;
+					border-radius: 0px;
+					color: $yellow;
+					box-shadow: none;
+					&:hover{
+						color: $dip;
+						background: $yellow;
+						border-color: $yellow;
+						box-shadow: none;
+					}
+				}
+			}
+		}
+	}
+}
+.luxuary_slider_area{
+	padding-left: 100px;
+	position: relative;
+	&:before{
+		content: "";
+		background: url(../img/icon/luxuary-left-color.jpg) no-repeat scroll center center;
+		width: 282px;
+		height: 950px;
+		position: absolute;
+		left: 0px;
+		top: 0px;
+		z-index: -1;
+	}
+	.luxuary_pagination{
+		position: absolute;
+		left: 145px;
+		top: 40%; 
+		transform: translateY(-50%);
+		z-index: 1;
+		color: #fff;
+		font: normal 16px $bar;
+		&:before{
+			content: "";
+			height: 28px;
+			width: 28px;
+			border: 1px solid #3c3b3b;
+			border-radius: 50%;
+			display: inline-block;
+			position: absolute;
+			left: -4px;
+			bottom: -160px;
+		}
+		&:after{
+			content: "";
+			height: 7px;
+			width: 7px;
+			background: #3c3b3b;
+			border-radius: 50%;
+			display: inline-block;
+			position: absolute;
+			left: 6px;
+			bottom: -150px;
+		}
+		.pagingInfo{
+			width: 22px;
+			&:before{
+				content: "";
+				width: 2px;
+				height: 100px;
+				position: absolute;
+				left: 50%;
+				bottom: -122px;
+				background: #3c3b3b;
+				margin-left: -1px;
+			}
+		}
+	}
+	.luxuary_details{
+		position: absolute;
+		right: 0px;
+		bottom: 0px;
+		display: flex;
+		.luxuary_d_item{
+			text-align: center;
+			padding-left: 55px;
+			padding-right: 55px;
+			border-right: 1px solid #312d2d;
+			align-self: center;
+			&:last-child{
+				border-right: 0px;
+			}
+			&:nth-child(3){
+				border-right: 0px;
+			}
+			h4{
+				color: #fff;
+				font: bold 30px $bar;
+				span{
+					font-size: 20px;
+				}
+			}
+			p{
+				margin-bottom: 0px;
+				font: normal 14px $bar;
+				color: rgba(255, 255, 255, .5);
+				text-transform: uppercase;
+			}
+			&.video_luxuary{
+				padding-left: 0px;
+				padding-right: 0px;
+				.luxuary_video_area{
+					padding: 0px;
+					.car_video{
+						margin-left: 0px;
+						.play_btn{
+							i{
+								height: 60px;
+								width: 60px;
+								line-height: 60px;
+							}
+							&:before{
+								height: 100px;
+								width: 100px;
+								margin-left: -50px;
+								margin-top: -50px;
+							}
+							&:after{
+								height: 80px;
+								width: 80px;
+								margin-left: -40px;
+								margin-top: -40px;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+/* End Budget Slider Area css
+============================================================================================ */

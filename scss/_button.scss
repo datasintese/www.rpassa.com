@@ -1,0 +1,198 @@
+/* Button Area css
+============================================================================================ */
+.main_btn{
+	line-height: 48px;
+	font-size: 16px;
+	font-family: $bar;
+	display: inline-block;
+	padding: 0px 26px;
+	position: relative;
+	border-width: 1px;
+    border-style: solid;
+	@include transition;
+	font-weight: bold;
+	&.red{
+		color: #fff;
+		position: relative;
+		&:hover{
+			color: #fff;
+		}
+	}
+	&.red2{
+//		background: $red2;
+		color: #fff;
+		position: relative;
+//		border-color: $red2;
+		&:hover{
+			color: #fff;
+		}
+	}
+	&.orange{
+		color: #fff;
+		position: relative;
+		&:hover{
+			color: #fff;
+		}
+	}
+	&.yellow{
+		background: $yellow;
+		border-color: $yellow;
+		color: $dip;
+		text-transform: uppercase;
+		font-weight: bold;
+		line-height: 58px;
+		padding: 0px 45px;
+		&:hover{
+			background: #d6ac13;
+			border-color: #d6ac13;
+			color: $dip;
+		}
+	}
+	&.per{
+		&:hover{
+			background: #da464c;
+			border-color: #da464c;
+			color: #fff; 
+		}
+	}
+	&.border{
+		background: transparent;
+		color: $baseColor;
+		border-color: $baseColor !important;
+		&:hover{
+			color: #fff;
+		}
+		&.orange{
+			color: $or;
+			&:hover{
+				color: #fff;
+				background: $or;
+				border-color: $or;
+			}
+		}
+		&.red2{
+			color: $red2;
+			&:hover{
+				color: #fff;
+//				background: $red2;
+//				border-color: $red2;
+			}
+		}
+		&.per{
+			color: $per;
+			&:hover{
+				color: #fff;
+				background: $per; 
+				border-color: $per;
+			}
+		}
+	}
+	&:hover{
+		color: #fff;
+	}
+}
+.submit_btn{
+	line-height: 58px;
+	color: #fff;
+	font-size: 16px;
+	font-family: $bar;
+	display: inline-block;
+	padding: 0px 42px;
+	position: relative;
+	border: none;
+	outline: none !important;
+	box-shadow: none !important;
+	text-transform: uppercase;
+	font-weight: bold;
+    border-width: 1px;
+    border-style: solid;
+	@include transition;
+	&:hover{
+		color: #fff;
+	}
+	&.red{
+		color: #fff;
+		position: relative;
+		&:hover{
+			color: #fff;
+		}
+	}
+	&.orange{
+		background: $or;
+		&:hover{
+			color: #fff;
+			background: #e4390c;
+			border-color: #e4390c; 
+		}
+	}
+	&.per{
+		&:hover{
+			color: #fff;
+		}
+	}
+}
+					
+.view_btn{
+	text-transform: uppercase;
+	font: bold 16px $bar;
+	color: $baseColor;
+	@include transition;
+	&:hover{
+		color: $baseColor;
+	}
+	&.red2{
+//		color: $red2;
+	}
+}
+.read_btn{
+	text-transform: uppercase;
+	font: 600 14px $bar;
+	color: $dip;
+	letter-spacing: 1.4px;
+	position: relative;
+	@include transition;
+	&:before{
+		content: "";
+		width: 0px;
+		height: 2px;
+		background: $or;
+		position: absolute;
+		left: 0px;
+		top: 50%;
+		transform: translateY(-50%);
+		opacity: 0;
+		@include transition;
+	}
+	&:hover{
+		padding-left: 35px;
+		color: $or;
+		&:before{
+			width: 25px;
+			opacity: 1;
+		}
+	}
+}
+.border_btn{
+	border: 1px solid #fff;
+	text-transform: uppercase;
+	color: #fff;
+	font: bold 16px/48px $bar;
+	display: inline-block;
+	padding: 0px 54.5px;
+	@include transition;
+	&:hover{
+		color: #fff;
+	}
+	&.red{
+//		border-color: $baseColor;
+		border-radius: 0px;
+//		color: $baseColor;
+		outline: none;
+	 	box-shadow: none;
+		&:hover{
+			color: #fff;
+		}
+	}
+}
+/* Button Area css
+============================================================================================ */

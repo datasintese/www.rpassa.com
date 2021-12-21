@@ -1,0 +1,86 @@
+/* Auto Market Area css
+============================================================================================ */
+.auto_market_area{
+	.market_inner{
+		.market_text{
+			h3{
+				font: bold 44px $bar;
+				color: $dip;
+				position: relative;
+				margin-bottom: 15px;
+				img{
+					position: absolute;
+					left: 0px;
+					top: -26px;
+				}
+			}
+			.nav.nav-tabs{
+				border: none;
+				border-bottom: 1px solid #e5e5e5;
+				margin: 0px;
+				li{
+					margin: 0px;
+					a{
+						border-radius: 0px;
+						border: none;
+						font: bold 16px $bar;
+						color: $dip;
+						text-transform: uppercase;
+						padding: 0px 47px;
+						margin: 0px;
+						line-height: 52px;
+						position: relative;
+						cursor: pointer;
+						&:before{
+							content: "";
+							width: 0%;
+							height: 2px;
+							position: absolute;
+							left: 0px;
+							bottom: -1px;
+							@include transition;
+						}
+						&.active{
+							&:before{
+								width: 100%;
+							}
+						}
+					}
+				}
+			}
+			.tab-pane{
+				padding: 0px;
+				padding-top: 25px;
+				p{
+					padding-right: 20px;
+					margin-bottom: 20px;
+				}
+				.media{
+					margin-right: -15px;
+					.d-flex{
+						padding-right: 12px;
+						i{
+							font-size: 40px;
+							margin-top: 6px;
+						}
+					}
+					.media-body{
+						h4{
+							color: $dip;
+							font: bold 24px $bar;
+							margin-bottom: 12px;
+						}
+						p{
+							margin-bottom: 0px;
+						}
+					}
+				}
+			}
+		}
+		.market_image{
+			text-align: right;
+		}
+	}
+}
+/* End Auto Market Area css
+============================================================================================ */

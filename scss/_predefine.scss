@@ -1,0 +1,289 @@
+.list{
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+a{
+    text-decoration:none;
+    transition: all 0.3s linear;
+    &:hover, &:focus{
+       text-decoration:none;
+       outline: none;
+    }
+}
+.row.m0{
+    margin: 0px;
+}
+
+body{
+    line-height: 28px;
+    font-size: 16px;
+    font-family: $bar;
+    font-weight: normal;
+    color: $pfont;
+}
+h1, h2, h3, h4, h5, h6{ 
+    font-family: $bar; 
+    font-weight: bold;
+}
+i{
+	&:before{
+		margin-left: 0px !important;
+	}
+}
+
+button:focus{
+    outline: none;
+	box-shadow: none;
+}
+.m0{
+	margin: 0px;
+}
+.p0{
+	padding-left: 0px;
+	padding-right: 0px;
+}
+.p_100{
+	padding-top: 100px;
+	padding-bottom: 100px;
+}
+.pad_top{
+	padding-top: 100px;
+}
+.pad_btm{
+	padding-bottom: 100px;
+}
+.solid_br{
+	height: 1px;
+	background: url(../img/icon/sec-br.png) no-repeat;
+	width: 100%;
+}
+.border_solid{
+	border-bottom: 1px solid #e4e4e4;
+	max-width: 1110px;
+	margin: auto;
+}
+.luxuary_bg{
+	background: #0f1114;
+	
+}
+
+
+//.container{
+//    @media(min-width:1200px){
+//        max-width: 1200px;
+//    }
+//}
+
+/* Main Title Area css
+============================================================================================ */
+.single_title{
+	margin-bottom: 70px;
+	h2{
+		font: bold 44px $bar;
+		color: $dip;
+		margin-bottom: 0px;
+	}
+	&.yellow{
+		h2{
+			span{
+				color: $yellow;
+			}
+		}
+	}
+}
+.title_two{
+	margin-bottom: 70px;
+	h5{
+		text-transform: uppercase;
+		font: 500 16px $bar;
+		letter-spacing: 1.6px;
+//		color: $baseColor;
+		margin-bottom: 10px;
+	}
+	h2{
+		font: bold 44px $bar;
+		color: $dip;
+		margin-bottom: 0px;
+	}
+	&.white{
+		h2{
+			color: #fff;
+		}
+	}
+	&.orange{
+		h5{
+//			color: $or;
+		}
+	}
+	&.red2{
+		h5{
+//			color: $red2;
+		}
+	}
+}
+.flag_title{
+	margin-bottom: 60px;
+	h2{
+		position: relative;
+		z-index: 2;
+		margin-bottom: 0px;
+		font: bold 44px $bar;
+		color: $dip;
+		img{
+			position: absolute;
+			left: 7px;
+			top: -22px;
+			z-index: -1;
+		}
+	}
+	&.white{
+		h2{
+			color: #fff;
+		}
+	}
+}
+.flag_center_title{
+	text-align: center;
+	margin-bottom: 60px;
+	h2{
+		position: relative;
+		z-index: 2;
+		margin-bottom: 0px;
+		font: bold 44px $bar;
+		color: $dip;
+		display: inline-block;
+		img{
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+			top: -22px;
+			z-index: -1;
+		}
+	}
+	&.white{
+		h2{
+			color: #fff;
+		}
+	}
+}
+.single_simple_title{
+	margin-bottom: 70px;
+	h2{
+		color: #fff;
+		margin-bottom: 0px;
+		font: bold 44px $bar;
+	}
+	&.black{
+		h2{
+			color: $dip;
+		}
+	}
+}
+.single_br_title{
+	margin-bottom: 105px;
+	h2{
+		color: #fff;
+		margin-bottom: 0px;
+		font: normal 44px $bar;
+		position: relative;
+		&:before{
+			content: attr(data-text);
+			position: absolute;
+			left: 0px;
+			top: 50%;
+			transform: translateY(-50%);
+			color: rgba(255, 255, 255, .01);
+			font: bold 200px $bar;
+			text-transform: uppercase;
+		}
+		&:after{
+			content: "";
+			height: 2px;
+			width: 50px;
+			height: 2px;
+			background: $baseColor;
+			position: absolute;
+			left: 0px;
+			bottom: -25px;
+		}
+	}
+}
+.single_dubble_title{
+	margin-bottom: 100px;
+	h2{
+		color: $dip;
+		margin-bottom: 0px;
+		font: bold 44px $bar;
+		position: relative;
+		span{
+			color: $yellow;
+		}
+		&:before{
+			content: "";
+			background: $yellow;
+			width: 46px;
+			height: 2px;
+			position: absolute;
+			left: 50%;
+			bottom: -20px;
+			transform: translateX(-50%);
+		}
+		&:after{
+			content: "";
+			background: $yellow;
+			width: 23px;
+			height: 2px;
+			position: absolute;
+			left: 50%;
+			bottom: -27px;
+			transform: translateX(-50%);
+		}
+	}
+}
+.leaf_title{
+	margin-bottom: 70px;
+	h2{
+		margin-bottom: 0px;
+		color: $dip;
+		font: bold 44px $bar;
+		position: relative;
+		&:before{
+			content: "";
+			background: url(../img/icon/leaf.png) no-repeat;
+			height: 68px;
+			width: 80px;
+			position: absolute;
+			left: 50%;
+			bottom: 7px;
+			transform: translateX(-50%);
+		}
+	}
+}
+.boat_title{
+	margin-bottom: 70px;
+	h2{
+		margin-bottom: 0px;
+		position: relative;
+		color: $dip;
+		font: bold 44px $bar;
+		&:before{
+			content: "";
+			background: url(../img/boat/boat-title-shadow.png) no-repeat;
+			height: 85px;
+			width: 85px;
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%, -50%);
+		}
+	}
+}
+/* End Main Title Area css
+============================================================================================ */
+
+
+
+
+

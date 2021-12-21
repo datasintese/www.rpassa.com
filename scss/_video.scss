@@ -1,0 +1,230 @@
+/* Car About Area css
+============================================================================================ */
+.car_about_area{
+	&.truck_video{
+		.car_about_inner{
+			.dubble_img{
+				img{
+					box-shadow: 0px 10px 29px 0px rgba(0, 0, 0, 0.1);
+					& + img{
+						float: right;
+						margin-right: 36px;
+						margin-top: -165px;
+						position: relative;
+						box-shadow: 0px 10px 29px 0px rgba(0, 0, 0, 0.1);
+					}
+				}
+			}
+			.car_video{
+				margin-left: 0px;
+				margin-right: 15px;
+				.play_btn{
+					color: $or;
+				}
+			}
+			.c_ab_text{
+				h6{
+					color: $or;
+				}
+				.blockquote{
+					p{
+						position: relative;
+						i{
+							position: absolute;
+							left: 22px;
+							top: -10px;
+							color: rgba(0, 0, 0, .10);
+							font-size: 50px;
+							z-index: -1;
+						}
+					}
+				}
+			}
+		}
+	}
+	&.yacht_dubble_img{
+		.car_about_inner{
+			.c_ab_text{
+				h3{
+					position: relative;
+					&:before{
+						content: "";
+						background: url(../img/boat/boat-title-shadow2.png) no-repeat;
+						height: 85px;
+						width: 85px;
+						position: absolute;
+						left: 0%;
+						top: -16px;
+						transform: translate(0%, 0%);
+					}
+				}
+			}
+		}
+	}
+	.counter_inner{
+		padding-top: 70px;
+		.counter_item{
+			h6{
+				color: $dip;
+			}
+		}
+	}
+	&.about_counter{
+		.single_text{
+			max-width: 845px;
+			margin: 80px auto 0px;
+			font: normal 20px/32px $bar;
+			text-align: center;
+		}
+		.counter_inner{
+			padding-top: 50px;
+		}
+		.counter_person{
+			margin-top: 50px;
+			text-align: center;
+		}
+	}
+}
+.car_about_inner{
+	.c_ab_text{
+		h6{
+			text-transform: uppercase;
+			font: 500 16px $bar;
+			margin-bottom: 12px;
+		}
+		h3{
+			font: bold 44px $bar;
+			color: $dip;
+			margin-bottom: 18px;
+		}
+		p{
+			padding-right: 30px;
+			margin-bottom: 30px;
+			position: relative;
+			i{
+				position: absolute;
+				color: #e5e5e5;
+				font-size: 50px;
+				left: 20px;
+				top: -8px;
+				opacity: .9;
+				z-index: -1;
+			}
+		}
+		.blockquote{
+			border-left: 3px solid transparent;
+			padding-left: 30px;
+			padding-top: 13px;
+			padding-bottom: 16px;
+			margin-bottom: 0px;
+			p{
+				font: normal 20px/32px $bar;
+				color: $dip;
+				padding-right: 40px;
+				margin-bottom: 18px;
+			}
+			h4{
+				color: $dip;
+				margin-bottom: 0px;
+				font: bold 20px $bar;
+				span{
+					font-weight: normal;
+					font-size: 16px;
+				}
+			}
+		}
+		.sing{
+			float: right;
+			margin-right: 80px;
+			margin-top: -60px;
+		}
+	}
+}
+.car_video{
+	margin-left: 15px;
+	position: relative;
+	.play_btn{
+		height: 50px;
+		width: 50px;
+		text-align: center;
+		line-height: 50px;
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		background: #fff;
+		border-radius: 50%;
+		color: $baseColor;
+		font-size: 12px;
+		&:before{
+			content: "";
+			height: 70px;
+			width: 70px;
+			border-radius: 50%;
+			border: 1px solid #fff;
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			animation: runpulse 1s infinite linear;
+			margin-left: -35px;
+			margin-top: -35px;
+		}
+		&:after{
+			content: "";
+			height: 60px;
+			width: 60px;
+			border-radius: 50%;
+			border: 1px solid #fff;
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			margin-left: -30px;
+			margin-top: -30px;
+			animation: runpulse 1.5s infinite linear;
+		}
+	}
+}
+.luxuary_video_area{
+	position: relative;
+	padding-left: 100px;
+	padding-right: 100px;
+	.car_video{
+		.play_btn{
+//			background: $baseColor;
+			color: #fff;
+			font-size: 20px;
+			z-index: 3;
+			background: transparent;
+			height: auto;
+			width: auto;
+			i{
+				height: 70px;
+				width: 70px;
+				border-radius: 50%;
+				line-height: 70px;
+//				background: $baseColor;
+				display: inline-block;
+			}
+			&:before{
+				border: none;
+				background: rgba(255, 255, 255, .15);
+				height: 170px;
+				width: 170px;
+				margin-left: -85px;
+				margin-top: -85px;
+				z-index: -1;
+			}
+			&:after{
+				background: rgba(255, 255, 255, .15);
+				height: 120px;
+				width: 120px;
+				border: none;
+				margin-left: -60px;
+				margin-top: -60px;
+				z-index: -1;
+			}
+		}
+	}
+}
+/* End Car About Area css
+============================================================================================ */
