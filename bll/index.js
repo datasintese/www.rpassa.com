@@ -1,141 +1,42 @@
-;(function($) {
+; (function ($) {
     "use strict";
 
-    // Inicialização de Combos de Pesquisa
-    // -----------------------------------
+    SegmentoCarros.Construtor();
+    SegmentoMotos.Construtor();
 
-    $('.nice_select#categoria').empty().append('<option selected="selected" value="0">Categoria</option>');
-    $('.nice_select#categoria').niceSelect('update');
+    Init();
+    function Init() {
+        let segmento = 'carros';
+        $('.segmento#' + segmento).show();
 
-    $('.nice_select#modelo').empty().append('<option selected="selected" value="0">Modelo</option>');
-    $('.nice_select#modelo').niceSelect('update');
+        SegmentoCarros.InicializarSegmento();
+    }
 
-    $('.nice_select#quilometragem').empty().append('<option selected="selected" value="0">Quilometragem</option>');
-    $('.nice_select#quilometragem').niceSelect('update');
+    $('.menu-segmento').on('click', function (event) {
+        event.preventDefault();
 
-    $('.nice_select#marca').empty().append('<option selected="selected" value="0">Marca</option>');
-    $('.nice_select#marca').niceSelect('update');
+        let segmento = $(this).attr('id');
 
-    // Carregamento de dados das Combos
-    // --------------------------------
+        $('.segmento').each(function (obj) {
+            $(this).hide();
+        });
 
-    CarregarComboCategoria();
-    CarregarComboMarca();
-    CarregarComboQuilometragem();
+        try {
+            $('.segmento#' + segmento).fadeIn();
+            
+            let baseTela = '.spa>.segmento#' + segmento;
+            var target = $(baseTela).find('.find_form');
+            
+            // Move a página para a barra de pesquisa do segmento
+            $("html, body").animate({ scrollTop: target.height() });
 
-    $('.nice_select#marca').on('change', function(event){
-        event.preventDefault()
-        CarregarComboModelo(this.value);
+            if (segmento == 'carros') {
+                SegmentoCarros.InicializarSegmento();
+            }
+            else if (segmento == 'motos') {
+                SegmentoMotos.InicializarSegmento();
+            }
+        } catch (error) {
+        }
     });
-
-    function CarregarComboCategoria()
-    {
-        $.ajax({
-            url: sessionStorage.getItem('api') + '/v1/mobile/categorias',
-            type: "GET", cache: false, async: true, contentData: 'json',
-            success: function (result, textStatus, request) {
-                
-                $.each(result, function(i, obj){
-                    $('.nice_select#categoria').last()
-                        .append('<option value="' + obj.id +'">' + obj.nome + '</option>');
-                });
-                $('.nice_select#categoria').niceSelect('update');
-            },
-            error: function (request, textStatus, errorThrown) {
-                alert(JSON.stringify(request));
-    
-                // if (!MensagemErroAjax(request, errorThrown)) {
-                //     try {
-                //         var obj = $.parseJSON(request.responseText)
-                //         Mensagem(obj.mensagem, 'warning');
-                //     } catch (error) {
-                //         Mensagem(request.responseText, 'warning');
-                //     }
-                // }
-            }
-        });
-    }
-    function CarregarComboMarca()
-    {
-        $.ajax({
-            url: sessionStorage.getItem('api') + '/v1/mobile/carros/marcas',
-            type: "GET", cache: false, async: true, contentData: 'json',
-            success: function (result, textStatus, request) {
-                
-                $.each(result, function(i, obj){
-                    $('.nice_select#marca').last()
-                        .append('<option value="' + obj.id + '">' + obj.nome + '</option>');
-                });
-                $('.nice_select#marca').niceSelect('update');
-            },
-            error: function (request, textStatus, errorThrown) {
-                alert(JSON.stringify(request));
-    
-                // if (!MensagemErroAjax(request, errorThrown)) {
-                //     try {
-                //         var obj = $.parseJSON(request.responseText)
-                //         Mensagem(obj.mensagem, 'warning');
-                //     } catch (error) {
-                //         Mensagem(request.responseText, 'warning');
-                //     }
-                // }
-            }
-        });
-    }
-    function CarregarComboModelo(marca_id)
-    {
-        $('.nice_select#modelo').empty().append('<option selected="selected" value="0">Modelo</option>');
-        
-        $.ajax({
-            url: sessionStorage.getItem('api') + '/v1/mobile/carros/modelos?marca_id=' + marca_id,
-            type: "GET", cache: false, async: true, contentData: 'json',
-            success: function (result, textStatus, request) {
-
-                $.each(result, function(i, obj){
-                    $('.nice_select#modelo').last()
-                        .append('<option value="' + obj.id + '">' + obj.nome + '</option>');
-                });
-                $('.nice_select#modelo').niceSelect('update');
-            },
-            error: function (request, textStatus, errorThrown) {
-                alert(JSON.stringify(request));
-    
-                // if (!MensagemErroAjax(request, errorThrown)) {
-                //     try {
-                //         var obj = $.parseJSON(request.responseText)
-                //         Mensagem(obj.mensagem, 'warning');
-                //     } catch (error) {
-                //         Mensagem(request.responseText, 'warning');
-                //     }
-                // }
-            }
-        });
-    }
-    function CarregarComboQuilometragem()
-    {
-        $.ajax({
-            url: sessionStorage.getItem('api') + '/v1/mobile/carros/quilometragem',
-            type: "GET", cache: false, async: true, contentData: 'json',
-            success: function (result, textStatus, request) {
-                
-                $.each(result, function(i, obj){
-                    $('.nice_select#quilometragem').last()
-                        .append('<option value="' + obj.id +'">' + obj.nome + '</option>');
-                });
-                $('.nice_select#quilometragem').niceSelect('update');
-            },
-            error: function (request, textStatus, errorThrown) {
-                alert(JSON.stringify(request));
-    
-                // if (!MensagemErroAjax(request, errorThrown)) {
-                //     try {
-                //         var obj = $.parseJSON(request.responseText)
-                //         Mensagem(obj.mensagem, 'warning');
-                //     } catch (error) {
-                //         Mensagem(request.responseText, 'warning');
-                //     }
-                // }
-            }
-        });
-    }
-})(jQuery)
+})(jQuery);
