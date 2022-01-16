@@ -141,6 +141,13 @@
         </section>
         <!--================End Slider Area =================-->
         
+		
+		<style>
+			.list {
+			max-height: 500px; 
+			overflow-y: scroll !important;
+			}
+		</style>
         <!--================Find Car Form Area =================-->
        	 <section class="find_form">
         	<div class="container">
@@ -149,33 +156,34 @@
         			</div>
         		<div class="find_form_inner row m0">
         			<div class="find_item">
-        				<select class="nice_select">
+        				<select class="nice_select" id="categoria">
 							<option value="1">Categoria</option>
 							<option value="2">Repasse</option>
 							<option value="3">Compra</option>
 						</select>
         			</div>
+					<div class="find_item">
+        				<select class="nice_select" id="marca">
+							<option value="1">Marca</option>
+							<option value="2">BMW</option>
+							<option value="3">Audi</option>
+						</select>
+        			</div>
         			<div class="find_item">
-        				<select class="nice_select">
+        				<select class="nice_select" id="modelo">
 							<option value="1">Modelo</option>
 							<option value="2">Novo Hyundai Creta</option>
 							<option value="3">Toyota Corolla Cross</option>
 						</select>
         			</div>
         			<div class="find_item">
-        				<select class="nice_select">
+        				<select class="nice_select" id="quilometragem">
 							<option value="1">Quilometragem</option>
 							<option value="2">10000</option>
 							<option value="3">20000</option>
 						</select>
         			</div>
-        			<div class="find_item">
-        				<select class="nice_select">
-							<option value="1">Marca</option>
-							<option value="2">BMW</option>
-							<option value="3">Audi</option>
-						</select>
-        			</div>
+        			
         			<div class="find_item">
         				<button class="submit_btn" type="button">Pesquisar</button>
         			</div>
@@ -835,5 +843,13 @@
         <script src="vendors/animate-css/wow.min.js"></script>
         
         <script src="js/theme-dist.js"></script>
+
+		<!--RPassa-->
+		<script src="js/sweetalert2.all.min.js"></script>
+        <script src="js/jquery.inputmask.min.js"></script>
+		<script src="bll/app-settings.js"></script>
+        <script src="bll/app-functions.js"></script>
+		<script src="bll/index.js"></script>
+		<!--RPassa-->
     </body>
 </html>
