@@ -119,6 +119,14 @@
 				</div>
 			</div>
         </header>
+		
+		<style>
+			.list {
+			max-height: 500px; 
+			overflow-y: scroll !important;
+			}
+		</style>
+
         <!--================End Footer Area =================-->
         <div class="spa">
 			<div class="segmento" id="carros" style="display: none;">
@@ -141,356 +149,64 @@
 					</div>
 				</section>
 				<!--================End Slider Area =================-->
-				
-				
-				<style>
-					.list {
-					max-height: 500px; 
-					overflow-y: scroll !important;
-					}
-				</style>
+
 				<!--================Find Car Form Area =================-->
 				<section class="find_form">
-					<div class="container">
-						<div class="find_title">
+					<form id="formPesquisar">
+						<div class="container">
+							<div class="find_title">
 								<i class="icon-car_2"></i> Buscar Carros
 							</div>
-						<div class="find_form_inner row m0">
-							<div class="find_item">
-								<select class="nice_select" id="categoria">
-									<option value="1">Categoria</option>
-									<option value="2">Repasse</option>
-									<option value="3">Compra</option>
-								</select>
-							</div>
-							<div class="find_item">
-								<select class="nice_select" id="marca">
-									<option value="1">Marca</option>
-									<option value="2">BMW</option>
-									<option value="3">Audi</option>
-								</select>
-							</div>
-							<div class="find_item">
-								<select class="nice_select" id="modelo">
-									<option value="1">Modelo</option>
-									<option value="2">Novo Hyundai Creta</option>
-									<option value="3">Toyota Corolla Cross</option>
-								</select>
-							</div>
-							<div class="find_item">
-								<select class="nice_select" id="quilometragem">
-									<option value="1">Quilometragem</option>
-									<option value="2">10000</option>
-									<option value="3">20000</option>
-								</select>
-							</div>
-							
-							<div class="find_item">
-								<button class="submit_btn" type="button">Pesquisar</button>
+							<div class="find_form_inner row m0">
+								<div class="find_item">
+									<select class="nice_select" id="categoria">
+										<option value="1">Categoria</option>
+										<option value="2">Repasse</option>
+										<option value="3">Compra</option>
+									</select>
+								</div>
+								<div class="find_item">
+									<select class="nice_select" id="marca">
+										<option value="1">Marca</option>
+										<option value="2">BMW</option>
+										<option value="3">Audi</option>
+									</select>
+								</div>
+								<div class="find_item">
+									<select class="nice_select" id="modelo">
+										<option value="1">Modelo</option>
+										<option value="2">Novo Hyundai Creta</option>
+										<option value="3">Toyota Corolla Cross</option>
+									</select>
+								</div>
+								<div class="find_item">
+									<select class="nice_select" id="quilometragem">
+										<option value="1">Quilometragem</option>
+										<option value="2">10000</option>
+										<option value="3">20000</option>
+									</select>
+								</div>
+								
+								<div class="find_item">
+									<button class="submit_btn" type="submit">Pesquisar</button>
+								</div>
 							</div>
 						</div>
-					</div>
+					</form>
 				</section>
 				<!--================End Find Car Form Area =================-->
 				
-				<!--================Marketplace Area =================-->
-				<section class="market_place_area p_100">
-					<div class="container">
-						<div class="row market_inner">
-							<div class="col-lg-6">
-								<div class="car_img">
-									<img class="img-fluid" src="img/car-1.png" alt="">
-									<ul class="nav">
-										<li class="wow animated fadeInLeft" data-wow-delay="0.2s">
-											<h4>14+</h4>
-											<h5>Anos</h5>
-										</li>
-										<li class="wow animated fadeInDown" data-wow-delay="0.4s">
-											<h4>150+</h4>
-											<h5>Profissionais</h5>
-										</li>
-										<li class="wow animated fadeInRight" data-wow-delay="0.5s">
-											<h4>11+</h4>
-											<h5>Franquias</h5>
-										</li>
-									</ul>
-								</div>
+				<div class="pesquisa" style="display: none;">
+					<!--================Area de Pesquisa =================-->
+					<section class="latest_collection_area p_100">
+						<div class="container">
+							<div class="flag_title">
+								<h2 class="wow animated fadeInUp" data-wow-delay="0.2s"><img src="img/icon/flag-2.png" alt="">Resultado da Pesquisa</h2>
 							</div>
-							<div class="col-lg-6">
-								<div class="market_text">
-									<h3><img src="img/icon/flag.png" alt="">Livre-se de suas <span>dívidas</span>.</h3>
-									<div class="row maket_item_inner">
-										<div class="col-sm-6">
-											<div class="media">
-												<div class="d-flex">
-													<i class="icon-car_2"></i>
-												</div>
-												<div class="media-body">
-													<h4>Melhores Carros</h4>
-													<p>Temos o carro ideal para seu perfil.</p>
-												</div>
-											</div>
-										</div>
-										<div class="col-sm-6">
-											<div class="media">
-												<div class="d-flex">
-													<i class="icon-pricing"></i>
-												</div>
-												<div class="media-body">
-													<h4>Preços Justos</h4>
-													<p>Preços que cabem no seu bolso.</p>
-												</div>
-											</div>
-										</div>
-										<div class="col-sm-6">
-											<div class="media">
-												<div class="d-flex">
-													<i class="icon-car_shield"></i>
-												</div>
-												<div class="media-body">
-													<h4>Marcas Famosas</h4>
-													<p>Encontre o veículo dos seus sonhos.</p>
-												</div>
-											</div>
-										</div>
-										<div class="col-sm-6">
-											<div class="media">
-												<div class="d-flex">
-													<i class="icon-rating"></i>
-												</div>
-												<div class="media-body">
-													<h4>Negócios Seguros</h4>
-													<p>Experiência e credibilidade no seu negócio.</p>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</section>
-				<!--================End Marketplace Area =================-->
-				
-				<!--================Budget Feature Area =================-->
-				<section class="budget_feaute_area">
-					<div class="container">
-						<div class="row b_feature_inner">
-							<div class="col-lg-3 col-sm-6">
-								<div class="b_f_item wow animated fadeInLeft" data-wow-delay="0.2s">
-									<div class="icon">
-										<i class="icon-free_delivery"></i>
-									</div>
-									<a href="#"><h4>Entregamos seu Veículo</h4></a>
-									<p>Tenha seu veículo entregue na comodidade de sua casa.</p>
-								</div>
-							</div>
-							<div class="col-lg-3 col-sm-6">
-								<div class="b_f_item wow animated fadeInLeft" data-wow-delay="0.4s">
-									<div class="icon">
-										<i class="icon-setting"></i>
-									</div>
-									<a href="#"><h4>Carros Inspecionados</h4></a>
-									<p>Tenha a certeza de ter um veículo de qualidade.</p>
-								</div>
-							</div>
-							<div class="col-lg-3 col-sm-6">
-								<div class="b_f_item wow animated fadeInLeft" data-wow-delay="0.6s">
-									<div class="icon">
-										<i class="icon-support1"></i>
-									</div>
-									<a href="#"><h4>24/7 Central de Ajuda</h4></a>
-									<p>Suporte disponível a qualquer momento.</p>
-								</div>
-							</div>
-							<div class="col-lg-3 col-sm-6">
-								<div class="b_f_item wow animated fadeInLeft" data-wow-delay="0.8s">
-									<div class="icon">
-										<i class="icon-gist"></i>
-									</div>
-									<a href="#"><h4>Brindes de Cortesia</h4></a>
-									<p>Escolha seu brinde no fechamento de negócios.</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</section>
-				<!--================End Budget Feature Area =================-->
-				
-				<!--================Latest Collection Area =================-->
-				<section class="latest_collection_area p_100">
-					<div class="container">
-						<div class="flag_title">
-							<h2 class="wow animated fadeInUp" data-wow-delay="0.2s"><img src="img/icon/flag-2.png" alt="">Coleção mais Recente</h2>
-						</div>
-						<div class="row l_collection_inner">
-							<div class="col-lg-4 col-md-6">
-								<div class="l_collection_item wow animated fadeInUp" data-wow-delay="0.2s">
-									<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-collection/car-1.jpg" alt=""></a></div>
-									<div class="text_body">
-										<a href="product-details.html"><h4>Jaguer M1 Hybrid</h4></a>
-										<h5>R$ 160.000,00</h5>
-										<p>Build year: <span>2015</span></p>
-									</div>
-									<div class="text_footer">
-										<a href="#"><i class="icon-engine"></i> 2500</a>
-										<a href="#"><i class="icon-gear1"></i> Manual</a>
-										<a href="#"><i class="icon-oil"></i>20/24</a>
-									</div>
-								</div>
-							</div>
-							<div class="col-lg-4 col-md-6">
-								<div class="l_collection_item wow animated fadeInUp" data-wow-delay="0.4s">
-									<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-collection/car-2.jpg" alt=""></a></div>
-									<div class="text_body">
-										<a href="product-details.html"><h4>Audi A8 Hybrid</h4></a>
-										<h5>R$ 160.000,00</h5>
-										<p>Build year: <span>2015</span></p>
-									</div>
-									<div class="text_footer">
-										<a href="#"><i class="icon-engine"></i> 2500</a>
-										<a href="#"><i class="icon-gear1"></i> Manual</a>
-										<a href="#"><i class="icon-oil"></i>20/24</a>
-									</div>
-								</div>
-							</div>
-							<div class="col-lg-4 col-md-6">
-								<div class="l_collection_item wow animated fadeInUp" data-wow-delay="0.6s">
-									<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-collection/car-3.jpg" alt=""></a></div>
-									<div class="text_body">
-										<a href="product-details.html"><h4>Mercedez Benz E</h4></a>
-										<h5>R$ 160.000,00</h5>
-										<p>Build year: <span>2015</span></p>
-									</div>
-									<div class="text_footer">
-										<a href="#"><i class="icon-engine"></i> 2500</a>
-										<a href="#"><i class="icon-gear1"></i> Manual</a>
-										<a href="#"><i class="icon-oil"></i>20/24</a>
-									</div>
-								</div>
-							</div>
-							<div class="col-lg-4 col-md-6">
-								<div class="l_collection_item wow animated fadeInUp" data-wow-delay="0.8s">
-									<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-collection/car-4.jpg" alt=""></a></div>
-									<div class="text_body">
-										<a href="product-details.html"><h4>Jaguer M1 Hybrid</h4></a>
-										<h5>R$ 160.000,00</h5>
-										<p>Build year: <span>2015</span></p>
-									</div>
-									<div class="text_footer">
-										<a href="#"><i class="icon-engine"></i> 2500</a>
-										<a href="#"><i class="icon-gear1"></i> Manual</a>
-										<a href="#"><i class="icon-oil"></i>20/24</a>
-									</div>
-								</div>
-							</div>
-							<div class="col-lg-4 col-md-6">
-								<div class="l_collection_item wow animated fadeInUp" data-wow-delay="1s">
-									<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-collection/car-5.jpg" alt=""></a></div>
-									<div class="text_body">
-										<a href="product-details.html"><h4>Audi A8 Hybrid</h4></a>
-										<h5>R$ 160.000,00</h5>
-										<p>Build year: <span>2015</span></p>
-									</div>
-									<div class="text_footer">
-										<a href="#"><i class="icon-engine"></i> 2500</a>
-										<a href="#"><i class="icon-gear1"></i> Manual</a>
-										<a href="#"><i class="icon-oil"></i>20/24</a>
-									</div>
-								</div>
-							</div>
-							<div class="col-lg-4 col-md-6">
-								<div class="l_collection_item wow animated fadeInUp" data-wow-delay="1.2s">
-									<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-collection/car-6.jpg" alt=""></a></div>
-									<div class="text_body">
-										<a href="product-details.html"><h4>Bugatti Venon</h4></a>
-										<h5>R$ 160.000,00</h5>
-										<p>Build year: <span>2015</span></p>
-									</div>
-									<div class="text_footer">
-										<a href="#"><i class="icon-engine"></i> 2500</a>
-										<a href="#"><i class="icon-gear1"></i> Manual</a>
-										<a href="#"><i class="icon-oil"></i>20/24</a>
-									</div>
-								</div>
-							</div>
-							<a class="main_btn red wow animated fadeInRight" data-wow-delay="0.2s" href="#">Todos Carros</a>
-						</div>
-					</div>
-				</section>
-				<!--================End Latest Collection Area =================-->
-				
-				<!--================Car Company Area =================-->
-				<section class="car_company_area p_100">
-					<div class="container">
-						<div class="flag_center_title">
-							<h2 class="wow animated fadeInUp" data-wow-delay="0.2s"><img src="img/icon/flag-2.png" alt=""> Marcas Populares</h2>
-						</div>
-						<div class="car_company_slider owl-carousel">
-							<div class="item">
-								<div class="car_c_item">
-									<a href="#"><img src="img/car-company/car-company-1.png" alt=""></a> 
-									<a href="#"><h5>BMW <span>(50)</span></h5></a>
-								</div>
-							</div>
-							<div class="item">
-								<div class="car_c_item">
-									<a href="#"><img src="img/car-company/car-company-2.png" alt=""></a>
-									<a href="#"><h5>Land ROver <span>(25)</span></h5></a>
-								</div>
-							</div>
-							<div class="item">
-								<div class="car_c_item">
-									<a href="#"><img src="img/car-company/car-company-3.png" alt=""></a>
-									<a href="#"><h5>Mercedes <span>(24)</span></h5></a>
-								</div>
-							</div>
-							<div class="item">
-								<div class="car_c_item">
-									<a href="#"><img src="img/car-company/car-company-4.png" alt=""></a>
-									<a href="#"><h5>Nissan <span>(34)</span></h5></a>
-								</div>
-							</div>
-							<div class="item">
-								<div class="car_c_item">
-									<a href="#"><img src="img/car-company/car-company-5.png" alt=""></a>
-									<a href="#"><h5>porsche <span>(26)</span></h5></a>
-								</div>
-							</div>
-							<div class="item">
-								<div class="car_c_item">
-									<a href="#"><img src="img/car-company/car-company-6.png" alt=""></a>
-									<a href="#"><h5>Toyota <span>(80)</span></h5></a>
-								</div>
-							</div>
-							<div class="item">
-								<div class="car_c_item">
-									<a href="#"><img src="img/car-company/car-company-7.png" alt=""></a>
-									<a href="#"><h5>FAW <span>(05)</span></h5></a>
-								</div>
-							</div>
-							<div class="item">
-								<div class="car_c_item">
-									<a href="#"><img src="img/car-company/car-company-8.png" alt=""></a>
-									<a href="#"><h5>Audi <span>(32)</span></h5></a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</section>
-				<!--================End Car Company Area =================-->
-				
-				<!--================Feature Car Slider Area =================-->
-				<section class="feature_car_area">
-					<div class="container">
-						<div class="flag_title white">
-							<h2 class="wow animated fadeInUp" data-wow-delay="0.2s"><img src="img/icon/flag-3.png" alt="">Melhores Ofertas</h2>
-						</div>
-						<div class="f_car_slider_inner">
-							<div class="f_car_slider owl-carousel">
-								<div class="item">
-									<div class="l_collection_item">
-										<div class="car_img"><a href="product-details.html"><img src="img/product/car-collection/car-1.jpg" alt=""></a></div>
+							<div class="row l_collection_inner">
+								<div class="col-lg-4 col-md-6">
+									<div class="l_collection_item wow animated fadeInUp" data-wow-delay="0.2s">
+										<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-collection/car-1.jpg" alt=""></a></div>
 										<div class="text_body">
 											<a href="product-details.html"><h4>Jaguer M1 Hybrid</h4></a>
 											<h5>R$ 160.000,00</h5>
@@ -503,9 +219,9 @@
 										</div>
 									</div>
 								</div>
-								<div class="item">
-									<div class="l_collection_item">
-										<div class="car_img"><a href="product-details.html"><img src="img/product/car-collection/car-2.jpg" alt=""></a></div>
+								<div class="col-lg-4 col-md-6">
+									<div class="l_collection_item wow animated fadeInUp" data-wow-delay="0.4s">
+										<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-collection/car-2.jpg" alt=""></a></div>
 										<div class="text_body">
 											<a href="product-details.html"><h4>Audi A8 Hybrid</h4></a>
 											<h5>R$ 160.000,00</h5>
@@ -518,9 +234,9 @@
 										</div>
 									</div>
 								</div>
-								<div class="item">
-									<div class="l_collection_item">
-										<div class="car_img"><a href="product-details.html"><img src="img/product/car-collection/car-3.jpg" alt=""></a></div>
+								<div class="col-lg-4 col-md-6">
+									<div class="l_collection_item wow animated fadeInUp" data-wow-delay="0.6s">
+										<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-collection/car-3.jpg" alt=""></a></div>
 										<div class="text_body">
 											<a href="product-details.html"><h4>Mercedez Benz E</h4></a>
 											<h5>R$ 160.000,00</h5>
@@ -533,11 +249,11 @@
 										</div>
 									</div>
 								</div>
-								<div class="item">
-									<div class="l_collection_item">
-										<div class="car_img"><a href="product-details.html"><img src="img/product/car-collection/car-2.jpg" alt=""></a></div>
+								<div class="col-lg-4 col-md-6">
+									<div class="l_collection_item wow animated fadeInUp" data-wow-delay="0.8s">
+										<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-collection/car-4.jpg" alt=""></a></div>
 										<div class="text_body">
-											<a href="product-details.html"><h4>Mercedez Benz E</h4></a>
+											<a href="product-details.html"><h4>Jaguer M1 Hybrid</h4></a>
 											<h5>R$ 160.000,00</h5>
 											<p>Build year: <span>2015</span></p>
 										</div>
@@ -548,11 +264,11 @@
 										</div>
 									</div>
 								</div>
-								<div class="item">
-									<div class="l_collection_item">
-										<div class="car_img"><a href="product-details.html"><img src="img/product/car-collection/car-1.jpg" alt=""></a></div>
+								<div class="col-lg-4 col-md-6">
+									<div class="l_collection_item wow animated fadeInUp" data-wow-delay="1s">
+										<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-collection/car-5.jpg" alt=""></a></div>
 										<div class="text_body">
-											<a href="product-details.html"><h4>Mercedez Benz E</h4></a>
+											<a href="product-details.html"><h4>Audi A8 Hybrid</h4></a>
 											<h5>R$ 160.000,00</h5>
 											<p>Build year: <span>2015</span></p>
 										</div>
@@ -563,11 +279,11 @@
 										</div>
 									</div>
 								</div>
-								<div class="item">
-									<div class="l_collection_item">
-										<div class="car_img"><a href="product-details.html"><img src="img/product/car-collection/car-3.jpg" alt=""></a></div>
+								<div class="col-lg-4 col-md-6">
+									<div class="l_collection_item wow animated fadeInUp" data-wow-delay="1.2s">
+										<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-collection/car-6.jpg" alt=""></a></div>
 										<div class="text_body">
-											<a href="product-details.html"><h4>Mercedez Benz E</h4></a>
+											<a href="product-details.html"><h4>Bugatti Venon</h4></a>
 											<h5>R$ 160.000,00</h5>
 											<p>Build year: <span>2015</span></p>
 										</div>
@@ -575,74 +291,469 @@
 											<a href="#"><i class="icon-engine"></i> 2500</a>
 											<a href="#"><i class="icon-gear1"></i> Manual</a>
 											<a href="#"><i class="icon-oil"></i>20/24</a>
+										</div>
+									</div>
+								</div>
+								<a class="main_btn red wow animated fadeInRight" data-wow-delay="0.2s" href="#">Todos Carros</a>
+							</div>
+						</div>
+					</section>
+					<!--================Fim da Área de Pesquisa =================-->
+				</div> <!--Pesquisa-->
+
+				<div class="vitrine">
+					<!--================Marketplace Area =================-->
+					<section class="market_place_area p_100">
+						<div class="container">
+							<div class="row market_inner">
+								<div class="col-lg-6">
+									<div class="car_img">
+										<img class="img-fluid" src="img/car-1.png" alt="">
+										<ul class="nav">
+											<li class="wow animated fadeInLeft" data-wow-delay="0.2s">
+												<h4>14+</h4>
+												<h5>Anos</h5>
+											</li>
+											<li class="wow animated fadeInDown" data-wow-delay="0.4s">
+												<h4>150+</h4>
+												<h5>Profissionais</h5>
+											</li>
+											<li class="wow animated fadeInRight" data-wow-delay="0.5s">
+												<h4>11+</h4>
+												<h5>Franquias</h5>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="market_text">
+										<h3><img src="img/icon/flag.png" alt="">Livre-se de suas <span>dívidas</span>.</h3>
+										<div class="row maket_item_inner">
+											<div class="col-sm-6">
+												<div class="media">
+													<div class="d-flex">
+														<i class="icon-car_2"></i>
+													</div>
+													<div class="media-body">
+														<h4>Melhores Carros</h4>
+														<p>Temos o carro ideal para seu perfil.</p>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<div class="media">
+													<div class="d-flex">
+														<i class="icon-pricing"></i>
+													</div>
+													<div class="media-body">
+														<h4>Preços Justos</h4>
+														<p>Preços que cabem no seu bolso.</p>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<div class="media">
+													<div class="d-flex">
+														<i class="icon-car_shield"></i>
+													</div>
+													<div class="media-body">
+														<h4>Marcas Famosas</h4>
+														<p>Encontre o veículo dos seus sonhos.</p>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<div class="media">
+													<div class="d-flex">
+														<i class="icon-rating"></i>
+													</div>
+													<div class="media-body">
+														<h4>Negócios Seguros</h4>
+														<p>Experiência e credibilidade no seu negócio.</p>
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				</section>
-				<!--================End Feature Car Slider Area =================-->
-				<br><br>
-				<!--================Car Company Area =================-->
-				<section class="car_browse_area p_100">
-					<div class="container">
-						<div class="flag_center_title">
-							<h2 class="wow animated fadeInUp" data-wow-delay="0.2s"><img src="img/icon/flag-2.png" alt=""> Tipo de Navegação</h2>
-						</div>
-						<div class="car_browse_slider owl-carousel">
-							<div class="item">
-								<div class="car_c_item">
-									<a href="#"><img src="img/car/car-1.png" alt=""></a>
-									<a href="#"><h5>convertible <span>(80)</span></h5></a>
+					</section>
+					<!--================End Marketplace Area =================-->
+					
+					<!--================Budget Feature Area =================-->
+					<section class="budget_feaute_area">
+						<div class="container">
+							<div class="row b_feature_inner">
+								<div class="col-lg-3 col-sm-6">
+									<div class="b_f_item wow animated fadeInLeft" data-wow-delay="0.2s">
+										<div class="icon">
+											<i class="icon-free_delivery"></i>
+										</div>
+										<a href="#"><h4>Entregamos seu Veículo</h4></a>
+										<p>Tenha seu veículo entregue na comodidade de sua casa.</p>
+									</div>
 								</div>
-							</div>
-							<div class="item">
-								<div class="car_c_item">
-									<a href="#"><img src="img/car/car-2.png" alt=""></a>
-									<a href="#"><h5>Sedan <span>(25)</span></h5></a>
+								<div class="col-lg-3 col-sm-6">
+									<div class="b_f_item wow animated fadeInLeft" data-wow-delay="0.4s">
+										<div class="icon">
+											<i class="icon-setting"></i>
+										</div>
+										<a href="#"><h4>Carros Inspecionados</h4></a>
+										<p>Tenha a certeza de ter um veículo de qualidade.</p>
+									</div>
 								</div>
-							</div>
-							<div class="item">
-								<div class="car_c_item">
-									<a href="#"><img src="img/car/car-3.png" alt=""></a>
-									<a href="#"><h5>Hybrid <span>(24)</span></h5></a>
+								<div class="col-lg-3 col-sm-6">
+									<div class="b_f_item wow animated fadeInLeft" data-wow-delay="0.6s">
+										<div class="icon">
+											<i class="icon-support1"></i>
+										</div>
+										<a href="#"><h4>24/7 Central de Ajuda</h4></a>
+										<p>Suporte disponível a qualquer momento.</p>
+									</div>
 								</div>
-							</div>
-							<div class="item">
-								<div class="car_c_item">
-									<a href="#"><img src="img/car/car-4.png" alt=""></a>
-									<a href="#"><h5>SUV <span>(50)</span></h5></a>
-								</div>
-							</div>
-							<div class="item">
-								<div class="car_c_item">
-									<a href="#"><img src="img/car/car-5.png" alt=""></a>
-									<a href="#"><h5>Luxury <span>(34)</span></h5></a>
-								</div>
-							</div>
-							<div class="item">
-								<div class="car_c_item">
-									<a href="#"><img src="img/car/car-6.png" alt=""></a>
-									<a href="#"><h5>Electric <span>(26)</span></h5></a>
-								</div>
-							</div>
-							<div class="item">
-								<div class="car_c_item">
-									<a href="#"><img src="img/car/car-4.png" alt=""></a>
-									<a href="#"><h5>FAW <span>(05)</span></h5></a>
-								</div>
-							</div>
-							<div class="item">
-								<div class="car_c_item">
-									<a href="#"><img src="img/car/car-3.png" alt=""></a>
-									<a href="#"><h5>Audi <span>(32)</span></h5></a>
+								<div class="col-lg-3 col-sm-6">
+									<div class="b_f_item wow animated fadeInLeft" data-wow-delay="0.8s">
+										<div class="icon">
+											<i class="icon-gist"></i>
+										</div>
+										<a href="#"><h4>Brindes de Cortesia</h4></a>
+										<p>Escolha seu brinde no fechamento de negócios.</p>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				</section>
-				<!--================End Car Company Area =================-->
+					</section>
+					<!--================End Budget Feature Area =================-->
+					
+					<!--================Latest Collection Area =================-->
+					<section class="latest_collection_area p_100">
+						<div class="container">
+							<div class="flag_title">
+								<h2 class="wow animated fadeInUp" data-wow-delay="0.2s"><img src="img/icon/flag-2.png" alt="">Coleção mais Recente</h2>
+							</div>
+							<div class="row l_collection_inner">
+								<div class="col-lg-4 col-md-6">
+									<div class="l_collection_item wow animated fadeInUp" data-wow-delay="0.2s">
+										<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-collection/car-1.jpg" alt=""></a></div>
+										<div class="text_body">
+											<a href="product-details.html"><h4>Jaguer M1 Hybrid</h4></a>
+											<h5>R$ 160.000,00</h5>
+											<p>Build year: <span>2015</span></p>
+										</div>
+										<div class="text_footer">
+											<a href="#"><i class="icon-engine"></i> 2500</a>
+											<a href="#"><i class="icon-gear1"></i> Manual</a>
+											<a href="#"><i class="icon-oil"></i>20/24</a>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-4 col-md-6">
+									<div class="l_collection_item wow animated fadeInUp" data-wow-delay="0.4s">
+										<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-collection/car-2.jpg" alt=""></a></div>
+										<div class="text_body">
+											<a href="product-details.html"><h4>Audi A8 Hybrid</h4></a>
+											<h5>R$ 160.000,00</h5>
+											<p>Build year: <span>2015</span></p>
+										</div>
+										<div class="text_footer">
+											<a href="#"><i class="icon-engine"></i> 2500</a>
+											<a href="#"><i class="icon-gear1"></i> Manual</a>
+											<a href="#"><i class="icon-oil"></i>20/24</a>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-4 col-md-6">
+									<div class="l_collection_item wow animated fadeInUp" data-wow-delay="0.6s">
+										<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-collection/car-3.jpg" alt=""></a></div>
+										<div class="text_body">
+											<a href="product-details.html"><h4>Mercedez Benz E</h4></a>
+											<h5>R$ 160.000,00</h5>
+											<p>Build year: <span>2015</span></p>
+										</div>
+										<div class="text_footer">
+											<a href="#"><i class="icon-engine"></i> 2500</a>
+											<a href="#"><i class="icon-gear1"></i> Manual</a>
+											<a href="#"><i class="icon-oil"></i>20/24</a>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-4 col-md-6">
+									<div class="l_collection_item wow animated fadeInUp" data-wow-delay="0.8s">
+										<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-collection/car-4.jpg" alt=""></a></div>
+										<div class="text_body">
+											<a href="product-details.html"><h4>Jaguer M1 Hybrid</h4></a>
+											<h5>R$ 160.000,00</h5>
+											<p>Build year: <span>2015</span></p>
+										</div>
+										<div class="text_footer">
+											<a href="#"><i class="icon-engine"></i> 2500</a>
+											<a href="#"><i class="icon-gear1"></i> Manual</a>
+											<a href="#"><i class="icon-oil"></i>20/24</a>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-4 col-md-6">
+									<div class="l_collection_item wow animated fadeInUp" data-wow-delay="1s">
+										<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-collection/car-5.jpg" alt=""></a></div>
+										<div class="text_body">
+											<a href="product-details.html"><h4>Audi A8 Hybrid</h4></a>
+											<h5>R$ 160.000,00</h5>
+											<p>Build year: <span>2015</span></p>
+										</div>
+										<div class="text_footer">
+											<a href="#"><i class="icon-engine"></i> 2500</a>
+											<a href="#"><i class="icon-gear1"></i> Manual</a>
+											<a href="#"><i class="icon-oil"></i>20/24</a>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-4 col-md-6">
+									<div class="l_collection_item wow animated fadeInUp" data-wow-delay="1.2s">
+										<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-collection/car-6.jpg" alt=""></a></div>
+										<div class="text_body">
+											<a href="product-details.html"><h4>Bugatti Venon</h4></a>
+											<h5>R$ 160.000,00</h5>
+											<p>Build year: <span>2015</span></p>
+										</div>
+										<div class="text_footer">
+											<a href="#"><i class="icon-engine"></i> 2500</a>
+											<a href="#"><i class="icon-gear1"></i> Manual</a>
+											<a href="#"><i class="icon-oil"></i>20/24</a>
+										</div>
+									</div>
+								</div>
+								<a class="main_btn red wow animated fadeInRight" data-wow-delay="0.2s" href="#">Todos Carros</a>
+							</div>
+						</div>
+					</section>
+					<!--================End Latest Collection Area =================-->
+					
+					<!--================Car Company Area =================-->
+					<section class="car_company_area p_100">
+						<div class="container">
+							<div class="flag_center_title">
+								<h2 class="wow animated fadeInUp" data-wow-delay="0.2s"><img src="img/icon/flag-2.png" alt=""> Marcas Populares</h2>
+							</div>
+							<div class="car_company_slider owl-carousel">
+								<div class="item">
+									<div class="car_c_item">
+										<a href="#"><img src="img/car-company/car-company-1.png" alt=""></a> 
+										<a href="#"><h5>BMW <span>(50)</span></h5></a>
+									</div>
+								</div>
+								<div class="item">
+									<div class="car_c_item">
+										<a href="#"><img src="img/car-company/car-company-2.png" alt=""></a>
+										<a href="#"><h5>Land ROver <span>(25)</span></h5></a>
+									</div>
+								</div>
+								<div class="item">
+									<div class="car_c_item">
+										<a href="#"><img src="img/car-company/car-company-3.png" alt=""></a>
+										<a href="#"><h5>Mercedes <span>(24)</span></h5></a>
+									</div>
+								</div>
+								<div class="item">
+									<div class="car_c_item">
+										<a href="#"><img src="img/car-company/car-company-4.png" alt=""></a>
+										<a href="#"><h5>Nissan <span>(34)</span></h5></a>
+									</div>
+								</div>
+								<div class="item">
+									<div class="car_c_item">
+										<a href="#"><img src="img/car-company/car-company-5.png" alt=""></a>
+										<a href="#"><h5>porsche <span>(26)</span></h5></a>
+									</div>
+								</div>
+								<div class="item">
+									<div class="car_c_item">
+										<a href="#"><img src="img/car-company/car-company-6.png" alt=""></a>
+										<a href="#"><h5>Toyota <span>(80)</span></h5></a>
+									</div>
+								</div>
+								<div class="item">
+									<div class="car_c_item">
+										<a href="#"><img src="img/car-company/car-company-7.png" alt=""></a>
+										<a href="#"><h5>FAW <span>(05)</span></h5></a>
+									</div>
+								</div>
+								<div class="item">
+									<div class="car_c_item">
+										<a href="#"><img src="img/car-company/car-company-8.png" alt=""></a>
+										<a href="#"><h5>Audi <span>(32)</span></h5></a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+					<!--================End Car Company Area =================-->
+					
+					<!--================Feature Car Slider Area =================-->
+					<section class="feature_car_area">
+						<div class="container">
+							<div class="flag_title white">
+								<h2 class="wow animated fadeInUp" data-wow-delay="0.2s"><img src="img/icon/flag-3.png" alt="">Melhores Ofertas</h2>
+							</div>
+							<div class="f_car_slider_inner">
+								<div class="f_car_slider owl-carousel">
+									<div class="item">
+										<div class="l_collection_item">
+											<div class="car_img"><a href="product-details.html"><img src="img/product/car-collection/car-1.jpg" alt=""></a></div>
+											<div class="text_body">
+												<a href="product-details.html"><h4>Jaguer M1 Hybrid</h4></a>
+												<h5>R$ 160.000,00</h5>
+												<p>Build year: <span>2015</span></p>
+											</div>
+											<div class="text_footer">
+												<a href="#"><i class="icon-engine"></i> 2500</a>
+												<a href="#"><i class="icon-gear1"></i> Manual</a>
+												<a href="#"><i class="icon-oil"></i>20/24</a>
+											</div>
+										</div>
+									</div>
+									<div class="item">
+										<div class="l_collection_item">
+											<div class="car_img"><a href="product-details.html"><img src="img/product/car-collection/car-2.jpg" alt=""></a></div>
+											<div class="text_body">
+												<a href="product-details.html"><h4>Audi A8 Hybrid</h4></a>
+												<h5>R$ 160.000,00</h5>
+												<p>Build year: <span>2015</span></p>
+											</div>
+											<div class="text_footer">
+												<a href="#"><i class="icon-engine"></i> 2500</a>
+												<a href="#"><i class="icon-gear1"></i> Manual</a>
+												<a href="#"><i class="icon-oil"></i>20/24</a>
+											</div>
+										</div>
+									</div>
+									<div class="item">
+										<div class="l_collection_item">
+											<div class="car_img"><a href="product-details.html"><img src="img/product/car-collection/car-3.jpg" alt=""></a></div>
+											<div class="text_body">
+												<a href="product-details.html"><h4>Mercedez Benz E</h4></a>
+												<h5>R$ 160.000,00</h5>
+												<p>Build year: <span>2015</span></p>
+											</div>
+											<div class="text_footer">
+												<a href="#"><i class="icon-engine"></i> 2500</a>
+												<a href="#"><i class="icon-gear1"></i> Manual</a>
+												<a href="#"><i class="icon-oil"></i>20/24</a>
+											</div>
+										</div>
+									</div>
+									<div class="item">
+										<div class="l_collection_item">
+											<div class="car_img"><a href="product-details.html"><img src="img/product/car-collection/car-2.jpg" alt=""></a></div>
+											<div class="text_body">
+												<a href="product-details.html"><h4>Mercedez Benz E</h4></a>
+												<h5>R$ 160.000,00</h5>
+												<p>Build year: <span>2015</span></p>
+											</div>
+											<div class="text_footer">
+												<a href="#"><i class="icon-engine"></i> 2500</a>
+												<a href="#"><i class="icon-gear1"></i> Manual</a>
+												<a href="#"><i class="icon-oil"></i>20/24</a>
+											</div>
+										</div>
+									</div>
+									<div class="item">
+										<div class="l_collection_item">
+											<div class="car_img"><a href="product-details.html"><img src="img/product/car-collection/car-1.jpg" alt=""></a></div>
+											<div class="text_body">
+												<a href="product-details.html"><h4>Mercedez Benz E</h4></a>
+												<h5>R$ 160.000,00</h5>
+												<p>Build year: <span>2015</span></p>
+											</div>
+											<div class="text_footer">
+												<a href="#"><i class="icon-engine"></i> 2500</a>
+												<a href="#"><i class="icon-gear1"></i> Manual</a>
+												<a href="#"><i class="icon-oil"></i>20/24</a>
+											</div>
+										</div>
+									</div>
+									<div class="item">
+										<div class="l_collection_item">
+											<div class="car_img"><a href="product-details.html"><img src="img/product/car-collection/car-3.jpg" alt=""></a></div>
+											<div class="text_body">
+												<a href="product-details.html"><h4>Mercedez Benz E</h4></a>
+												<h5>R$ 160.000,00</h5>
+												<p>Build year: <span>2015</span></p>
+											</div>
+											<div class="text_footer">
+												<a href="#"><i class="icon-engine"></i> 2500</a>
+												<a href="#"><i class="icon-gear1"></i> Manual</a>
+												<a href="#"><i class="icon-oil"></i>20/24</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+					<!--================End Feature Car Slider Area =================-->
+					<br><br>
+					<!--================Car Company Area =================-->
+					<section class="car_browse_area p_100">
+						<div class="container">
+							<div class="flag_center_title">
+								<h2 class="wow animated fadeInUp" data-wow-delay="0.2s"><img src="img/icon/flag-2.png" alt=""> Tipo de Navegação</h2>
+							</div>
+							<div class="car_browse_slider owl-carousel">
+								<div class="item">
+									<div class="car_c_item">
+										<a href="#"><img src="img/car/car-1.png" alt=""></a>
+										<a href="#"><h5>convertible <span>(80)</span></h5></a>
+									</div>
+								</div>
+								<div class="item">
+									<div class="car_c_item">
+										<a href="#"><img src="img/car/car-2.png" alt=""></a>
+										<a href="#"><h5>Sedan <span>(25)</span></h5></a>
+									</div>
+								</div>
+								<div class="item">
+									<div class="car_c_item">
+										<a href="#"><img src="img/car/car-3.png" alt=""></a>
+										<a href="#"><h5>Hybrid <span>(24)</span></h5></a>
+									</div>
+								</div>
+								<div class="item">
+									<div class="car_c_item">
+										<a href="#"><img src="img/car/car-4.png" alt=""></a>
+										<a href="#"><h5>SUV <span>(50)</span></h5></a>
+									</div>
+								</div>
+								<div class="item">
+									<div class="car_c_item">
+										<a href="#"><img src="img/car/car-5.png" alt=""></a>
+										<a href="#"><h5>Luxury <span>(34)</span></h5></a>
+									</div>
+								</div>
+								<div class="item">
+									<div class="car_c_item">
+										<a href="#"><img src="img/car/car-6.png" alt=""></a>
+										<a href="#"><h5>Electric <span>(26)</span></h5></a>
+									</div>
+								</div>
+								<div class="item">
+									<div class="car_c_item">
+										<a href="#"><img src="img/car/car-4.png" alt=""></a>
+										<a href="#"><h5>FAW <span>(05)</span></h5></a>
+									</div>
+								</div>
+								<div class="item">
+									<div class="car_c_item">
+										<a href="#"><img src="img/car/car-3.png" alt=""></a>
+										<a href="#"><h5>Audi <span>(32)</span></h5></a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+					<!--================End Car Company Area =================-->
+
+				</div> <!--Vitrine-->
 			</div>
 
 			<div class="segmento" id="motos" style="display: none;">
@@ -665,55 +776,50 @@
 					</div>
 				</section>
 				<!--================End Slider Area =================-->
-				
-				
-				<style>
-					.list {
-					max-height: 500px; 
-					overflow-y: scroll !important;
-					}
-				</style>
+
 				<!--================Find Bike Form Area =================-->
 				<section class="find_form">
-					<div class="container">
-						<div class="find_title">
-								<i class="icon-car_2"></i> Buscar Motos
+					<form id="formPesquisar">
+						<div class="container">
+							<div class="find_title">
+									<i class="icon-car_2"></i> Buscar Motos
 							</div>
-						<div class="find_form_inner row m0">
-							<div class="find_item">
-								<select class="nice_select" id="categoria">
-									<option value="1">Categoria</option>
-									<option value="2">Repasse</option>
-									<option value="3">Compra</option>
-								</select>
-							</div>
-							<div class="find_item">
-								<select class="nice_select" id="marca">
-									<option value="1">Marca</option>
-									<option value="2">Honda</option>
-									<option value="3">Yamaha</option>
-								</select>
-							</div>
-							<div class="find_item">
+							<div class="find_form_inner row m0">
+								<div class="find_item">
+									<select class="nice_select" id="categoria">
+										<option value="1">Categoria</option>
+										<option value="2">Repasse</option>
+										<option value="3">Compra</option>
+									</select>
+								</div>
+								<div class="find_item">
+									<select class="nice_select" id="marca">
+										<option value="1">Marca</option>
+										<option value="2">Honda</option>
+										<option value="3">Yamaha</option>
+									</select>
+								</div>
+								<div class="find_item">
 								<select class="nice_select" id="modelo">
 									<option value="1">Modelo</option>
 									<option value="2">CG</option>
 									<option value="3">Titan</option>
 								</select>
-							</div>
-							<div class="find_item">
-								<select class="nice_select" id="quilometragem">
-									<option value="1">Quilometragem</option>
-									<option value="2">10000</option>
-									<option value="3">20000</option>
-								</select>
-							</div>
-							
-							<div class="find_item">
-								<button class="submit_btn" type="button">Pesquisar</button>
+								</div>
+								<div class="find_item">
+									<select class="nice_select" id="quilometragem">
+										<option value="1">Quilometragem</option>
+										<option value="2">10000</option>
+										<option value="3">20000</option>
+									</select>
+								</div>
+								
+								<div class="find_item">
+									<button class="submit_btn" type="submit">Pesquisar</button>
+								</div>
 							</div>
 						</div>
-					</div>
+					</form>
 				</section>
 				<!--================End Find Bike Form Area =================-->
 				
@@ -1107,7 +1213,9 @@
 					</div>
 				</section>
 				<!--================End Feature Bike Slider Area =================-->
+				
 				<br><br>
+
 				<!--================Bike Company Area =================-->
 				<section class="car_browse_area p_100">
 					<div class="container">
@@ -1169,6 +1277,7 @@
 				<!--================End Bike Company Area =================-->
 			</div>
 		</div>
+
         <!--================Client Feedback Area =================-->
         <section class="client_feedback_area p_100">
         	<div class="container">
@@ -1241,25 +1350,28 @@
         						</ul>
         					</aside>
         				</div>
-        				<div class="col-lg-4 col-sm-6">
-        					<aside class="f_widget subscribe_widget wow animated fadeInUp" data-wow-delay="0.8s">
-        						<div class="f_title">
-        							<h3>Newsletter</h3>
-        						</div>
-								<div class="input-group">
-									<input type="text" class="form-control" placeholder="Digite seu e-mail">
-									<div class="input-group-append">
-										<button class="btn btn-outline-secondary red" type="button" id="button-addon2"><i class="icon-arrow_3"></i></button>
+						
+						<div class="col-lg-4 col-sm-6">
+							<form id="newsletter">
+								<aside class="f_widget subscribe_widget wow animated fadeInUp" data-wow-delay="0.8s">
+									<div class="f_title">
+										<h3>Newsletter</h3>
 									</div>
-								</div>
-       							<ul class="nav">
-       								<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-       								<li><a href="#"><i class="fa fa-youtube"></i></a></li>
-       								<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-       								<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-       							</ul>
-        					</aside>
-        				</div>
+									<div class="input-group">
+										<input type="text" id="emailsubscribe" class="form-control" placeholder="Digite seu e-mail">
+										<div class="input-group-append">
+											<button class="btn btn-outline-secondary red" type="submit" id="button-addon2"><i class="icon-arrow_3"></i></button>
+										</div>
+									</div>
+									<ul class="nav">
+										<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+										<li><a href="#"><i class="fa fa-youtube"></i></a></li>
+										<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+										<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+									</ul>
+								</aside>
+							</form>		
+						</div>
         			</div>
         		</div>
         	</div>
@@ -1378,6 +1490,7 @@
 		<script src="bll/segmento-carros.js"></script>
 		<script src="bll/segmento-motos.js"></script>
 		<script src="bll/index.js"></script>
+		<script src="bll/rodape.js"></script>
 		<!--RPassa-->
     </body>
 </html>
