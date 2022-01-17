@@ -2,20 +2,26 @@ var SegmentoCarros = {
     spa: null,
 
     Construtor() {
+        var this_ = this;
         var baseTela = '.spa>.segmento#carros';
         this.spa = $(baseTela);
 
         // Combo Marca
         this.spa.find('.nice_select#marca').on('change', function (event) {
             event.preventDefault();
-            SegmentoCarros.CarregarComboModelo(this.value);
+            this_.CarregarComboModelo(this.value);
         });
 
         // Botão Pesquisar
         this.spa.find('#formPesquisar').on("submit", function (event) {
             event.preventDefault();
 
-            SegmentoCarros.Pesquisar();
+            var id_categoria = null;
+            var id_marca = parseInt(this_.spa.find('.nice_select#marca').val());
+            var id_modelo = parseInt(this_.spa.find('.nice_select#modelo').val());
+            var id_quilometragem = null;
+
+            this_.Pesquisar(id_categoria, id_marca, id_modelo, id_quilometragem);
         });
     },
 
@@ -73,7 +79,12 @@ var SegmentoCarros = {
         </div>`;
     },
 
-    Pesquisar: function () {
+    Pesquisar: function (
+        id_categoria, 
+        id_marca, 
+        id_modelo, 
+        id_quilometragem) {
+
         var this_ = this;
         this.spa.find('.vitrine').hide();
         var target = this.spa.find('.pesquisa');
@@ -84,16 +95,23 @@ var SegmentoCarros = {
         var colecao = this.spa.find('.pesquisa').find('.latest_collection_area').find('.row.l_collection_inner');
         colecao.empty();
 
+        var params = {
+            orderby: 1,
+            offset: 0,
+            skip: 0,
+            lote: 10
+        };
+
+        if (id_categoria > 0) params['categoria_id'] = '[' + id_categoria + ']';
+        if (id_marca > 0) params['marcas_ids'] = '[' + id_marca + ']';
+        if (id_modelo > 0) params['modelos_ids'] = '[' + id_modelo + ']';
+        if (id_quilometragem > 0) params['categoria'] = id_quilometragem;
+
         $.ajax({
             url: sessionStorage.getItem('api') + '/v1/mobile/carros',
             type: "GET", cache: false, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
-            data: {
-                orderby: 1,
-                offset: 0,
-                skip: 0,
-                lote: 10
-            },
+            data: params,
             success: function (result, textStatus, request) {
                 var rows = result.registros;
                 $.each(rows, function (i, row) {
@@ -165,28 +183,28 @@ var SegmentoCarros = {
 
         carousel.empty();
         carousel.owlCarousel({
-            loop:true,
-                margin: 0,
-                items: 3,
-                nav: false,
-                autoplay: true,
-                smartSpeed: 1500,
-                dots:false, 
-				center: false,
-				navContainerClass: 'car_arrow',
-                navText: ['<i class="fa fa-angle-left" aria-hidden="true"></i>','<i class="fa fa-angle-right" aria-hidden="true"></i>'],
-                responsiveClass: true,
-				responsive: {
-                    0: {
-                        items: 1,
-                    },
-                    768: {
-                        items: 2,
-                    },
-                    992: {
-                        items: 3,
-                    },
-                }
+            loop: true,
+            margin: 0,
+            items: 3,
+            nav: false,
+            autoplay: true,
+            smartSpeed: 1500,
+            dots: false,
+            center: false,
+            navContainerClass: 'car_arrow',
+            navText: ['<i class="fa fa-angle-left" aria-hidden="true"></i>', '<i class="fa fa-angle-right" aria-hidden="true"></i>'],
+            responsiveClass: true,
+            responsive: {
+                0: {
+                    items: 1,
+                },
+                768: {
+                    items: 2,
+                },
+                992: {
+                    items: 3,
+                },
+            }
         });
     },
 
@@ -205,7 +223,7 @@ var SegmentoCarros = {
                 offset: 0,
                 skip: 0,
                 lote: 12,
-                ofertas: 1
+                ofertas: 1 /* true */
             },
             success: function (result, textStatus, request) {
                 //this_.LimparCarrosel(colecao);
