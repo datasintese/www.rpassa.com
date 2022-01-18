@@ -1,11 +1,23 @@
 var SegmentoCarros = {
     spa: null,
 
-    CarrosMaisRecentes: {
+    RolamentoMaisRecentes: {
         orderby: 1,
         offset: 0,
         skip: 0,
         lote: 12
+    },
+
+    RolamentoPesquisa: {
+        orderby: 1,
+        offset: 0,
+        skip: 0,
+        lote: 12,
+        marcas_ids: null,
+        modelos_ids: null,
+        categoria_id: null,
+        km_min: null,
+        km_max: null
     },
 
     Construtor() {
@@ -23,19 +35,31 @@ var SegmentoCarros = {
         this.spa.find('#formPesquisar').on("submit", function (event) {
             event.preventDefault();
 
-            var id_categoria = null;
-            var id_marca = parseInt(this_.spa.find('.nice_select#marca').val());
-            var id_modelo = parseInt(this_.spa.find('.nice_select#modelo').val());
-            var id_quilometragem = null;
+            this_.RolamentoPesquisa.marcas_ids = parseInt(this_.spa.find('.nice_select#marca').val());
+            this_.RolamentoPesquisa.modelos_ids = parseInt(this_.spa.find('.nice_select#modelo').val());
 
-            this_.Pesquisar(id_categoria, id_marca, id_modelo, id_quilometragem);
+            this_.RolamentoPesquisa.km_min = parseInt(this_.spa.find('.nice_select#quilometragem').val().split('|')[0]);
+            this_.RolamentoPesquisa.km_max = parseInt(this_.spa.find('.nice_select#quilometragem').val().split('|')[1]);
+
+            var target = this_.spa.find('.pesquisa');
+            target.fadeIn();
+            $("html, body").animate({ scrollTop: target.offset().top });
+
+            this_.Pesquisar(true);
         });
 
-        this_.spa.find('.latest_collection_area.p_100')
+        this_.spa.find('.vitrine').find('.latest_collection_area.p_100')
             .last().append(this.HtmlBotaoCarregarMais('carregar_mais_carros_recentes'));
 
         $("#carregar_mais_carros_recentes").on('click', function (event) {
             this_.VitrineCarregarMaisRecentes(false);
+        });
+
+        this_.spa.find('.pesquisa')
+            .last().append(this.HtmlBotaoCarregarMais('carregar_mais_carros_pesquisa'));
+
+        $("#carregar_mais_carros_pesquisa").on('click', function (event) {
+            this_.Pesquisar(false);
         });
     },
 
@@ -62,6 +86,7 @@ var SegmentoCarros = {
                     <a href="product-details.html"><h4>` + row.marca + ' - ' + row.modelo + `</h4></a>
                     <h5>` + row.preco + `</h5>
                     <p>Ano/Modelo: <span>`+ row.ano + `</span></p>
+                    <p>Quilometragem: <span>`+ row.km + `</span></p>
                 </div>
                 <div class="text_footer">
                     <a href="#"><i class="icon-engine"></i> 2500</a>
@@ -108,6 +133,7 @@ var SegmentoCarros = {
                     <a href="product-details.html"><h4>` + row.marca + ' - ' + row.modelo + `</h4></a>
                     <h5>` + row.preco + `</h5>
                     <p>Ano/Modelo: <span>`+ row.ano + `</span></p>
+                    <p>Quilometragem: <span>`+ row.km + `</span></p>
                 </div>
                 <div class="text_footer">
                     <a href="#"><i class="icon-engine"></i> 2500</a>
@@ -118,43 +144,36 @@ var SegmentoCarros = {
         </div>`;
     },
 
-    LimparPesquisa: function () {
-        var colecao = this.spa.find('.pesquisa').find('.latest_collection_area').find('.row.l_collection_inner');
-        colecao.empty();
-        return colecao;
-    },
-
-    LimparVitrineMaisRecentes: function () {
-
-        return colecao;
-    },
-
-    Pesquisar: function (
-        id_categoria,
-        id_marca,
-        id_modelo,
-        id_quilometragem) {
-
+    Pesquisar: function (limpar) {
         var this_ = this;
+
         this.spa.find('.vitrine').hide();
-        var target = this.spa.find('.pesquisa');
-        target.fadeIn();
+        var colecao = this.spa.find('.pesquisa').find('.latest_collection_area').find('.row.l_collection_inner');
 
-        $("html, body").animate({ scrollTop: target.offset().top });
+        if (limpar) {
+            colecao.empty();
+            this_.RolamentoPesquisa.offset = 0;
+            this_.RolamentoPesquisa.skip = 0;
+        }
 
-        var colecao = this.LimparPesquisa();
+        var params = {};
+        params['orderby'] = this_.RolamentoPesquisa.orderby;
+        params['offset'] = this_.RolamentoPesquisa.offset;
+        params['skip'] = this_.RolamentoPesquisa.skip;
+        params['lote'] = this_.RolamentoPesquisa.lote;
 
-        var params = {
-            orderby: 1,
-            offset: 0,
-            skip: 0,
-            lote: 10
-        };
-
-        if (id_categoria > 0) params['categoria_id'] = '[' + id_categoria + ']';
-        if (id_marca > 0) params['marcas_ids'] = '[' + id_marca + ']';
-        if (id_modelo > 0) params['modelos_ids'] = '[' + id_modelo + ']';
-        if (id_quilometragem > 0) params['categoria'] = id_quilometragem;
+        $.each(this.RolamentoPesquisa, function (key, value) {
+            if (value > 0) {
+                if (key.endsWith('_ids')) {
+                    params[key] = '[' + value + ']';
+                }
+                else
+                    params[key] = value;
+            }
+            else if (value == NaN || value == undefined || value == null) {
+                delete params[key];
+            }
+        });
 
         $.ajax({
             url: sessionStorage.getItem('api') + '/v1/mobile/carros',
@@ -162,11 +181,18 @@ var SegmentoCarros = {
             contentType: 'application/json;charset=utf-8',
             data: params,
             success: function (result, textStatus, request) {
+                this_.RolamentoPesquisa.offset = result.next_offset;
+                this_.RolamentoPesquisa.skip = result.next_skip;
+
                 var rows = result.registros;
                 $.each(rows, function (i, row) {
                     colecao.append(this_.HtmlItemCarroColecao(row));
                 });
 
+                if (result.next_offset == -1)
+                    $("#carregar_mais_carros_pesquisa").hide();
+                else
+                    $("#carregar_mais_carros_pesquisa").show();
             },
             error: function (request, textStatus, errorThrown) {
                 alert(JSON.stringify(request));
@@ -187,10 +213,9 @@ var SegmentoCarros = {
         var this_ = this;
 
         var colecao = this.spa.find('.vitrine').find('.latest_collection_area').find('.row.l_collection_inner');
-        if (limpar) 
-        {
-            this.CarrosMaisRecentes.offset = 0;
-            this.CarrosMaisRecentes.skip = 0;
+        if (limpar) {
+            this.RolamentoMaisRecentes.offset = 0;
+            this.RolamentoMaisRecentes.skip = 0;
             colecao.empty();
         }
 
@@ -199,19 +224,24 @@ var SegmentoCarros = {
             type: "GET", cache: false, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
             data: {
-                orderby: this_.CarrosMaisRecentes.orderby,
-                offset: this_.CarrosMaisRecentes.offset,
-                skip: this_.CarrosMaisRecentes.skip,
-                lote: this_.CarrosMaisRecentes.lote
+                orderby: this_.RolamentoMaisRecentes.orderby,
+                offset: this_.RolamentoMaisRecentes.offset,
+                skip: this_.RolamentoMaisRecentes.skip,
+                lote: this_.RolamentoMaisRecentes.lote
             },
             success: function (result, textStatus, request) {
+                this_.RolamentoMaisRecentes.offset = result.next_offset;
+                this_.RolamentoMaisRecentes.skip = result.next_skip;
+
                 var rows = result.registros;
                 $.each(rows, function (i, row) {
                     colecao.append(this_.HtmlItemCarroColecao(row));
                 });
 
-                this_.CarrosMaisRecentes.offset = result.next_offset;
-                this_.CarrosMaisRecentes.skip = result.next_skip;
+                if (result.next_offset == -1)
+                    $("#carregar_mais_carros_recentes").hide();
+                else
+                    $("#carregar_mais_carros_recentes").show();
             },
             error: function (request, textStatus, errorThrown) {
                 alert(JSON.stringify(request));
@@ -430,7 +460,7 @@ var SegmentoCarros = {
 
                 $.each(result, function (i, obj) {
                     spa.find('.nice_select#quilometragem').last()
-                        .append('<option value="' + obj.id + '">' + obj.nome + '</option>');
+                        .append('<option value="' + obj.km_min + '|' + obj.km_max + '">' + obj.nome + '</option>');
                 });
                 spa.find('.nice_select#quilometragem').niceSelect('update');
             },
