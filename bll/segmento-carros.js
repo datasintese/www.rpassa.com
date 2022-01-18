@@ -1,6 +1,13 @@
 var SegmentoCarros = {
     spa: null,
 
+    CarrosMaisRecentes: {
+        orderby: 1,
+        offset: 0,
+        skip: 0,
+        lote: 12
+    },
+
     Construtor() {
         var this_ = this;
         var baseTela = '.spa>.segmento#carros';
@@ -23,6 +30,13 @@ var SegmentoCarros = {
 
             this_.Pesquisar(id_categoria, id_marca, id_modelo, id_quilometragem);
         });
+
+        this_.spa.find('.latest_collection_area.p_100')
+            .last().append(this.HtmlBotaoCarregarMais('carregar_mais_carros_recentes'));
+
+        $("#carregar_mais_carros_recentes").on('click', function (event) {
+            this_.VitrineCarregarMaisRecentes(false);
+        });
     },
 
     InicializarSegmento: function () {
@@ -33,8 +47,8 @@ var SegmentoCarros = {
         this.CarregarComboCarroCategoria();
         this.CarregarComboCarroMarca();
         this.CarregarComboCarroQuilometragem();
-        this.VitrineCarrosMaisRecentes();
-        this.VitrineMelhoresOfertasCarrosel();
+        this.VitrineCarregarMaisRecentes(true);
+        this.VitrineCarregarMelhoresOfertasCarrosel(true);
     },
 
     HtmlItemCarroColecao: function (row) {
@@ -54,6 +68,31 @@ var SegmentoCarros = {
                     <a href="#"><i class="icon-gear1"></i> Manual</a>
                     <a href="#"><i class="icon-oil"></i>20/24</a>
                 </div>
+            </div>
+        </div>`
+    },
+
+    HtmlBotaoCarregarMais: function (id_attribute) {
+        return `
+        <div style="top: 25px;
+            width: auto;
+            height: auto;
+            position: relative;">
+            
+            <div style="width: auto;
+                height: auto;
+                text-align: center;
+                position: relative;">
+                
+                <button 
+                    id="` + id_attribute + `"
+                    style="height: 40px !important; padding: 3px 15px; margin: 0px;"
+                    class="btn btn-outline-secondary red" 
+                    type="submit" 
+                    id="button-addon2">
+                    
+                    <h4>Carregar Mais</h4>
+                </button>
             </div>
         </div>`
     },
@@ -79,10 +118,21 @@ var SegmentoCarros = {
         </div>`;
     },
 
+    LimparPesquisa: function () {
+        var colecao = this.spa.find('.pesquisa').find('.latest_collection_area').find('.row.l_collection_inner');
+        colecao.empty();
+        return colecao;
+    },
+
+    LimparVitrineMaisRecentes: function () {
+
+        return colecao;
+    },
+
     Pesquisar: function (
-        id_categoria, 
-        id_marca, 
-        id_modelo, 
+        id_categoria,
+        id_marca,
+        id_modelo,
         id_quilometragem) {
 
         var this_ = this;
@@ -92,8 +142,7 @@ var SegmentoCarros = {
 
         $("html, body").animate({ scrollTop: target.offset().top });
 
-        var colecao = this.spa.find('.pesquisa').find('.latest_collection_area').find('.row.l_collection_inner');
-        colecao.empty();
+        var colecao = this.LimparPesquisa();
 
         var params = {
             orderby: 1,
@@ -134,26 +183,35 @@ var SegmentoCarros = {
         });
     },
 
-    VitrineCarrosMaisRecentes: function () {
+    VitrineCarregarMaisRecentes: function (limpar) {
         var this_ = this;
+
         var colecao = this.spa.find('.vitrine').find('.latest_collection_area').find('.row.l_collection_inner');
-        colecao.empty();
+        if (limpar) 
+        {
+            this.CarrosMaisRecentes.offset = 0;
+            this.CarrosMaisRecentes.skip = 0;
+            colecao.empty();
+        }
 
         $.ajax({
             url: sessionStorage.getItem('api') + '/v1/mobile/carros',
             type: "GET", cache: false, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
             data: {
-                orderby: 1,
-                offset: 0,
-                skip: 0,
-                lote: 12
+                orderby: this_.CarrosMaisRecentes.orderby,
+                offset: this_.CarrosMaisRecentes.offset,
+                skip: this_.CarrosMaisRecentes.skip,
+                lote: this_.CarrosMaisRecentes.lote
             },
             success: function (result, textStatus, request) {
                 var rows = result.registros;
                 $.each(rows, function (i, row) {
                     colecao.append(this_.HtmlItemCarroColecao(row));
                 });
+
+                this_.CarrosMaisRecentes.offset = result.next_offset;
+                this_.CarrosMaisRecentes.skip = result.next_skip;
             },
             error: function (request, textStatus, errorThrown) {
                 alert(JSON.stringify(request));
@@ -204,39 +262,45 @@ var SegmentoCarros = {
                 992: {
                     items: 3,
                 },
+            },
+            onDragged: function () {
+                alert('onDragged');
+            },
+            onDrag: function () {
+                alert('onDrag');
             }
         });
+
+        // carousel.html(carousel.find('.owl-stage-outer').html()).removeClass('owl-hidden');
     },
 
-    VitrineMelhoresOfertasCarrosel: function () {
+    VitrineCarregarMelhoresOfertasCarrosel: function (limpar) {
         var this_ = this;
         var carousel = this.spa.find('.vitrine').find('.feature_car_area').find('.f_car_slider.owl-carousel');
 
-        this.ResetarOwlCarouselMelhoresOfertas(carousel);
+        if (limpar) this.ResetarOwlCarouselMelhoresOfertas(carousel);
 
         $.ajax({
             url: sessionStorage.getItem('api') + '/v1/mobile/carros',
             type: "GET", cache: false, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
             data: {
-                orderby: 2,
+                orderby: 4,
                 offset: 0,
                 skip: 0,
                 lote: 12,
                 ofertas: 1 /* true */
             },
             success: function (result, textStatus, request) {
-                //this_.LimparCarrosel(colecao);
-
                 var rows = result.registros;
+
                 $.each(rows, function (i, row) {
-                    // colecao.append(this_.HtmlQuadroCarroCarrosel(row));
-
                     carousel.owlCarousel('add', this_.HtmlItemCarroCarousel(row)).owlCarousel('update');
+                });
 
-                })
-
-                // $('.owl-carousel').owlCarousel('update');
+                carousel.owlCarousel('show');
+                // f_car_slider
+                // owl-hiden
             },
             error: function (request, textStatus, errorThrown) {
                 alert(JSON.stringify(request));
