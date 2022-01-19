@@ -1,6 +1,7 @@
 var DetalhesCarro = {
     spa: null,
     produto_id: null,
+    alienado: null,
 
     Construtor(params) {
         this.produto_id = params.carro;
@@ -83,22 +84,48 @@ var DetalhesCarro = {
         }
     },
 
-    HtmlItemImagem: function (imagem_hash, principal) {
+    HtmlItemBandeiraAlienado: function (row) {
+        var tooltip = (row.alienado ? 'Alienado' : 'Quitado');
+        var imgFile = (row.alienado ? 'tag-alienado.png' : 'tag-quitado.png');
+
+        return`
+        <div style="position: absolute; top: 0; padding-left: 5px; width: 20px; height: auto; "
+            data-toggle="tooltip" data-placement="top" title="` + tooltip + `">
+            <img style="width: inherit; height: inherit;" 
+                src="img/` + imgFile + `"></img>
+        </div>`;
+    },
+    
+    HtmlItemImagem: function (imagem_hash, principal, use_bandeira_alienado) {
         var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + this.produto_id + '/imagens/' + imagem_hash + '?tipo=' + (principal ? 'principal' : 'secundaria');
+
+        var bandeira_alienado = '';
+
+        if (use_bandeira_alienado){
+            bandeira_alienado = this.HtmlItemBandeiraAlienado({ alienado: this.alienado });
+        }
 
         return `
         <div class="item">
             <img src="` + url_imagem + `" alt="Imagem">
+            ` + bandeira_alienado + `
         </div>`;
     },
 
-    HtmlItemImagemNavSlider: function (imagem_hash, principal) {
+    HtmlItemImagemNavSlider: function (imagem_hash, principal, use_bandeira_alienado) {
         var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + this.produto_id + '/imagens/' + imagem_hash + '?tipo=' + (principal ? 'principal' : 'secundario');
+
+        var bandeira_alienado = '';
+
+        if (use_bandeira_alienado){
+            bandeira_alienado = this.HtmlItemBandeiraAlienado({ alienado: this.alienado });
+        }
 
         return `
         <div class="item">
             <div class="img_inner">
                 <img src="` + url_imagem + `" alt="">
+                ` + bandeira_alienado +`
             </div>
         </div>`;
     },
@@ -123,12 +150,12 @@ var DetalhesCarro = {
 
                 this_.LimparTodasAsImagens();
 
-                this_.spa.find('.product_main_slider').last().append(this_.HtmlItemImagem(result.imagem_principal, true));
+                this_.spa.find('.product_main_slider').last().append(this_.HtmlItemImagem(result.imagem_principal, true, true));
                 this_.spa.find('.product_nav_slider').last().append(this_.HtmlItemImagem(result.imagem_principal, true));
 
                 var imagens = result.imagens_hashs;
                 $.each(imagens, function (key, value) {
-                    this_.spa.find('.product_main_slider').last().append(this_.HtmlItemImagemNavSlider(value, false));
+                    this_.spa.find('.product_main_slider').last().append(this_.HtmlItemImagemNavSlider(value, false, true));
                     this_.spa.find('.product_nav_slider').last().append(this_.HtmlItemImagemNavSlider(value, false));
                 });
             },
