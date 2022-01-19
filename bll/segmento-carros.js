@@ -86,6 +86,16 @@ var SegmentoCarros = {
                 this_.VitrineCarregarMelhoresOfertasCarrosel(false);
             }
         });
+
+        $(document.body).on('click', '.favorito' ,function(event){
+            event.preventDefault();
+            alert('favorito');
+        });
+
+        $(document.body).on('click', '.compartilhar' ,function(event){
+            event.preventDefault();
+            alert('compartilhar');
+        });
     },
 
     Inicializar: function () {
@@ -127,11 +137,34 @@ var SegmentoCarros = {
         </div>`
     },
 
-    HtmlItemBandeiraAlienado: function (row) {
-        return`
-        <div style="position: absolute; top: 0; padding-left: 5px; width: 20px; height: auto; ">
-            <img style="width: inherit; height: inherit;" 
-                src="img/` + (row.alienado ? 'tag-alienado.png' : 'tag-quitado.png') + `"></img>
+    HtmlFaixaBandeirasItems: function (row) {
+        var tooltipAlienado = (row.alienado ? 'Alienado' : 'Quitado');
+        var imgAlienado = (row.alienado ? 'tag-alienado.png' : 'tag-quitado.png');
+
+        var tooltipFavorito = (row.favorito ? 'Desvaforitar' : 'Favoritar');
+        var imgFavorito = (row.favorito ? 'favorito.png' : 'unfavorito.png');
+
+        return `
+        <div style="position: absolute; overflow: hidden; top: 0; width: 100%; height: auto; padding: 0px 5px;">
+            <img style="float: left; width: 20px"
+                data-toggle="tooltip" data-placement="top" title="` + tooltipAlienado + `" 
+                src="img/` + imgAlienado + `"></img>
+            
+                <a class='favorito' href="#" style="float: right;"
+                    data-id-produto="` + row.id + `">
+
+                    <img style="width: 20px"
+                        data-toggle="tooltip" data-placement="top" title="` + tooltipFavorito + `" 
+                        src="img/` + imgFavorito + `"></img>
+                </a>
+
+                <a class='compartilhar' href="#" style="float: right; margin: 0px 5px 0px 0px"
+                    data-url="` +  + `">
+
+                    <img style="width: 20px"
+                        data-toggle="tooltip" data-placement="top" title="Compartilhar" 
+                        src="img/compartilhar.png"></img>
+                </a>
         </div>`;
     },
 
@@ -144,7 +177,7 @@ var SegmentoCarros = {
                 <div class="car_img"><a href="detalhes-produto.html?carro=`+ row.id + `">
                     <img class="img-fluid" src="`+ url_imagem + `" alt="Imagem principal"></a>
                     
-                    ` + this.HtmlItemBandeiraAlienado(row) + `
+                    ` + this.HtmlFaixaBandeirasItems(row) + `
                     
                 </div>
                 <div class="text_body">
@@ -172,8 +205,8 @@ var SegmentoCarros = {
                     <a href="detalhes-produto.html?carro=`+ row.id + `">
                         <img src="` + url_imagem + `" alt="Imagem principal"></a>
 
-                        ` + this.HtmlItemBandeiraAlienado(row) + `
-                        
+                        ` + this.HtmlFaixaBandeirasItems(row) + `
+
                 </div>
                 <div class="text_body">
                     <a href="detalhes-produto.html"><h4>` + row.marca + ' - ' + row.modelo + `</h4></a>
