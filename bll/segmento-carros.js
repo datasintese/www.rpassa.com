@@ -28,7 +28,7 @@ var SegmentoCarros = {
         lote: 12
     },
 
-    Construtor() {
+    Construtor(params) {
         var this_ = this;
         var baseTela = '.spa>.segmento#carros';
         this.spa = $(baseTela);
@@ -88,7 +88,9 @@ var SegmentoCarros = {
         });
     },
 
-    InicializarSegmento: function () {
+    Inicializar: function () {
+        $('.spa>.segmento#carros').show();
+
         this.spa.find('.pesquisa').hide();
         this.spa.find('.vitrine').show();
 
@@ -98,28 +100,6 @@ var SegmentoCarros = {
         this.CarregarComboCarroQuilometragem();
         this.VitrineCarregarMaisRecentes(true);
         this.VitrineCarregarMelhoresOfertasCarrosel(true);
-    },
-
-    HtmlItemCarroColecao: function (row) {
-        var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + row.id + '/imagens/' + row.imagem_hash + '?tipo=principal';
-
-        return `
-        <div class="col-lg-4 col-md-6">
-            <div class="l_collection_item wow animated fadeInUp" data-wow-delay="0.2s">
-                <div class="car_img"><a href="product-details.html"><img class="img-fluid" src="`+ url_imagem + `" alt="Imagem principal"></a></div>
-                <div class="text_body">
-                    <a href="product-details.html"><h4>` + row.marca + ' - ' + row.modelo + `</h4></a>
-                    <h5>` + row.preco + `</h5>
-                    <p>Ano/Modelo: <span>`+ row.ano + `</span></p>
-                    <p>Quilometragem: <span>`+ row.km + `</span></p>
-                </div>
-                <div class="text_footer">
-                    <a href="#"><i class="icon-engine"></i> 2500</a>
-                    <a href="#"><i class="icon-gear1"></i> Manual</a>
-                    <a href="#"><i class="icon-oil"></i>20/24</a>
-                </div>
-            </div>
-        </div>`
     },
 
     HtmlBotaoCarregarMais: function (id_attribute) {
@@ -147,15 +127,56 @@ var SegmentoCarros = {
         </div>`
     },
 
+    HtmlItemBandeiraAlienado: function (row) {
+        return`
+        <div style="position: absolute; top: 0; padding-left: 5px; width: 20px; height: auto; ">
+            <img style="width: inherit; height: inherit;" 
+                src="img/` + (row.alienado ? 'tag-alienado.png' : 'tag-quitado.png') + `"></img>
+        </div>`;
+    },
+
+    HtmlItemCarroColecao: function (row) {
+        var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + row.id + '/imagens/' + row.imagem_hash + '?tipo=principal';
+
+        return `
+        <div class="col-lg-4 col-md-6">
+            <div class="l_collection_item wow animated fadeInUp" data-wow-delay="0.2s">
+                <div class="car_img"><a href="detalhes-produto.html?carro=`+ row.id + `">
+                    <img class="img-fluid" src="`+ url_imagem + `" alt="Imagem principal"></a>
+                    
+                    ` + this.HtmlItemBandeiraAlienado(row) + `
+                    
+                </div>
+                <div class="text_body">
+                    <a href="detalhes-produto.html"><h4>` + row.marca + ' - ' + row.modelo + `</h4></a>
+                    <h5>` + row.preco + `</h5>
+                    <p>Ano/Modelo: <span>`+ row.ano + `</span></p>
+                    <p>Quilometragem: <span>`+ row.km + `</span></p>
+                </div>
+                <div class="text_footer">
+                    <a href="#"><i class="icon-engine"></i> 2500</a>
+                    <a href="#"><i class="icon-gear1"></i> Manual</a>
+                    <a href="#"><i class="icon-oil"></i>20/24</a>
+                </div>
+            </div>
+        </div>`
+    },
+
     HtmlItemCarroCarousel: function (row) {
         var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + row.id + '/imagens/' + row.imagem_hash + '?tipo=principal';
 
         return `
         <div class="item">
             <div class="l_collection_item">
-                <div class="car_img"><a href="product-details.html"><img src="`+ url_imagem + `" alt="Imagem principal"></a></div>
+                <div class="car_img">
+                    <a href="detalhes-produto.html?carro=`+ row.id + `">
+                        <img src="` + url_imagem + `" alt="Imagem principal"></a>
+
+                        ` + this.HtmlItemBandeiraAlienado(row) + `
+                        
+                </div>
                 <div class="text_body">
-                    <a href="product-details.html"><h4>` + row.marca + ' - ' + row.modelo + `</h4></a>
+                    <a href="detalhes-produto.html"><h4>` + row.marca + ' - ' + row.modelo + `</h4></a>
                     <h5>` + row.preco + `</h5>
                     <p>Ano/Modelo: <span>`+ row.ano + `</span></p>
                     <p>Quilometragem: <span>`+ row.km + `</span></p>
