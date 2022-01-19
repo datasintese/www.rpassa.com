@@ -159,7 +159,7 @@ var SegmentoCarros = {
                 </a>
 
                 <a class='compartilhar' href="#" style="float: right; margin: 0px 5px 0px 0px"
-                    data-url="` +  + `">
+                    data-url="` + '' + `">
 
                     <img style="width: 20px"
                         data-toggle="tooltip" data-placement="top" title="Compartilhar" 
