@@ -132,11 +132,11 @@ function hexToBase64(str) {
     return btoa(bString);
 }
 
-var qs = (function (a) {
-    if (a == "") return {};
+var QueryString = (function (value) {
+    if (value == "") return {};
     var b = {};
-    for (var i = 0; i < a.length; ++i) {
-        var p = a[i].split('=', 2);
+    for (var i = 0; i < value.length; ++i) {
+        var p = value[i].split('=', 2);
         if (p.length == 1)
             b[p[0]] = "";
         else
@@ -176,4 +176,13 @@ function minifyHTML(targetElSelector = 'html', removableElSelector = '', imgSour
         .replace(/(\s\}\s)|(\s\})|(\}\s)/g, '}');
 
     return asdd.replace(/src\=\"/g, 'src="' + imgSourcePrefix);
+}
+
+function insertUrlParam(key, value) {
+    if (history.pushState) {
+        let searchParams = new URLSearchParams(window.location.search);
+        searchParams.set(key, value);
+        let newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + searchParams.toString();
+        window.history.pushState({path: newurl}, '', newurl);
+    }
 }

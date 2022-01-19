@@ -9,6 +9,7 @@ var SegmentoCarros = {
     },
 
     RolamentoPesquisa: {
+        categoria_id: null,
         orderby: 1,
         offset: 0,
         skip: 0,
@@ -20,7 +21,14 @@ var SegmentoCarros = {
         km_max: null
     },
 
-    Construtor() {
+    RolamentoMelhoresOfertas: {
+        orderby: 4,
+        offset: 0,
+        skip: 0,
+        lote: 12
+    },
+
+    Construtor(params) {
         var this_ = this;
         var baseTela = '.spa>.segmento#carros';
         this.spa = $(baseTela);
@@ -28,12 +36,18 @@ var SegmentoCarros = {
         // Combo Marca
         this.spa.find('.nice_select#marca').on('change', function (event) {
             event.preventDefault();
-            this_.CarregarComboModelo(this.value);
+
+            if (parseInt(this.value) > 0)
+                this_.CarregarComboModelo(this.value);
+            else
+                this_.LimparComboModelo();
         });
 
         // Botão Pesquisar
         this.spa.find('#formPesquisar').on("submit", function (event) {
             event.preventDefault();
+
+            this_.RolamentoPesquisa.categoria_id = parseInt(this_.spa.find('.nice_select#categoria').val());
 
             this_.RolamentoPesquisa.marcas_ids = parseInt(this_.spa.find('.nice_select#marca').val());
             this_.RolamentoPesquisa.modelos_ids = parseInt(this_.spa.find('.nice_select#modelo').val());
@@ -48,6 +62,7 @@ var SegmentoCarros = {
             this_.Pesquisar(true);
         });
 
+        // Adiciona Botão Carregar Mais
         this_.spa.find('.vitrine').find('.latest_collection_area.p_100')
             .last().append(this.HtmlBotaoCarregarMais('carregar_mais_carros_recentes'));
 
@@ -55,15 +70,27 @@ var SegmentoCarros = {
             this_.VitrineCarregarMaisRecentes(false);
         });
 
+        // Adiciona Botão Carregar Mais
         this_.spa.find('.pesquisa')
             .last().append(this.HtmlBotaoCarregarMais('carregar_mais_carros_pesquisa'));
 
         $("#carregar_mais_carros_pesquisa").on('click', function (event) {
             this_.Pesquisar(false);
         });
+
+        // Adicionar Rolamento no slider
+        var carousel = this.spa.find('.vitrine').find('.feature_car_area').find('.f_car_slider.owl-carousel');
+        carousel.on('changed.owl.carousel', function (e) {
+            var count = (e.item.count - e.page.size);
+            if (e.item.index == count) {
+                this_.VitrineCarregarMelhoresOfertasCarrosel(false);
+            }
+        });
     },
 
-    InicializarSegmento: function () {
+    Inicializar: function () {
+        $('.spa>.segmento#carros').show();
+
         this.spa.find('.pesquisa').hide();
         this.spa.find('.vitrine').show();
 
@@ -73,28 +100,6 @@ var SegmentoCarros = {
         this.CarregarComboCarroQuilometragem();
         this.VitrineCarregarMaisRecentes(true);
         this.VitrineCarregarMelhoresOfertasCarrosel(true);
-    },
-
-    HtmlItemCarroColecao: function (row) {
-        var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + row.id + '/imagens/' + row.imagem_hash + '?tipo=principal';
-
-        return `
-        <div class="col-lg-4 col-md-6">
-            <div class="l_collection_item wow animated fadeInUp" data-wow-delay="0.2s">
-                <div class="car_img"><a href="product-details.html"><img class="img-fluid" src="`+ url_imagem + `" alt="Imagem principal"></a></div>
-                <div class="text_body">
-                    <a href="product-details.html"><h4>` + row.marca + ' - ' + row.modelo + `</h4></a>
-                    <h5>` + row.preco + `</h5>
-                    <p>Ano/Modelo: <span>`+ row.ano + `</span></p>
-                    <p>Quilometragem: <span>`+ row.km + `</span></p>
-                </div>
-                <div class="text_footer">
-                    <a href="#"><i class="icon-engine"></i> 2500</a>
-                    <a href="#"><i class="icon-gear1"></i> Manual</a>
-                    <a href="#"><i class="icon-oil"></i>20/24</a>
-                </div>
-            </div>
-        </div>`
     },
 
     HtmlBotaoCarregarMais: function (id_attribute) {
@@ -122,15 +127,56 @@ var SegmentoCarros = {
         </div>`
     },
 
+    HtmlItemBandeiraAlienado: function (row) {
+        return`
+        <div style="position: absolute; top: 0; padding-left: 5px; width: 20px; height: auto; ">
+            <img style="width: inherit; height: inherit;" 
+                src="img/` + (row.alienado ? 'tag-alienado.png' : 'tag-quitado.png') + `"></img>
+        </div>`;
+    },
+
+    HtmlItemCarroColecao: function (row) {
+        var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + row.id + '/imagens/' + row.imagem_hash + '?tipo=principal';
+
+        return `
+        <div class="col-lg-4 col-md-6">
+            <div class="l_collection_item wow animated fadeInUp" data-wow-delay="0.2s">
+                <div class="car_img"><a href="detalhes-produto.html?carro=`+ row.id + `">
+                    <img class="img-fluid" src="`+ url_imagem + `" alt="Imagem principal"></a>
+                    
+                    ` + this.HtmlItemBandeiraAlienado(row) + `
+                    
+                </div>
+                <div class="text_body">
+                    <a href="detalhes-produto.html"><h4>` + row.marca + ' - ' + row.modelo + `</h4></a>
+                    <h5>` + row.preco + `</h5>
+                    <p>Ano/Modelo: <span>`+ row.ano + `</span></p>
+                    <p>Quilometragem: <span>`+ row.km + `</span></p>
+                </div>
+                <div class="text_footer">
+                    <a href="#"><i class="icon-engine"></i> 2500</a>
+                    <a href="#"><i class="icon-gear1"></i> Manual</a>
+                    <a href="#"><i class="icon-oil"></i>20/24</a>
+                </div>
+            </div>
+        </div>`
+    },
+
     HtmlItemCarroCarousel: function (row) {
         var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + row.id + '/imagens/' + row.imagem_hash + '?tipo=principal';
 
         return `
         <div class="item">
             <div class="l_collection_item">
-                <div class="car_img"><a href="product-details.html"><img src="`+ url_imagem + `" alt="Imagem principal"></a></div>
+                <div class="car_img">
+                    <a href="detalhes-produto.html?carro=`+ row.id + `">
+                        <img src="` + url_imagem + `" alt="Imagem principal"></a>
+
+                        ` + this.HtmlItemBandeiraAlienado(row) + `
+                        
+                </div>
                 <div class="text_body">
-                    <a href="product-details.html"><h4>` + row.marca + ' - ' + row.modelo + `</h4></a>
+                    <a href="detalhes-produto.html"><h4>` + row.marca + ' - ' + row.modelo + `</h4></a>
                     <h5>` + row.preco + `</h5>
                     <p>Ano/Modelo: <span>`+ row.ano + `</span></p>
                     <p>Quilometragem: <span>`+ row.km + `</span></p>
@@ -165,7 +211,7 @@ var SegmentoCarros = {
         $.each(this.RolamentoPesquisa, function (key, value) {
             if (value > 0) {
                 if (key.endsWith('_ids')) {
-                    params[key] = '[' + value + ']';
+                    params[key] = '[' + value + ']'; // Coloca no formato de lista campos terminados em _ids
                 }
                 else
                     params[key] = value;
@@ -271,7 +317,7 @@ var SegmentoCarros = {
 
         carousel.empty();
         carousel.owlCarousel({
-            loop: true,
+            loop: false,
             margin: 0,
             items: 3,
             nav: false,
@@ -292,14 +338,10 @@ var SegmentoCarros = {
                 992: {
                     items: 3,
                 },
-            },
-            onDragged: function () {
-                alert('onDragged');
-            },
-            onDrag: function () {
-                alert('onDrag');
             }
         });
+
+        // $(".f_car_slider").show();
 
         // carousel.html(carousel.find('.owl-stage-outer').html()).removeClass('owl-hidden');
     },
@@ -308,20 +350,27 @@ var SegmentoCarros = {
         var this_ = this;
         var carousel = this.spa.find('.vitrine').find('.feature_car_area').find('.f_car_slider.owl-carousel');
 
-        if (limpar) this.ResetarOwlCarouselMelhoresOfertas(carousel);
+        if (limpar) {
+            this_.RolamentoPesquisa.offset = 0;
+            this_.RolamentoPesquisa.skip = 0;
+            this.ResetarOwlCarouselMelhoresOfertas(carousel);
+        }
 
         $.ajax({
             url: sessionStorage.getItem('api') + '/v1/mobile/carros',
             type: "GET", cache: false, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
             data: {
-                orderby: 4,
-                offset: 0,
-                skip: 0,
-                lote: 12,
+                orderby: this_.RolamentoMelhoresOfertas.orderby,
+                offset: this_.RolamentoMelhoresOfertas.offset,
+                skip: this_.RolamentoMelhoresOfertas.skip,
+                lote: this_.RolamentoMelhoresOfertas.lote,
                 ofertas: 1 /* true */
             },
             success: function (result, textStatus, request) {
+                this_.RolamentoMelhoresOfertas.offset = result.next_offset;
+                this_.RolamentoMelhoresOfertas.skip = result.next_skip;
+
                 var rows = result.registros;
 
                 $.each(rows, function (i, row) {
@@ -351,14 +400,18 @@ var SegmentoCarros = {
         this.spa.find('.nice_select#categoria').empty().append('<option selected="selected" value="0">Categoria</option>');
         this.spa.find('.nice_select#categoria').niceSelect('update');
 
-        this.spa.find('.nice_select#modelo').empty().append('<option selected="selected" value="0">Modelo</option>');
-        this.spa.find('.nice_select#modelo').niceSelect('update');
+        this.LimparComboModelo();
 
         this.spa.find('.nice_select#quilometragem').empty().append('<option selected="selected" value="0">Quilometragem</option>');
         this.spa.find('.nice_select#quilometragem').niceSelect('update');
 
         this.spa.find('.nice_select#marca').empty().append('<option selected="selected" value="0">Marca</option>');
         this.spa.find('.nice_select#marca').niceSelect('update');
+    },
+
+    LimparComboModelo: function () {
+        this.spa.find('.nice_select#modelo').empty().append('<option selected="selected" value="0">Modelo</option>');
+        this.spa.find('.nice_select#modelo').niceSelect('update');
     },
 
     CarregarComboCarroCategoria: function () {
