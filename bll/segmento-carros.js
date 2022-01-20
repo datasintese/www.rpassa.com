@@ -22,7 +22,7 @@ var SegmentoCarros = {
     },
 
     RolamentoMelhoresOfertas: {
-        orderby: 4,
+        orderby: 4, /* Menor Preço */
         offset: 0,
         skip: 0,
         lote: 12
@@ -94,7 +94,7 @@ var SegmentoCarros = {
 
         $(document.body).on('click', '.compartilhar' ,function(event){
             event.preventDefault();
-            alert('compartilhar');
+            TelaCompartilhamento.ExibirTela($(this).attr('data-url-compartilhar'));
         });
     },
 
@@ -137,12 +137,12 @@ var SegmentoCarros = {
         </div>`
     },
 
-    HtmlFaixaBandeirasItems: function (row) {
-        var tooltipAlienado = (row.alienado ? 'Alienado' : 'Quitado');
-        var imgAlienado = (row.alienado ? 'tag-alienado.png' : 'tag-quitado.png');
+    HtmlFaixaBandeirasItem: function (produto) {
+        var tooltipAlienado = (produto.alienado ? 'Alienado' : 'Quitado');
+        var imgAlienado = (produto.alienado ? 'tag-alienado.png' : 'tag-quitado.png');
 
-        var tooltipFavorito = (row.favorito ? 'Desvaforitar' : 'Favoritar');
-        var imgFavorito = (row.favorito ? 'favorito.png' : 'unfavorito.png');
+        var tooltipFavorito = (produto.favorito ? 'Desvaforitar' : 'Favoritar');
+        var imgFavorito = (produto.favorito ? 'favorito.png' : 'unfavorito.png');
 
         return `
         <div style="position: absolute; overflow: hidden; top: 0; width: 100%; height: auto; padding: 0px 5px;">
@@ -151,7 +151,7 @@ var SegmentoCarros = {
                 src="img/` + imgAlienado + `"></img>
             
                 <a class='favorito' href="#" style="float: right;"
-                    data-id-produto="` + row.id + `">
+                    data-id-produto="` + produto.id + `">
 
                     <img style="width: 20px"
                         data-toggle="tooltip" data-placement="top" title="` + tooltipFavorito + `" 
@@ -159,7 +159,7 @@ var SegmentoCarros = {
                 </a>
 
                 <a class='compartilhar' href="#" style="float: right; margin: 0px 5px 0px 0px"
-                    data-url="` + '' + `">
+                    data-url-compartilhar="` + produto.url_compartilhamento + `">
 
                     <img style="width: 20px"
                         data-toggle="tooltip" data-placement="top" title="Compartilhar" 
@@ -177,7 +177,7 @@ var SegmentoCarros = {
                 <div class="car_img"><a href="detalhes-produto.html?carro=`+ row.id + `">
                     <img class="img-fluid" src="`+ url_imagem + `" alt="Imagem principal"></a>
                     
-                    ` + this.HtmlFaixaBandeirasItems(row) + `
+                    ` + this.HtmlFaixaBandeirasItem(row) + `
                     
                 </div>
                 <div class="text_body">
@@ -205,7 +205,7 @@ var SegmentoCarros = {
                     <a href="detalhes-produto.html?carro=`+ row.id + `">
                         <img src="` + url_imagem + `" alt="Imagem principal"></a>
 
-                        ` + this.HtmlFaixaBandeirasItems(row) + `
+                        ` + this.HtmlFaixaBandeirasItem(row) + `
 
                 </div>
                 <div class="text_body">
@@ -384,8 +384,8 @@ var SegmentoCarros = {
         var carousel = this.spa.find('.vitrine').find('.feature_car_area').find('.f_car_slider.owl-carousel');
 
         if (limpar) {
-            this_.RolamentoPesquisa.offset = 0;
-            this_.RolamentoPesquisa.skip = 0;
+            this.RolamentoPesquisa.offset = 0;
+            this.RolamentoPesquisa.skip = 0;
             this.ResetarOwlCarouselMelhoresOfertas(carousel);
         }
 

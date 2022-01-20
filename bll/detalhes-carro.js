@@ -95,7 +95,7 @@ var DetalhesCarro = {
                 src="img/` + imgFile + `"></img>
         </div>`;
     },
-    
+
     HtmlItemImagem: function (imagem_hash, principal, use_bandeira_alienado) {
         var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + this.produto_id + '/imagens/' + imagem_hash + '?tipo=' + (principal ? 'principal' : 'secundaria');
 

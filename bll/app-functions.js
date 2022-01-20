@@ -192,3 +192,13 @@ function maxHeight(className) {
         return $(this).height();
     }).get());
 }
+
+function copiarTexto(text) {
+    try {
+        navigator.clipboard.writeText(text);
+        return true;
+    } catch (err) {
+        console.error('Failed to copy!', err)
+        return false;
+    }
+}
