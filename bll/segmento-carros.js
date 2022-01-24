@@ -137,12 +137,12 @@ var SegmentoCarros = {
         </div>`
     },
 
-    HtmlFaixaBandeirasItem: function (produto) {
+    HtmlFaixaSuperiorProduto: function (produto) {
         var tooltipAlienado = (produto.alienado ? 'Alienado' : 'Quitado');
         var imgAlienado = (produto.alienado ? 'tag-alienado.png' : 'tag-quitado.png');
 
         var tooltipFavorito = (produto.favorito ? 'Desvaforitar' : 'Favoritar');
-        var imgFavorito = (produto.favorito ? 'favorito.png' : 'unfavorito.png');
+        var imgFavorito = (produto.favorito ? 'favorite2.png' : 'favorite.png');
 
         return `
         <div style="position: absolute; overflow: hidden; top: 0; width: 100%; height: auto; padding: 0px 5px;">
@@ -163,28 +163,28 @@ var SegmentoCarros = {
 
                     <img style="width: 20px"
                         data-toggle="tooltip" data-placement="top" title="Compartilhar" 
-                        src="img/compartilhar.png"></img>
+                        src="img/share.png"></img>
                 </a>
         </div>`;
     },
 
-    HtmlItemCarroColecao: function (row) {
-        var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + row.id + '/imagens/' + row.imagem_hash + '?tipo=principal';
+    HtmlItemCarroColecao: function (produto) {
+        var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + produto.imagem_hash + '?tipo=principal';
 
         return `
         <div class="col-lg-4 col-md-6">
             <div class="l_collection_item wow animated fadeInUp" data-wow-delay="0.2s">
-                <div class="car_img"><a href="detalhes-produto.html?carro=`+ row.id + `">
+                <div class="car_img"><a href="detalhes-produto.html?carro=`+ produto.id + `">
                     <img class="img-fluid" src="`+ url_imagem + `" alt="Imagem principal"></a>
                     
-                    ` + this.HtmlFaixaBandeirasItem(row) + `
+                    ` + this.HtmlFaixaSuperiorProduto(produto) + `
                     
                 </div>
                 <div class="text_body">
-                    <a href="detalhes-produto.html"><h4>` + row.marca + ' - ' + row.modelo + `</h4></a>
-                    <h5>` + row.preco + `</h5>
-                    <p>Ano/Modelo: <span>`+ row.ano + `</span></p>
-                    <p>Quilometragem: <span>`+ row.km + `</span></p>
+                    <a href="detalhes-produto.html"><h4>` + produto.marca + ' - ' + produto.modelo + `</h4></a>
+                    <h5>` + produto.preco + `</h5>
+                    <p>Ano/Modelo: <span>`+ produto.ano + `</span></p>
+                    <p>Quilometragem: <span>`+ produto.km + `</span></p>
                 </div>
                 <div class="text_footer">
                     <a href="#"><i class="icon-engine"></i> 2500</a>
@@ -195,24 +195,24 @@ var SegmentoCarros = {
         </div>`
     },
 
-    HtmlItemCarroCarousel: function (row) {
-        var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + row.id + '/imagens/' + row.imagem_hash + '?tipo=principal';
+    HtmlItemCarroCarousel: function (produto) {
+        var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + produto.imagem_hash + '?tipo=principal';
 
         return `
         <div class="item">
             <div class="l_collection_item">
                 <div class="car_img">
-                    <a href="detalhes-produto.html?carro=`+ row.id + `">
+                    <a href="detalhes-produto.html?carro=`+ produto.id + `">
                         <img src="` + url_imagem + `" alt="Imagem principal"></a>
 
-                        ` + this.HtmlFaixaBandeirasItem(row) + `
+                        ` + this.HtmlFaixaSuperiorProduto(produto) + `
 
                 </div>
                 <div class="text_body">
-                    <a href="detalhes-produto.html"><h4>` + row.marca + ' - ' + row.modelo + `</h4></a>
-                    <h5>` + row.preco + `</h5>
-                    <p>Ano/Modelo: <span>`+ row.ano + `</span></p>
-                    <p>Quilometragem: <span>`+ row.km + `</span></p>
+                    <a href="detalhes-produto.html"><h4>` + produto.marca + ' - ' + produto.modelo + `</h4></a>
+                    <h5>` + produto.preco + `</h5>
+                    <p>Ano/Modelo: <span>`+ produto.ano + `</span></p>
+                    <p>Quilometragem: <span>`+ produto.km + `</span></p>
                 </div>
                 <div class="text_footer">
                     <a href="#"><i class="icon-engine"></i> 2500</a>
@@ -263,9 +263,9 @@ var SegmentoCarros = {
                 this_.RolamentoPesquisa.offset = result.next_offset;
                 this_.RolamentoPesquisa.skip = result.next_skip;
 
-                var rows = result.registros;
-                $.each(rows, function (i, row) {
-                    colecao.append(this_.HtmlItemCarroColecao(row));
+                var produtos = result.registros;
+                $.each(produtos, function (i, produto) {
+                    colecao.append(this_.HtmlItemCarroColecao(produto));
                 });
 
                 if (result.next_offset == -1)
@@ -312,9 +312,9 @@ var SegmentoCarros = {
                 this_.RolamentoMaisRecentes.offset = result.next_offset;
                 this_.RolamentoMaisRecentes.skip = result.next_skip;
 
-                var rows = result.registros;
-                $.each(rows, function (i, row) {
-                    colecao.append(this_.HtmlItemCarroColecao(row));
+                var produtos = result.registros;
+                $.each(produtos, function (i, produto) {
+                    colecao.append(this_.HtmlItemCarroColecao(produto));
                 });
 
                 if (result.next_offset == -1)
@@ -404,10 +404,10 @@ var SegmentoCarros = {
                 this_.RolamentoMelhoresOfertas.offset = result.next_offset;
                 this_.RolamentoMelhoresOfertas.skip = result.next_skip;
 
-                var rows = result.registros;
+                var produtos = result.registros;
 
-                $.each(rows, function (i, row) {
-                    carousel.owlCarousel('add', this_.HtmlItemCarroCarousel(row)).owlCarousel('update');
+                $.each(produtos, function (i, produto) {
+                    carousel.owlCarousel('add', this_.HtmlItemCarroCarousel(produto)).owlCarousel('update');
                 });
 
                 carousel.owlCarousel('show');
