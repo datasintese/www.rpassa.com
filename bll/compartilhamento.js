@@ -2,7 +2,7 @@ var TelaCompartilhamento = {
     elementId: "modal_tela_compartilhamento",
     elementClassBase: "base_tela_compartilhamento",
 
-    CompartilhamentoRedeSocial: {
+    Link: {
         whatsapp: "https://wa.me/?text={texto}",
         facebook: "http://www.facebook.com/sharer.php?s=100&p[title]={titulo}&p[summary]={sumario}&p[url]={url}&p[images][0]={imagens}", //http://www.facebook.com/sharer.php?s=100&p[title]={titulo}&p[summary]={sumario}&p[url]={url}&p[images][0]={imagens}
         // linkedIn: "https://www.linkedin.com/shareArticle?mini=true&url={url}&title={titulo}", // https://www.linkedin.com/shareArticle?mini=true&url=[URL]&title=[TITULO]&summary=[RESUMO]&source=[NOME-DA-FONTE]
@@ -21,13 +21,26 @@ var TelaCompartilhamento = {
         this.InjectCssContent(this.Template.Css());
         this.InjectHtmlContent(this.Template.Html());
 
+        $('body>.' + this.elementClassBase).on('shown.bs.modal', function () {
+            // OnShow
+            $(this).find('#cpyClipboard').tooltip('dispose');
+        });
+
+        $('body>.' + this.elementClassBase).on('hidden.bs.modal', function () {
+            // OnClose
+            $(this).find('#cpyClipboard').tooltip('dispose');
+        });
+
         $('#cpyClipboard').on('click', function (event) {
             var url = $(this).parent().find('input').first().attr('placeholder');
+            
             if (copiarTexto(url)) {
-
+                $(this).attr('title', 'Copiado!')
+                    .tooltip({ items: "input" }).tooltip("show");
             }
             else {
-
+                $(this).attr('title', 'Falha ao copiar!')
+                    .tooltip({ items: "input" }).tooltip("show");
             }
         });
     },
@@ -52,14 +65,14 @@ var TelaCompartilhamento = {
         imagens = encodeURIComponent(imagens);
 
         $('#urlCompartilhamento').attr('placeholder', url);
-        $('#comp_whatsapp').attr('href', this.CompartilhamentoRedeSocial.whatsapp.replace('{texto}', url));
-        $('#comp_facebook').attr('href', this.CompartilhamentoRedeSocial.facebook.replace('{url}', url)
+        $('#comp_whatsapp').attr('href', this.Link.whatsapp.replace('{texto}', url));
+        $('#comp_facebook').attr('href', this.Link.facebook.replace('{url}', url)
             .replace('{titulo}', titulo)
             .replace('{sumario}', sumario)
             .replace('{imagens}', imagens));
 
 
-        $('#comp_twitter').attr('href', this.CompartilhamentoRedeSocial.twitter.replace('{url}', url)
+        $('#comp_twitter').attr('href', this.Link.twitter.replace('{url}', url)
             .replace('{titulo}', titulo));
 
         // $('#comp_messenger').attr('href', this.CompartilhamentoRedeSocial.messenger.replace('{url}', url)

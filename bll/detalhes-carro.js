@@ -1,7 +1,6 @@
 var DetalhesCarro = {
     spa: null,
     produto_id: null,
-    alienado: null,
 
     Construtor(params) {
         this.produto_id = params.carro;
@@ -9,11 +8,21 @@ var DetalhesCarro = {
         var this_ = this;
         var baseTela = '.spa>.segmento#carros';
         this.spa = $(baseTela);
+
+        $(document.body).on('click', '.favorito' ,function(event){
+            event.preventDefault();
+            alert('favorito');
+        });
+
+        $(document.body).on('click', '.compartilhar' ,function(event){
+            event.preventDefault();
+            TelaCompartilhamento.ExibirTela($(this).attr('data-url-compartilhar'));
+        });
     },
 
     Inicializar: function () {
         $('.spa>.segmento#carros').show();
-        var target = this.spa.find('.product_details_area'); 
+        var target = this.spa.find('.product_details_area');
         $("html, body").animate({ scrollTop: target.offset().top });
 
         this.IniciarSlickImagemPrimaria();
@@ -60,7 +69,7 @@ var DetalhesCarro = {
                     {
                         breakpoint: 1024,
                         settings: {
-                            
+
                             slidesToShow: 3,
                             slidesToScroll: 3
                         }
@@ -84,48 +93,67 @@ var DetalhesCarro = {
         }
     },
 
-    HtmlItemBandeiraAlienado: function (row) {
-        var tooltip = (row.alienado ? 'Alienado' : 'Quitado');
-        var imgFile = (row.alienado ? 'tag-alienado.png' : 'tag-quitado.png');
+    HtmlFaixaSuperiorProduto: function (produto) {
+        var tooltipAlienado = (produto.alienado ? 'Alienado' : 'Quitado');
+        var imgAlienado = (produto.alienado ? 'tag-alienado.png' : 'tag-quitado.png');
 
-        return`
-        <div style="position: absolute; top: 0; padding-left: 5px; width: 20px; height: auto; "
-            data-toggle="tooltip" data-placement="top" title="` + tooltip + `">
-            <img style="width: inherit; height: inherit;" 
-                src="img/` + imgFile + `"></img>
+        var tooltipFavorito = (produto.favorito ? 'Desvaforitar' : 'Favoritar');
+        var imgFavorito = (produto.favorito ? 'favorite2.png' : 'favorite.png');
+
+        return `
+        <div style="position: absolute; overflow: hidden; top: 0; width: 100%; height: auto; padding: 0px 5px;">
+            <img style="float: left; width: 20px"
+                data-toggle="tooltip" data-placement="top" title="` + tooltipAlienado + `" 
+                src="img/` + imgAlienado + `"></img>
+            
+                <a class='favorito' href="#" style="float: right;"
+                    data-id-produto="` + produto.id + `">
+
+                    <img style="width: 20px"
+                        data-toggle="tooltip" data-placement="top" title="` + tooltipFavorito + `" 
+                        src="img/` + imgFavorito + `"></img>
+                </a>
+
+                <a class='compartilhar' href="#" style="float: right; margin: 0px 5px 0px 0px"
+                    data-url-compartilhar="` + produto.url_compartilhamento + `">
+
+                    <img style="width: 20px"
+                        data-toggle="tooltip" data-placement="top" title="Compartilhar" 
+                        src="img/share.png"></img>
+                </a>
         </div>`;
     },
 
-    HtmlItemImagem: function (imagem_hash, principal, use_bandeira_alienado) {
-        var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + this.produto_id + '/imagens/' + imagem_hash + '?tipo=' + (principal ? 'principal' : 'secundaria');
+    HtmlItemImagemProduto: function (produto, use_faixa_superior, tipo_imagem, imagem_hash) { /* true = principal, false = secundária */
+        var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + imagem_hash + '?tipo=' + (tipo_imagem ? 'principal' : 'secundaria');
 
-        var bandeira_alienado = '';
+        var htmlFaixaSuperior = '';
 
-        if (use_bandeira_alienado){
-            bandeira_alienado = this.HtmlItemBandeiraAlienado({ alienado: this.alienado });
+        if (use_faixa_superior) {
+            htmlFaixaSuperior = this.HtmlFaixaSuperiorProduto(produto);
         }
 
         return `
         <div class="item">
             <img src="` + url_imagem + `" alt="Imagem">
-            ` + bandeira_alienado + `
+            ` + htmlFaixaSuperior + `
         </div>`;
     },
 
-    HtmlItemImagemNavSlider: function (imagem_hash, principal, use_bandeira_alienado) {
-        var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + this.produto_id + '/imagens/' + imagem_hash + '?tipo=' + (principal ? 'principal' : 'secundario');
+    HtmlItemImagemProdutoNavSlider: function (produto, use_faixa_superior, tipo_imagem, imagem_hash) { /* true = principal, false = secundária */
+        var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + imagem_hash + '?tipo=' + (tipo_imagem ? 'principal' : 'secundario');
 
-        var bandeira_alienado = '';
+        var htmlFaixaSuperior = '';
 
-        if (use_bandeira_alienado){
-            bandeira_alienado = this.HtmlItemBandeiraAlienado({ alienado: this.alienado });
+        if (use_faixa_superior) {
+            htmlFaixaSuperior = this.HtmlFaixaSuperiorProduto(produto);
         }
 
         return `
         <div class="item">
             <div class="img_inner">
                 <img src="` + url_imagem + `" alt="">
-                ` + bandeira_alienado +`
+                ` + htmlFaixaSuperior + `
             </div>
         </div>`;
     },
@@ -150,13 +178,13 @@ var DetalhesCarro = {
 
                 this_.LimparTodasAsImagens();
 
-                this_.spa.find('.product_main_slider').last().append(this_.HtmlItemImagem(result.imagem_principal, true, true));
-                this_.spa.find('.product_nav_slider').last().append(this_.HtmlItemImagem(result.imagem_principal, true));
+                this_.spa.find('.product_main_slider').last().append(this_.HtmlItemImagemProduto(result, true, true, result.imagem_principal));
+                this_.spa.find('.product_nav_slider').last().append(this_.HtmlItemImagemProduto(result, false, true, result.imagem_principal));
 
                 var imagens = result.imagens_hashs;
-                $.each(imagens, function (key, value) {
-                    this_.spa.find('.product_main_slider').last().append(this_.HtmlItemImagemNavSlider(value, false, true));
-                    this_.spa.find('.product_nav_slider').last().append(this_.HtmlItemImagemNavSlider(value, false));
+                $.each(imagens, function (key, imagem_secundaria) {
+                    this_.spa.find('.product_main_slider').last().append(this_.HtmlItemImagemProdutoNavSlider(result, true, false, imagem_secundaria));
+                    this_.spa.find('.product_nav_slider').last().append(this_.HtmlItemImagemProdutoNavSlider(result, false, false, imagem_secundaria));
                 });
             },
             error: function (request, textStatus, errorThrown) {
