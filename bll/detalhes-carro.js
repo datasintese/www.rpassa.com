@@ -28,7 +28,7 @@ var DetalhesCarro = {
         this.IniciarSlickImagemPrimaria();
         this.IniciarSlickImagensSecundarias();
 
-        this.CarregarDetalhes();
+        this.CarregarProduto();
     },
 
     IniciarSlickImagemPrimaria: function () {
@@ -163,15 +163,148 @@ var DetalhesCarro = {
         this.spa.find('.product_nav_slider').slick('removeSlide', null, null, true);
     },
 
-    CarregarEspecificacoesEstaticas: function (produto) {
-        alert(this.spa.find(".product_list_right>ul.nav").html());
+    CarregarEspecificacoesObrigatorias: function (especificacoes) {
+        var nav = this.spa.find(".product_list_right>ul.nav");
+
+        $.each(especificacoes, function (key, spec) {
+            if (spec.obrigatorio) {
+                let icon = spec.css_icon;
+
+                nav.append(`
+                <li>
+                    <a href="#"><i class="` + spec.icone + `"></i>` + spec.chave + `<span>` + spec.valor + `</span></a>
+                </li>`);
+            }
+        });
     },
 
-    CarregarEspecificacoesDinamicas: function (produto) {
+    CarregarEspecificacoes: function (especificacoes) {
+        var this_ = this;
+        var nav = this.spa.find(".right_spec>.tab-content#nav-tabContent");
+        nav.empty();
 
+        var spec_html = '';
+
+        var oldTipo = -1;
+        $.each(especificacoes, function (key, spec) {
+            if (spec.id_tipo != 99 /* Outros */) {
+                if (oldTipo != spec.id_tipo) {
+                    if (oldTipo != -1) {
+                        spec_html += '</ul></div>';
+                    }
+
+                    var id = 'nav-carro' + spec.id_tipo;
+                    var aria_controls = 'nav-carro-tab' + spec.id_tipo;
+
+                    spec_html += `
+                        <div class="tab-pane fade show active" id="` + aria_controls + `" role="tabpanel"
+                            aria-labelledby="` + id + `">`;
+
+                    spec_html += `
+                    <div class="spec_information nice_scroll">
+                        <h4>` + spec.tipo + `</h4>
+                        <ul class="nav flex-column">`;
+
+                    oldTipo = spec.id_tipo;
+                }
+
+                spec_html += '<li>' + spec.chave;   // Chave
+
+                if (spec.valor == 'true') {
+                    spec_html += ' <img src="img/icon/green.png" alt="">';          // True
+                }
+                else if (spec.valor == 'false') {
+                    spec_html += ' <img src="img/icon/close-icon.png" alt="">';     // False
+                }
+                else
+                    spec_html += ' <span>' + spec.valor + '</span></li>';           // Valor
+            }
+        });
+        nav.append(spec_html + '</div>');
+
+        // -------------------------------------------------
+        // Adiciona as especificações vazias do lado direito
+        // -------------------------------------------------
+
+        var anchors = this.spa.find(".left_spec>div.nav>a");
+
+        anchors.each(function (key, value) {
+            var id = $(this).attr('id');
+            var texto = $(this).text();
+            var aria_controls = $(this).attr('aria-controls');
+
+            var found = this_.spa.find('.right_spec').find('[aria-labelledby=' + id + ']');
+
+            if (found.length == 0) {
+                var html = `
+                <div class="tab-pane fade" id="` + aria_controls + `" role="tabpanel"
+                    aria-labelledby="`+ id + `">
+                    <div class="spec_information nice_scroll">
+                        <h4>`+ texto + `</h4>
+                        <ul class="nav flex-column">
+                        </ul>
+                    </div>
+                </div>
+                `;
+
+                nav.append(html);
+            }
+        });
     },
 
-    CarregarDetalhes: function () {
+    CarregarNavTiposEspecificacoes: function () {
+        var nav = this.spa.find(".left_spec>div.nav");
+        nav.empty();
+
+        $.ajax({
+            url: sessionStorage.getItem('api') + '/v1/mobile/especificacoes/carro/tipos',
+            type: "GET", cache: false, async: false, contentData: 'json',
+            success: function (result, textStatus, request) {
+                $.each(result, function (key, value) {
+                    let id = 'nav-carro' + value.id;
+                    let aria_controls = 'nav-carro-tab' + value.id;
+                    let active = key == 0 ? ' active' : '';
+
+                    nav.append(`
+                    <a class="nav-item nav-link ` + active + `" id="` + id + `" data-toggle="tab"
+                        href="#`+ aria_controls + `" role="tab" aria-controls="` + aria_controls + `"
+                        aria-selected="` + (active == ' active' ? 'true' : 'false') + `">` + value.nome + `</a>`);
+                });
+            },
+            error: function (request, textStatus, errorThrown) {
+                alert(JSON.stringify(request));
+
+                // if (!MensagemErroAjax(request, errorThrown)) {
+                //     try {
+                //         var obj = $.parseJSON(request.responseText)
+                //         Mensagem(obj.mensagem, 'warning');
+                //     } catch (error) {
+                //         Mensagem(request.responseText, 'warning');
+                //     }
+                // }
+            }
+        });
+    },
+
+    CarregarDetalhes: function (detalhes) {
+        var row = this.spa.find(".product_overview_text").find('.row');
+
+        var left = row.find('.nav:eq(0)');
+        var right = row.find('.nav:eq(1)');
+
+        var valores = detalhes.split(' ⬤ ');
+
+        $.each(valores, function (key, value) {
+            let par = key % 2 == 0;
+
+            if (par)
+                left.append(`<li><img src="img/icon/green.png" alt="">` + value + `</li>`);
+            else
+                right.append(`<li><img src="img/icon/green.png" alt="">` + value + `</li>`);
+        });
+    },
+
+    CarregarProduto: function () {
         var this_ = this;
 
         $.ajax({
@@ -195,8 +328,10 @@ var DetalhesCarro = {
                     this_.spa.find('.product_nav_slider').last().append(this_.HtmlItemImagemProdutoNavSlider(result, false, false, imagem_secundaria));
                 });
 
-                this_.CarregarEspecificacoesEstaticas(result);
-                this_.CarregarEspecificacoesDinamicas(result);
+                this_.CarregarDetalhes(result.detalhes);
+                this_.CarregarNavTiposEspecificacoes();
+                this_.CarregarEspecificacoesObrigatorias(result.especificacoes);
+                this_.CarregarEspecificacoes(result.especificacoes);
             },
             error: function (request, textStatus, errorThrown) {
                 alert(JSON.stringify(request));
