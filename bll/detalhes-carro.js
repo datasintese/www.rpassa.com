@@ -9,12 +9,12 @@ var DetalhesCarro = {
         var baseTela = '.spa>.segmento#carros';
         this.spa = $(baseTela);
 
-        $(document.body).on('click', '.favorito' ,function(event){
+        $(document.body).on('click', '.favorito', function (event) {
             event.preventDefault();
             alert('favorito');
         });
 
-        $(document.body).on('click', '.compartilhar' ,function(event){
+        $(document.body).on('click', '.compartilhar', function (event) {
             event.preventDefault();
             TelaCompartilhamento.ExibirTela($(this).attr('data-url-compartilhar'));
         });
@@ -163,6 +163,14 @@ var DetalhesCarro = {
         this.spa.find('.product_nav_slider').slick('removeSlide', null, null, true);
     },
 
+    CarregarEspecificacoesEstaticas: function (produto) {
+        alert(this.spa.find(".product_list_right>ul.nav").html());
+    },
+
+    CarregarEspecificacoesDinamicas: function (produto) {
+
+    },
+
     CarregarDetalhes: function () {
         var this_ = this;
 
@@ -186,6 +194,9 @@ var DetalhesCarro = {
                     this_.spa.find('.product_main_slider').last().append(this_.HtmlItemImagemProdutoNavSlider(result, true, false, imagem_secundaria));
                     this_.spa.find('.product_nav_slider').last().append(this_.HtmlItemImagemProdutoNavSlider(result, false, false, imagem_secundaria));
                 });
+
+                this_.CarregarEspecificacoesEstaticas(result);
+                this_.CarregarEspecificacoesDinamicas(result);
             },
             error: function (request, textStatus, errorThrown) {
                 alert(JSON.stringify(request));
