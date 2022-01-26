@@ -56,11 +56,12 @@ function Mensagem(text, icon, then_func, target) {
 }
 
 function Logado() {
-    return StorageGetItem('token') !== null;
+    return sessionStorage.getItem('token') !== null;
 }
 
-function LogOut(func_exec) {
-    StorageRemoveItem('Notificacoes');
+    
+$('#logout').on('click', function (event) {
+
     $.ajax({
         url: sessionStorage.getItem("auth"),
         type: "POST", cache: false, async: false, dataType: "json",
@@ -74,14 +75,20 @@ function LogOut(func_exec) {
         contentType: "application/x-www-form-urlencoded; charset=utf-8",
         complete: function (data) {
             StorageClear();
-            func_exec();
+            Redirecionar('sing-in.html');
         }
     });
+});
+
+function Redirecionar(paginaHtml) {
+    if (!RedirecionarHref()) {
+        $(location).attr('href', paginaHtml);
+    }
 }
 
 function StorageSetItem(key, value) {
     // if (PermanecerConectado())
-    localStorage.setItem(key, value);
+    sessionStorage.setItem(key, value);
     return value;
     // else
     //     return sessionStorage.setItem(key, value);
@@ -89,14 +96,14 @@ function StorageSetItem(key, value) {
 
 function StorageGetItem(key) {
     // if (PermanecerConectado())
-    return localStorage.getItem(key);
+    return sessionStorage.getItem(key);
     // else
     //     return sessionStorage.getItem(key);
 }
 
 function StorageRemoveItem(key) {
     // if (PermanecerConectado())
-    return localStorage.removeItem(key);
+    return sessionStorage.removeItem(key);
     // else
     //     return sessionStorage.removeItem(key);
 }
@@ -111,16 +118,10 @@ function RedirecionarHref() {
     } else return false;
 }
 
-function PermanecerConectado() {
-    return localStorage.getItem('permanecer') === 'true';
-}
 
 function StorageClear() {
-    var permanecer = localStorage.getItem('permanecer');
     var href = StorageGetItem('href');
-    localStorage.clear();
     sessionStorage.clear();
-    localStorage.setItem('permanecer', permanecer);
     StorageSetItem('href', href);
 };
 

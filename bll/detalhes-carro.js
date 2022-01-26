@@ -11,7 +11,32 @@ var DetalhesCarro = {
 
         $(document.body).on('click', '.favorito', function (event) {
             event.preventDefault();
-            alert('favorito');
+            if (!Logado()){
+                Redirecionar('sing-in.html');
+            }else{
+                alert('favorito');
+                
+                $.ajax({
+                    url: StorageGetItem("api") + '/v1/mobile/carros/' + this_.produto_id + '/favoritar',
+                    type: "POST", cache: false, async: true, dataType: 'json',
+                    headers: {
+                        'Authorization': StorageGetItem("token")
+                    },
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    success: function(request, textStatus, errorThrown){
+                        alert(request.mensagem);
+                    },
+                    error: function(request, textStatus, errorThrown){
+                        alert(request.responseText);
+                        var mensagem = undefined;
+                        try {
+                            var obj = $.parseJSON(request.responseText)
+                            mensagem = obj.mensagem;
+                        } catch (error) {
+                            mensagem = request.responseText;
+                        }
+                    }
+                });
         });
 
         $(document.body).on('click', '.compartilhar', function (event) {

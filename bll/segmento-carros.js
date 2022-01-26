@@ -87,9 +87,47 @@ var SegmentoCarros = {
             }
         });
 
-        $(document.body).on('click', '.favorito' ,function(event){
+        $(document.body).on('click', '.favorito img' ,function(event){
             event.preventDefault();
-            alert('favorito');
+
+            let produto = $(this).closest('div[produto_id]').attr('produto_id');
+
+            let favoritoTeste = $(this).attr('[favorito]');
+            let imagemTeste = $(this).attr('src');
+
+            alert(teste);
+            //alert(favoritoTeste);
+            alert(imagemTeste);
+            return;
+
+            if (!Logado()){
+                Redirecionar('sing-in.html');
+            }else{
+                alert('favorito');
+                
+                $.ajax({
+                    url: StorageGetItem("api") + '/v1/mobile/carros/' + produto + '/favoritar',
+                    type: "POST", cache: false, async: true, dataType: 'json',
+                    headers: {
+                        'Authorization': "Bearer " + StorageGetItem("token")
+                    },
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    success: function(request, textStatus, errorThrown){
+                        alert(request.mensagem);
+                    },
+                    error: function(request, textStatus, errorThrown){
+                        alert(request.responseText);
+                        var mensagem = undefined;
+                        try {
+                            var obj = $.parseJSON(request.responseText)
+                            mensagem = obj.mensagem;
+                        } catch (error) {
+                            mensagem = request.responseText;
+                        }
+                    }
+                });
+                
+            }
         });
 
         $(document.body).on('click', '.compartilhar' ,function(event){
@@ -155,7 +193,7 @@ var SegmentoCarros = {
 
                     <img style="width: 20px"
                         data-toggle="tooltip" data-placement="top" title="` + tooltipFavorito + `" 
-                        src="img/` + imgFavorito + `"></img>
+                        src="img/` + imgFavorito + `" isfavorito="${produto.favorito}"></img>
                 </a>
 
                 <a class='compartilhar' href="#" style="float: right; margin: 0px 5px 0px 0px"
@@ -172,7 +210,7 @@ var SegmentoCarros = {
         var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + produto.imagem_hash + '?tipo=principal';
 
         return `
-        <div class="col-lg-4 col-md-6">
+        <div class="col-lg-4 col-md-6" produto_id="${produto.id}">
             <div class="l_collection_item wow animated fadeInUp" data-wow-delay="0.2s">
                 <div class="car_img"><a href="detalhes-produto.html?carro=`+ produto.id + `">
                     <img class="img-fluid" src="`+ url_imagem + `" alt="Imagem principal"></a>
@@ -199,7 +237,7 @@ var SegmentoCarros = {
         var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + produto.imagem_hash + '?tipo=principal';
 
         return `
-        <div class="item">
+        <div class="item" produto_id="${produto.id}">
             <div class="l_collection_item">
                 <div class="car_img">
                     <a href="detalhes-produto.html?carro=`+ produto.id + `">
