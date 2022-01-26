@@ -91,23 +91,36 @@ var SegmentoCarros = {
             event.preventDefault();
 
             let produto = $(this).closest('div[produto_id]').attr('produto_id');
+            let isfavorito = $(this).attr('isfavorito') == "true";
+            
+            let url_dinamica = "";
+            let metodo_http = "";
 
-            let favoritoTeste = $(this).attr('[favorito]');
-            let imagemTeste = $(this).attr('src');
+            let this_ = this;
 
-            alert(teste);
-            //alert(favoritoTeste);
-            alert(imagemTeste);
-            return;
+            if(isfavorito){
+                url_dinamica = StorageGetItem("api") + '/v1/mobile/carros/' + produto + '/desfavoritar'
+                metodo_http = "DELETE";
+            }else{
+                url_dinamica = StorageGetItem("api") + '/v1/mobile/carros/' + produto + '/favoritar'
+                metodo_http = "POST";
+            }
 
             if (!Logado()){
                 Redirecionar('sing-in.html');
             }else{
-                alert('favorito');
-                
+                if(isfavorito){
+                    isfavorito = false;
+                    $(this_).attr('isfavorito', 'false');
+                    $(this_).attr('src', 'img/favorite.png');
+                }else{
+                    isfavorito = true;
+                    $(this_).attr('isfavorito', 'true');
+                    $(this_).attr('src', 'img/favorite2.png');
+                }
                 $.ajax({
-                    url: StorageGetItem("api") + '/v1/mobile/carros/' + produto + '/favoritar',
-                    type: "POST", cache: false, async: true, dataType: 'json',
+                    url: url_dinamica,
+                    type: metodo_http, cache: false, async: true, dataType: 'json',
                     headers: {
                         'Authorization': "Bearer " + StorageGetItem("token")
                     },
@@ -116,6 +129,13 @@ var SegmentoCarros = {
                         alert(request.mensagem);
                     },
                     error: function(request, textStatus, errorThrown){
+                        if(isfavorito){
+                            $(this_).attr('isfavorito', 'false');
+                            $(this_).attr('src', 'img/favorite.png');
+                        }else{
+                            $(this_).attr('isfavorito', 'true');
+                            $(this_).attr('src', 'img/favorite2.png');
+                        }
                         alert(request.responseText);
                         var mensagem = undefined;
                         try {
@@ -126,7 +146,6 @@ var SegmentoCarros = {
                         }
                     }
                 });
-                
             }
         });
 
@@ -296,6 +315,11 @@ var SegmentoCarros = {
             url: sessionStorage.getItem('api') + '/v1/mobile/carros',
             type: "GET", cache: false, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
+            beforeSend: function(xhr){
+                if(Logado()){
+                    xhr.setRequestHeader('Authorization', "Bearer " + StorageGetItem("token")); //Mágica aqui
+                }
+            },
             data: params,
             success: function (result, textStatus, request) {
                 this_.RolamentoPesquisa.offset = result.next_offset;
@@ -340,6 +364,11 @@ var SegmentoCarros = {
             url: sessionStorage.getItem('api') + '/v1/mobile/carros',
             type: "GET", cache: false, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
+            beforeSend: function(xhr){
+                if(Logado()){
+                    xhr.setRequestHeader('Authorization', "Bearer " + StorageGetItem("token"));
+                }
+            },
             data: {
                 orderby: this_.RolamentoMaisRecentes.orderby,
                 offset: this_.RolamentoMaisRecentes.offset,
@@ -431,6 +460,11 @@ var SegmentoCarros = {
             url: sessionStorage.getItem('api') + '/v1/mobile/carros',
             type: "GET", cache: false, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
+            beforeSend: function(xhr){
+                if(Logado()){
+                    xhr.setRequestHeader('Authorization', "Bearer " + StorageGetItem("token")); //Mágica aqui
+                }
+            },
             data: {
                 orderby: this_.RolamentoMelhoresOfertas.orderby,
                 offset: this_.RolamentoMelhoresOfertas.offset,
