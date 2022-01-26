@@ -87,12 +87,12 @@ var SegmentoCarros = {
             }
         });
 
-        $(document.body).on('click', '.favorito' ,function(event){
+        $(document.body).on('click', '.favorito', function (event) {
             event.preventDefault();
             alert('favorito');
         });
 
-        $(document.body).on('click', '.compartilhar' ,function(event){
+        $(document.body).on('click', '.compartilhar', function (event) {
             event.preventDefault();
             TelaCompartilhamento.ExibirTela($(this).attr('data-url-compartilhar'));
         });
