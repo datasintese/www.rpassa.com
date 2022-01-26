@@ -163,16 +163,42 @@ var DetalhesCarro = {
         this.spa.find('.product_nav_slider').slick('removeSlide', null, null, true);
     },
 
-    CarregarEspecificacoesObrigatorias: function (especificacoes) {
+    CarregarEspecificacoesPadrao: function (especificacoes) {
         var nav = this.spa.find(".product_list_right>ul.nav");
 
         $.each(especificacoes, function (key, spec) {
-            if (spec.obrigatorio) {
+            if (spec.id_tipo == 99) {
                 let icon = spec.css_icon;
 
                 nav.append(`
                 <li>
-                    <a href="#"><i class="` + spec.icone + `"></i>` + spec.chave + `<span>` + spec.valor + `</span></a>
+                    <div style="
+                        height: 61px;
+                        line-height: 61px;
+                        border-bottom: 1px solid #dddddd;">
+
+                        <a style="
+                            display: inline-block;
+                            "><i class="` + spec.icone + `"></i>` + spec.chave + 
+                        
+                        `
+                        <div style="
+                            display: flex; 
+                            height: 100%;
+                            float: right; 
+                            vertical-align: middle;
+                            text-align: right">
+
+                            <span style="
+                                height: 100%; 
+                                width: 100%;
+                                display: inline-flex;
+                                align-items: center;
+                                line-height: 20px
+                                ">` + spec.valor + `</span></a>
+                        
+                        </div>
+                    </div:
                 </li>`);
             }
         });
@@ -330,7 +356,7 @@ var DetalhesCarro = {
 
                 this_.CarregarDetalhes(result.detalhes);
                 this_.CarregarNavTiposEspecificacoes();
-                this_.CarregarEspecificacoesObrigatorias(result.especificacoes);
+                this_.CarregarEspecificacoesPadrao(result.especificacoes);
                 this_.CarregarEspecificacoes(result.especificacoes);
             },
             error: function (request, textStatus, errorThrown) {
