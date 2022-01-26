@@ -87,9 +87,66 @@ var SegmentoCarros = {
             }
         });
 
-        $(document.body).on('click', '.favorito', function (event) {
+        $(document.body).on('click', '.favorito img' ,function(event){
             event.preventDefault();
-            alert('favorito');
+
+            let produto = $(this).closest('div[produto_id]').attr('produto_id');
+            let isfavorito = $(this).attr('isfavorito') == "true";
+            
+            let url_dinamica = "";
+            let metodo_http = "";
+
+            let this_ = this;
+
+            if(isfavorito){
+                url_dinamica = StorageGetItem("api") + '/v1/mobile/carros/' + produto + '/desfavoritar'
+                metodo_http = "DELETE";
+            }else{
+                url_dinamica = StorageGetItem("api") + '/v1/mobile/carros/' + produto + '/favoritar'
+                metodo_http = "POST";
+            }
+
+            if (!Logado()){
+                Redirecionar('sing-in.html');
+            }else{
+                if(isfavorito){
+                    isfavorito = false;
+                    $(this_).attr('isfavorito', 'false');
+                    $(this_).attr('src', 'img/favorite.png');
+                }else{
+                    isfavorito = true;
+                    $(this_).attr('isfavorito', 'true');
+                    $(this_).attr('src', 'img/favorite2.png');
+                }
+                $.ajax({
+                    url: url_dinamica,
+                    type: metodo_http, cache: false, async: true, dataType: 'json',
+                    headers: {
+                        'Authorization': "Bearer " + StorageGetItem("token")
+                    },
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    success: function(request, textStatus, errorThrown){
+                        alert(request.mensagem);
+                    },
+                    error: function(request, textStatus, errorThrown){
+                        if(isfavorito){
+                            $(this_).attr('isfavorito', 'false');
+                            $(this_).attr('src', 'img/favorite.png');
+                        }else{
+                            $(this_).attr('isfavorito', 'true');
+                            $(this_).attr('src', 'img/favorite2.png');
+                        }
+                        alert(request.responseText);
+                        var mensagem = undefined;
+                        try {
+                            var obj = $.parseJSON(request.responseText)
+                            mensagem = obj.mensagem;
+                        } catch (error) {
+                            mensagem = request.responseText;
+                        }
+                    }
+                });
+            }
         });
 
         $(document.body).on('click', '.compartilhar', function (event) {
@@ -155,7 +212,7 @@ var SegmentoCarros = {
 
                     <img style="width: 20px"
                         data-toggle="tooltip" data-placement="top" title="` + tooltipFavorito + `" 
-                        src="img/` + imgFavorito + `"></img>
+                        src="img/` + imgFavorito + `" isfavorito="${produto.favorito}"></img>
                 </a>
 
                 <a class='compartilhar' href="#" style="float: right; margin: 0px 5px 0px 0px"
@@ -172,7 +229,7 @@ var SegmentoCarros = {
         var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + produto.imagem_hash + '?tipo=principal';
 
         return `
-        <div class="col-lg-4 col-md-6">
+        <div class="col-lg-4 col-md-6" produto_id="${produto.id}">
             <div class="l_collection_item wow animated fadeInUp" data-wow-delay="0.2s">
                 <div class="car_img"><a href="detalhes-produto.html?carro=`+ produto.id + `">
                     <img class="img-fluid" src="`+ url_imagem + `" alt="Imagem principal"></a>
@@ -199,7 +256,7 @@ var SegmentoCarros = {
         var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + produto.imagem_hash + '?tipo=principal';
 
         return `
-        <div class="item">
+        <div class="item" produto_id="${produto.id}">
             <div class="l_collection_item">
                 <div class="car_img">
                     <a href="detalhes-produto.html?carro=`+ produto.id + `">
@@ -258,6 +315,11 @@ var SegmentoCarros = {
             url: sessionStorage.getItem('api') + '/v1/mobile/carros',
             type: "GET", cache: false, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
+            beforeSend: function(xhr){
+                if(Logado()){
+                    xhr.setRequestHeader('Authorization', "Bearer " + StorageGetItem("token")); //Mágica aqui
+                }
+            },
             data: params,
             success: function (result, textStatus, request) {
                 this_.RolamentoPesquisa.offset = result.next_offset;
@@ -302,6 +364,11 @@ var SegmentoCarros = {
             url: sessionStorage.getItem('api') + '/v1/mobile/carros',
             type: "GET", cache: false, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
+            beforeSend: function(xhr){
+                if(Logado()){
+                    xhr.setRequestHeader('Authorization', "Bearer " + StorageGetItem("token"));
+                }
+            },
             data: {
                 orderby: this_.RolamentoMaisRecentes.orderby,
                 offset: this_.RolamentoMaisRecentes.offset,
@@ -393,6 +460,11 @@ var SegmentoCarros = {
             url: sessionStorage.getItem('api') + '/v1/mobile/carros',
             type: "GET", cache: false, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
+            beforeSend: function(xhr){
+                if(Logado()){
+                    xhr.setRequestHeader('Authorization', "Bearer " + StorageGetItem("token")); //Mágica aqui
+                }
+            },
             data: {
                 orderby: this_.RolamentoMelhoresOfertas.orderby,
                 offset: this_.RolamentoMelhoresOfertas.offset,
