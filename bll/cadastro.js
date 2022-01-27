@@ -40,19 +40,22 @@
                 etapa:3 // Essa etapa descreve todos os campos preenchido
             },
             contentType: "application/x-www-form-urlencoded; charset=utf-8",
-            success: function(request, textStatus, errorThrown){
-                alert(request.responseText);
-                // campo de mensagem
-                Redirecionar('autenticacao.html');
-            },
-            error:function(request, textStatus, errorThrown){
-                alert(request.responseText);
-                var mensagem = undefined;
+            success: function (result, textStatus, request) {
                 try {
-                    var obj = $.parseJSON(request.responseText)
-                    mensagem = obj.mensagem;
+                    Mensagem(result.mensagem, 'success');
+                    Redirecionar('autenticacao.html');
                 } catch (error) {
-                    mensagem = request.responseText;
+                    Mensagem(JSON.stringify(result), 'success');
+                }
+            },
+            error: function (request, textStatus, errorThrown) {
+                if (!MensagemErroAjax(request, errorThrown)) {
+                    try {
+                        var obj = $.parseJSON(request.responseText)
+                        Mensagem(obj.mensagem, 'warning', function () { $("#cpf").select(); });
+                    } catch (error) {
+                        Mensagem(request.responseText, 'error', function () { $("#cpf").select(); });
+                    }
                 }
             }
         });

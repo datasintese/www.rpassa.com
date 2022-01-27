@@ -75,7 +75,7 @@ $('#logout').on('click', function (event) {
         contentType: "application/x-www-form-urlencoded; charset=utf-8",
         complete: function (data) {
             StorageClear();
-            Redirecionar('sing-in.html');
+            Redirecionar('autenticacao.html');
         }
     });
 });

@@ -28,30 +28,28 @@
             },
             contentType: "application/x-www-form-urlencoded; charset=utf-8",
             success: function (result, textStatus, request) {
-                StorageClear();
-                StorageSetItem("start", $.now());
-                StorageSetItem("expires", result.expires_in);
-                StorageSetItem("token", result.access_token);
-                StorageSetItem("refresh", result.refresh_token);
-                Redirecionar('index.html');
+                try {
+                    StorageClear();
+                    StorageSetItem("start", $.now());
+                    StorageSetItem("expires", result.expires_in);
+                    StorageSetItem("token", result.access_token);
+                    StorageSetItem("refresh", result.refresh_token);
+                    Mensagem(result.mensagem, 'success');
+                    Redirecionar('index.html');
+                } catch (error) {
+                    Mensagem(JSON.stringify(result), 'success');
+                }
             },
             error: function (request, textStatus, errorThrown) {
-                alert(request.responseText);
-
                 if (!MensagemErroAjax(request, errorThrown)) {
-                    var mensagem = undefined;
                     try {
                         var obj = $.parseJSON(request.responseText)
-                        mensagem = obj.mensagem;
+                        Mensagem(obj.mensagem, 'warning', function () { $("#email").select(); });
                     } catch (error) {
-                        mensagem = request.responseText;
+                        Mensagem(request.responseText, 'error', function () { $("#email").select(); });
                     }
-                    Mensagem(mensagem, 'warning', function () {
-                        $("#email").select();
-                    });
                 }
             }
         });
     });
-
 })(jQuery);
