@@ -91,7 +91,7 @@ var SegmentoCarros = {
             event.preventDefault();
             
             if (!Logado()){
-                Redirecionar('sing-in.html');
+                Redirecionar('autenticacao.html');
             }else{
                 
                 let produto = $(this).closest('div[produto_id]').attr('produto_id');

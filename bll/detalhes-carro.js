@@ -13,7 +13,7 @@ var DetalhesCarro = {
             event.preventDefault();
 
             if (!Logado()){
-                Redirecionar('sing-in.html');
+                Redirecionar('autenticacao.html');
             }else{
 
                 let isfavorito = $(this).attr('isfavorito') == "true";
