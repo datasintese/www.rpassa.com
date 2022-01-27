@@ -303,6 +303,11 @@ var DetalhesCarro = {
             }
         });
 
+        if (spec_html != '') {
+            spec_html += '</ul></div></div>';
+            nav.append(spec_html);
+            spec_html = '';
+        }
 
         // -------------------------------------------------
         // Adiciona as especificações vazias do lado direito
