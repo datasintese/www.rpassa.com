@@ -203,3 +203,15 @@ function copiarTexto(text) {
         return false;
     }
 }
+
+function dateToMysql(datain){
+    let data = moment(datain, "DD/MM/YYYY").toDate();
+
+    let isValido = data instanceof Date && !isNaN(data)
+
+    if(!isValido){
+        return '1999' + '-' + '01' + '-' + '01'
+    }
+    let dataFormatada = data.toISOString().split('T')[0]; // data.toISOString().slice(0, 10);
+    return dataFormatada;
+}

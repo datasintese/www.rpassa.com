@@ -16,19 +16,20 @@
     $('#celular').inputmask('(99) 9 9999-9999');
 
     $('#cadastro').click(function(event){
+        event.preventDefault();
+
         let cpf_i = $('#cpf').val();
-        let [dia, mes, ano] = $('#data-nascimento').val().split('/');
+        let dataInput = $('#data-nascimento').val();
         let email_i = $('#email').val();
         let celular_i = $('#celular').val();
         let senha_i = $('#password').val();
         let confirma_senha_i = $('#c-password').val();
 
-        let data_nascimento_i = ano + '-' + mes + '-' + dia;
+        let data_nascimento_i = dateToMysql(dataInput);
 
         $.ajax({
             url: StorageGetItem("api") + '/v1/usuarios',
             type: "POST", cache:false, async:true, dataType:'json',
-            contentType: "application/x-www-form-urlencoded; charset=utf-8",
             data: {
                 cpf: cpf_i,
                 data_nascimento: data_nascimento_i,
@@ -38,8 +39,11 @@
                 confirma_senha: confirma_senha_i,
                 etapa:3 // Essa etapa descreve todos os campos preenchido
             },
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
             success: function(request, textStatus, errorThrown){
                 alert(request.responseText);
+                // campo de mensagem
+                Redirecionar('autenticacao.html');
             },
             error:function(request, textStatus, errorThrown){
                 alert(request.responseText);
