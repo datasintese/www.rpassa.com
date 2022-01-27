@@ -21,13 +21,13 @@ var DetalhesCarro = {
                 let metodo_http = "";
                 let eventAtual = this;
 
-                if(isfavorito){
+                if (isfavorito) {
                     isfavorito = false;
                     url_dinamica = StorageGetItem("api") + '/v1/mobile/carros/' + this_.produto_id + '/desfavoritar'
                     metodo_http = "DELETE";
                     $(eventAtual).attr('isfavorito', 'false');
                     $(eventAtual).attr('src', 'img/favorite.png');
-                }else{
+                } else {
                     isfavorito = true;
                     url_dinamica = StorageGetItem("api") + '/v1/mobile/carros/' + this_.produto_id + '/favoritar'
                     metodo_http = "POST";
@@ -42,14 +42,14 @@ var DetalhesCarro = {
                         'Authorization': "Bearer " + StorageGetItem("token")
                     },
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                    success: function(request, textStatus, errorThrown){
+                    success: function (request, textStatus, errorThrown) {
                         // alert(request.mensagem);
                     },
-                    error: function(request, textStatus, errorThrown){
-                        if(isfavorito){
+                    error: function (request, textStatus, errorThrown) {
+                        if (isfavorito) {
                             $(eventAtual).attr('isfavorito', 'false');
                             $(eventAtual).attr('src', 'img/favorite.png');
-                        }else{
+                        } else {
                             $(eventAtual).attr('isfavorito', 'true');
                             $(eventAtual).attr('src', 'img/favorite2.png');
                         }
@@ -223,14 +223,17 @@ var DetalhesCarro = {
                 let icon = spec.css_icon;
 
                 nav.append(`
-                <li>
+                <li style=" border-bottom: 1px solid #dddddd;">
+
                     <div style="
                         height: 61px;
                         line-height: 61px;
-                        border-bottom: 1px solid #dddddd;">
+                        border: none;
+                        ">
 
                         <a style="
                             display: inline-block;
+                            border: none;
                             "><i class="` + spec.icone + `"></i>` + spec.chave +
 
                     `
@@ -246,7 +249,8 @@ var DetalhesCarro = {
                                 width: 100%;
                                 display: inline-flex;
                                 align-items: center;
-                                line-height: 20px
+                                line-height: 20px;
+                                
                                 ">` + spec.valor + `</span></a>
                         
                         </div>
@@ -267,15 +271,18 @@ var DetalhesCarro = {
         $.each(especificacoes, function (key, spec) {
             if (spec.id_tipo != 99 /* Outros */) {
                 if (oldTipo != spec.id_tipo) {
-                    if (oldTipo != -1) {
-                        spec_html += '</ul></div>';
-                    }
+                    spec_html += '</ul></div></div>';
+                    nav.append(spec_html);
+                    spec_html = '';
+                }
 
+                if (oldTipo != spec.id_tipo) {
                     var id = 'nav-carro' + spec.id_tipo;
                     var aria_controls = 'nav-carro-tab' + spec.id_tipo;
+                    var active = key == 0 ? ' show active' : '';
 
                     spec_html += `
-                        <div class="tab-pane fade show active" id="` + aria_controls + `" role="tabpanel"
+                        <div class="tab-pane fade` + active + `" id="` + aria_controls + `" role="tabpanel"
                             aria-labelledby="` + id + `">`;
 
                     spec_html += `
@@ -296,9 +303,15 @@ var DetalhesCarro = {
                 }
                 else
                     spec_html += ' <span>' + spec.valor + '</span></li>';           // Valor
+
             }
         });
-        nav.append(spec_html + '</div>');
+
+        if (spec_html != '') {
+            spec_html += '</ul></div></div>';
+            nav.append(spec_html);
+            spec_html = '';
+        }
 
         // -------------------------------------------------
         // Adiciona as especificações vazias do lado direito
@@ -388,8 +401,8 @@ var DetalhesCarro = {
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/carros/' + this_.produto_id + '/detalhes',
             type: "GET", cache: false, async: false, contentData: 'json',
-            beforeSend: function(xhr){
-                if(Logado()){
+            beforeSend: function (xhr) {
+                if (Logado()) {
                     xhr.setRequestHeader('Authorization', "Bearer " + StorageGetItem("token"));
                 }
             },
