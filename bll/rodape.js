@@ -5,7 +5,7 @@
         event.preventDefault();
 
         $.ajax({
-            url: sessionStorage.getItem("api") + "/v1/newsletter",
+            url: localStorage.getItem("api") + "/v1/newsletter",
             type: "POST", cache: false, async: false, dataType: "json",
             data: {
                 Email: $("#emailsubscribe").val(),

@@ -9,24 +9,50 @@ var DetalhesCarro = {
         var baseTela = '.spa>.segmento#carros';
         this.spa = $(baseTela);
 
-        $(document.body).on('click', '.favorito', function (event) {
+        $(document.body).on('click', '.favorito img', function (event) {
             event.preventDefault();
+
             if (!Logado()){
                 Redirecionar('sing-in.html');
             }else{
-                alert('favorito');
-                
+
+                let isfavorito = $(this).attr('isfavorito') == "true";
+                let url_dinamica = "";
+                let metodo_http = "";
+                let eventAtual = this;
+
+                if(isfavorito){
+                    isfavorito = false;
+                    url_dinamica = StorageGetItem("api") + '/v1/mobile/carros/' + this_.produto_id + '/desfavoritar'
+                    metodo_http = "DELETE";
+                    $(eventAtual).attr('isfavorito', 'false');
+                    $(eventAtual).attr('src', 'img/favorite.png');
+                }else{
+                    isfavorito = true;
+                    url_dinamica = StorageGetItem("api") + '/v1/mobile/carros/' + this_.produto_id + '/favoritar'
+                    metodo_http = "POST";
+                    $(eventAtual).attr('isfavorito', 'true');
+                    $(eventAtual).attr('src', 'img/favorite2.png');
+                }
+
                 $.ajax({
-                    url: StorageGetItem("api") + '/v1/mobile/carros/' + this_.produto_id + '/favoritar',
-                    type: "POST", cache: false, async: true, dataType: 'json',
+                    url: url_dinamica,
+                    type: metodo_http, cache: false, async: true, dataType: 'json',
                     headers: {
-                        'Authorization': StorageGetItem("token")
+                        'Authorization': "Bearer " + StorageGetItem("token")
                     },
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
                     success: function(request, textStatus, errorThrown){
-                        alert(request.mensagem);
+                        // alert(request.mensagem);
                     },
                     error: function(request, textStatus, errorThrown){
+                        if(isfavorito){
+                            $(eventAtual).attr('isfavorito', 'false');
+                            $(eventAtual).attr('src', 'img/favorite.png');
+                        }else{
+                            $(eventAtual).attr('isfavorito', 'true');
+                            $(eventAtual).attr('src', 'img/favorite2.png');
+                        }
                         alert(request.responseText);
                         var mensagem = undefined;
                         try {
@@ -37,6 +63,7 @@ var DetalhesCarro = {
                         }
                     }
                 });
+            }
         });
 
         $(document.body).on('click', '.compartilhar', function (event) {
@@ -53,7 +80,7 @@ var DetalhesCarro = {
         this.IniciarSlickImagemPrimaria();
         this.IniciarSlickImagensSecundarias();
 
-        this.CarregarDetalhes();
+        this.CarregarProduto();
     },
 
     IniciarSlickImagemPrimaria: function () {
@@ -136,7 +163,7 @@ var DetalhesCarro = {
 
                     <img style="width: 20px"
                         data-toggle="tooltip" data-placement="top" title="` + tooltipFavorito + `" 
-                        src="img/` + imgFavorito + `"></img>
+                        src="img/` + imgFavorito + `" isfavorito="${produto.favorito}"></img>
                 </a>
 
                 <a class='compartilhar' href="#" style="float: right; margin: 0px 5px 0px 0px"
@@ -150,7 +177,7 @@ var DetalhesCarro = {
     },
 
     HtmlItemImagemProduto: function (produto, use_faixa_superior, tipo_imagem, imagem_hash) { /* true = principal, false = secundária */
-        var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + imagem_hash + '?tipo=' + (tipo_imagem ? 'principal' : 'secundaria');
+        var url_imagem = localStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + imagem_hash + '?tipo=' + (tipo_imagem ? 'principal' : 'secundaria');
 
         var htmlFaixaSuperior = '';
 
@@ -166,7 +193,7 @@ var DetalhesCarro = {
     },
 
     HtmlItemImagemProdutoNavSlider: function (produto, use_faixa_superior, tipo_imagem, imagem_hash) { /* true = principal, false = secundária */
-        var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + imagem_hash + '?tipo=' + (tipo_imagem ? 'principal' : 'secundario');
+        var url_imagem = localStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + imagem_hash + '?tipo=' + (tipo_imagem ? 'principal' : 'secundario');
 
         var htmlFaixaSuperior = '';
 
@@ -188,20 +215,184 @@ var DetalhesCarro = {
         this.spa.find('.product_nav_slider').slick('removeSlide', null, null, true);
     },
 
-    CarregarEspecificacoesEstaticas: function (produto) {
-        alert(this.spa.find(".product_list_right>ul.nav").html());
+    CarregarEspecificacoesPadrao: function (especificacoes) {
+        var nav = this.spa.find(".product_list_right>ul.nav");
+
+        $.each(especificacoes, function (key, spec) {
+            if (spec.id_tipo == 99) {
+                let icon = spec.css_icon;
+
+                nav.append(`
+                <li>
+                    <div style="
+                        height: 61px;
+                        line-height: 61px;
+                        border-bottom: 1px solid #dddddd;">
+
+                        <a style="
+                            display: inline-block;
+                            "><i class="` + spec.icone + `"></i>` + spec.chave +
+
+                    `
+                        <div style="
+                            display: flex; 
+                            height: 100%;
+                            float: right; 
+                            vertical-align: middle;
+                            text-align: right">
+
+                            <span style="
+                                height: 100%; 
+                                width: 100%;
+                                display: inline-flex;
+                                align-items: center;
+                                line-height: 20px
+                                ">` + spec.valor + `</span></a>
+                        
+                        </div>
+                    </div:
+                </li>`);
+            }
+        });
     },
 
-    CarregarEspecificacoesDinamicas: function (produto) {
+    CarregarEspecificacoes: function (especificacoes) {
+        var this_ = this;
+        var nav = this.spa.find(".right_spec>.tab-content#nav-tabContent");
+        nav.empty();
 
+        var spec_html = '';
+
+        var oldTipo = -1;
+        $.each(especificacoes, function (key, spec) {
+            if (spec.id_tipo != 99 /* Outros */) {
+                if (oldTipo != spec.id_tipo) {
+                    if (oldTipo != -1) {
+                        spec_html += '</ul></div>';
+                    }
+
+                    var id = 'nav-carro' + spec.id_tipo;
+                    var aria_controls = 'nav-carro-tab' + spec.id_tipo;
+
+                    spec_html += `
+                        <div class="tab-pane fade show active" id="` + aria_controls + `" role="tabpanel"
+                            aria-labelledby="` + id + `">`;
+
+                    spec_html += `
+                    <div class="spec_information nice_scroll">
+                        <h4>` + spec.tipo + `</h4>
+                        <ul class="nav flex-column">`;
+
+                    oldTipo = spec.id_tipo;
+                }
+
+                spec_html += '<li>' + spec.chave;   // Chave
+
+                if (spec.valor == 'true') {
+                    spec_html += ' <img src="img/icon/green.png" alt="">';          // True
+                }
+                else if (spec.valor == 'false') {
+                    spec_html += ' <img src="img/icon/close-icon.png" alt="">';     // False
+                }
+                else
+                    spec_html += ' <span>' + spec.valor + '</span></li>';           // Valor
+            }
+        });
+        nav.append(spec_html + '</div>');
+
+        // -------------------------------------------------
+        // Adiciona as especificações vazias do lado direito
+        // -------------------------------------------------
+
+        var anchors = this.spa.find(".left_spec>div.nav>a");
+
+        anchors.each(function (key, value) {
+            var id = $(this).attr('id');
+            var texto = $(this).text();
+            var aria_controls = $(this).attr('aria-controls');
+
+            var found = this_.spa.find('.right_spec').find('[aria-labelledby=' + id + ']');
+
+            if (found.length == 0) {
+                var html = `
+                <div class="tab-pane fade" id="` + aria_controls + `" role="tabpanel"
+                    aria-labelledby="`+ id + `">
+                    <div class="spec_information nice_scroll">
+                        <h4>`+ texto + `</h4>
+                        <ul class="nav flex-column">
+                        </ul>
+                    </div>
+                </div>
+                `;
+
+                nav.append(html);
+            }
+        });
     },
 
-    CarregarDetalhes: function () {
+    CarregarNavTiposEspecificacoes: function () {
+        var nav = this.spa.find(".left_spec>div.nav");
+        nav.empty();
+
+        $.ajax({
+            url: localStorage.getItem('api') + '/v1/mobile/especificacoes/carro/tipos',
+            type: "GET", cache: false, async: false, contentData: 'json',
+            success: function (result, textStatus, request) {
+                $.each(result, function (key, value) {
+                    let id = 'nav-carro' + value.id;
+                    let aria_controls = 'nav-carro-tab' + value.id;
+                    let active = key == 0 ? ' active' : '';
+
+                    nav.append(`
+                    <a class="nav-item nav-link ` + active + `" id="` + id + `" data-toggle="tab"
+                        href="#`+ aria_controls + `" role="tab" aria-controls="` + aria_controls + `"
+                        aria-selected="` + (active == ' active' ? 'true' : 'false') + `">` + value.nome + `</a>`);
+                });
+            },
+            error: function (request, textStatus, errorThrown) {
+                alert(JSON.stringify(request));
+
+                // if (!MensagemErroAjax(request, errorThrown)) {
+                //     try {
+                //         var obj = $.parseJSON(request.responseText)
+                //         Mensagem(obj.mensagem, 'warning');
+                //     } catch (error) {
+                //         Mensagem(request.responseText, 'warning');
+                //     }
+                // }
+            }
+        });
+    },
+
+    CarregarDetalhes: function (detalhes) {
+        var row = this.spa.find(".product_overview_text").find('.row');
+
+        var left = row.find('.nav:eq(0)');
+        var right = row.find('.nav:eq(1)');
+
+        var valores = detalhes.split(' ⬤ ');
+
+        $.each(valores, function (key, value) {
+            let par = key % 2 == 0;
+
+            if (par)
+                left.append(`<li><img src="img/icon/green.png" alt="">` + value + `</li>`);
+            else
+                right.append(`<li><img src="img/icon/green.png" alt="">` + value + `</li>`);
+        });
+    },
+
+    CarregarProduto: function () {
         var this_ = this;
 
         $.ajax({
-            url: sessionStorage.getItem('api') + '/v1/mobile/carros/' + this_.produto_id + '/detalhes',
+            url: localStorage.getItem('api') + '/v1/mobile/carros/' + this_.produto_id + '/detalhes',
             type: "GET", cache: false, async: false, contentData: 'json',
+            beforeSend: function(xhr){
+                if(Logado()){
+                    xhr.setRequestHeader('Authorization', "Bearer " + StorageGetItem("token"));
+                }
+            },
             success: function (result, textStatus, request) {
                 this_.spa.find('#marca_modelo').html(result.marca + ' - ' + result.modelo);
                 this_.spa.find('#preco').html(result.preco);
@@ -220,8 +411,10 @@ var DetalhesCarro = {
                     this_.spa.find('.product_nav_slider').last().append(this_.HtmlItemImagemProdutoNavSlider(result, false, false, imagem_secundaria));
                 });
 
-                this_.CarregarEspecificacoesEstaticas(result);
-                this_.CarregarEspecificacoesDinamicas(result);
+                this_.CarregarDetalhes(result.detalhes);
+                this_.CarregarNavTiposEspecificacoes();
+                this_.CarregarEspecificacoesPadrao(result.especificacoes);
+                this_.CarregarEspecificacoes(result.especificacoes);
             },
             error: function (request, textStatus, errorThrown) {
                 alert(JSON.stringify(request));
