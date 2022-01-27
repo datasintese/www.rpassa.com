@@ -9,24 +9,50 @@ var DetalhesCarro = {
         var baseTela = '.spa>.segmento#carros';
         this.spa = $(baseTela);
 
-        $(document.body).on('click', '.favorito', function (event) {
+        $(document.body).on('click', '.favorito img', function (event) {
             event.preventDefault();
-            if (!Logado()) {
+
+            if (!Logado()){
                 Redirecionar('sing-in.html');
-            } else {
-                alert('favorito');
+            }else{
+
+                let isfavorito = $(this).attr('isfavorito') == "true";
+                let url_dinamica = "";
+                let metodo_http = "";
+                let eventAtual = this;
+
+                if(isfavorito){
+                    isfavorito = false;
+                    url_dinamica = StorageGetItem("api") + '/v1/mobile/carros/' + this_.produto_id + '/desfavoritar'
+                    metodo_http = "DELETE";
+                    $(eventAtual).attr('isfavorito', 'false');
+                    $(eventAtual).attr('src', 'img/favorite.png');
+                }else{
+                    isfavorito = true;
+                    url_dinamica = StorageGetItem("api") + '/v1/mobile/carros/' + this_.produto_id + '/favoritar'
+                    metodo_http = "POST";
+                    $(eventAtual).attr('isfavorito', 'true');
+                    $(eventAtual).attr('src', 'img/favorite2.png');
+                }
 
                 $.ajax({
-                    url: StorageGetItem("api") + '/v1/mobile/carros/' + this_.produto_id + '/favoritar',
-                    type: "POST", cache: false, async: true, dataType: 'json',
+                    url: url_dinamica,
+                    type: metodo_http, cache: false, async: true, dataType: 'json',
                     headers: {
-                        'Authorization': StorageGetItem("token")
+                        'Authorization': "Bearer " + StorageGetItem("token")
                     },
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                    success: function (request, textStatus, errorThrown) {
-                        alert(request.mensagem);
+                    success: function(request, textStatus, errorThrown){
+                        // alert(request.mensagem);
                     },
-                    error: function (request, textStatus, errorThrown) {
+                    error: function(request, textStatus, errorThrown){
+                        if(isfavorito){
+                            $(eventAtual).attr('isfavorito', 'false');
+                            $(eventAtual).attr('src', 'img/favorite.png');
+                        }else{
+                            $(eventAtual).attr('isfavorito', 'true');
+                            $(eventAtual).attr('src', 'img/favorite2.png');
+                        }
                         alert(request.responseText);
                         var mensagem = undefined;
                         try {
@@ -137,7 +163,7 @@ var DetalhesCarro = {
 
                     <img style="width: 20px"
                         data-toggle="tooltip" data-placement="top" title="` + tooltipFavorito + `" 
-                        src="img/` + imgFavorito + `"></img>
+                        src="img/` + imgFavorito + `" isfavorito="${produto.favorito}"></img>
                 </a>
 
                 <a class='compartilhar' href="#" style="float: right; margin: 0px 5px 0px 0px"
@@ -151,7 +177,7 @@ var DetalhesCarro = {
     },
 
     HtmlItemImagemProduto: function (produto, use_faixa_superior, tipo_imagem, imagem_hash) { /* true = principal, false = secundária */
-        var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + imagem_hash + '?tipo=' + (tipo_imagem ? 'principal' : 'secundaria');
+        var url_imagem = localStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + imagem_hash + '?tipo=' + (tipo_imagem ? 'principal' : 'secundaria');
 
         var htmlFaixaSuperior = '';
 
@@ -167,7 +193,7 @@ var DetalhesCarro = {
     },
 
     HtmlItemImagemProdutoNavSlider: function (produto, use_faixa_superior, tipo_imagem, imagem_hash) { /* true = principal, false = secundária */
-        var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + imagem_hash + '?tipo=' + (tipo_imagem ? 'principal' : 'secundario');
+        var url_imagem = localStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + imagem_hash + '?tipo=' + (tipo_imagem ? 'principal' : 'secundario');
 
         var htmlFaixaSuperior = '';
 
@@ -309,7 +335,7 @@ var DetalhesCarro = {
         nav.empty();
 
         $.ajax({
-            url: sessionStorage.getItem('api') + '/v1/mobile/especificacoes/carro/tipos',
+            url: localStorage.getItem('api') + '/v1/mobile/especificacoes/carro/tipos',
             type: "GET", cache: false, async: false, contentData: 'json',
             success: function (result, textStatus, request) {
                 $.each(result, function (key, value) {
@@ -360,8 +386,13 @@ var DetalhesCarro = {
         var this_ = this;
 
         $.ajax({
-            url: sessionStorage.getItem('api') + '/v1/mobile/carros/' + this_.produto_id + '/detalhes',
+            url: localStorage.getItem('api') + '/v1/mobile/carros/' + this_.produto_id + '/detalhes',
             type: "GET", cache: false, async: false, contentData: 'json',
+            beforeSend: function(xhr){
+                if(Logado()){
+                    xhr.setRequestHeader('Authorization', "Bearer " + StorageGetItem("token"));
+                }
+            },
             success: function (result, textStatus, request) {
                 this_.spa.find('#marca_modelo').html(result.marca + ' - ' + result.modelo);
                 this_.spa.find('#preco').html(result.preco);

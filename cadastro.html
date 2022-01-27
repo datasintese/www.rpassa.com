@@ -38,7 +38,7 @@
         </div>
        
         <!--================Header Area =================-->
-        <header class="header_area menu_two menu_three">
+		<header class="header_area menu_two menu_three">
 			<div class="top_menu">
 				<div class="container">
 					<div class="top_menu_inner d-flex justify-content-between">
@@ -90,9 +90,9 @@
 										<li><a href="#">Financiamento</a></li>
 										<li><a href="#">Perguntas Frequentes</a></li>
 										<li><a href="#">Depoimentos</a></li>
-										<li><a href="#">Cadastre-se</a></li>
-										<li><a href="sing-in.html" id="area-usuario">Área do Usuário</a></li>
-										<li><a id="logout">Sair</a></li>
+										<li><a href="cadastro.html">Cadastre-se</a></li>
+										<li><a href="autenticacao.html">Área do Usuário</a></li>
+										<li><a href="#" id="logout">Sair</a></li>
 									</ul>
 								</li>
 								<li class="dropdown submenu">
@@ -143,10 +143,10 @@
         <section class="breadcrumb_area" style="background: url(img/breadcrumb/breadcrumb-bg-4.jpg)">
         	<div class="container">
         		<div class="breadcrumb_inner">
-        			<h3>Account Login</h3>
+        			<h3>Criar Conta</h3>
         			<div class="link">
-        				<a href="index.html">Home</a>
-        				<a href="#">Login</a>
+        				<a href="index.html">Início</a>
+        				<a href="#">Cadastrar</a>
         			</div>
         		</div>
         	</div>
@@ -157,36 +157,42 @@
         <section class="create_account_area p_100">
         	<div class="container">
         		<div class="flag_center_title wow animated fadeInUp" data-wow-delay="0.2s">
-        			<h2><img src="img/icon/flag-2.png" alt="">Usuário Logar</h2>
+        			<h2><img src="img/icon/flag-4.png" alt="">Criar Conta</h2>
         		</div>
         		<div class="create_account_box">
 					<!-- 
-        			<h6>Login with social network</h6>
-					
+        			<h6>Sign up with social network</h6>
         			<div class="social_singup">
         				<a href="#"><i class="fa fa-google-plus"></i></a>
         				<a href="#"><i class="fa fa-facebook"></i></a>
         				<a href="#"><i class="fa fa-twitter"></i></a>
         			</div>
-				
         			<div class="or">
         				<p>or</p>
         			</div>
-					-->
-        			<form class="row contact_form" action="contact_process.php" method="post" id="login-form" novalidate="novalidate">
+					--->
+        			<form class="row contact_form"  id="contactForm">
 						<div class="form-group col-md-12">
-							<input type="email" class="form-control" id="email" name="email" placeholder="Email"><br>
-							<input type="password" class="form-control" id="password" name="name" placeholder="Senha">
-							<div class="creat_account">
-								<input type="checkbox" id="p-option-1" name="selector">
-								<label for="p-option-1">Lembrar senha</label>
-								<div class="check"></div>
-							</div>
-							<a class="forgot" href="#">Esqueceu a senha?</a>
+							<input type="text" class="form-control" id="cpf" name="cpf" placeholder="Cpf" required>
 						</div>
 						<div class="form-group col-md-12">
-							<button type="submit" value="submit" class="btn submit_btn red form-control" id="autenticacao" >Sign in</button>
-							<h5>Não tem uma conta? <a href="sing-up.html">Criar Conta</a></h5>
+							<input type="text" class="form-control" id="data-nascimento" name="nascimento" placeholder="Data Nascimento" required>
+						</div>
+						<div class="form-group col-md-12">
+							<input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+						</div>
+						<div class="form-group col-md-12">
+							<input type="text" class="form-control" id="celular" name="celular" placeholder="Celular" required>
+						</div>
+						<div class="form-group col-md-12">
+							<input type="password" class="form-control" id="password" name="password" placeholder="Senha" required>
+						</div>
+						<div class="form-group col-md-12">
+							<input type="password" class="form-control" id="c-password" name="c-password" placeholder="Confime a Senha" required>
+						</div>
+						<div class="form-group col-md-12">
+							<button type="submit" value="submit" class="btn submit_btn red form-control" id="cadastro">Cadastrar</button>
+							<h5>Já tem uma conta? <a href="autenticacao.html">Login</a></h5>
 						</div>
 					</form>
         		</div>
@@ -257,7 +263,7 @@
         			</div>
         		</div>
         	</div>
-        	<div class="footer_card wow animated fadeInUp" data-wow-delay="0.2s">
+        	<div class="footer_card wow animated fadeIn" data-wow-delay="0.4s">
         		<div class="container">
         			<div class="f_card_inner d-flex justify-content-between">
         				<div class="left">
@@ -355,6 +361,9 @@
         <script src="js/jquery-3.4.1.min.js"></script>
         <script src="js/popper.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
+
+
+
        
         <!-- Extra Plugin js -->
         <script src="vendors/datetimepicker/moment.js"></script>
@@ -372,14 +381,20 @@
         <script src="vendors/nice-scroll/jquery.mCustomScrollbar.concat.min.js"></script>
         <script src="vendors/popup/jquery.magnific-popup.min.js"></script>
         <script src="vendors/animate-css/wow.min.js"></script>
-
-		<!-- Tema -->
         <script src="js/theme-dist.js"></script>
-        
-		<!-- Rpassa -->
-		<script src="bll/app-functions.js"></script>
-		<script src="bll/autenticacao.js"></script>
+
+
+		<!--RPassa-->
+		<script src="js/sweetalert2.all.min.js"></script>
+		<script src="js/jquery.inputmask.min.js"></script>
 		<script src="bll/app-settings.js"></script>
-     
+		<script src="bll/app-functions.js"></script>
+		<script src="bll/compartilhamento.js"></script>
+		<script src="bll/segmento-carros.js"></script>
+		<script src="bll/index.js"></script>
+		<script src="bll/rodape.js"></script>
+		<script src="bll/detalhes-carro.js"></script>
+		<script src="bll/cadastro.js"></script>
+		<!--RPassa-->
     </body>
 </html>

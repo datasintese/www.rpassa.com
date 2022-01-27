@@ -2,6 +2,14 @@
     'use strict';
 
     if (Logado()) Redirecionar('index.html'); else $('body').show();
+    var target = $('body section.create_account_area');
+
+    $("html, body").animate( { scrollTop: target.height() - 20 } );
+    $('#email').focus();
+    
+    $("input[type=email], [type=password]").focus( function() {
+        $(this).select();
+    });
 
     $('#autenticacao').on('click', function (event) {
         event.preventDefault();
@@ -10,7 +18,7 @@
         let senha = $('#password').val();
 
         $.ajax({
-            url: sessionStorage.getItem("auth"),
+            url: localStorage.getItem("auth"),
             type: "POST", cache: false, async: false, dataType: "json",
             data: {
                 username: email,

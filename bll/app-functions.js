@@ -56,14 +56,14 @@ function Mensagem(text, icon, then_func, target) {
 }
 
 function Logado() {
-    return sessionStorage.getItem('token') !== null;
+    return localStorage.getItem('token') !== null;
 }
 
     
 $('#logout').on('click', function (event) {
 
     $.ajax({
-        url: sessionStorage.getItem("auth"),
+        url: localStorage.getItem("auth"),
         type: "POST", cache: false, async: false, dataType: "json",
         headers: {
             Authorization: 'Bearer ' + StorageGetItem("token")
@@ -88,24 +88,24 @@ function Redirecionar(paginaHtml) {
 
 function StorageSetItem(key, value) {
     // if (PermanecerConectado())
-    sessionStorage.setItem(key, value);
+    localStorage.setItem(key, value);
     return value;
     // else
-    //     return sessionStorage.setItem(key, value);
+    //     return localStorage.setItem(key, value);
 }
 
 function StorageGetItem(key) {
     // if (PermanecerConectado())
-    return sessionStorage.getItem(key);
+    return localStorage.getItem(key);
     // else
-    //     return sessionStorage.getItem(key);
+    //     return localStorage.getItem(key);
 }
 
 function StorageRemoveItem(key) {
     // if (PermanecerConectado())
-    return sessionStorage.removeItem(key);
+    return localStorage.removeItem(key);
     // else
-    //     return sessionStorage.removeItem(key);
+    //     return localStorage.removeItem(key);
 }
 
 function RedirecionarHref() {
@@ -121,7 +121,7 @@ function RedirecionarHref() {
 
 function StorageClear() {
     var href = StorageGetItem('href');
-    sessionStorage.clear();
+    localStorage.clear();
     StorageSetItem('href', href);
 };
 

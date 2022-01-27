@@ -89,32 +89,29 @@ var SegmentoCarros = {
 
         $(document.body).on('click', '.favorito img' ,function(event){
             event.preventDefault();
-
-            let produto = $(this).closest('div[produto_id]').attr('produto_id');
-            let isfavorito = $(this).attr('isfavorito') == "true";
             
-            let url_dinamica = "";
-            let metodo_http = "";
-
-            let this_ = this;
-
-            if(isfavorito){
-                url_dinamica = StorageGetItem("api") + '/v1/mobile/carros/' + produto + '/desfavoritar'
-                metodo_http = "DELETE";
-            }else{
-                url_dinamica = StorageGetItem("api") + '/v1/mobile/carros/' + produto + '/favoritar'
-                metodo_http = "POST";
-            }
-
             if (!Logado()){
                 Redirecionar('sing-in.html');
             }else{
+                
+                let produto = $(this).closest('div[produto_id]').attr('produto_id');
+                let isfavorito = $(this).attr('isfavorito') == "true";
+                
+                let url_dinamica = "";
+                let metodo_http = "";
+    
+                let this_ = this;
+
                 if(isfavorito){
                     isfavorito = false;
+                    url_dinamica = StorageGetItem("api") + '/v1/mobile/carros/' + produto + '/desfavoritar'
+                    metodo_http = "DELETE";
                     $(this_).attr('isfavorito', 'false');
                     $(this_).attr('src', 'img/favorite.png');
                 }else{
                     isfavorito = true;
+                    url_dinamica = StorageGetItem("api") + '/v1/mobile/carros/' + produto + '/favoritar'
+                    metodo_http = "POST";
                     $(this_).attr('isfavorito', 'true');
                     $(this_).attr('src', 'img/favorite2.png');
                 }
@@ -126,7 +123,7 @@ var SegmentoCarros = {
                     },
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
                     success: function(request, textStatus, errorThrown){
-                        alert(request.mensagem);
+                        // alert(request.mensagem);
                     },
                     error: function(request, textStatus, errorThrown){
                         if(isfavorito){
@@ -226,7 +223,7 @@ var SegmentoCarros = {
     },
 
     HtmlItemCarroColecao: function (produto) {
-        var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + produto.imagem_hash + '?tipo=principal';
+        var url_imagem = localStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + produto.imagem_hash + '?tipo=principal';
 
         return `
         <div class="col-lg-4 col-md-6" produto_id="${produto.id}">
@@ -253,7 +250,7 @@ var SegmentoCarros = {
     },
 
     HtmlItemCarroCarousel: function (produto) {
-        var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + produto.imagem_hash + '?tipo=principal';
+        var url_imagem = localStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + produto.imagem_hash + '?tipo=principal';
 
         return `
         <div class="item" produto_id="${produto.id}">
@@ -312,7 +309,7 @@ var SegmentoCarros = {
         });
 
         $.ajax({
-            url: sessionStorage.getItem('api') + '/v1/mobile/carros',
+            url: localStorage.getItem('api') + '/v1/mobile/carros',
             type: "GET", cache: false, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
             beforeSend: function(xhr){
@@ -361,7 +358,7 @@ var SegmentoCarros = {
         }
 
         $.ajax({
-            url: sessionStorage.getItem('api') + '/v1/mobile/carros',
+            url: localStorage.getItem('api') + '/v1/mobile/carros',
             type: "GET", cache: false, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
             beforeSend: function(xhr){
@@ -457,7 +454,7 @@ var SegmentoCarros = {
         }
 
         $.ajax({
-            url: sessionStorage.getItem('api') + '/v1/mobile/carros',
+            url: localStorage.getItem('api') + '/v1/mobile/carros',
             type: "GET", cache: false, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
             beforeSend: function(xhr){
@@ -523,7 +520,7 @@ var SegmentoCarros = {
         let spa = this.spa;
 
         $.ajax({
-            url: sessionStorage.getItem('api') + '/v1/mobile/categorias',
+            url: localStorage.getItem('api') + '/v1/mobile/categorias',
             type: "GET", cache: false, async: true, contentData: 'json',
             success: function (result, textStatus, request) {
 
@@ -552,7 +549,7 @@ var SegmentoCarros = {
         let spa = this.spa;
 
         $.ajax({
-            url: sessionStorage.getItem('api') + '/v1/mobile/carros/marcas',
+            url: localStorage.getItem('api') + '/v1/mobile/carros/marcas',
             type: "GET", cache: false, async: true, contentData: 'json',
             success: function (result, textStatus, request) {
 
@@ -583,7 +580,7 @@ var SegmentoCarros = {
         spa.find('.nice_select#modelo').empty().append('<option selected="selected" value="0">Modelo</option>');
 
         $.ajax({
-            url: sessionStorage.getItem('api') + '/v1/mobile/carros/modelos?marca_id=' + marca_id,
+            url: localStorage.getItem('api') + '/v1/mobile/carros/modelos?marca_id=' + marca_id,
             type: "GET", cache: false, async: true, contentData: 'json',
             success: function (result, textStatus, request) {
 
@@ -612,7 +609,7 @@ var SegmentoCarros = {
         let spa = this.spa;
 
         $.ajax({
-            url: sessionStorage.getItem('api') + '/v1/mobile/carros/quilometragem',
+            url: localStorage.getItem('api') + '/v1/mobile/carros/quilometragem',
             type: "GET", cache: false, async: true, contentData: 'json',
             success: function (result, textStatus, request) {
 
