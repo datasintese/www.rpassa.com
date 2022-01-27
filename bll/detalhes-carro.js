@@ -223,14 +223,17 @@ var DetalhesCarro = {
                 let icon = spec.css_icon;
 
                 nav.append(`
-                <li>
+                <li style=" border-bottom: 1px solid #dddddd;">
+
                     <div style="
                         height: 61px;
                         line-height: 61px;
-                        border-bottom: 1px solid #dddddd;">
+                        border: none;
+                        ">
 
                         <a style="
                             display: inline-block;
+                            border: none;
                             "><i class="` + spec.icone + `"></i>` + spec.chave +
 
                     `
@@ -246,7 +249,8 @@ var DetalhesCarro = {
                                 width: 100%;
                                 display: inline-flex;
                                 align-items: center;
-                                line-height: 20px
+                                line-height: 20px;
+                                
                                 ">` + spec.valor + `</span></a>
                         
                         </div>
