@@ -59,11 +59,10 @@ function Logado() {
     return localStorage.getItem('token') !== null;
 }
 
-
-$('#logout').on('click', function (event) {
-
+function LogOut(func_exec) {
+    StorageRemoveItem('Notificacoes');
     $.ajax({
-        url: localStorage.getItem("auth"),
+        url: sessionStorage.getItem("auth"),
         type: "POST", cache: false, async: false, dataType: "json",
         headers: {
             Authorization: 'Bearer ' + StorageGetItem("token")
@@ -75,9 +74,13 @@ $('#logout').on('click', function (event) {
         contentType: "application/x-www-form-urlencoded; charset=utf-8",
         complete: function (data) {
             StorageClear();
-            Redirecionar('autenticacao.html');
+            func_exec();
         }
     });
+}
+    
+$('#logout').on('click', function (event) {
+    LogOut(function(){Redirecionar('autenticacao.html');})
 });
 
 function Redirecionar(paginaHtml) {
