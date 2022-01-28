@@ -80,6 +80,7 @@ var TelaCompartilhamento = {
         //     .replace('{sumario}', sumario)
         //     .replace('{imagens}', imagens));
 
+        //$('.' + this.elementClassBase).show();
         $('#' + this.elementId).modal('show');
     },
 
@@ -123,54 +124,53 @@ var TelaCompartilhamento = {
             var idUrlCompartilhamento = 'urlCompartilhamento';
 
             return `
-        <div class="` + root.elementClassBase + `">
-            <div class='container d-flex justify-content-center mt-100'> <button type="button" class="btn btn-primary mx-auto" data-toggle="modal" data-target="#exampleModal"> Compartilhar em rede social </button> </div>
-            <div class="modal fade" id="` + root.elementId + `" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content col-12">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Compartilhar</h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="icon-container1 d-flex">
-                                <div class="smd"><a id="comp_whatsapp" href="#" rel="nofollow" target="_blank"><i class="img-thumbnail fab fa-whatsapp fa-2x" style="color: #25D366;background-color: #cef5dc;"></i></a></a>
-                                    <p>Whatsapp</p>
+            <div class="` + root.elementClassBase + `">
+                <div class="modal fade" id="` + root.elementId + `" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content col-12">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Compartilhar</h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="icon-container1 d-flex">
+                                    <div class="smd"><a id="comp_whatsapp" href="#" rel="nofollow" target="_blank"><i class="img-thumbnail fab fa-whatsapp fa-2x" style="color: #25D366;background-color: #cef5dc;"></i></a></a>
+                                        <p>Whatsapp</p>
+                                    </div>
+                                    <div class="smd"><a id="comp_facebook" href="#" rel="nofollow" target="_blank"><i class="img-thumbnail fab fa-facebook fa-2x" style="color: #3b5998;background-color: #eceff5;"></i></a>
+                                        <p>Facebook</p>
+                                    </div>
+                                    <div class="smd"><a id="comp_twitter" href="#" rel="nofollow" target="_blank"><i class=" img-thumbnail fab fa-twitter fa-2x" style="color:#4c6ef5;background-color: aliceblue"></i></a>
+                                        <p>Twitter</p>
+                                    </div>
+                                    <!--<div class="smd"><a id="comp_messenger" href="#" rel="nofollow" target="_blank"><i class="img-thumbnail fab fa-facebook-messenger fa-2x" style="color: #3b5998;background-color: #eceff5;"></i></a>
+                                        <p>Messenger</p>
+                                    </div>-->
                                 </div>
-                                <div class="smd"><a id="comp_facebook" href="#" rel="nofollow" target="_blank"><i class="img-thumbnail fab fa-facebook fa-2x" style="color: #3b5998;background-color: #eceff5;"></i></a>
-                                    <p>Facebook</p>
-                                </div>
-                                <div class="smd"><a id="comp_twitter" href="#" rel="nofollow" target="_blank"><i class=" img-thumbnail fab fa-twitter fa-2x" style="color:#4c6ef5;background-color: aliceblue"></i></a>
-                                    <p>Twitter</p>
-                                </div>
-                                <!--<div class="smd"><a id="comp_messenger" href="#" rel="nofollow" target="_blank"><i class="img-thumbnail fab fa-facebook-messenger fa-2x" style="color: #3b5998;background-color: #eceff5;"></i></a>
-                                    <p>Messenger</p>
+                                <!--<div class="icon-container2 d-flex">
+                                    <div class="smd"><a id="comp_discord" href="#" rel="nofollow" target="_blank"><i class="img-thumbnail fab fa-discord fa-2x " style="color: #738ADB;background-color: #d8d8d8;"></i></a>
+                                        <p>Discord</p>
+                                    </div>
+                                    <div class="smd"><a id="comp_telegram" href="#" rel="nofollow" target="_blank"><i class="img-thumbnail fab fa-telegram fa-2x" style="color: #4c6ef5;background-color: aliceblue"></i></a>
+                                        <p>Telegram</p>
+                                    </div>
+                                    <div class="smd"><a id="comp_reddit" href="#" rel="nofollow" target="_blank"><i class="img-thumbnail fab fa-reddit-alien fa-2x" style="color: #FF5700;background-color: #fdd9ce;"></i></a>
+                                        <p>Reddit</p>
+                                    </div>
+                                    <div class="smd"><a id="comp_wechat" href="#" rel="nofollow" target="_blank"><i class="img-thumbnail fab fa-weixin fa-2x" style="color: #7bb32e;background-color: #daf1bc;"></i></a>
+                                        <p>WeChat</p>
+                                    </div>
                                 </div>-->
                             </div>
-                            <!--<div class="icon-container2 d-flex">
-                                <div class="smd"><a id="comp_discord" href="#" rel="nofollow" target="_blank"><i class="img-thumbnail fab fa-discord fa-2x " style="color: #738ADB;background-color: #d8d8d8;"></i></a>
-                                    <p>Discord</p>
+                            <div class="modal-footer"> <label style="font-weight: 600">Link da página <span class="message"></span></label><br />
+                                <div class="row"> 
+                                    <input readonly class="col-10 ur" type="url" placeholder="https://www.rpassa.com/" id="` + idUrlCompartilhamento + `" aria-describedby="inputGroup-sizing-default" style="height: 40px;"> 
+                                    <button class="cpy" id="cpyClipboard"><i class="far fa-clone"></i></button> 
                                 </div>
-                                <div class="smd"><a id="comp_telegram" href="#" rel="nofollow" target="_blank"><i class="img-thumbnail fab fa-telegram fa-2x" style="color: #4c6ef5;background-color: aliceblue"></i></a>
-                                    <p>Telegram</p>
-                                </div>
-                                <div class="smd"><a id="comp_reddit" href="#" rel="nofollow" target="_blank"><i class="img-thumbnail fab fa-reddit-alien fa-2x" style="color: #FF5700;background-color: #fdd9ce;"></i></a>
-                                    <p>Reddit</p>
-                                </div>
-                                <div class="smd"><a id="comp_wechat" href="#" rel="nofollow" target="_blank"><i class="img-thumbnail fab fa-weixin fa-2x" style="color: #7bb32e;background-color: #daf1bc;"></i></a>
-                                    <p>WeChat</p>
-                                </div>
-                            </div>-->
-                        </div>
-                        <div class="modal-footer"> <label style="font-weight: 600">Link da página <span class="message"></span></label><br />
-                            <div class="row"> 
-                                <input readonly class="col-10 ur" type="url" placeholder="https://www.rpassa.com/" id="` + idUrlCompartilhamento + `" aria-describedby="inputGroup-sizing-default" style="height: 40px;"> 
-                                <button class="cpy" id="cpyClipboard"><i class="far fa-clone"></i></button> 
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>`;
+            </div>`;
         },
 
         Css: function () {

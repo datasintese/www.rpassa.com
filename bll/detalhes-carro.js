@@ -12,9 +12,9 @@ var DetalhesCarro = {
         $(document.body).on('click', '.favorito img', function (event) {
             event.preventDefault();
 
-            if (!Logado()){
+            if (!Logado()) {
                 Redirecionar('autenticacao.html');
-            }else{
+            } else {
 
                 let isfavorito = $(this).attr('isfavorito') == "true";
                 let url_dinamica = "";
@@ -69,6 +69,33 @@ var DetalhesCarro = {
         $(document.body).on('click', '.compartilhar', function (event) {
             event.preventDefault();
             TelaCompartilhamento.ExibirTela($(this).attr('data-url-compartilhar'));
+        });
+
+        $(document.body).on('click', '.nav-item.nav-link', function (event) {
+            event.preventDefault();
+
+            // alert(JSON.stringify($('.nicescroll').getNiceScroll()));
+
+
+
+            // let heightNav = $('.nav-tabs.flex-column').outerHeight();
+
+            // await sleep(200);
+
+            // Rediomensiona a vertical da seção de especificação do veículo
+            // setTimeout(function () {
+            //     let heightPage = $('.tab-pane.fade.active.show').outerHeight();
+            //     // style="height:5000px"
+            //     $('section+.product_details_area').css('height', heightNav + heightPage);
+
+            //     //$('section+.product_details_area').outerHeight(heightNav + heightPage);
+
+            //     // $('section+.product_details_area').animate({height:heightNav + heightPage},200);
+            // }, 100);
+
+            // setTimeout(function () {
+            //     $('.nicescroll').getNiceScroll().resize();
+            // }, 100);
         });
     },
 

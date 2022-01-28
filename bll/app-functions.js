@@ -59,7 +59,7 @@ function Logado() {
     return localStorage.getItem('token') !== null;
 }
 
-    
+
 $('#logout').on('click', function (event) {
 
     $.ajax({
@@ -204,14 +204,18 @@ function copiarTexto(text) {
     }
 }
 
-function dateToMysql(datain){
+function dateToMysql(datain) {
     let data = moment(datain, "DD/MM/YYYY").toDate();
 
     let isValido = data instanceof Date && !isNaN(data)
 
-    if(!isValido){
+    if (!isValido) {
         return '1999' + '-' + '01' + '-' + '01'
     }
     let dataFormatada = data.toISOString().split('T')[0]; // data.toISOString().slice(0, 10);
     return dataFormatada;
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
