@@ -9,14 +9,93 @@ var DetalhesCarro = {
         var baseTela = '.spa>.segmento#carros';
         this.spa = $(baseTela);
 
-        $(document.body).on('click', '.favorito', function (event) {
+        $(document.body).on('click', '.favorito img', function (event) {
             event.preventDefault();
-            alert('favorito');
+
+            if (!Logado()) {
+                Redirecionar('autenticacao.html');
+            } else {
+
+                let isfavorito = $(this).attr('isfavorito') == "true";
+                let url_dinamica = "";
+                let metodo_http = "";
+                let eventAtual = this;
+
+                if (isfavorito) {
+                    isfavorito = false;
+                    url_dinamica = StorageGetItem("api") + '/v1/mobile/carros/' + this_.produto_id + '/desfavoritar'
+                    metodo_http = "DELETE";
+                    $(eventAtual).attr('isfavorito', 'false');
+                    $(eventAtual).attr('src', 'img/favorite.png');
+                } else {
+                    isfavorito = true;
+                    url_dinamica = StorageGetItem("api") + '/v1/mobile/carros/' + this_.produto_id + '/favoritar'
+                    metodo_http = "POST";
+                    $(eventAtual).attr('isfavorito', 'true');
+                    $(eventAtual).attr('src', 'img/favorite2.png');
+                }
+
+                $.ajax({
+                    url: url_dinamica,
+                    type: metodo_http, cache: false, async: true, dataType: 'json',
+                    headers: {
+                        'Authorization': "Bearer " + StorageGetItem("token")
+                    },
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    success: function (request, textStatus, errorThrown) {
+                        // alert(request.mensagem);
+                    },
+                    error: function (request, textStatus, errorThrown) {
+                        if (isfavorito) {
+                            $(eventAtual).attr('isfavorito', 'false');
+                            $(eventAtual).attr('src', 'img/favorite.png');
+                        } else {
+                            $(eventAtual).attr('isfavorito', 'true');
+                            $(eventAtual).attr('src', 'img/favorite2.png');
+                        }
+                        alert(request.responseText);
+                        var mensagem = undefined;
+                        try {
+                            var obj = $.parseJSON(request.responseText)
+                            mensagem = obj.mensagem;
+                        } catch (error) {
+                            mensagem = request.responseText;
+                        }
+                    }
+                });
+            }
         });
 
         $(document.body).on('click', '.compartilhar', function (event) {
             event.preventDefault();
             TelaCompartilhamento.ExibirTela($(this).attr('data-url-compartilhar'));
+        });
+
+        $(document.body).on('click', '.nav-item.nav-link', function (event) {
+            event.preventDefault();
+
+            // alert(JSON.stringify($('.nicescroll').getNiceScroll()));
+
+
+
+            // let heightNav = $('.nav-tabs.flex-column').outerHeight();
+
+            // await sleep(200);
+
+            // Rediomensiona a vertical da seção de especificação do veículo
+            // setTimeout(function () {
+            //     let heightPage = $('.tab-pane.fade.active.show').outerHeight();
+            //     // style="height:5000px"
+            //     $('section+.product_details_area').css('height', heightNav + heightPage);
+
+            //     //$('section+.product_details_area').outerHeight(heightNav + heightPage);
+
+            //     // $('section+.product_details_area').animate({height:heightNav + heightPage},200);
+            // }, 100);
+
+            // setTimeout(function () {
+            //     $('.nicescroll').getNiceScroll().resize();
+            // }, 100);
         });
     },
 
@@ -111,7 +190,7 @@ var DetalhesCarro = {
 
                     <img style="width: 20px"
                         data-toggle="tooltip" data-placement="top" title="` + tooltipFavorito + `" 
-                        src="img/` + imgFavorito + `"></img>
+                        src="img/` + imgFavorito + `" isfavorito="${produto.favorito}"></img>
                 </a>
 
                 <a class='compartilhar' href="#" style="float: right; margin: 0px 5px 0px 0px"
@@ -125,7 +204,7 @@ var DetalhesCarro = {
     },
 
     HtmlItemImagemProduto: function (produto, use_faixa_superior, tipo_imagem, imagem_hash) { /* true = principal, false = secundária */
-        var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + imagem_hash + '?tipo=' + (tipo_imagem ? 'principal' : 'secundaria');
+        var url_imagem = localStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + imagem_hash + '?tipo=' + (tipo_imagem ? 'principal' : 'secundaria');
 
         var htmlFaixaSuperior = '';
 
@@ -141,7 +220,7 @@ var DetalhesCarro = {
     },
 
     HtmlItemImagemProdutoNavSlider: function (produto, use_faixa_superior, tipo_imagem, imagem_hash) { /* true = principal, false = secundária */
-        var url_imagem = sessionStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + imagem_hash + '?tipo=' + (tipo_imagem ? 'principal' : 'secundario');
+        var url_imagem = localStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + imagem_hash + '?tipo=' + (tipo_imagem ? 'principal' : 'secundario');
 
         var htmlFaixaSuperior = '';
 
@@ -171,17 +250,20 @@ var DetalhesCarro = {
                 let icon = spec.css_icon;
 
                 nav.append(`
-                <li>
+                <li style=" border-bottom: 1px solid #dddddd;">
+
                     <div style="
                         height: 61px;
                         line-height: 61px;
-                        border-bottom: 1px solid #dddddd;">
+                        border: none;
+                        ">
 
                         <a style="
                             display: inline-block;
-                            "><i class="` + spec.icone + `"></i>` + spec.chave + 
-                        
-                        `
+                            border: none;
+                            "><i class="` + spec.icone + `"></i>` + spec.chave +
+
+                    `
                         <div style="
                             display: flex; 
                             height: 100%;
@@ -194,7 +276,8 @@ var DetalhesCarro = {
                                 width: 100%;
                                 display: inline-flex;
                                 align-items: center;
-                                line-height: 20px
+                                line-height: 20px;
+                                
                                 ">` + spec.valor + `</span></a>
                         
                         </div>
@@ -215,15 +298,18 @@ var DetalhesCarro = {
         $.each(especificacoes, function (key, spec) {
             if (spec.id_tipo != 99 /* Outros */) {
                 if (oldTipo != spec.id_tipo) {
-                    if (oldTipo != -1) {
-                        spec_html += '</ul></div>';
-                    }
+                    spec_html += '</ul></div></div>';
+                    nav.append(spec_html);
+                    spec_html = '';
+                }
 
+                if (oldTipo != spec.id_tipo) {
                     var id = 'nav-carro' + spec.id_tipo;
                     var aria_controls = 'nav-carro-tab' + spec.id_tipo;
+                    var active = key == 0 ? ' show active' : '';
 
                     spec_html += `
-                        <div class="tab-pane fade show active" id="` + aria_controls + `" role="tabpanel"
+                        <div class="tab-pane fade` + active + `" id="` + aria_controls + `" role="tabpanel"
                             aria-labelledby="` + id + `">`;
 
                     spec_html += `
@@ -244,9 +330,15 @@ var DetalhesCarro = {
                 }
                 else
                     spec_html += ' <span>' + spec.valor + '</span></li>';           // Valor
+
             }
         });
-        nav.append(spec_html + '</div>');
+
+        if (spec_html != '') {
+            spec_html += '</ul></div></div>';
+            nav.append(spec_html);
+            spec_html = '';
+        }
 
         // -------------------------------------------------
         // Adiciona as especificações vazias do lado direito
@@ -283,7 +375,7 @@ var DetalhesCarro = {
         nav.empty();
 
         $.ajax({
-            url: sessionStorage.getItem('api') + '/v1/mobile/especificacoes/carro/tipos',
+            url: localStorage.getItem('api') + '/v1/mobile/especificacoes/carro/tipos',
             type: "GET", cache: false, async: false, contentData: 'json',
             success: function (result, textStatus, request) {
                 $.each(result, function (key, value) {
@@ -334,8 +426,13 @@ var DetalhesCarro = {
         var this_ = this;
 
         $.ajax({
-            url: sessionStorage.getItem('api') + '/v1/mobile/carros/' + this_.produto_id + '/detalhes',
+            url: localStorage.getItem('api') + '/v1/mobile/carros/' + this_.produto_id + '/detalhes',
             type: "GET", cache: false, async: false, contentData: 'json',
+            beforeSend: function (xhr) {
+                if (Logado()) {
+                    xhr.setRequestHeader('Authorization', "Bearer " + StorageGetItem("token"));
+                }
+            },
             success: function (result, textStatus, request) {
                 this_.spa.find('#marca_modelo').html(result.marca + ' - ' + result.modelo);
                 this_.spa.find('#preco').html(result.preco);

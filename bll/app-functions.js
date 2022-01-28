@@ -56,13 +56,14 @@ function Mensagem(text, icon, then_func, target) {
 }
 
 function Logado() {
-    return StorageGetItem('token') !== null;
+    return localStorage.getItem('token') !== null;
 }
 
-function LogOut(func_exec) {
-    StorageRemoveItem('Notificacoes');
+
+$('#logout').on('click', function (event) {
+
     $.ajax({
-        url: sessionStorage.getItem("auth"),
+        url: localStorage.getItem("auth"),
         type: "POST", cache: false, async: false, dataType: "json",
         headers: {
             Authorization: 'Bearer ' + StorageGetItem("token")
@@ -74,9 +75,15 @@ function LogOut(func_exec) {
         contentType: "application/x-www-form-urlencoded; charset=utf-8",
         complete: function (data) {
             StorageClear();
-            func_exec();
+            Redirecionar('autenticacao.html');
         }
     });
+});
+
+function Redirecionar(paginaHtml) {
+    if (!RedirecionarHref()) {
+        $(location).attr('href', paginaHtml);
+    }
 }
 
 function StorageSetItem(key, value) {
@@ -84,21 +91,21 @@ function StorageSetItem(key, value) {
     localStorage.setItem(key, value);
     return value;
     // else
-    //     return sessionStorage.setItem(key, value);
+    //     return localStorage.setItem(key, value);
 }
 
 function StorageGetItem(key) {
     // if (PermanecerConectado())
     return localStorage.getItem(key);
     // else
-    //     return sessionStorage.getItem(key);
+    //     return localStorage.getItem(key);
 }
 
 function StorageRemoveItem(key) {
     // if (PermanecerConectado())
     return localStorage.removeItem(key);
     // else
-    //     return sessionStorage.removeItem(key);
+    //     return localStorage.removeItem(key);
 }
 
 function RedirecionarHref() {
@@ -111,16 +118,10 @@ function RedirecionarHref() {
     } else return false;
 }
 
-function PermanecerConectado() {
-    return localStorage.getItem('permanecer') === 'true';
-}
 
 function StorageClear() {
-    var permanecer = localStorage.getItem('permanecer');
     var href = StorageGetItem('href');
     localStorage.clear();
-    sessionStorage.clear();
-    localStorage.setItem('permanecer', permanecer);
     StorageSetItem('href', href);
 };
 
@@ -201,4 +202,20 @@ function copiarTexto(text) {
         console.error('Failed to copy!', err)
         return false;
     }
+}
+
+function dateToMysql(datain) {
+    let data = moment(datain, "DD/MM/YYYY").toDate();
+
+    let isValido = data instanceof Date && !isNaN(data)
+
+    if (!isValido) {
+        return '1999' + '-' + '01' + '-' + '01'
+    }
+    let dataFormatada = data.toISOString().split('T')[0]; // data.toISOString().slice(0, 10);
+    return dataFormatada;
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
