@@ -7,9 +7,8 @@
 
     $('#codigo').inputmask('999-999', {autoUnmask: true});
 
-    $('#etapa1').hide();
-    $('#etapa2').show();
-
+    $('#etapa1').show();
+    $('#etapa2').hide();
 
     $("input").focus( function() {
         $(this).select();
