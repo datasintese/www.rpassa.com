@@ -1,20 +1,14 @@
 (function($){
     "use strict"
-    var target = $('body section.create_account_area');
+    var target = $('section.create_account_area').offset().top;
 
-    $("html, body").animate( { scrollTop: target.height() - 150 } );
+    $("html, body").animate( { scrollTop: target } );
     $('#email').focus();
 
-    let recupera_senha = StorageGetItem('recupera_senha');
     $('#codigo').inputmask('999-999', {autoUnmask: true});
 
-    if(recupera_senha == null){
-        $('#etapa1').show();
-        $('#etapa2').hide();
-    }else{
-        $('#etapa1').hide();
-        $('#etapa2').show();
-    }
+    $('#etapa1').show();
+    $('#etapa2').hide();
 
     $("input").focus( function() {
         $(this).select();
@@ -33,8 +27,7 @@
             contentType: "application/x-www-form-urlencoded; charset=utf-8",
             success: function (result, textStatus, request) {
                 try {
-                    StorageSetItem('recupera_senha', 'etapa2');
-                    Mensagem(result.mensagem, 'success');
+                    Mensagem(result.mensagem, 'success', function(){ $('#codigo').focus(); });
                     $('#etapa1').hide();
                     $('#etapa2').show();
 
@@ -74,7 +67,6 @@
             contentType: "application/x-www-form-urlencoded; charset=utf-8",
             success: function (result, textStatus, request) {
                 try {
-                    StorageRemoveItem('recupera_senha');
                     Mensagem(result.mensagem, 'success', function(){ Redirecionar('autenticacao.html'); });
                 } catch (error) {
                     Mensagem(JSON.stringify(result), 'success');

@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="icon" href="img/favicon-red.png" type="image/png">
-        <title>Motodeal</title>
+        <title>Rpassa</title>
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/font-awesome.min.css">
@@ -34,7 +34,7 @@
 			</div>
         </div>
        
-        <!--================Header Area =================-->
+     <!--================Header Area =================-->
 	<header class="header_area menu_two menu_three">
 		<div class="top_menu">
 			<div class="container">
@@ -135,80 +135,292 @@
 			</div>
 		</div>
 	</header>
+
+	
+	<!--================Breadcrumb Area =================-->
+	<section class="breadcrumb_area" style="background: url(img/breadcrumb/breadcrumb-bg-6.jpg)">
+		<div class="container">
+			<div class="breadcrumb_inner">
+				<h3>Usuário</h3>
+				<div class="link">
+					<a href="index.html">Inicio</a>
+					<a href="#">Usuário</a>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--================End Breadcrumb Area =================-->
+	
+	<!--================Our Service Area =================-->
+	<section class="our_service_area service_two p_100">
+		<div class="container">
+			<div class="flag_center_title wow animated fadeInUp" data-wow-delay="0.2s">
+				<h2><img src="img/icon/flag-2.png" alt="">Usuário</h2>
+			</div>
+			<div class="or_service_inner">
+				<div class="row flex-row-reverse">
+					<div class="col-lg-8">
+						<div class="service_body">
+							<div class="tab-content" id="myTabContent">
+								<div class="tab-pane fade show active" id="perfil" role="tabpanel" aria-labelledby="perfil-tab">
+									<div class="service_ex">
+
+										<!--================Profile Account Area =================-->
+										<section class="create_account_area p_100">
+											<div class="container">
+												<div class="flag_center_title wow animated fadeInUp" data-wow-delay="0.2s">
+													<h2><img src="img/icon/flag-4.png" alt="">Perfil</h2>
+												</div>
+												<div class="create_account_box">
+													<!-- 
+													<h6>Sign up with social network</h6>
+													<div class="social_singup">
+														<a href="#"><i class="fa fa-google-plus"></i></a>
+														<a href="#"><i class="fa fa-facebook"></i></a>
+														<a href="#"><i class="fa fa-twitter"></i></a>
+													</div>
+													<div class="or">
+														<p>or</p>
+													</div>
+													--->
+													<form class="row contact_form" method="GET" id="etapa1">
+														<div class="form-group col-md-12">
+															<input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" >
+														</div>
+														<div class="form-group col-md-12">
+															<input type="text" class="form-control" id="cpf" name="cpf" placeholder="Cpf" >
+														</div>
+														<div class="form-group col-md-12">
+															<input type="email" class="form-control" id="email" name="email" placeholder="Email" >
+														</div>
+														<div class="form-group col-md-12">
+															<input type="text" class="form-control" id="celular" name="celular" placeholder="Telefone" >
+														</div>
+														<div class="form-group col-md-12">
+															<button type="submit" value="submit" class="btn submit_btn red form-control" >Solicitar Alteração de Dados</button>
+														</div>
+													</form>
+													<form class="row contact_form" method="POST" id="etapa2">
+														
+														<div class="form-group col-md-12">
+															<input type="text" class="form-control" id="codigo" name="codigo" placeholder="Codigo">
+														</div>
+														<div class="form-group col-md-12">
+															<input type="email" class="form-control" id="novo_email" name="novo_email" placeholder="Novo email" >
+														</div>
+														<div class="form-group col-md-12">
+															<input type="text" class="form-control" id="novo_celular" name="novo_celular" placeholder="Novo Telefone" >
+														</div>
+														<div class="form-group col-md-12">
+															<button type="submit" value="submit" class="btn submit_btn red form-control" >Alterar Dados</button>
+														</div>
+													</form>
+												</div>
+											</div>
+										</section>
+        								<!--================End Profile Account Area=================-->
+									</div>
+								</div>
+								<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+									<div class="service_ex">
+										<section class="create_account_area p_100">
+											<div class="container">
+												<div class="flag_center_title wow animated fadeInUp" data-wow-delay="0.2s">
+													<h2><img src="img/icon/flag-4.png" alt="">Alterar Senha</h2>
+												</div>
+												<!--================Alter password Area=================-->
+												<div class="create_account_box">
+													<!-- 
+													<h6>Sign up with social network</h6>
+													<div class="social_singup">
+														<a href="#"><i class="fa fa-google-plus"></i></a>
+														<a href="#"><i class="fa fa-facebook"></i></a>
+														<a href="#"><i class="fa fa-twitter"></i></a>
+													</div>
+													<div class="or">
+														<p>or</p>
+													</div>
+													--->
+													<form class="row contact_form" method="POST"  id="formSenha">
+														<div class="form-group col-md-12">
+															<input type="text" class="form-control" id="senha-atual" name="senha-atual" placeholder="Senha Atual" >
+														</div>
+														<div class="form-group col-md-12">
+															<input type="text" class="form-control" id="nova-senha" name="nova-senha" placeholder="Nova Senha" >
+														</div>
+														<div class="form-group col-md-12">
+															<input type="email" class="form-control" id="confirma-senha" name="confirma-senha" placeholder="Confirma Senha" >
+														</div>
+														<div class="form-group col-md-12">
+															<button type="submit" value="submit" class="btn submit_btn red form-control" >Alterar Senha</button>
+														</div>
+													</form>
+												</div>
+											</div>
+										</section>
+        								<!--================End Alter Password Area=================-->
+									</div>
+								</div>
+								<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+									<div class="service_ex">
+										<section class="create_account_area p_100">
+											<div class="container">
+												<div class="flag_center_title wow animated fadeInUp" data-wow-delay="0.2s">
+													<h2><img src="img/icon/flag-4.png" alt="">Favoritos</h2>
+												</div>
+												<!--================Favorite Area=================-->
+												<div class="create_account_box">
+													<!-- 
+													<h6>Sign up with social network</h6>
+													<div class="social_singup">
+														<a href="#"><i class="fa fa-google-plus"></i></a>
+														<a href="#"><i class="fa fa-facebook"></i></a>
+														<a href="#"><i class="fa fa-twitter"></i></a>
+													</div>
+													<div class="or">
+														<p>or</p>
+													</div>
+													--->
+													<form class="row contact_form" method="POST"  id="contactForm">
+														<div class="form-group col-md-12">
+															<input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" readonly>
+														</div>
+														<div class="form-group col-md-12">
+															<input type="text" class="form-control" id="cpf" name="cpf" placeholder="Cpf" readonly>
+														</div>
+														<div class="form-group col-md-12">
+															<input type="email" class="form-control" id="email" name="email" placeholder="Email" >
+														</div>
+														<div class="form-group col-md-12">
+															<input type="text" class="form-control" id="celular" name="celular" placeholder="Telefone" >
+														</div>
+														<div class="form-group col-md-12">
+															<button type="submit" value="submit" class="btn submit_btn red form-control" >Alterar Dados</button>
+														</div>
+													</form>
+												</div>
+											</div>
+										</section>
+        								<!--================End Favorite Area=================-->
+									</div>
+								</div>
+								<div class="tab-pane fade" id="aira" role="tabpanel" aria-labelledby="aira-tab">
+									<div class="service_ex">
+										<section class="create_account_area p_100">
+											<div class="container">
+												<div class="flag_center_title wow animated fadeInUp" data-wow-delay="0.2s">
+													<h2><img src="img/icon/flag-4.png" alt="">Configuração de Propostas</h2>
+												</div>
+												<!--================Proposal Area=================-->
+												<div class="create_account_box">
+													<!-- 
+													<h6>Sign up with social network</h6>
+													<div class="social_singup">
+														<a href="#"><i class="fa fa-google-plus"></i></a>
+														<a href="#"><i class="fa fa-facebook"></i></a>
+														<a href="#"><i class="fa fa-twitter"></i></a>
+													</div>
+													<div class="or">
+														<p>or</p>
+													</div>
+													--->
+													<form class="row contact_form" method="POST"  id="contactForm">
+														<div class="form-group col-md-12">
+															<input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" >
+														</div>
+														<div class="form-group col-md-12">
+															<input type="text" class="form-control" id="cpf" name="cpf" placeholder="Cpf" >
+														</div>
+														<div class="form-group col-md-12">
+															<input type="email" class="form-control" id="email" name="email" placeholder="Email" >
+														</div>
+														<div class="form-group col-md-12">
+															<input type="text" class="form-control" id="celular" name="celular" placeholder="Telefone" >
+														</div>
+														<div class="form-group col-md-12">
+															<button type="submit" value="submit" class="btn submit_btn red form-control" >Alterar Dados</button>
+														</div>
+													</form>
+												</div>
+											</div>
+										</section>
+        								<!--================End Proposal Area=================-->
+									</div>
+								</div>
+								<div class="tab-pane fade" id="acc" role="tabpanel" aria-labelledby="acc-tab">
+									<div class="service_ex">
+										<section class="create_account_area p_100">
+											<div class="container">
+												<div class="flag_center_title wow animated fadeInUp" data-wow-delay="0.2s">
+													<h2><img src="img/icon/flag-4.png" alt="">Minhas Propostas</h2>
+												</div>
+												<!--================My Proposal Area=================-->
+												<div class="create_account_box">
+													<!-- 
+													<h6>Sign up with social network</h6>
+													<div class="social_singup">
+														<a href="#"><i class="fa fa-google-plus"></i></a>
+														<a href="#"><i class="fa fa-facebook"></i></a>
+														<a href="#"><i class="fa fa-twitter"></i></a>
+													</div>
+													<div class="or">
+														<p>or</p>
+													</div>
+													--->
+													<form class="row contact_form" method="POST"  id="contactForm">
+														<div class="form-group col-md-12">
+															<input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" >
+														</div>
+														<div class="form-group col-md-12">
+															<input type="text" class="form-control" id="cpf" name="cpf" placeholder="Cpf" >
+														</div>
+														<div class="form-group col-md-12">
+															<input type="email" class="form-control" id="email" name="email" placeholder="Email" >
+														</div>
+														<div class="form-group col-md-12">
+															<input type="text" class="form-control" id="celular" name="celular" placeholder="Telefone" >
+														</div>
+														<div class="form-group col-md-12">
+															<button type="submit" value="submit" class="btn submit_btn red form-control" >Alterar Dados</button>
+														</div>
+													</form>
+												</div>
+											</div>
+										</section>
+        								<!--================End My Proposal Area=================-->
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4">
+						<div class="service_button">
+							<ul class="nav nav-tabs" id="myTab" role="tablist">
+								<li class="nav-item">
+									<a class="nav-link active" id="perfil-tab" data-toggle="tab" href="#perfil" role="tab" aria-controls="perfil" aria-selected="true"><i class="icon-user"></i>Perfil</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"><i class="icon-lock"></i>Alterar Senha</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"><i class="icon-heart"></i>Favoritos</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" id="aira-tab" data-toggle="tab" href="#aira" role="tab" aria-controls="aira" aria-selected="false"><i class="icon-setting"></i>Escolher por onde receber Propostas</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" id="acc-tab" data-toggle="tab" href="#acc" role="tab" aria-controls="acc" aria-selected="false"><i class="icon-accident"></i>Minhas Propostas</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--================End Our Service Area =================-->
         
-        <!--================Breadcrumb Area =================-->
-        <section class="breadcrumb_area" style="background: url(img/breadcrumb/breadcrumb-bg-5.jpg)">
-        	<div class="container">
-        		<div class="breadcrumb_inner">
-        			<h3>Usuário</h3>
-        			<div class="link">
-        				<a href="index.html">Inicio</a>
-        				<a href="#">Usuário</a>
-        			</div>
-        		</div>
-        	</div>
-        </section>
-        <!--================End Breadcrumb Area =================-->
-        
-        <!--================Find Map Area =================-->
-        <section class="find_map_area">
-        	<div class="row">
-        		<div class="col-lg-3">
-        			<div class="finding_list nice_scroll">
-        				<div class="find_loc_itme">
-        					<div class="media">
-        						<div class="d-flex">
-        							<i class="icon-user-circle"></i>
-        						</div>
-        						<div class="media-body">
-        							<h4>Maike Apolinario </h4>
-        						</div>
-        					</div>
-                            <li class="dropdown submenu">
-								<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
-									aria-haspopup="true" aria-expanded="true">Serviços</a>
-								<ul class="dropdown-menu">
-									<li><a href="#">Serviço 1</a></li>
-									<li><a href="#">Serviço 2</a></li>
-									<li><a href="#">Serviço 3</a></li>
-								</ul>
-							</li>
-        				</div>
-        			</div>
-        		</div>
-        		<div class="col-lg-9">
-        			<div class="finding_map">
-                        <form class="row contact_form" method="POST"  id="contactForm">
-                            <div class="form-group col-md-12">
-                                <input type="text" class="form-control" id="cpf" name="cpf" placeholder="Cpf" >
-                            </div>
-                            <div class="form-group col-md-12">
-                                <input type="text" class="form-control" id="data-nascimento" name="nascimento" placeholder="Data Nascimento" >
-                            </div>
-                            <div class="form-group col-md-12">
-                                <input type="email" class="form-control" id="email" name="email" placeholder="Email" >
-                            </div>
-                            <div class="form-group col-md-12">
-                                <input type="text" class="form-control" id="celular" name="celular" placeholder="Celular" >
-                            </div>
-                            <div class="form-group col-md-12">
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Senha" >
-                            </div>
-                            <div class="form-group col-md-12">
-                                <input type="password" class="form-control" id="c-password" name="c-password" placeholder="Confime a Senha" >
-                            </div>
-                            <div class="form-group col-md-12">
-                                <button type="submit" value="submit" class="btn submit_btn red form-control" id="cadastro">Cadastrar</button>
-                                <h5>Já tem uma conta? <a href="autenticacao.html">Login</a></h5>
-                            </div>
-                        </form>
-        			</div>
-        		</div> 
-        	</div>
-        </section>
-        <!--================End Find Map Area =================-->
-        
-        <!--================Footer Area =================-->
+    <!--================Footer Area =================-->
 	<footer class="footer_area red_footer_area budget_footer">
 		<div class="footer_widgets">
 			<div class="container">
@@ -396,5 +608,18 @@
         <script src="js/map.js"></script>
         
         <script src="js/theme-dist.js"></script>
+
+		<!--RPassa-->
+		<script src="js/sweetalert2.all.min.js"></script>
+		<script src="js/jquery.inputmask.min.js"></script>
+		<script src="bll/app-settings.js"></script>
+		<script src="bll/app-functions.js"></script>
+		<script src="bll/compartilhamento.js"></script>
+		<script src="bll/segmento-carros.js"></script>
+		<script src="bll/index.js"></script>
+		<script src="bll/usuario.js"></script>
+		<script src="bll/rodape.js"></script>
+		<script src="bll/detalhes-carro.js"></script>
+		<!--RPassa-->
     </body>
 </html>
