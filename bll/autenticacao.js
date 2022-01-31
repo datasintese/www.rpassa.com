@@ -1,7 +1,7 @@
 (function ($) {
     'use strict';
 
-    if (Logado()) Redirecionar('index.html'); else $('body').show();
+    if (Logado()) Redirecionar('usuario.html'); else $('body').show();
     var target = $('section.create_account_area').offset().top;
 
     $("html, body").animate( { scrollTop: target} );
@@ -35,7 +35,7 @@
                     StorageSetItem("token", result.access_token);
                     StorageSetItem("refresh", result.refresh_token);
                     Mensagem(result.mensagem, 'success');
-                    Redirecionar('index.html');
+                    Redirecionar('usuario.html');
                 } catch (error) {
                     Mensagem(JSON.stringify(result), 'success');
                 }
