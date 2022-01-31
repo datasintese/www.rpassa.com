@@ -143,21 +143,21 @@
         <section class="breadcrumb_area" style="background: url(img/breadcrumb/breadcrumb-bg-4.jpg)">
         	<div class="container">
         		<div class="breadcrumb_inner">
-        			<h3>Usuário Logar</h3>
+        			<h3>Recuperar Senha</h3>
         			<div class="link">
-        				<a href="index.html">Home</a>
-        				<a href="#">Login</a>
+        				<a href="index.html">Inicio</a>
+        				<a href="#">Recuperacao Senha</a>
         			</div>
         		</div>
         	</div>
         </section>
         <!--================End Breadcrumb Area =================-->
         
-        <!--================Create Account Area =================-->
+        <!--================Recover Account Area =================-->
         <section class="create_account_area p_100">
         	<div class="container">
         		<div class="flag_center_title wow animated fadeInUp" data-wow-delay="0.2s">
-        			<h2><img src="img/icon/flag-2.png" alt="">Usuário Logar</h2>
+        			<h2><img src="img/icon/flag-2.png" alt="">Recuperar Senha</h2>
         		</div>
         		<div class="create_account_box">
 					<!-- 
@@ -173,26 +173,24 @@
         				<p>or</p>
         			</div>
 					-->
-        			<form class="row contact_form" action="contact_process.php" method="post" id="login-form" novalidate="novalidate">
+        			<form class="row contact_form" method="post" novalidate="novalidate" id="etapa1">
 						<div class="form-group col-md-12">
 							<input type="email" class="form-control" id="email" name="email" placeholder="Email"><br>
-							<input type="password" class="form-control" id="password" name="name" placeholder="Senha">
-							<div class="creat_account">
-								<input type="checkbox" id="p-option-1" name="selector">
-								<label for="p-option-1">Lembrar senha</label>
-								<div class="check"></div>
-							</div>
-							<a class="forgot" href="recuperacao-senha.html">Esqueceu a senha?</a>
+							<button type="submit" value="submit" class="btn submit_btn red form-control" >Enviar Email</button>
 						</div>
+					</form>
+					<form class="row contact_form" method="post" novalidate="novalidate" id="etapa2">
 						<div class="form-group col-md-12">
-							<button type="submit" value="submit" class="btn submit_btn red form-control" id="autenticacao" >Entrar</button>
-							<h5>Não tem uma conta? <a href="cadastro.html">Criar Conta</a></h5>
+							<input type="text" class="form-control" id="codigo" name="codigo" placeholder="Codigo"><br>
+							<input type="password" class="form-control" id="password" name="password" placeholder="Senha" ><br>
+							<input type="password" class="form-control" id="c-password" name="c-password" placeholder="Confime a Senha" ><br>
+							<button type="submit" value="submit" class="btn submit_btn red form-control" >Alterar Senha</button>
 						</div>
 					</form>
         		</div>
         	</div>
         </section>
-        <!--================End Create Account Area =================-->
+        <!--================End Recover Account Area =================-->
         
         <!--================Footer Area =================-->
 		<footer class="footer_area red_footer_area budget_footer">
@@ -388,7 +386,7 @@
 		<script src="bll/app-settings.js"></script>
 		<script src="bll/app-functions.js"></script>
 		<script src="bll/compartilhamento.js"></script>
-		<script src="bll/autenticacao.js"></script>
+		<script src="bll/recuperacao-senha.js"></script>
 		<script src="bll/rodape.js"></script>
 
     </body>
