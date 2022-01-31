@@ -2,9 +2,9 @@
     'use strict';
 
     if (Logado()) Redirecionar('index.html'); else $('body').show();
-    var target = $('body section.create_account_area');
+    var target = $('section.create_account_area').offset().top;
 
-    $("html, body").animate( { scrollTop: target.height() - 20 } );
+    $("html, body").animate( { scrollTop: target} );
     $('#email').focus();
     
     $("input[type=email], [type=password]").focus( function() {

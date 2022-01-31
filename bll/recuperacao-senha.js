@@ -1,8 +1,8 @@
 (function($){
     "use strict"
-    var target = $('body section.create_account_area');
+    var target = $('section.create_account_area').offset().top;
 
-    $("html, body").animate( { scrollTop: target.height() - 150 } );
+    $("html, body").animate( { scrollTop: target } );
     $('#email').focus();
 
     let recupera_senha = StorageGetItem('recupera_senha');
