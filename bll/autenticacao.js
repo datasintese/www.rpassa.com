@@ -35,7 +35,7 @@
                     StorageSetItem("token", result.access_token);
                     StorageSetItem("refresh", result.refresh_token);
                     Mensagem(result.mensagem, 'success');
-                    Redirecionar('index.html');
+                    Redirecionar('usuario.html');
                 } catch (error) {
                     Mensagem(JSON.stringify(result), 'success');
                 }

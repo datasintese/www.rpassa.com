@@ -5,16 +5,11 @@
     $("html, body").animate( { scrollTop: target } );
     $('#email').focus();
 
-    let recupera_senha = StorageGetItem('recupera_senha');
     $('#codigo').inputmask('999-999', {autoUnmask: true});
 
-    if(recupera_senha == null){
-        $('#etapa1').show();
-        $('#etapa2').hide();
-    }else{
-        $('#etapa1').hide();
-        $('#etapa2').show();
-    }
+    $('#etapa1').hide();
+    $('#etapa2').show();
+
 
     $("input").focus( function() {
         $(this).select();
@@ -33,7 +28,6 @@
             contentType: "application/x-www-form-urlencoded; charset=utf-8",
             success: function (result, textStatus, request) {
                 try {
-                    StorageSetItem('recupera_senha', 'etapa2');
                     Mensagem(result.mensagem, 'success');
                     $('#etapa1').hide();
                     $('#etapa2').show();
@@ -74,7 +68,6 @@
             contentType: "application/x-www-form-urlencoded; charset=utf-8",
             success: function (result, textStatus, request) {
                 try {
-                    StorageRemoveItem('recupera_senha');
                     Mensagem(result.mensagem, 'success', function(){ Redirecionar('autenticacao.html'); });
                 } catch (error) {
                     Mensagem(JSON.stringify(result), 'success');

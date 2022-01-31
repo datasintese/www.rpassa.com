@@ -24,15 +24,8 @@
         $(this).select();
     });
 
-    let altera_dados = StorageGetItem('altera_dados');
-    if(altera_dados == null){
-        $('#etapa1').show();
-        $('#etapa2').hide();
-    }else{
-        $('#etapa1').hide();
-        $('#etapa2').show();
-        $('#codigo').focus();
-    }
+    $('#etapa1').show();
+    $('#etapa2').hide();
 
     if(!Logado()){
         Redirecionar('autenticacao.html');
@@ -83,7 +76,6 @@
             contentType: "application/x-www-form-urlencoded; charset=utf-8",
             success: function (result, textStatus, request) {
                 try {
-                    StorageSetItem('altera_dados', 'etapa2');
                     Mensagem(result.mensagem, 'success', function(){ $('#codigo').focus(); });
                     $('#etapa1').hide();
                     $('#etapa2').show();
@@ -126,7 +118,6 @@
             contentType: "application/x-www-form-urlencoded; charset=utf-8",
             success: function (result, textStatus, request) {
                 try {
-                    StorageRemoveItem('altera_dados');
                     Mensagem(result.mensagem, 'success');
 
                     $('#email').val(novo_email_i != '' ? novo_email_i : $('#email').val());
