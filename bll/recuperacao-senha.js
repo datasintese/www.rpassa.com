@@ -27,7 +27,7 @@
             contentType: "application/x-www-form-urlencoded; charset=utf-8",
             success: function (result, textStatus, request) {
                 try {
-                    Mensagem(result.mensagem, 'success');
+                    Mensagem(result.mensagem, 'success', function(){ $('#codigo').focus(); });
                     $('#etapa1').hide();
                     $('#etapa2').show();
 
