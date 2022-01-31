@@ -1,9 +1,10 @@
 ; (function ($) {
     "use strict";
 
-    var target = $('body section.create_account_area');
+    var target = $('section.create_account_area').offset().top;
 
-    $("html, body").animate( { scrollTop: target.height() - 280 } );
+
+    $("html, body").animate( { scrollTop: target } );
 
     $('#cpf').focus();
     

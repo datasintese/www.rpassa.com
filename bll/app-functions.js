@@ -78,9 +78,9 @@ function LogOut(func_exec) {
         }
     });
 }
-    
+
 $('#logout').on('click', function (event) {
-    LogOut(function(){Redirecionar('autenticacao.html');})
+    LogOut(function () { Redirecionar('autenticacao.html'); })
 });
 
 function Redirecionar(paginaHtml) {
@@ -221,4 +221,46 @@ function dateToMysql(datain) {
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function SolicitarDadosServidorAjax(url_req, type_req, data_req, contentType_req, exibirMensagem = false, redirecionar, func_exec) {
+    $.ajax({
+        url: StorageGetItem("api") + url_req,
+        type: type_req, cache: false, async: true, dataType: 'json',
+        headers: {
+            Authorization: 'Bearer ' + StorageGetItem("token")
+        },
+        data: data_req,
+        contentType: contentType_req,
+        success: function (result, textStatus, request) {
+            let mensagem = "";
+            try {
+                mensagem = result.mensagem;
+                func_exec;
+                if (redirecionar != "") {
+                    Redirecionar(redirecionar);
+                }
+            } catch (error) {
+                mensagem = result.mensagem;
+            }
+            if (exibirMensagem) {
+                Mensagem(mensagem, 'success');
+            }
+        },
+        error: function (request, textStatus, errorThrown) {
+            if (!MensagemErroAjax(request, errorThrown)) {
+                try {
+                    var obj = $.parseJSON(request.responseText)
+                    if (exibirMensagem) {
+                        Mensagem(obj.mensagem, 'warning', function () { $("#cpf").select(); });
+                    }
+
+                } catch (error) {
+                    if (exibirMensagem) {
+                        Mensagem(request.responseText, 'error', function () { $("#cpf").select(); });
+                    }
+                }
+            }
+        }
+    });
 }
