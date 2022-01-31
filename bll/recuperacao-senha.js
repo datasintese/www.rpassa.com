@@ -6,7 +6,7 @@
     $('#email').focus();
 
     let recupera_senha = StorageGetItem('recupera_senha');
-    $('#codigo').inputmask('999-999');
+    $('#codigo').inputmask('999-999', {autoUnmask: true});
 
     if(recupera_senha == null){
         $('#etapa1').show();
@@ -46,9 +46,9 @@
                 if (!MensagemErroAjax(request, errorThrown)) {
                     try {
                         var obj = $.parseJSON(request.responseText)
-                        Mensagem(obj.mensagem, 'warning', function () { $("#email").select(); });
+                        Mensagem(obj.mensagem, 'error');
                     } catch (error) {
-                        Mensagem(request.responseText, 'error', function () { $("#email").select(); });
+                        Mensagem(request.responseText, 'error');
                     }
                 }
             }
@@ -57,7 +57,8 @@
 
     $('#etapa2').submit(function(event){
         event.preventDefault();
-
+        
+        //$('#codigo').unmask();
         let codigo_i = $('#codigo').val();
         let nova_senha_i = $('#password').val();
         let confirma_senha_i = $('#c-password').val();
