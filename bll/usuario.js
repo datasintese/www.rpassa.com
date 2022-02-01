@@ -52,6 +52,32 @@
             if (!MensagemErroAjax(request, errorThrown)) {
                 try {
                     var obj = $.parseJSON(request.responseText)
+                    Mensagem(obj.mensagem, 'warning');
+                } catch (error) {
+                    Mensagem(request.responseText, 'error');
+                }
+            }
+        }
+    });
+
+    $.ajax({
+        url: StorageGetItem("api") + '/v1/mobile/carros/favoritos/detalhes',
+        type: "GET", cache:false, async:true, dataType:'json',
+        headers: {
+            Authorization: 'Bearer ' + StorageGetItem("token")
+        },
+        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+        success: function (result, textStatus, request) {
+            try {
+                $('#favoritos').text('Favoritos (' + result.quantidade_favoritos + ')');
+            } catch (error) {
+                Mensagem(JSON.stringify(result), 'success');
+            }
+        },
+        error: function (request, textStatus, errorThrown) {
+            if (!MensagemErroAjax(request, errorThrown)) {
+                try {
+                    var obj = $.parseJSON(request.responseText)
                     Mensagem(obj.mensagem, 'error');
                 } catch (error) {
                     Mensagem(request.responseText, 'error');
@@ -131,6 +157,49 @@
                     $('#etapa2').hide();
 
 
+                } catch (error) {
+                    Mensagem(JSON.stringify(result), 'success');
+                }
+            },
+            error: function (request, textStatus, errorThrown) {
+                if (!MensagemErroAjax(request, errorThrown)) {
+                    try {
+                        var obj = $.parseJSON(request.responseText)
+                        Mensagem(obj.mensagem, 'warning', function () { $("#" + obj.campo.toLowerCase()).select(); });
+                    } catch (error) {
+                        Mensagem(request.responseText, 'error', function () { $("#" + obj.campo.toLowerCase()).select(); });
+                    }
+                }
+            }
+        });
+    })
+
+    $('#formSenha').submit(function(event){
+        event.preventDefault();
+        
+        let senha_atual = $('#senha-atual').val();
+        let nova_senha = $('#nova-senha').val();
+        let confirma_senha = $('#confirma-senha').val();
+
+        $.ajax({
+            url: StorageGetItem('api') + '/v1/usuarios/senha',
+            type: 'PUT', cache: false, async:true, dataType:'json',
+            headers: {
+                Authorization: 'Bearer ' + StorageGetItem("token")
+            },
+            data:{
+                SenhaAtual: senha_atual,
+                NovaSenha: nova_senha,
+                ConfirmaSenha: confirma_senha,
+            },
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function (result, textStatus, request) {
+                try {
+                    $('#senha-atual').val('');
+                    $('#nova-senha').val('');
+                    $('#confirma-senha').val('');
+
+                    Mensagem(result.mensagem, 'success');
                 } catch (error) {
                     Mensagem(JSON.stringify(result), 'success');
                 }
