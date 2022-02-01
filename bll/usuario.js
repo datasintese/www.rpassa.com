@@ -1,9 +1,9 @@
 (function(){
     "use strict"
 
-    var target = $('section.create_account_area').offset().top;
+    var target = $('#usuario_config').offset().top;
 
-    $("html, body").animate( { scrollTop: target } );
+    $("html, body").animate( { scrollTop: target - 80 } );
     
     $('#codigo').inputmask('999-999', {autoUnmask: true});
     $('#novo_celular').inputmask('(99) 9 9999-9999');
