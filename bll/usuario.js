@@ -52,7 +52,7 @@
             if (!MensagemErroAjax(request, errorThrown)) {
                 try {
                     var obj = $.parseJSON(request.responseText)
-                    Mensagem(obj.mensagem, 'error');
+                    Mensagem(obj.mensagem, 'warning');
                 } catch (error) {
                     Mensagem(request.responseText, 'error');
                 }
@@ -61,7 +61,7 @@
     });
 
     $.ajax({
-        url: StorageGetItem("api") + '/v1/usuarios',
+        url: StorageGetItem("api") + '/v1/mobile/carros/favoritos/detalhes',
         type: "GET", cache:false, async:true, dataType:'json',
         headers: {
             Authorization: 'Bearer ' + StorageGetItem("token")
@@ -69,10 +69,7 @@
         contentType: "application/x-www-form-urlencoded; charset=utf-8",
         success: function (result, textStatus, request) {
             try {
-                $('#cpf').val(result.cpf);
-                $('#nome').val(result.nome);
-                $('#email').val(result.email);
-                $('#celular').val(result.telefone);
+                $('#favoritos').text('Favoritos (' + result.quantidade_favoritos + ')');
             } catch (error) {
                 Mensagem(JSON.stringify(result), 'success');
             }
