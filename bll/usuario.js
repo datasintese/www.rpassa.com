@@ -1,35 +1,16 @@
 (function(){
     "use strict"
+    UsuarioPerfil.Inicializar();
+})(jQuery)
 
-    var target = $('#usuario_config').offset().top;
 
-    $("html, body").animate( { scrollTop: target - 80 } );
-    
-    $('#codigo').inputmask('999-999', {autoUnmask: true});
-    $('#novo_celular').inputmask('(99) 9 9999-9999');
 
-    $('#nome').prop('disabled', true);
-    $('#nome').css("background-color", "#cccccc"); 
 
-    $('#cpf').prop('disabled', true);
-    $('#cpf').css("background-color", "#cccccc"); 
+/*
+(function(){
+    "use strict"
 
-    $('#email').prop('disabled', true);
-    $('#email').css("background-color", "#cccccc"); 
-
-    $('#celular').prop('disabled', true);
-    $('#celular').css("background-color", "#cccccc"); 
-    
-    $("input").focus( function() {
-        $(this).select();
-    });
-
-    $('#etapa1').show();
-    $('#etapa2').hide();
-
-    if(!Logado()){
-        Redirecionar('autenticacao.html');
-    }
+    UsuarioPerfil.Inicializar();
 
     $.ajax({
         url: StorageGetItem("api") + '/v1/usuarios',
@@ -216,4 +197,6 @@
             }
         });
     })
-})(jQuery)
+})(jQuery);
+
+*/
