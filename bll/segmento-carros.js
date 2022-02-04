@@ -1,13 +1,6 @@
 var SegmentoCarros = {
     spa: null,
-
-    RolamentoMaisRecentes: {
-        orderby: 1,
-        offset: 0,
-        skip: 0,
-        lote: 12
-    },
-
+    
     RolamentoPesquisa: {
         categoria_id: null,
         orderby: 1,
@@ -437,10 +430,6 @@ var SegmentoCarros = {
                 },
             }
         });
-
-        // $(".f_car_slider").show();
-
-        // carousel.html(carousel.find('.owl-stage-outer').html()).removeClass('owl-hidden');
     },
 
     VitrineCarregarMelhoresOfertasCarrosel: function (limpar) {
