@@ -1,6 +1,6 @@
 var SegmentoCarros = {
     spa: null,
-    
+
     RolamentoPesquisa: {
         categoria_id: null,
         orderby: 1,
@@ -12,6 +12,13 @@ var SegmentoCarros = {
         categoria_id: null,
         km_min: null,
         km_max: null
+    },
+
+    RolamentoMaisRecentes: {
+        orderby: 1,
+        offset: 0,
+        skip: 0,
+        lote: 12
     },
 
     RolamentoMelhoresOfertas: {
@@ -80,28 +87,28 @@ var SegmentoCarros = {
             }
         });
 
-        $(document.body).on('click', '.favorito img' ,function(event){
+        $(document.body).on('click', '.favorito img', function (event) {
             event.preventDefault();
-            
-            if (!Logado()){
+
+            if (!Logado()) {
                 Redirecionar('autenticacao.html');
-            }else{
-                
+            } else {
+
                 let produto = $(this).closest('div[produto_id]').attr('produto_id');
                 let isfavorito = $(this).attr('isfavorito') == "true";
-                
+
                 let url_dinamica = "";
                 let metodo_http = "";
-    
+
                 let this_ = this;
 
-                if(isfavorito){
+                if (isfavorito) {
                     isfavorito = false;
                     url_dinamica = StorageGetItem("api") + '/v1/mobile/carros/' + produto + '/desfavoritar'
                     metodo_http = "DELETE";
                     $(this_).attr('isfavorito', 'false');
                     $(this_).attr('src', 'img/favorite.png');
-                }else{
+                } else {
                     isfavorito = true;
                     url_dinamica = StorageGetItem("api") + '/v1/mobile/carros/' + produto + '/favoritar'
                     metodo_http = "POST";
@@ -115,14 +122,14 @@ var SegmentoCarros = {
                         'Authorization': "Bearer " + StorageGetItem("token")
                     },
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                    success: function(request, textStatus, errorThrown){
+                    success: function (request, textStatus, errorThrown) {
                         // alert(request.mensagem);
                     },
-                    error: function(request, textStatus, errorThrown){
-                        if(isfavorito){
+                    error: function (request, textStatus, errorThrown) {
+                        if (isfavorito) {
                             $(this_).attr('isfavorito', 'false');
                             $(this_).attr('src', 'img/favorite.png');
-                        }else{
+                        } else {
                             $(this_).attr('isfavorito', 'true');
                             $(this_).attr('src', 'img/favorite2.png');
                         }
@@ -270,7 +277,7 @@ var SegmentoCarros = {
         </div>`;
     },
 
-    Pesquisar: function (limpar) {
+    Pesquisar(limpar) {
         var this_ = this;
 
         this.spa.find('.vitrine').hide();
@@ -305,8 +312,8 @@ var SegmentoCarros = {
             url: localStorage.getItem('api') + '/v1/mobile/carros',
             type: "GET", cache: false, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
-            beforeSend: function(xhr){
-                if(Logado()){
+            beforeSend: function (xhr) {
+                if (Logado()) {
                     xhr.setRequestHeader('Authorization', "Bearer " + StorageGetItem("token")); //Mágica aqui
                 }
             },
@@ -340,13 +347,13 @@ var SegmentoCarros = {
         });
     },
 
-    VitrineCarregarMaisRecentes: function (limpar) {
+    VitrineCarregarMaisRecentes(limpar) {
         var this_ = this;
 
         var colecao = this.spa.find('.vitrine').find('.latest_collection_area').find('.row.l_collection_inner');
         if (limpar) {
-            this.RolamentoMaisRecentes.offset = 0;
-            this.RolamentoMaisRecentes.skip = 0;
+            this.RolamentoMelhoresOfertas.offset = 0;
+            this.RolamentoMelhoresOfertas.skip = 0;
             colecao.empty();
         }
 
@@ -354,20 +361,20 @@ var SegmentoCarros = {
             url: localStorage.getItem('api') + '/v1/mobile/carros',
             type: "GET", cache: false, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
-            beforeSend: function(xhr){
-                if(Logado()){
+            beforeSend: function (xhr) {
+                if (Logado()) {
                     xhr.setRequestHeader('Authorization', "Bearer " + StorageGetItem("token"));
                 }
             },
             data: {
-                orderby: this_.RolamentoMaisRecentes.orderby,
-                offset: this_.RolamentoMaisRecentes.offset,
-                skip: this_.RolamentoMaisRecentes.skip,
-                lote: this_.RolamentoMaisRecentes.lote
+                orderby: this_.RolamentoMelhoresOfertas.orderby,
+                offset: this_.RolamentoMelhoresOfertas.offset,
+                skip: this_.RolamentoMelhoresOfertas.skip,
+                lote: this_.RolamentoMelhoresOfertas.lote
             },
             success: function (result, textStatus, request) {
-                this_.RolamentoMaisRecentes.offset = result.next_offset;
-                this_.RolamentoMaisRecentes.skip = result.next_skip;
+                this_.RolamentoMelhoresOfertas.offset = result.next_offset;
+                this_.RolamentoMelhoresOfertas.skip = result.next_skip;
 
                 var produtos = result.registros;
                 $.each(produtos, function (i, produto) {
@@ -394,14 +401,14 @@ var SegmentoCarros = {
         });
     },
 
-    LimparCarrosel: function (owlCarousel) {
+    LimparCarrosel(owlCarousel) {
         for (var i = 0; i < owlCarousel.find('.item').length; i++) {
             owlCarousel.find(".edit-manage-carousel").trigger('remove.owl.carousel', [i])
                 .trigger('refresh.owl.carousel');
         }
     },
 
-    ResetarOwlCarouselMelhoresOfertas: function (carousel) {
+    ResetarOwlCarouselMelhoresOfertas(carousel) {
         carousel.trigger('destroy.owl.carousel');
         carousel.html(carousel.find('.owl-stage-outer').html()).removeClass('owl-loaded');
 
@@ -446,21 +453,21 @@ var SegmentoCarros = {
             url: localStorage.getItem('api') + '/v1/mobile/carros',
             type: "GET", cache: false, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
-            beforeSend: function(xhr){
-                if(Logado()){
+            beforeSend: function (xhr) {
+                if (Logado()) {
                     xhr.setRequestHeader('Authorization', "Bearer " + StorageGetItem("token")); //Mágica aqui
                 }
             },
             data: {
-                orderby: this_.RolamentoMelhoresOfertas.orderby,
-                offset: this_.RolamentoMelhoresOfertas.offset,
-                skip: this_.RolamentoMelhoresOfertas.skip,
-                lote: this_.RolamentoMelhoresOfertas.lote,
+                orderby: this_.RolamentoMaisRecentes.orderby,
+                offset: this_.RolamentoMaisRecentes.offset,
+                skip: this_.RolamentoMaisRecentes.skip,
+                lote: this_.RolamentoMaisRecentes.lote,
                 ofertas: 1 /* true */
             },
             success: function (result, textStatus, request) {
-                this_.RolamentoMelhoresOfertas.offset = result.next_offset;
-                this_.RolamentoMelhoresOfertas.skip = result.next_skip;
+                this_.RolamentoMaisRecentes.offset = result.next_offset;
+                this_.RolamentoMaisRecentes.skip = result.next_skip;
 
                 var produtos = result.registros;
 
@@ -487,7 +494,7 @@ var SegmentoCarros = {
         });
     },
 
-    LimparTodasAsCombosCarro: function () {
+    LimparTodasAsCombosCarro() {
         this.spa.find('.nice_select#categoria').empty().append('<option selected="selected" value="0">Categoria</option>');
         this.spa.find('.nice_select#categoria').niceSelect('update');
 
@@ -500,12 +507,12 @@ var SegmentoCarros = {
         this.spa.find('.nice_select#marca').niceSelect('update');
     },
 
-    LimparComboModelo: function () {
+    LimparComboModelo() {
         this.spa.find('.nice_select#modelo').empty().append('<option selected="selected" value="0">Modelo</option>');
         this.spa.find('.nice_select#modelo').niceSelect('update');
     },
 
-    CarregarComboCarroCategoria: function () {
+    CarregarComboCarroCategoria() {
         let spa = this.spa;
 
         $.ajax({
@@ -534,7 +541,7 @@ var SegmentoCarros = {
         })
     },
 
-    CarregarComboCarroMarca: function () {
+    CarregarComboCarroMarca() {
         let spa = this.spa;
 
         $.ajax({
@@ -563,7 +570,7 @@ var SegmentoCarros = {
         });
     },
 
-    CarregarComboModelo: function (marca_id) {
+    CarregarComboModelo(marca_id) {
         let spa = this.spa;
 
         spa.find('.nice_select#modelo').empty().append('<option selected="selected" value="0">Modelo</option>');
@@ -594,7 +601,7 @@ var SegmentoCarros = {
         });
     },
 
-    CarregarComboCarroQuilometragem: function () {
+    CarregarComboCarroQuilometragem() {
         let spa = this.spa;
 
         $.ajax({
