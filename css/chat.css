@@ -23,16 +23,21 @@
 }
 
 .people-list {
+    position: fixed;
+    height: 50%;
     -moz-transition: .5s;
     -o-transition: .5s;
     -webkit-transition: .5s;
-    transition: .5s
+    transition: .5s;
+    overflow-y: scroll;
+    
 }
 
 .people-list .chat-list li {
     padding: 10px 15px;
     list-style: none;
-    border-radius: 3px
+    border-radius: 3px;
+    
 }
 
 .people-list .chat-list li:hover {
@@ -85,8 +90,10 @@
 }
 
 .chat .chat-history {
+    height: 100%;
     padding: 20px;
-    border-bottom: 2px solid #fff
+    border-bottom: 2px solid #fff;
+    overflow-y: scroll
 }
 
 .chat .chat-history ul {
