@@ -5,11 +5,10 @@ var UsuarioPerfil = {
 
     RolamentoHistoricoChat: {
         offset: 0,
-        lote: 5,
+        lote: 15,
         next_offset: null,
         usuario_principal: 66
     },
-
 
     Construtor() {
         this_ = this;
@@ -58,7 +57,6 @@ var UsuarioPerfil = {
         this.ObterHistoricoProposta();
         this.EventEscutarScroll();
     },
-
 
     CarregarDadosUsuario : function(){
         $.ajax({

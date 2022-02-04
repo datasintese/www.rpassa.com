@@ -24,7 +24,7 @@
 
 .people-list {
     position: fixed;
-    height: 50%;
+    height: 100%;
     -moz-transition: .5s;
     -o-transition: .5s;
     -webkit-transition: .5s;
