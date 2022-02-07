@@ -2,12 +2,23 @@
 var UsuarioPerfil = {
     spa : null,
     this_ : null,
+    
+    proposta : [],
+    palavra_chave : "result",
+    chave : null,
 
-    RolamentoHistoricoChat: {
+    RolamentoHistoricoChat : {
         offset: 0,
         lote: 15,
         next_offset: null,
-        usuario_principal: 66
+        usuario_principal: null
+    },
+
+    RolamentoMensagens : {
+        offset: 0,
+        lote: 15,
+        next_offset: null,
+        usuario_principal: null
     },
 
     Construtor() {
@@ -55,7 +66,8 @@ var UsuarioPerfil = {
         this.EventAlterarDadosUsuario();
         this.EventAlterarSenhaUsuario();
         this.ObterHistoricoProposta();
-        this.EventEscutarScroll();
+        this.EventEscutarScrollHistoricoProposta();
+        this.EventEscutarScrollHistoricoMensagem();
     },
 
     CarregarDadosUsuario : function(){
@@ -190,7 +202,6 @@ var UsuarioPerfil = {
                         this_.spa.find('#etapa1').show();
                         this_.spa.find('#etapa2').hide();
     
-    
                     } catch (error) {
                         Mensagem(JSON.stringify(result), 'success');
                     }
@@ -274,6 +285,8 @@ var UsuarioPerfil = {
                     $.each(historico_proposta, function (i, historico) {
                         this_.spa.find("#historico_proposta").last().append(this_.HtmlHistoricoProposta(historico));
                     });
+                    this_.RemoverAssinaturaEvento();
+                    this_.EventObterMensagemUsuarioSelecionado();
 
                 } catch (error) {
                     Mensagem(JSON.stringify(result), 'success');
@@ -295,16 +308,22 @@ var UsuarioPerfil = {
     HtmlHistoricoProposta : function(historico_proposta){
         let url_imagem = localStorage.getItem('api') + '/v1/mobile/carros/' + historico_proposta.id_produto + '/imagens/' + historico_proposta.imagem_hash + '?tipo=principal';
 
-        return `<li class="clearfix">
+        this_.proposta[this_.palavra_chave + historico_proposta.id] = {
+            id_produto : historico_proposta.id_produto,
+            usuario : this_.RolamentoHistoricoChat.usuario_principal === historico_proposta.usuario_id_de ? historico_proposta.usuario_id_para: historico_proposta.usuario_id_de,
+            nome_usuario : this_.RolamentoHistoricoChat.usuario_principal === historico_proposta.usuario_id_de ? historico_proposta.nome_para: historico_proposta.nome_de
+        };
+
+        return `<li class="clearfix conversa" id="${this_.palavra_chave + historico_proposta.id}">
             <img src="${url_imagem}" alt="avatar">
             <div class="about">
-                <div class="name">${historico_proposta.nome_de}</div>
+                <div class="name">${this_.proposta[this_.palavra_chave + historico_proposta.id].nome_usuario}</div>
                 <div class="status"> <i class="fa fa-circle offline"></i> ${historico_proposta.tempo_corrido_ult_conversa} </div>                                            
             </div>
         </li>`
     },
 
-    EventEscutarScroll : function(){
+    EventEscutarScrollHistoricoProposta : function(){
         this_.spa.find(".people-list").scroll(function(){
             if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight - 1) {
                 if(this_.RolamentoHistoricoChat.next_offset > -1){
@@ -313,5 +332,115 @@ var UsuarioPerfil = {
                 }
             }
         });
-    }
+    },
+
+    ObterMensagensProposta : function(chave, isRolamento){
+        let obj = this_.proposta[chave];
+        $.ajax({
+            url: StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/chat/mensagens/historico?offset=' + this_.RolamentoMensagens.offset + '&lote=' + this_.RolamentoMensagens.lote + '&produto_id=' + obj.id_produto,
+            type: 'GET', cache: false, async:true, dataType:'json',
+            headers: {
+                Authorization: 'Bearer ' + StorageGetItem("token")
+            },
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function (result, textStatus, request) {
+                try {
+
+                    console.log(result);
+
+                    this_.RolamentoMensagens.offset = result.offset;
+                    this_.RolamentoMensagens.lote = result.lote;
+                    this_.RolamentoMensagens.next_offset = result.next_offset;
+                    this_.RolamentoMensagens.usuario_principal = result.usuario_principal;
+                    let historico_mensagem = result.registros;
+
+                    let hist_mensagem = this_.spa.find("#historico_mensagem");
+
+                    if(!isRolamento){
+                        this_.spa.find("#cabecalho_proposta").empty();
+                        this_.spa.find("#cabecalho_proposta").append(this_.HtmlCabecalhoMensagem(obj.nome_usuario));
+                        hist_mensagem.empty();
+                    }
+
+                    $.each(historico_mensagem, function (i, historico) {
+                        hist_mensagem.prepend(this_.HtmlMensagemProposta(historico));
+                    });
+
+                    let hist_scroll = hist_mensagem.parent();
+                    if(!isRolamento){
+                        hist_scroll.prop("scrollTop", hist_scroll.prop("scrollHeight"));
+                    }else{
+                        alert(hist_scroll.scrollTop());
+                    }
+
+                } catch (error) {
+                    Mensagem(JSON.stringify(result), 'success');
+                }
+            },
+            error: function (request, textStatus, errorThrown) {
+                if (!MensagemErroAjax(request, errorThrown)) {
+                    try {
+                        var obj = $.parseJSON(request.responseText)
+                        Mensagem(obj.mensagem, 'warning', function () { this_.spa.find("#email").select(); });
+                    } catch (error) {
+                        Mensagem(request.responseText, 'error', function () { this_.spa.find("#email").select(); });
+                    }
+                }
+            }
+        });
+    },
+
+    HtmlMensagemProposta : function(historico_mensagem){
+
+        if(this_.RolamentoHistoricoChat.usuario_principal === historico_mensagem.usuario_id_de){
+            return `<li class="clearfix">
+                        <div class="message-data text-right">
+                            <span class="message-data-time">${historico_mensagem.data_hora}</span>
+                        </div>
+                        <div class="message other-message float-right">${historico_mensagem.mensagem}</div>
+                    </li>`
+        }
+        else{
+            return `<li class="clearfix">
+                        <div class="message-data">
+                            <span class="message-data-time">${historico_mensagem.data_hora}</span>
+                        </div>
+                        <div class="message my-message">${historico_mensagem.mensagem}</div>                                    
+                    </li>`
+        }
+    },
+
+    HtmlCabecalhoMensagem(nomeUsuario){
+        return `<div class="row">
+                    <div class="col-lg-6">
+                        <div class="chat-about">
+                            <h6 class="m-b-0">${nomeUsuario}</h6>
+                        </div>
+                    </div>
+                </div>`;
+    },
+
+    EventObterMensagemUsuarioSelecionado(){
+        let historicoProposta = this_.spa.find("li.clearfix.conversa");
+        historicoProposta.click(function(){
+            this_.chave = $(this).attr('id');
+            this_.ObterMensagensProposta(this_.chave, false);
+        });
+    },
+
+    RemoverAssinaturaEvento(){
+        let historicoProposta = this_.spa.find("li.clearfix.conversa");
+        historicoProposta.off('click');
+    },
+
+    EventEscutarScrollHistoricoMensagem : function(){
+        this_.spa.find("#historico_mensagem").parent().scroll(function(){
+            if($(this).scrollTop() <= 0) {
+                if(this_.RolamentoMensagens.next_offset > -1){
+                    this_.RolamentoMensagens.offset = this_.RolamentoMensagens.next_offset;
+                    this_.ObterMensagensProposta(this_.chave, true);
+                }
+            }
+        });
+    },
 };
