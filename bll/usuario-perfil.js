@@ -6,6 +6,8 @@ var UsuarioPerfil = {
     proposta : [],
     palavra_chave : "result",
     chave : null,
+    
+    scrollAnterior : null, // Paginação da mensagem
 
     RolamentoHistoricoChat : {
         offset: 0,
@@ -68,6 +70,7 @@ var UsuarioPerfil = {
         this.ObterHistoricoProposta();
         this.EventEscutarScrollHistoricoProposta();
         this.EventEscutarScrollHistoricoMensagem();
+        this.EventEnviarMensagem();
     },
 
     CarregarDadosUsuario : function(){
@@ -346,7 +349,7 @@ var UsuarioPerfil = {
             success: function (result, textStatus, request) {
                 try {
 
-                    console.log(result);
+                    //console.log(result);
 
                     this_.RolamentoMensagens.offset = result.offset;
                     this_.RolamentoMensagens.lote = result.lote;
@@ -370,7 +373,7 @@ var UsuarioPerfil = {
                     if(!isRolamento){
                         hist_scroll.prop("scrollTop", hist_scroll.prop("scrollHeight"));
                     }else{
-                        alert(hist_scroll.scrollTop());
+                        hist_scroll.prop("scrollTop", hist_scroll.prop("scrollHeight") - this_.scrollAnterior);
                     }
 
                 } catch (error) {
@@ -425,6 +428,7 @@ var UsuarioPerfil = {
         historicoProposta.click(function(){
             this_.chave = $(this).attr('id');
             this_.ObterMensagensProposta(this_.chave, false);
+            this_.EscutarMensagensUsuarioSelecionado();
         });
     },
 
@@ -436,6 +440,7 @@ var UsuarioPerfil = {
     EventEscutarScrollHistoricoMensagem : function(){
         this_.spa.find("#historico_mensagem").parent().scroll(function(){
             if($(this).scrollTop() <= 0) {
+                this_.scrollAnterior = $(this)[0].scrollHeight;
                 if(this_.RolamentoMensagens.next_offset > -1){
                     this_.RolamentoMensagens.offset = this_.RolamentoMensagens.next_offset;
                     this_.ObterMensagensProposta(this_.chave, true);
@@ -443,4 +448,134 @@ var UsuarioPerfil = {
             }
         });
     },
+
+    EventEnviarMensagem : function(){
+        this_.spa.find("#envio_mensagem").keydown(function(event) {
+            if (event.keyCode === 13) {
+                let mensagem = $(this).val();
+                if(mensagem != ''){
+                    this_.EnviarMensagem(mensagem);
+                    $(this).val('');
+                }
+            }
+        });
+    },
+
+    EnviarMensagem: function(msg){
+        let obj = this_.proposta[this_.chave];
+        $.ajax({
+            url: StorageGetItem('api') + '/v1/usuarios/chat/mensagens',
+            type: 'POST', cache: false, async:true, dataType:'json',
+            headers: {
+                Authorization: 'Bearer ' + StorageGetItem("token")
+            },
+            data: {
+                produto_id : obj.id_produto,
+                usuario_id_para: obj.usuario,
+                mensagem: msg,
+            },
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function (result, textStatus, request) {
+                try {
+
+                    let hist_mensagem = this_.spa.find("#historico_mensagem");
+                    hist_mensagem.append(this_.HtmlMensagemProposta(result));
+                    hist_mensagem.parent().prop("scrollTop", hist_mensagem.parent().prop("scrollHeight"));
+
+                } catch (error) {
+                    Mensagem(JSON.stringify(result), 'success');
+                }
+            },
+            error: function (request, textStatus, errorThrown) {
+                if (!MensagemErroAjax(request, errorThrown)) {
+                    try {
+                        var obj = $.parseJSON(request.responseText)
+                        Mensagem(obj.mensagem, 'warning', function () { this_.spa.find("#email").select(); });
+                    } catch (error) {
+                        Mensagem(request.responseText, 'error', function () { this_.spa.find("#email").select(); });
+                    }
+                }
+            }
+        });
+    },
+
+    EscutarMensagensUsuarioSelecionado(){
+        let obj = this_.proposta[this_.chave];
+        
+        var r = new XMLHttpRequest();
+        
+        r.multipart = true;
+        r.open('GET', StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/chat/mensagens?produto_id=' + obj.id_produto, true);
+        r.setRequestHeader('ContentType', "multipart/x-mixed-replace; boundary=frame")
+        r.setRequestHeader('Authorization', "Bearer " + StorageGetItem("token")); //Mágica aqui
+        r.overrideMimeType("application/json;charset=utf-8");
+
+        r.responseType = "json";
+        r.onmessage = function(e) {
+            var arraybuffer = r.response; // não é responseText
+            console.log(arraybuffer);
+        }
+        r.send();
+
+        /*
+        r.onreadystatechange = function () {
+            console.log(r.responseText.length);
+        };
+        r.onprogress = function(){
+            alert('progess');
+        };
+        r.onupdateProgress = function(){
+            alert('updateProgress');
+        };
+        r.onload = function(){
+            alert('load');
+        };
+        r.ontransferComplete = function(){
+            alert('transferComplete');
+        };
+        r.onerror = function(){
+            alert('error');
+        };
+        r.onabort = function(){
+            alert('abort');
+        };
+        r.send();
+        /*
+        $.ajax({
+            url: StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/chat/mensagens?produto_id=' + obj.id_produto ,
+            type: 'GET', cache: false, async:true, dataType:'json',
+            headers: {
+                Authorization: 'Bearer ' + StorageGetItem("token")
+            },
+            contentType: "multipart/x-mixed-replace; boundary=frame",
+            success: function (result, textStatus, request) {
+                try {
+                    console.log(result);
+                } catch (error) {
+                    Mensagem(JSON.stringify(result), 'success');
+                }
+            },
+            error: function (request, textStatus, errorThrown) {
+                if (!MensagemErroAjax(request, errorThrown)) {
+                    try {
+                        var obj = $.parseJSON(request.responseText)
+                        Mensagem(obj.mensagem, 'warning', function () { this_.spa.find("#email").select(); });
+                    } catch (error) {
+                        Mensagem(request.responseText, 'error', function () { this_.spa.find("#email").select(); });
+                    }
+                }
+            }
+        });
+*/
+
+        /*
+        var r = new XMLHttpRequest();
+        r.multipart = true;
+        r.open('GET', '/', true);
+        r.onreadystatechange = function () {
+            console.log(r.responseText.length);
+        };
+        r.send();
+        */
+    }
 };
