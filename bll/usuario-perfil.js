@@ -499,9 +499,135 @@ var UsuarioPerfil = {
         });
     },
 
-    EscutarMensagensUsuarioSelecionado(){
+    EscutarMensagensUsuarioSelecionado : async function(){
         let obj = this_.proposta[this_.chave];
+
+        var client = new XMLHttpRequest();
+        client.multipart = true;
+        client.open('GET', StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/chat/mensagens?produto_id=' + obj.id_produto, true);
+        client.setRequestHeader('Authorization', 'Bearer ' + StorageGetItem("token"));
+        client.setRequestHeader('Content-Type', 'multipart/x-mixed-replace; boundary=frame');
+        client.setRequestHeader('Connection', 'keep-alive');
+
+        var boundary = "";
+        var lastBytesRead = 0;
+        client.onreadystatechange = function () {
+            if (client.readyState == 2) {
+                console.log("Conectado!");
+
+                var contentType = client.getResponseHeader("Content-Type");
+                var type = contentType.split(';');
+                var subTypeBoundary = type.find(element => element.trim().startsWith('boundary')).trim();
+                var boundSplit = subTypeBoundary.split('=')
+                boundary = boundSplit[1];
+            }
+            else if (client.readyState == 3) {
+                //log2.innerHTML = "ready state = " + client.readyState;
+                //log3.innerHTML = "lenght = " + client.response.length;
+
+                var part = client.responseText.substring(lastBytesRead);
+                lastBytesRead = client.responseText.length;
+                var boundaryPart = part.split('\r\n\r\n');
+                boundaryPart = boundaryPart[1];
+                var idx = boundaryPart.lastIndexOf('\r\n--' + boundary + '\r\n');
+                if(idx > -1){
+                    boundaryPart = boundaryPart.substring(0, idx);
+                }
+
+                let jsonRes = JSON.stringify(boundaryPart);
+                let resFinal = JSON.parse(jsonRes);
+                console.log(resFinal);
+            }
+            else if (client.readyState == 4) {
+                console.log("Desconectado!");
+            }
+            else {
+                console.log(client.response);
+            }
+        }
+
+        client.send();
+
+        /*
+        let cabecalho = {
+               method: 'GET',
+               headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'multipart/x-mixed-replace; boundary=frame',
+                'Connection': 'keep-alive',
+                'Authorization': 'Bearer ' + StorageGetItem("token")
+               },
+               cache: 'default',
+               async: true
+       
+
+        var oReq = new XMLHttpRequest();
+
+        oReq.open('GET', StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/chat/mensagens?produto_id=' + obj.id_produto);
+
+        oReq.setRequestHeader('Accept', 'application/json');
+        oReq.setRequestHeader('Authorization', 'Bearer ' + StorageGetItem("token"));
+        oReq.setRequestHeader('contentType', 'multipart/x-mixed-replace; boundary=frame');
+        //oReq.setRequestHeader('Connection', 'keep-alive');
+
+       
+       
+
+        oReq.onprogress = function(event){
+            console.log(event);
+        }
+        oReq.onload = function(event){
+            console.log(event);
+        }
+        oReq.onerror = function(event){
+            console.log(event);
+        }
+        oReq.onabort = function(event){
+            console.log(event);
+        }
+
+        oReq.send();
+
+        /*
+        const evtSource = new EventSource(StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/chat/mensagens?produto_id=' + obj.id_produto, cabecalho );
         
+        evtSource.onmessage = function(event) {
+            console.log(event);
+        };
+
+        evtSource.onerror = function(err) {
+            console.error("EventSource failed:", err);
+        };
+        evtSource.OPEN();
+        */
+        
+
+        /*
+        let response = await fetch(StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/chat/mensagens?produto_id=' + obj.id_produto, cabecalho)
+
+        let reader = await response.body.getReader();
+
+        let cont = 0
+        while(true){
+            let teste = await reader.read();
+            //if(teste.done) {
+             //   reader = await response.body.getReader();
+            //    setTimeout(1000);
+            //}
+            if(teste != null){
+                let texto = new TextDecoder('utf-8').decode(teste.value);
+                if(texto != ''){
+                    let jsonRes = JSON.stringify(texto);
+                    let resFinal = JSON.parse(jsonRes);
+                    console.log(resFinal);
+                }
+            }
+            // cont++;
+        }
+        //reader.cancel();
+        //reader.closed();
+
+        /* 
         var r = new XMLHttpRequest();
         
         r.multipart = true;
@@ -517,7 +643,6 @@ var UsuarioPerfil = {
         }
         r.send();
 
-        /*
         r.onreadystatechange = function () {
             console.log(r.responseText.length);
         };
@@ -540,7 +665,6 @@ var UsuarioPerfil = {
             alert('abort');
         };
         r.send();
-        /*
         $.ajax({
             url: StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/chat/mensagens?produto_id=' + obj.id_produto ,
             type: 'GET', cache: false, async:true, dataType:'json',
@@ -566,9 +690,7 @@ var UsuarioPerfil = {
                 }
             }
         });
-*/
 
-        /*
         var r = new XMLHttpRequest();
         r.multipart = true;
         r.open('GET', '/', true);
@@ -578,4 +700,4 @@ var UsuarioPerfil = {
         r.send();
         */
     }
-};
+}
