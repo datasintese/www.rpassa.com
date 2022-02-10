@@ -507,7 +507,6 @@ var UsuarioPerfil = {
         client.open('GET', StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/chat/mensagens?produto_id=' + obj.id_produto, true);
         client.setRequestHeader('Authorization', 'Bearer ' + StorageGetItem("token"));
         client.setRequestHeader('Content-Type', 'multipart/x-mixed-replace; boundary=frame');
-        client.setRequestHeader('Connection', 'keep-alive');
 
         let boundary = "";
         let lastBytesRead = 0;
