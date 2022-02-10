@@ -502,41 +502,43 @@ var UsuarioPerfil = {
     EscutarMensagensUsuarioSelecionado : async function(){
         let obj = this_.proposta[this_.chave];
 
-        var client = new XMLHttpRequest();
+        let client = new XMLHttpRequest();
         client.multipart = true;
         client.open('GET', StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/chat/mensagens?produto_id=' + obj.id_produto, true);
         client.setRequestHeader('Authorization', 'Bearer ' + StorageGetItem("token"));
         client.setRequestHeader('Content-Type', 'multipart/x-mixed-replace; boundary=frame');
         client.setRequestHeader('Connection', 'keep-alive');
 
-        var boundary = "";
-        var lastBytesRead = 0;
+        let boundary = "";
+        let lastBytesRead = 0;
         client.onreadystatechange = function () {
             if (client.readyState == 2) {
                 console.log("Conectado!");
 
-                var contentType = client.getResponseHeader("Content-Type");
-                var type = contentType.split(';');
-                var subTypeBoundary = type.find(element => element.trim().startsWith('boundary')).trim();
-                var boundSplit = subTypeBoundary.split('=')
+                let contentType = client.getResponseHeader("Content-Type");
+                let type = contentType.split(';');
+                let subTypeBoundary = type.find(element => element.trim().startsWith('boundary')).trim();
+                let boundSplit = subTypeBoundary.split('=')
                 boundary = boundSplit[1];
             }
             else if (client.readyState == 3) {
-                //log2.innerHTML = "ready state = " + client.readyState;
-                //log3.innerHTML = "lenght = " + client.response.length;
 
-                var part = client.responseText.substring(lastBytesRead);
+                let part = client.responseText.substring(lastBytesRead);
                 lastBytesRead = client.responseText.length;
-                var boundaryPart = part.split('\r\n\r\n');
+                let boundaryPart = part.split('\r\n\r\n');
                 boundaryPart = boundaryPart[1];
-                var idx = boundaryPart.lastIndexOf('\r\n--' + boundary + '\r\n');
+                let idx = boundaryPart.lastIndexOf('\r\n--' + boundary + '\r\n');
                 if(idx > -1){
                     boundaryPart = boundaryPart.substring(0, idx);
                 }
+                let resFinal = JSON.parse(boundaryPart);
+                
+                let hist_mensagem = this_.spa.find("#historico_mensagem");
 
-                let jsonRes = JSON.stringify(boundaryPart);
-                let resFinal = JSON.parse(jsonRes);
-                console.log(resFinal);
+                $.each(resFinal, function (i, mensagem) {
+                    hist_mensagem.append(this_.HtmlMensagemProposta(mensagem));
+                    hist_mensagem.parent().prop("scrollTop", hist_mensagem.parent().prop("scrollHeight"));
+                });
             }
             else if (client.readyState == 4) {
                 console.log("Desconectado!");
