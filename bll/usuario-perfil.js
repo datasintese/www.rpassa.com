@@ -9,6 +9,8 @@ var UsuarioPerfil = {
     
     scrollAnterior : null, // Paginação da mensagem
 
+    client : null,
+
     RolamentoHistoricoChat : {
         offset: 0,
         lote: 15,
@@ -502,28 +504,31 @@ var UsuarioPerfil = {
     EscutarMensagensUsuarioSelecionado : async function(){
         let obj = this_.proposta[this_.chave];
 
-        let client = new XMLHttpRequest();
-        client.multipart = true;
-        client.open('GET', StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/chat/mensagens?produto_id=' + obj.id_produto, true);
-        client.setRequestHeader('Authorization', 'Bearer ' + StorageGetItem("token"));
-        client.setRequestHeader('Content-Type', 'multipart/x-mixed-replace; boundary=frame');
+        if(this_.client != null){
+            this_.client.abort();
+        }
+        this_.client = new XMLHttpRequest();
+
+        this_.client.multipart = true;
+        this_.client.open('GET', StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/chat/mensagens?produto_id=' + obj.id_produto, true);
+        this_.client.setRequestHeader('Authorization', 'Bearer ' + StorageGetItem("token"));
 
         let boundary = "";
         let lastBytesRead = 0;
-        client.onreadystatechange = function () {
-            if (client.readyState == 2) {
+        this_.client.onreadystatechange = function () {
+            if (this_.client.readyState == 2) {
                 console.log("Conectado!");
 
-                let contentType = client.getResponseHeader("Content-Type");
+                let contentType = this_.client.getResponseHeader("Content-Type");
                 let type = contentType.split(';');
                 let subTypeBoundary = type.find(element => element.trim().startsWith('boundary')).trim();
                 let boundSplit = subTypeBoundary.split('=')
                 boundary = boundSplit[1];
             }
-            else if (client.readyState == 3) {
+            else if (this_.client.readyState == 3) {
 
-                let part = client.responseText.substring(lastBytesRead);
-                lastBytesRead = client.responseText.length;
+                let part = this_.client.responseText.substring(lastBytesRead);
+                lastBytesRead = this_.client.responseText.length;
                 let boundaryPart = part.split('\r\n\r\n');
                 boundaryPart = boundaryPart[1];
                 let idx = boundaryPart.lastIndexOf('\r\n--' + boundary + '\r\n');
@@ -539,166 +544,14 @@ var UsuarioPerfil = {
                     hist_mensagem.parent().prop("scrollTop", hist_mensagem.parent().prop("scrollHeight"));
                 });
             }
-            else if (client.readyState == 4) {
+            else if (this_.client.readyState == 4) {
                 console.log("Desconectado!");
             }
             else {
-                console.log(client.response);
+                console.log(this_.client.response);
             }
         }
 
         client.send();
-
-        /*
-        let cabecalho = {
-               method: 'GET',
-               headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'multipart/x-mixed-replace; boundary=frame',
-                'Connection': 'keep-alive',
-                'Authorization': 'Bearer ' + StorageGetItem("token")
-               },
-               cache: 'default',
-               async: true
-       
-
-        var oReq = new XMLHttpRequest();
-
-        oReq.open('GET', StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/chat/mensagens?produto_id=' + obj.id_produto);
-
-        oReq.setRequestHeader('Accept', 'application/json');
-        oReq.setRequestHeader('Authorization', 'Bearer ' + StorageGetItem("token"));
-        oReq.setRequestHeader('contentType', 'multipart/x-mixed-replace; boundary=frame');
-        //oReq.setRequestHeader('Connection', 'keep-alive');
-
-       
-       
-
-        oReq.onprogress = function(event){
-            console.log(event);
-        }
-        oReq.onload = function(event){
-            console.log(event);
-        }
-        oReq.onerror = function(event){
-            console.log(event);
-        }
-        oReq.onabort = function(event){
-            console.log(event);
-        }
-
-        oReq.send();
-
-        /*
-        const evtSource = new EventSource(StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/chat/mensagens?produto_id=' + obj.id_produto, cabecalho );
-        
-        evtSource.onmessage = function(event) {
-            console.log(event);
-        };
-
-        evtSource.onerror = function(err) {
-            console.error("EventSource failed:", err);
-        };
-        evtSource.OPEN();
-        */
-        
-
-        /*
-        let response = await fetch(StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/chat/mensagens?produto_id=' + obj.id_produto, cabecalho)
-
-        let reader = await response.body.getReader();
-
-        let cont = 0
-        while(true){
-            let teste = await reader.read();
-            //if(teste.done) {
-             //   reader = await response.body.getReader();
-            //    setTimeout(1000);
-            //}
-            if(teste != null){
-                let texto = new TextDecoder('utf-8').decode(teste.value);
-                if(texto != ''){
-                    let jsonRes = JSON.stringify(texto);
-                    let resFinal = JSON.parse(jsonRes);
-                    console.log(resFinal);
-                }
-            }
-            // cont++;
-        }
-        //reader.cancel();
-        //reader.closed();
-
-        /* 
-        var r = new XMLHttpRequest();
-        
-        r.multipart = true;
-        r.open('GET', StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/chat/mensagens?produto_id=' + obj.id_produto, true);
-        r.setRequestHeader('ContentType', "multipart/x-mixed-replace; boundary=frame")
-        r.setRequestHeader('Authorization', "Bearer " + StorageGetItem("token")); //Mágica aqui
-        r.overrideMimeType("application/json;charset=utf-8");
-
-        r.responseType = "json";
-        r.onmessage = function(e) {
-            var arraybuffer = r.response; // não é responseText
-            console.log(arraybuffer);
-        }
-        r.send();
-
-        r.onreadystatechange = function () {
-            console.log(r.responseText.length);
-        };
-        r.onprogress = function(){
-            alert('progess');
-        };
-        r.onupdateProgress = function(){
-            alert('updateProgress');
-        };
-        r.onload = function(){
-            alert('load');
-        };
-        r.ontransferComplete = function(){
-            alert('transferComplete');
-        };
-        r.onerror = function(){
-            alert('error');
-        };
-        r.onabort = function(){
-            alert('abort');
-        };
-        r.send();
-        $.ajax({
-            url: StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/chat/mensagens?produto_id=' + obj.id_produto ,
-            type: 'GET', cache: false, async:true, dataType:'json',
-            headers: {
-                Authorization: 'Bearer ' + StorageGetItem("token")
-            },
-            contentType: "multipart/x-mixed-replace; boundary=frame",
-            success: function (result, textStatus, request) {
-                try {
-                    console.log(result);
-                } catch (error) {
-                    Mensagem(JSON.stringify(result), 'success');
-                }
-            },
-            error: function (request, textStatus, errorThrown) {
-                if (!MensagemErroAjax(request, errorThrown)) {
-                    try {
-                        var obj = $.parseJSON(request.responseText)
-                        Mensagem(obj.mensagem, 'warning', function () { this_.spa.find("#email").select(); });
-                    } catch (error) {
-                        Mensagem(request.responseText, 'error', function () { this_.spa.find("#email").select(); });
-                    }
-                }
-            }
-        });
-
-        var r = new XMLHttpRequest();
-        r.multipart = true;
-        r.open('GET', '/', true);
-        r.onreadystatechange = function () {
-            console.log(r.responseText.length);
-        };
-        r.send();
-        */
     }
 }
