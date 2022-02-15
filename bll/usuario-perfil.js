@@ -644,6 +644,7 @@ var UsuarioPerfil = {
                     <div class="l_collection_item orange grid_four red">
                         <div class="car_img">
                             <a href="detalhes-produto.html?carro=${favorito.id}"><img class="img-fluid" src="${url_imagem}" alt="Imagem principal"></a>
+                            ${SegmentoCarros.HtmlFaixaSuperiorProduto(favorito, 15, 20, 20)}
                         </div>
                         <div class="text_body">
                             <a href="product-details.html"><h4>${favorito.nome}</h4></a>
@@ -660,8 +661,42 @@ var UsuarioPerfil = {
                 </div>`
     },
 
+    HtmlFaixaSuperiorProduto: function (produto) {
+        var tooltipAlienado = (produto.alienado ? 'Alienado' : 'Quitado');
+        var imgAlienado = (produto.alienado ? 'tag-alienado.png' : 'tag-quitado.png');
+
+        var tooltipFavorito = (produto.favorito ? 'Desvaforitar' : 'Favoritar');
+        var imgFavorito = (produto.favorito ? 'favorite2.png' : 'favorite.png');
+
+        var styleSombra = "-webkit-filter: drop-shadow(1px 1px 1px #000); filter: drop-shadow(1px 1px 1px #000);";
+
+        return `
+        <div style="position: absolute; overflow: hidden; top: 0; width: 100%; height: auto; padding: 0px 5px 5px 5px;">
+            <img style="float: left; width: 15px; ` + styleSombra + `"
+                data-toggle="tooltip" data-placement="top" title="` + tooltipAlienado + `" 
+                src="img/` + imgAlienado + `"></img>
+            
+                <a class='favorito' href="#" style="float: right;"
+                    data-id-produto="` + produto.id + `">
+
+                    <img style="width: 20px; `+ styleSombra + `"
+                        data-toggle="tooltip" data-placement="top" title="` + tooltipFavorito + `" 
+                        src="img/` + imgFavorito + `" isfavorito="${produto.favorito}"></img>
+                </a>
+
+                <a class='compartilhar' href="#" style="float: right; margin: 0px 5px 0px 0px"
+                    data-url-compartilhar="` + produto.url_compartilhamento + `">
+
+                    <img style="width: 20px; ` + styleSombra + `"
+                        data-toggle="tooltip" data-placement="top" title="Compartilhar" 
+                        src="img/share.png"></img>
+                </a>
+        </div>`;
+    },
+
     EventFavoritoClick : function(){
         this_.spa.find("#nav_favorito").click(function(){
+            this_.CarregarComboOrdernacao();
             this_.ObterFavoritos();
         });
     },
@@ -675,6 +710,68 @@ var UsuarioPerfil = {
                 this_.RolamentoFavoritos.lote = 10;
                 this_.RolamentoFavoritos.favoritos = 1;
                 this_.ObterFavoritos();
+            }
+        });
+    },
+
+    Favoritar : function(){
+        $.ajax({
+            url: url_dinamica,
+            type: metodo_http, cache: false, async: true, dataType: 'json',
+            headers: {
+                'Authorization': "Bearer " + StorageGetItem("token")
+            },
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function (request, textStatus, errorThrown) {
+                // alert(request.mensagem);
+            },
+            error: function (request, textStatus, errorThrown) {
+                if (isfavorito) {
+                    $(this_).attr('isfavorito', 'false');
+                    $(this_).attr('src', 'img/favorite.png');
+                } else {
+                    $(this_).attr('isfavorito', 'true');
+                    $(this_).attr('src', 'img/favorite2.png');
+                }
+                alert(request.responseText);
+                var mensagem = undefined;
+                try {
+                    var obj = $.parseJSON(request.responseText)
+                    mensagem = obj.mensagem;
+                } catch (error) {
+                    mensagem = request.responseText;
+                }
+            }
+        });
+    },
+    
+    Desfavoritar : function(){
+        $.ajax({
+            url: url_dinamica,
+            type: metodo_http, cache: false, async: true, dataType: 'json',
+            headers: {
+                'Authorization': "Bearer " + StorageGetItem("token")
+            },
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function (request, textStatus, errorThrown) {
+                // alert(request.mensagem);
+            },
+            error: function (request, textStatus, errorThrown) {
+                if (isfavorito) {
+                    $(this_).attr('isfavorito', 'false');
+                    $(this_).attr('src', 'img/favorite.png');
+                } else {
+                    $(this_).attr('isfavorito', 'true');
+                    $(this_).attr('src', 'img/favorite2.png');
+                }
+                alert(request.responseText);
+                var mensagem = undefined;
+                try {
+                    var obj = $.parseJSON(request.responseText)
+                    mensagem = obj.mensagem;
+                } catch (error) {
+                    mensagem = request.responseText;
+                }
             }
         });
     }

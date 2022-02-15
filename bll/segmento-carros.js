@@ -277,7 +277,7 @@ var SegmentoCarros = {
         </div>`;
     },
 
-    HtmlFaixaSuperiorProduto: function (produto) {
+    HtmlFaixaSuperiorProduto: function (produto, widthImgAlienacao = 20, widthImgFavorito = 25, widthCompartilhamento = 20) {
         var tooltipAlienado = (produto.alienado ? 'Alienado' : 'Quitado');
         var imgAlienado = (produto.alienado ? 'tag-alienado.png' : 'tag-quitado.png');
 
@@ -288,14 +288,14 @@ var SegmentoCarros = {
 
         return `
         <div style="position: absolute; overflow: hidden; top: 0; width: 100%; height: auto; padding: 0px 5px 5px 5px;">
-            <img style="float: left; width: 20px; ` + styleSombra + `"
+            <img style="float: left; width: ${widthImgAlienacao}px; ` + styleSombra + `"
                 data-toggle="tooltip" data-placement="top" title="` + tooltipAlienado + `" 
                 src="img/` + imgAlienado + `"></img>
             
                 <a class='favorito' href="#" style="float: right;"
                     data-id-produto="` + produto.id + `">
 
-                    <img style="width: 25px; `+ styleSombra + `"
+                    <img style="width: ${widthImgFavorito}px; `+ styleSombra + `"
                         data-toggle="tooltip" data-placement="top" title="` + tooltipFavorito + `" 
                         src="img/` + imgFavorito + `" isfavorito="${produto.favorito}"></img>
                 </a>
@@ -303,7 +303,7 @@ var SegmentoCarros = {
                 <a class='compartilhar' href="#" style="float: right; margin: 0px 5px 0px 0px"
                     data-url-compartilhar="` + produto.url_compartilhamento + `">
 
-                    <img style="width: 20px; ` + styleSombra + `"
+                    <img style="width: ${widthCompartilhamento}px; ` + styleSombra + `"
                         data-toggle="tooltip" data-placement="top" title="Compartilhar" 
                         src="img/share.png"></img>
                 </a>
