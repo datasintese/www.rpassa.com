@@ -25,6 +25,14 @@ var UsuarioPerfil = {
         usuario_principal: null
     },
 
+    RolamentoFavoritos : {
+       orderby:4,
+       offset:0,
+       skip:0,
+       lote:10,
+       favoritos:1
+    },
+
     Construtor() {
         this_ = this;
         var baseTela = '.spa.our_service_area.service_two.p_100.perfil_usuario';
@@ -73,6 +81,7 @@ var UsuarioPerfil = {
         this.EventEscutarScrollHistoricoProposta();
         this.EventEscutarScrollHistoricoMensagem();
         this.EventEnviarMensagem();
+        this.ObterFavoritos();
     },
 
     CarregarDadosUsuario : function(){
@@ -552,6 +561,64 @@ var UsuarioPerfil = {
             }
         }
 
-        client.send();
+        this_.client.send();
+    },
+
+    ObterFavoritos : function(){
+        $.ajax({
+            url: StorageGetItem('api') + '/v1/mobile/carros?orderby=' + this_.RolamentoFavoritos.orderby + '&offset=' + this_.RolamentoFavoritos.offset + '&skip=' + this_.RolamentoFavoritos.skip + '&lote=' + this_.RolamentoFavoritos.lote + '&favoritos=1',
+            type: 'GET', cache: false, async: true, dataType:'json',
+            headers : {
+                Authorization: 'Bearer ' + StorageGetItem("token")
+            },
+            contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+            success : function(result, textStatus, request){
+                this_.RolamentoFavoritos.offset = result.offset;
+                this_.RolamentoFavoritos.lote = result.lote;
+                this_.RolamentoFavoritos.next_offset = result.next_offset;
+                this_.RolamentoFavoritos.skip = result.next_skip;
+
+                let favoritos_registros = result.registros; 
+
+                let html_favoritos = this_.spa.find("#segm_favorito");
+                html_favoritos.empty();
+                $.each(favoritos_registros, function (i, favorito) {
+                    html_favoritos.append(this_.HtmlFavoritos(favorito));
+                });
+            },
+            error : function(request, textStatus, errorThrown){
+                if (!MensagemErroAjax(request, errorThrown)) {
+                    try {
+                        var obj = $.parseJSON(request.responseText)
+                        Mensagem(obj.mensagem, 'warning', function () { this_.spa.find("#email").select(); });
+                    } catch (error) {
+                        Mensagem(request.responseText, 'error', function () { this_.spa.find("#email").select(); });
+                    }
+                }
+            }
+        });
+    },
+
+    HtmlFavoritos : function(favorito){
+        let url_imagem = localStorage.getItem('api') + '/v1/mobile/carros/' + favorito.id + '/imagens/' + favorito.imagem_hash + '?tipo=principal';
+
+        return `<div class="col-lg-4 col-md-4 col-sm-6 wow animated fadeInUp" data-wow-delay="0.2s">
+                    <div class="l_collection_item orange grid_four red">
+                        <div class="car_img">
+                            <a href="detalhes-produto.html?carro=${favorito.id}"><img class="img-fluid" src="${url_imagem}" alt="Imagem principal"></a>
+                        </div>
+                        <div class="text_body">
+                            <a href="product-details.html"><h4>${favorito.nome}</h4></a>
+                            <h5>R$ ${favorito.offset_preco}</h5>
+                            <p>Ano/Modelo: <span>${favorito.ano}</span></p>
+                            <p>Quilometragem: <span>${favorito.offset_km}</span></p>
+                        </div>
+                        <div class="text_footer">
+                            <a href="#"><i class="icon-engine"></i> 2500</a>
+                            <a href="#"><i class="icon-gear1"></i> Manual</a>
+                            <a href="#"><i class="icon-oil"></i>20/24</a>
+                        </div>
+                    </div>
+                </div>`
     }
 }
