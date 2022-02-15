@@ -229,6 +229,7 @@
 															<button type="submit" value="submit" class="btn submit_btn red form-control" >Alterar Dados</button>
 														</div>
 													</form>
+
 												</div>
 											</div>
 										</section>
@@ -286,11 +287,7 @@
 														</div>
 														<div class="right">
 															<div class="price_filter">
-																<h5>Sort by: </h5>
-																<select class="nice_select">
-																	<option value="1">Lowest Price</option>
-																	<option value="2">Medium Price</option>
-																	<option value="3">High Price</option>
+																<select id="order_by">
 																</select>
 															</div>
 														</div>
@@ -722,7 +719,7 @@
 									<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"><i class="icon-lock"></i>Alterar Senha</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"><i class="icon-heart"></i> <span id="favoritos">Favoritos ()</span></a>
+									<a class="nav-link" id="nav_favorito" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"><i class="icon-heart"></i> <span id="favoritos">Favoritos ()</span></a>
 								</li>
 								<li class="nav-item">
 									<a class="nav-link" id="aira-tab" data-toggle="tab" href="#aira" role="tab" aria-controls="aira" aria-selected="false" style="line-height: 2.0;"><i class="icon-setting"></i>Escolher por onde receber Propostas</a>
@@ -906,22 +903,23 @@
         <script src="js/popper.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
        
-        <!-- Extra Plugin js -->
-        <script src="vendors/datetimepicker/moment.js"></script>
-        <script src="vendors/datetimepicker/tempusdominus-bootstrap-4.min.js"></script>
-        <script src="vendors/nice-select/js/jquery.nice-select.min.js"></script>
-        <script src="vendors/owl-carousel/owl.carousel.min.js"></script>
-        <script src="vendors/isotope/imagesloaded.pkgd.min.js"></script>
-        <script src="vendors/isotope/isotope.pkgd.min.js"></script>
-        <script src="vendors/slick/slick.js"></script>
-        <script src="vendors/counter-up/jquery.waypoints.min.js"></script>
-        <script src="vendors/counter-up/jquery.counterup.min.js"></script>
-        <script src="vendors/nice-scroll/jquery.nicescroll.min.js"></script>
-        <script src="vendors/jquery-ui/jquery-ui.js"></script>
-        <script src="vendors/nice-scroll/jquery.nicescroll.min.js"></script>
-        <script src="vendors/nice-scroll/jquery.mCustomScrollbar.concat.min.js"></script>
-        <script src="vendors/popup/jquery.magnific-popup.min.js"></script>
-        <script src="vendors/animate-css/wow.min.js"></script>
+         <!-- Extra Plugin js -->
+		 <script src="vendors/datetimepicker/moment.js"></script>
+		 <script src="vendors/datetimepicker/tempusdominus-bootstrap-4.min.js"></script>
+		 <script src="vendors/nice-select/js/jquery.nice-select.min.js"></script>
+		 <script src="vendors/owl-carousel/owl.carousel.min.js"></script>
+		 <script src="vendors/isotope/imagesloaded.pkgd.min.js"></script>
+		 <script src="vendors/isotope/isotope.pkgd.min.js"></script>
+		 <script src="vendors/slick/slick.js"></script>
+		 <script src="vendors/counter-up/jquery.waypoints.min.js"></script>
+		 <script src="vendors/counter-up/jquery.counterup.min.js"></script>
+		 <script src="vendors/nice-scroll/jquery.nicescroll.min.js"></script>
+		 <script src="vendors/jquery-ui/jquery-ui.js"></script>
+		 <script src="vendors/nice-scroll/jquery.nicescroll.min.js"></script>
+		 <script src="vendors/nice-scroll/jquery.mCustomScrollbar.concat.min.js"></script>
+		 <script src="vendors/popup/jquery.magnific-popup.min.js"></script>
+		 <script src="vendors/animate-css/wow.min.js"></script>
+		 
         
         
         <script src="js/theme-dist.js"></script>

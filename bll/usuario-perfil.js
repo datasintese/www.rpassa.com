@@ -37,6 +37,7 @@ var UsuarioPerfil = {
         this_ = this;
         var baseTela = '.spa.our_service_area.service_two.p_100.perfil_usuario';
         this.spa = $(baseTela);
+
     },
 
     Inicializar(){
@@ -70,7 +71,9 @@ var UsuarioPerfil = {
             return;
         }
 
-        this_.spa.find("#historico_proposta").empty();
+        this.spa.find("#historico_proposta").empty();
+        this.CarregarComboOrdernacao();
+        
 
         this.CarregarDadosUsuario();
         this.CarregarDetalhesFavorito();
@@ -81,7 +84,39 @@ var UsuarioPerfil = {
         this.EventEscutarScrollHistoricoProposta();
         this.EventEscutarScrollHistoricoMensagem();
         this.EventEnviarMensagem();
-        this.ObterFavoritos();
+        this.EventFavoritoClick();
+        this.EventChangeOrdenacao();
+    },
+
+    CarregarComboOrdernacao : function(){
+
+        $.ajax({
+            url: localStorage.getItem('api') + '/v1/mobile/carros/ordenacao',
+            type: "GET", cache: false, async: true, contentData: 'json',
+            success: function (result, textStatus, request) {
+
+                let menu_ordernacao = this_.spa.find('#order_by');
+                menu_ordernacao.empty();
+                menu_ordernacao.append(`<option selected="selected" value="0">Ordenação</option>`);
+                $.each(result, function (i, obj) {
+                    menu_ordernacao.append(`<option value="${obj.id}">${obj.nome}</option>`);
+                });
+                menu_ordernacao.niceSelect();
+            },
+            error: function (request, textStatus, errorThrown) {
+                alert(JSON.stringify(request));
+
+                // if (!MensagemErroAjax(request, errorThrown)) {
+                //     try {
+                //         var obj = $.parseJSON(request.responseText)
+                //         Mensagem(obj.mensagem, 'warning');
+                //     } catch (error) {
+                //         Mensagem(request.responseText, 'warning');
+                //     }
+                // }
+            }
+        })
+      
     },
 
     CarregarDadosUsuario : function(){
@@ -518,6 +553,9 @@ var UsuarioPerfil = {
         }
         this_.client = new XMLHttpRequest();
 
+        var teste = new XMLHttpRequest();
+        teste.shift
+
         this_.client.multipart = true;
         this_.client.open('GET', StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/chat/mensagens?produto_id=' + obj.id_produto, true);
         this_.client.setRequestHeader('Authorization', 'Bearer ' + StorageGetItem("token"));
@@ -602,7 +640,7 @@ var UsuarioPerfil = {
     HtmlFavoritos : function(favorito){
         let url_imagem = localStorage.getItem('api') + '/v1/mobile/carros/' + favorito.id + '/imagens/' + favorito.imagem_hash + '?tipo=principal';
 
-        return `<div class="col-lg-4 col-md-4 col-sm-6 wow animated fadeInUp" data-wow-delay="0.2s">
+        return `<div class="col-lg-4 col-md-4 col-sm-6 " data-wow-delay="0.2s">
                     <div class="l_collection_item orange grid_four red">
                         <div class="car_img">
                             <a href="detalhes-produto.html?carro=${favorito.id}"><img class="img-fluid" src="${url_imagem}" alt="Imagem principal"></a>
@@ -620,5 +658,24 @@ var UsuarioPerfil = {
                         </div>
                     </div>
                 </div>`
+    },
+
+    EventFavoritoClick : function(){
+        this_.spa.find("#nav_favorito").click(function(){
+            this_.ObterFavoritos();
+        });
+    },
+
+    EventChangeOrdenacao : function(){
+        this_.spa.find('#order_by').change(function() {
+            if($(this).val() != 0){
+                this_.RolamentoFavoritos.orderby = $(this).val();
+                this_.RolamentoFavoritos.offset = 0;
+                this_.RolamentoFavoritos.skip = 0;
+                this_.RolamentoFavoritos.lote = 10;
+                this_.RolamentoFavoritos.favoritos = 1;
+                this_.ObterFavoritos();
+            }
+        });
     }
 }
