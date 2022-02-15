@@ -175,17 +175,17 @@ var SegmentoCarros = {
             url: localStorage.getItem('api') + '/v1/mobile/especificacoes/carro/valores?chave=categoria',
             type: "GET", cache: false, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
+            beforeSend: function(){
+                this_.ResetarOwlCarouselTiposNavegacao(carousel);
+            },
             success: function (result, textStatus, request) {
-                $.each(result, function (key, value) {
-                    if (value.contem_imagem) {
+                $.each(result, function (key, item) {
+                    if (item.contem_imagem) {
                         // valor (sedan)
-
-                        // car_browse_slider owl-carousel owl-loaded owl-drag
-
+                        carousel.owlCarousel('add', this_.HtmlItemTipoNavegacao(item)).owlCarousel('update');
                     }
                 });
-
-                this_.ResetarOwlCarouselTiposNavegacao(carousel);
+                carousel.owlCarousel('show');
             },
             error: function (request, textStatus, errorThrown) {
                 StorageClear();
@@ -239,14 +239,14 @@ var SegmentoCarros = {
         })
     },
 
-    HhtmlItemTipoNavegacao: function () {
-        let url_imagem = 'img/car/car-1.png';
+    HtmlItemTipoNavegacao: function (item) {
+        let url_imagem = localStorage.getItem('api') + '/v1/mobile/especificacoes/carro/valores/imagem?id_especificacao=' + item.id;
 
         return `<div class="item">
             <div class="car_c_item">
                 <a href="#"><img src="` + url_imagem + `" alt=""></a>
                 <a href="#">
-                    <h5>Conversível <span>(80)</span></h5>
+                    <h5>` + item.valor + ` <span>(80)</span></h5>
                 </a>
             </div>
         </div>`;
