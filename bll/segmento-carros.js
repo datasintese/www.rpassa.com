@@ -175,7 +175,7 @@ var SegmentoCarros = {
             url: localStorage.getItem('api') + '/v1/mobile/especificacoes/carro/valores?chave=categoria',
             type: "GET", cache: false, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
-            beforeSend: function(){
+            beforeSend: function () {
                 this_.ResetarOwlCarouselTiposNavegacao(carousel);
             },
             success: function (result, textStatus, request) {
