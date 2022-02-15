@@ -242,11 +242,22 @@ var SegmentoCarros = {
     HtmlItemTipoNavegacao: function (item) {
         let url_imagem = localStorage.getItem('api') + '/v1/mobile/especificacoes/carro/valores/imagem?id_especificacao=' + item.id;
 
+        $.ajax({
+            url: localStorage.getItem('api') + '/v1/mobile/analitico/carro?categoria=' + item.valor,
+            type: "GET", cache: false, async: true, contentData: 'json',
+            contentType: 'application/json;charset=utf-8',
+            success: async function (result, textStatus, request) {
+                $('span#analitico_categoria_' + item.valor).html('(' + result.total + ')');
+            },
+            error: function (request, textStatus, errorThrown) {
+            }
+        });
+
         return `<div class="item">
             <div class="car_c_item">
                 <a href="#"><img src="` + url_imagem + `" alt=""></a>
                 <a href="#">
-                    <h5>` + item.valor + ` <span>(80)</span></h5>
+                    <h5>` + item.valor + ` <span id=analitico_categoria_` + item.valor + `>(0)</span></h5>
                 </a>
             </div>
         </div>`;
@@ -295,7 +306,7 @@ var SegmentoCarros = {
                 <a class='favorito' href="#" style="float: right;"
                     data-id-produto="` + produto.id + `">
 
-                    <img style="width: ${widthImgFavorito}px; `+ styleSombra + `"
+                    <img style="width: ${widthImgFavorito}px; ` + styleSombra + `"
                         data-toggle="tooltip" data-placement="top" title="` + tooltipFavorito + `" 
                         src="img/` + imgFavorito + `" isfavorito="${produto.favorito}"></img>
                 </a>
