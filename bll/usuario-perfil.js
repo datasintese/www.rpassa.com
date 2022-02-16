@@ -26,12 +26,17 @@ var UsuarioPerfil = {
     },
 
     RolamentoFavoritos : {
-       orderby:4,
-       offset:0,
-       skip:0,
-       lote:10,
-       favoritos:1
+       orderby: 4,
+       offset: 0,
+       skip: 0,
+       lote: 9,
+       favoritos: 1,
+       next_skip: 0,
+       next_offset: 0
     },
+
+    QtdPaginas : 6,
+    PaginaAtual : 0, 
 
     Construtor() {
         this_ = this;
@@ -73,7 +78,6 @@ var UsuarioPerfil = {
 
         this.spa.find("#historico_proposta").empty();
         this.CarregarComboOrdernacao();
-        
 
         this.CarregarDadosUsuario();
         this.CarregarDetalhesFavorito();
@@ -84,8 +88,9 @@ var UsuarioPerfil = {
         this.EventEscutarScrollHistoricoProposta();
         this.EventEscutarScrollHistoricoMensagem();
         this.EventEnviarMensagem();
-        this.EventFavoritoClick();
+        this.EventMenuFavoritoClick();
         this.EventChangeOrdenacao();
+        
     },
 
     CarregarComboOrdernacao : function(){
@@ -603,44 +608,71 @@ var UsuarioPerfil = {
     },
 
     ObterFavoritos : function(){
-        $.ajax({
-            url: StorageGetItem('api') + '/v1/mobile/carros?orderby=' + this_.RolamentoFavoritos.orderby + '&offset=' + this_.RolamentoFavoritos.offset + '&skip=' + this_.RolamentoFavoritos.skip + '&lote=' + this_.RolamentoFavoritos.lote + '&favoritos=1',
-            type: 'GET', cache: false, async: true, dataType:'json',
-            headers : {
-                Authorization: 'Bearer ' + StorageGetItem("token")
-            },
-            contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-            success : function(result, textStatus, request){
-                this_.RolamentoFavoritos.offset = result.offset;
-                this_.RolamentoFavoritos.lote = result.lote;
-                this_.RolamentoFavoritos.next_offset = result.next_offset;
-                this_.RolamentoFavoritos.skip = result.next_skip;
 
-                let favoritos_registros = result.registros; 
+        return new Promise(function(resolve, reject) {
+            $.ajax({
+                url: StorageGetItem('api') + '/v1/mobile/carros?orderby=' + this_.RolamentoFavoritos.orderby + '&offset=' + this_.RolamentoFavoritos.offset + '&skip=' + this_.RolamentoFavoritos.skip + '&lote=' + this_.RolamentoFavoritos.lote + '&favoritos=1',
+                type: 'GET', cache: false, async: true, dataType:'json',
+                headers : {
+                    Authorization: 'Bearer ' + StorageGetItem("token")
+                },
+                contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+                beforeSend: function() {            
+                },
+                success: function(result, textStatus, request) {
+                    resolve(result) 
+                },
+                error: function(err) {
+                    reject(err) // Reject the promise and go to catch()
+                }
+            });
 
-                let html_favoritos = this_.spa.find("#segm_favorito");
-                html_favoritos.empty();
-                $.each(favoritos_registros, function (i, favorito) {
-                    html_favoritos.append(this_.HtmlFavoritos(favorito));
-                });
-            },
-            error : function(request, textStatus, errorThrown){
-                if (!MensagemErroAjax(request, errorThrown)) {
-                    try {
-                        var obj = $.parseJSON(request.responseText)
-                        Mensagem(obj.mensagem, 'warning', function () { this_.spa.find("#email").select(); });
-                    } catch (error) {
-                        Mensagem(request.responseText, 'error', function () { this_.spa.find("#email").select(); });
+            /*
+            $.ajax({
+                url: StorageGetItem('api') + '/v1/mobile/carros?orderby=' + this_.RolamentoFavoritos.orderby + '&offset=' + this_.RolamentoFavoritos.offset + '&skip=' + this_.RolamentoFavoritos.skip + '&lote=' + this_.RolamentoFavoritos.lote + '&favoritos=1',
+                type: 'GET', cache: false, async: false, dataType:'json',
+                headers : {
+                    Authorization: 'Bearer ' + StorageGetItem("token")
+                },
+                contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+                success : function(result, textStatus, request){
+    
+                    resolve(result);
+                        this_.RolamentoFavoritos.offset = result.offset;
+                        this_.RolamentoFavoritos.lote = result.lote;
+                        this_.RolamentoFavoritos.skip = result.next_skip;
+                        this_.RolamentoFavoritos.next_skip = result.next_skip;
+                        this_.RolamentoFavoritos.next_offset = result.next_offset;
+            
+                        let favoritos_registros = result.registros; 
+        
+                        let html_favoritos = this_.spa.find("#segm_favorito");
+                        //html_favoritos.empty();
+                        $.each(favoritos_registros, function (i, favorito) {
+                            html_favoritos.append(this_.HtmlFavoritos(favorito, numPage, exibirPagina));
+                        });
+                    
+                },
+                error : function(request, textStatus, errorThrown){
+                    if (!MensagemErroAjax(request, errorThrown)) {
+                        try {
+                            var obj = $.parseJSON(request.responseText)
+                            Mensagem(obj.mensagem, 'warning', function () { this_.spa.find("#email").select(); });
+                        } catch (error) {
+                            Mensagem(request.responseText, 'error', function () { this_.spa.find("#email").select(); });
+                        }
                     }
                 }
-            }
+            });
+            */
         });
+        
     },
 
-    HtmlFavoritos : function(favorito){
+    HtmlFavoritos : function(favorito, numPage, exibirPagina){
         let url_imagem = localStorage.getItem('api') + '/v1/mobile/carros/' + favorito.id + '/imagens/' + favorito.imagem_hash + '?tipo=principal';
 
-        return `<div class="col-lg-4 col-md-4 col-sm-6 " data-wow-delay="0.2s">
+        return `<div class="col-lg-4 col-md-4 col-sm-6 " data-wow-delay="0.2s" produto_id="${favorito.id}" numPage="${numPage}" style="display: ${exibirPagina ? "block" : "none" };">
                     <div class="l_collection_item orange grid_four red">
                         <div class="car_img">
                             <a href="detalhes-produto.html?carro=${favorito.id}"><img class="img-fluid" src="${url_imagem}" alt="Imagem principal"></a>
@@ -661,43 +693,102 @@ var UsuarioPerfil = {
                 </div>`
     },
 
-    HtmlFaixaSuperiorProduto: function (produto) {
-        var tooltipAlienado = (produto.alienado ? 'Alienado' : 'Quitado');
-        var imgAlienado = (produto.alienado ? 'tag-alienado.png' : 'tag-quitado.png');
-
-        var tooltipFavorito = (produto.favorito ? 'Desvaforitar' : 'Favoritar');
-        var imgFavorito = (produto.favorito ? 'favorite2.png' : 'favorite.png');
-
-        var styleSombra = "-webkit-filter: drop-shadow(1px 1px 1px #000); filter: drop-shadow(1px 1px 1px #000);";
-
-        return `
-        <div style="position: absolute; overflow: hidden; top: 0; width: 100%; height: auto; padding: 0px 5px 5px 5px;">
-            <img style="float: left; width: 15px; ` + styleSombra + `"
-                data-toggle="tooltip" data-placement="top" title="` + tooltipAlienado + `" 
-                src="img/` + imgAlienado + `"></img>
-            
-                <a class='favorito' href="#" style="float: right;"
-                    data-id-produto="` + produto.id + `">
-
-                    <img style="width: 20px; `+ styleSombra + `"
-                        data-toggle="tooltip" data-placement="top" title="` + tooltipFavorito + `" 
-                        src="img/` + imgFavorito + `" isfavorito="${produto.favorito}"></img>
-                </a>
-
-                <a class='compartilhar' href="#" style="float: right; margin: 0px 5px 0px 0px"
-                    data-url-compartilhar="` + produto.url_compartilhamento + `">
-
-                    <img style="width: 20px; ` + styleSombra + `"
-                        data-toggle="tooltip" data-placement="top" title="Compartilhar" 
-                        src="img/share.png"></img>
-                </a>
-        </div>`;
-    },
-
-    EventFavoritoClick : function(){
+    EventMenuFavoritoClick : function(){
         this_.spa.find("#nav_favorito").click(function(){
             this_.CarregarComboOrdernacao();
-            this_.ObterFavoritos();
+            this_.CarregarPaginasFavorito();
+            this_.EventFavoritoClick();
+            
+        });
+    },
+
+    CarregarPaginasFavorito : async function(){
+        let exibirPagina = true;
+
+        let pagination = this_.spa.find('ul.pagination');
+        pagination.empty();
+        pagination.append('<li class="page-item"><a class="page-link" href="#"><i class="icon-arrow"></i></a></li>');
+
+        for(let i = 1; i <= this_.QtdPaginas; i++){
+            let result = await this_.ObterFavoritos();
+
+            this_.RolamentoFavoritos.offset = result.offset;
+            this_.RolamentoFavoritos.lote = result.lote;
+            this_.RolamentoFavoritos.skip = result.next_skip;
+            this_.RolamentoFavoritos.next_skip = result.next_skip;
+            this_.RolamentoFavoritos.next_offset = result.next_offset;
+
+            let favoritos_registros = result.registros; 
+
+            let html_favoritos = this_.spa.find("#segm_favorito");
+
+            $.each(favoritos_registros, function (j, favorito) {
+                html_favoritos.append(this_.HtmlFavoritos(favorito, i, exibirPagina));
+            });
+
+            pagination.append(this_.HtmlPagination(i, exibirPagina))
+            exibirPagina =  false;
+            this_.RolamentoFavoritos.offset = this_.RolamentoFavoritos.next_offset;
+            this_.RolamentoFavoritos.skip = this_.RolamentoFavoritos.next_skip;
+     
+            if(this_.RolamentoFavoritos.next_skip < 0 || this_.RolamentoFavoritos.next_offset < 0){
+                // 
+                break;
+            }
+            
+        }
+
+        pagination.append('<li class="page-item"><a class="page-link" href="#"><i class="icon-arrow_2"></i></a></li>');
+        
+        this_.PaginaAtual = 1;
+        this_.EventClickPaginacao();
+    },
+
+    HtmlPagination : function(numPage, exibirPagina){
+
+        return `
+                    <li class="page-item ${exibirPagina? "active": ""}"><a class="page-link" href="#">${numPage}</a></li>
+                `
+    },
+
+    EventClickPaginacao : function(){
+        let html_favoritos = this_.spa.find("#segm_favorito");
+        let link_pagina = this_.spa.find("a.page-link");
+
+        link_pagina.click(function(event){
+            event.preventDefault();
+            let numPageClicked = $(this).text();
+
+            if(numPageClicked === ''){
+                let valor =  $(this).children().attr('class');
+                // Anterior
+                if(valor === 'icon-arrow'){
+                    numPageClicked = parseInt(this_.PaginaAtual) - 1;
+                    if(numPageClicked <= 0){
+                        return;
+                    }
+                }
+                // Próximo
+                else if(valor === 'icon-arrow_2'){
+                    numPageClicked = parseInt(this_.PaginaAtual) + 1;
+                }
+            }
+            console.log($(this));
+            this_.spa.find('.pagination li.page-item.active').attr('class', 'page-item');
+            $(this).parent().attr('class', 'page-item active');
+
+            html_favoritos.find(`div[numPage="${this_.PaginaAtual}"]`).each(function(i, element){
+                $(this).css('display','none');
+            });
+
+            html_favoritos.find(`div[numPage="${numPageClicked}"]`).each(function(i, element){
+                $(this).css('display','block');
+            });
+
+            this_.PaginaAtual = numPageClicked;
+
+            var target = this_.spa.find('#usuario_config').offset().top;
+            $("html, body").animate( { scrollTop: target } );
         });
     },
 
@@ -709,43 +800,48 @@ var UsuarioPerfil = {
                 this_.RolamentoFavoritos.skip = 0;
                 this_.RolamentoFavoritos.lote = 10;
                 this_.RolamentoFavoritos.favoritos = 1;
-                this_.ObterFavoritos();
+                this_.CarregarPaginasFavorito();
             }
         });
     },
 
-    Favoritar : function(){
-        $.ajax({
-            url: url_dinamica,
-            type: metodo_http, cache: false, async: true, dataType: 'json',
-            headers: {
-                'Authorization': "Bearer " + StorageGetItem("token")
-            },
-            contentType: "application/x-www-form-urlencoded; charset=utf-8",
-            success: function (request, textStatus, errorThrown) {
-                // alert(request.mensagem);
-            },
-            error: function (request, textStatus, errorThrown) {
-                if (isfavorito) {
-                    $(this_).attr('isfavorito', 'false');
-                    $(this_).attr('src', 'img/favorite.png');
-                } else {
-                    $(this_).attr('isfavorito', 'true');
-                    $(this_).attr('src', 'img/favorite2.png');
-                }
-                alert(request.responseText);
-                var mensagem = undefined;
-                try {
-                    var obj = $.parseJSON(request.responseText)
-                    mensagem = obj.mensagem;
-                } catch (error) {
-                    mensagem = request.responseText;
-                }
+    EventFavoritoClick : function(){
+        
+        let htmlFavorito = this_.spa.find("#segm_favorito");
+        htmlFavorito.find(".favorito img").click(function(event){
+            event.preventDefault();
+            if (!Logado()) {
+                Redirecionar('autenticacao.html');
+                return;
             }
+            this_.FavoritarDesfavoritar(this);
         });
     },
-    
-    Desfavoritar : function(){
+
+    FavoritarDesfavoritar : function(ref){
+
+        let produto = $(ref).closest('div[produto_id]').attr('produto_id');
+        let isfavorito = $(ref).attr('isfavorito') == "true";
+
+        let url_dinamica = "";
+        let metodo_http = "";
+
+        let this_ = ref;
+
+        if (isfavorito) {
+            isfavorito = false;
+            url_dinamica = StorageGetItem("api") + '/v1/mobile/carros/' + produto + '/desfavoritar'
+            metodo_http = "DELETE";
+            $(this_).attr('isfavorito', 'false');
+            $(this_).attr('src', 'img/favorite.png');
+        } else {
+            isfavorito = true;
+            url_dinamica = StorageGetItem("api") + '/v1/mobile/carros/' + produto + '/favoritar'
+            metodo_http = "POST";
+            $(this_).attr('isfavorito', 'true');
+            $(this_).attr('src', 'img/favorite2.png');
+        }
+
         $.ajax({
             url: url_dinamica,
             type: metodo_http, cache: false, async: true, dataType: 'json',
