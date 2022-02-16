@@ -3,19 +3,19 @@ var SegmentoCarros = {
 
     RolamentoPesquisa: {
         categoria_id: null,
-        orderby: 1,
+        orderby: 1, /* Mais Recentes */
         offset: 0,
         skip: 0,
         lote: 12,
         marcas_ids: null,
         modelos_ids: null,
-        categoria_id: null,
+        especificacoes_ids: null,
         km_min: null,
         km_max: null
     },
 
     RolamentoMaisRecentes: {
-        orderby: 1,
+        orderby: 1, /* Mais Recentes */
         offset: 0,
         skip: 0,
         lote: 12
@@ -100,21 +100,21 @@ var SegmentoCarros = {
                 let url_dinamica = "";
                 let metodo_http = "";
 
-                let this_ = this;
-
                 if (isfavorito) {
                     isfavorito = false;
                     url_dinamica = StorageGetItem("api") + '/v1/mobile/carros/' + produto + '/desfavoritar'
                     metodo_http = "DELETE";
-                    $(this_).attr('isfavorito', 'false');
-                    $(this_).attr('src', 'img/favorite.png');
+                    $(this).attr('isfavorito', 'false');
+                    $(this).attr('src', 'img/favorite.png');
                 } else {
                     isfavorito = true;
                     url_dinamica = StorageGetItem("api") + '/v1/mobile/carros/' + produto + '/favoritar'
                     metodo_http = "POST";
-                    $(this_).attr('isfavorito', 'true');
-                    $(this_).attr('src', 'img/favorite2.png');
+                    $(this).attr('isfavorito', 'true');
+                    $(this).attr('src', 'img/favorite2.png');
                 }
+
+                let this_ = this;
                 $.ajax({
                     url: url_dinamica,
                     type: metodo_http, cache: false, async: true, dataType: 'json',
@@ -145,14 +145,9 @@ var SegmentoCarros = {
                 });
             }
         });
-
-        $(document.body).on('click', '.compartilhar', function (event) {
-            event.preventDefault();
-            TelaCompartilhamento.ExibirTela($(this).attr('data-url-compartilhar'));
-        });
     },
 
-    Inicializar: function () {
+    Inicializar() {
         $('.spa>.segmento#carros').show();
 
         this.spa.find('.pesquisa').hide();
@@ -181,7 +176,6 @@ var SegmentoCarros = {
             success: function (result, textStatus, request) {
                 $.each(result, function (key, item) {
                     if (item.contem_imagem) {
-                        // valor (sedan)
                         carousel.owlCarousel('add', this_.HtmlItemTipoNavegacao(item)).owlCarousel('update');
                     }
                 });
@@ -247,7 +241,7 @@ var SegmentoCarros = {
             type: "GET", cache: false, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
             success: async function (result, textStatus, request) {
-                await sleep(300);
+                //await sleep(300);
                 $('span#analitico_categoria_' + item.valor).html('(' + result.total + ')');
             },
             error: function (request, textStatus, errorThrown) {
@@ -256,9 +250,9 @@ var SegmentoCarros = {
 
         return `<div class="item">
             <div class="car_c_item">
-                <a href="#"><img src="` + url_imagem + `" alt=""></a>
-                <a href="#">
-                    <h5>` + item.valor + ` <span id=analitico_categoria_` + item.valor + `>(0)</span></h5>
+                <a href="pesquisa-carro.html?especificacoes_ids=${encodeURIComponent("[" + item.id + "]")}"><img src="${url_imagem}" alt=""></a>
+                <a href="pesquisa-carro.html?especificacoes_ids=${encodeURIComponent("[" + item.id + "]")}">
+                    <h5>${item.valor} <span id=analitico_categoria_${item.valor}>(0)</span></h5>
                 </a>
             </div>
         </div>`;

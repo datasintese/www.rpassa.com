@@ -9,7 +9,7 @@ var PesquisaCarro = {
         lote: 12,
         marcas_ids: null,
         modelos_ids: null,
-        categoria_id: null,
+        especificacoes_ids: null,
         km_min: null,
         km_max: null
     },
@@ -18,11 +18,13 @@ var PesquisaCarro = {
         const urlSearchParams = new URLSearchParams(window.location.search);
         const params = Object.fromEntries(urlSearchParams.entries());
 
+        var this_ = this;
         this.Filtro = params;
-
+        $.each(this.Filtro, function (key, value) {
+            this_.RolamentoPesquisa[key] = JSON.parse(value);
+        });
 
         this.CarregarComboOrdenacao();
-
         this.Pesquisar(true);
     },
 
@@ -42,7 +44,7 @@ var PesquisaCarro = {
         params['lote'] = this_.RolamentoPesquisa.lote;
 
         $.each(this.RolamentoPesquisa, function (key, value) {
-            if (value > 0) {
+            if (value !== null) {
                 if (key.endsWith('_ids')) {
                     params[key] = '[' + value + ']'; // Coloca no formato de lista campos terminados em _ids
                 }
@@ -127,8 +129,10 @@ var PesquisaCarro = {
         return `<div class="col-lg-4 col-md-4 col-sm-6 wow animated fadeInUp" data-wow-delay="0.2s">
             <div class="l_collection_item orange grid_four red">
                 <div class="car_img">
-                    <a href="detalhes-produto.html?carro=${produto.id}"><img class="img-fluid"
+                    <a href="detalhes-produto.html?carro=${produto.id}">
+                        <img class="img-fluid"
                             src="${localStorage.getItem('api')}/v1/mobile/carros/${produto.id}/imagens/${produto.imagem_hash}?tipo=principal" alt=""></a>
+                        ${SegmentoCarros.HtmlFaixaSuperiorProduto(produto)}
                 </div>
                 <div class="text_body">
                     <a href="detalhes-produto.html?carro=${produto.id}">
@@ -158,3 +162,4 @@ var PesquisaCarro = {
 };
 
 PesquisaCarro.Inicializar();
+TelaCompartilhamento.Inicializar();

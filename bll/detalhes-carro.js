@@ -66,11 +66,6 @@ var DetalhesCarro = {
             }
         });
 
-        $(document.body).on('click', '.compartilhar', function (event) {
-            event.preventDefault();
-            TelaCompartilhamento.ExibirTela($(this).attr('data-url-compartilhar'));
-        });
-
         $(document.body).on('click', '.nav-item.nav-link', function (event) {
             event.preventDefault();
 
