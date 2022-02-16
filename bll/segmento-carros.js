@@ -247,6 +247,7 @@ var SegmentoCarros = {
             type: "GET", cache: false, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
             success: async function (result, textStatus, request) {
+                await sleep(300);
                 $('span#analitico_categoria_' + item.valor).html('(' + result.total + ')');
             },
             error: function (request, textStatus, errorThrown) {
