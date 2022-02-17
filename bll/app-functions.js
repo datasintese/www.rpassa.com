@@ -30,7 +30,7 @@ function MensagemErroAjax(request, errorThrown) {
 
 function Mensagem(text, icon, then_func, target) {
     const swalCustom = Swal.mixin({
-        target: target,
+        target: target ?? 'body',
         heightAuto: true,
         customClass: {
             content: 'text-muted',

@@ -26,6 +26,7 @@
         <!-- main css -->
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/responsive.css">
+		<link rel="stylesheet" href="css/chat.css">
     </head>
     <body data-scroll-animation="true">
         
@@ -165,7 +166,7 @@
 	<!--================End Breadcrumb Area =================-->
 	
 	<!--================Our Service Area =================-->
-	<section class="our_service_area service_two p_100">
+	<section class="spa our_service_area service_two p_100 perfil_usuario">
 		<div class="container" id="usuario_config">
 			<div class="flag_center_title wow animated fadeInUp" data-wow-delay="0.2s">
 				<h2><img src="img/icon/flag-2.png" alt="">Usuário</h2>
@@ -228,6 +229,7 @@
 															<button type="submit" value="submit" class="btn submit_btn red form-control" >Alterar Dados</button>
 														</div>
 													</form>
+
 												</div>
 											</div>
 										</section>
@@ -284,22 +286,15 @@
 															<h4><img src="img/icon/flag-4.png" alt="" height="20px">Favoritos</h4>
 														</div>
 														<div class="right">
-															<div class="grid">
-																<a class="active" href="#"><i class="icon-th"></i></a>
-																<a href="#"><i class="icon-list-ul"></i></a>
-															</div>
 															<div class="price_filter">
-																<h5>Sort by: </h5>
-																<select class="nice_select">
-																	<option value="1">Lowest Price</option>
-																	<option value="2">Medium Price</option>
-																	<option value="3">High Price</option>
+																<select id="order_by">
 																</select>
 															</div>
 														</div>
 													</div>
 													<div class="product_grid_inner">
-														<div class="row">
+														<div class="row" id="segm_favorito">
+															<!-- Exemplo favorito
 															<div class="col-lg-4 col-md-4 col-sm-6 wow animated fadeInUp" data-wow-delay="0.2s">
 																<div class="l_collection_item orange grid_four red">
 																	<div class="car_img">
@@ -317,235 +312,11 @@
 																	</div>
 																</div>
 															</div>
-															<div class="col-lg-4 col-md-4 col-sm-6 wow animated fadeInUp" data-wow-delay="0.3s">
-																<div class="l_collection_item orange grid_four red">
-																	<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-grid-four/car-3.jpg" alt=""></a>
-																	</div>
-																	<div class="text_body">
-																		<a href="product-details.html"><h4>Audi A8 Hybrid</h4></a>
-																		<h5>$16,000</h5>
-																		<p>Build year: <span>2015</span></p>
-																	</div>
-																	<div class="text_footer">
-																		<a href="#"><i class="icon-engine"></i> 2500</a>
-																		<a href="#"><i class="icon-gear1"></i> Manual</a>
-																		<a href="#"><i class="icon-oil"></i>20/24</a>
-																	</div>
-																</div>
-															</div>
-															<div class="col-lg-4 col-md-4 col-sm-6 wow animated fadeInUp" data-wow-delay="0.4s">
-																<div class="l_collection_item orange grid_four red">
-																	<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-grid-four/car-4.jpg" alt=""></a>
-																	</div>
-																	<div class="text_body">
-																		<a href="product-details.html"><h4>Ford Mustang GT</h4></a>
-																		<h5>$16,000</h5>
-																		<p>Build year: <span>2015</span></p>
-																	</div>
-																	<div class="text_footer">
-																		<a href="#"><i class="icon-engine"></i> 2500</a>
-																		<a href="#"><i class="icon-gear1"></i> Manual</a>
-																		<a href="#"><i class="icon-oil"></i>20/24</a>
-																	</div>
-																</div>
-															</div>
-															<div class="col-lg-4 col-md-4 col-sm-6 wow animated fadeInUp" data-wow-delay="0.5s">
-																<div class="l_collection_item orange grid_four red">
-																	<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-grid-four/car-9.jpg" alt=""></a>
-																	</div>
-																	<div class="text_body">
-																		<a href="product-details.html"><h4>Jaguer M1 Hybrid</h4></a>
-																		<h5>$16,000</h5>
-																		<p>Build year: <span>2015</span></p>
-																	</div>
-																	<div class="text_footer">
-																		<a href="#"><i class="icon-engine"></i> 2500</a>
-																		<a href="#"><i class="icon-gear1"></i> Manual</a>
-																		<a href="#"><i class="icon-oil"></i>20/24</a>
-																	</div>
-																</div>
-															</div>
-															<div class="col-lg-4 col-md-4 col-sm-6 wow animated fadeInUp" data-wow-delay="0.6s">
-																<div class="l_collection_item orange grid_four red">
-																	<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-grid-four/car-10.jpg" alt=""></a>
-																	</div>
-																	<div class="text_body">
-																		<a href="product-details.html"><h4>Audi A8 Hybrid</h4></a>
-																		<h5>$16,000</h5>
-																		<p>Build year: <span>2015</span></p>
-																	</div>
-																	<div class="text_footer">
-																		<a href="#"><i class="icon-engine"></i> 2500</a>
-																		<a href="#"><i class="icon-gear1"></i> Manual</a>
-																		<a href="#"><i class="icon-oil"></i>20/24</a>
-																	</div>
-																</div>
-															</div>
-															<div class="col-lg-4 col-md-4 col-sm-6 wow animated fadeInUp" data-wow-delay="0.7s">
-																<div class="l_collection_item orange grid_four red">
-																	<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-grid-four/car-11.jpg" alt=""></a>
-																	</div>
-																	<div class="text_body">
-																		<a href="product-details.html"><h4>Bugatti Venon</h4></a>
-																		<h5>$16,000</h5>
-																		<p>Build year: <span>2015</span></p>
-																	</div>
-																	<div class="text_footer">
-																		<a href="#"><i class="icon-engine"></i> 2500</a>
-																		<a href="#"><i class="icon-gear1"></i> Manual</a>
-																		<a href="#"><i class="icon-oil"></i>20/24</a>
-																	</div>
-																</div>
-															</div>
-															<div class="col-lg-4 col-md-4 col-sm-6 wow animated fadeInUp" data-wow-delay="0.8s">
-																<div class="l_collection_item orange grid_four red">
-																	<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-grid-four/car-7.jpg" alt=""></a>
-																	</div>
-																	<div class="text_body">
-																		<a href="product-details.html"><h4>Audi A8 Hybrid</h4></a>
-																		<h5>$16,000</h5>
-																		<p>Build year: <span>2015</span></p>
-																	</div>
-																	<div class="text_footer">
-																		<a href="#"><i class="icon-engine"></i> 2500</a>
-																		<a href="#"><i class="icon-gear1"></i> Manual</a>
-																		<a href="#"><i class="icon-oil"></i>20/24</a>
-																	</div>
-																</div>
-															</div>
-															<div class="col-lg-4 col-md-4 col-sm-6 wow animated fadeInUp" data-wow-delay="0.9s">
-																<div class="l_collection_item orange grid_four red">
-																	<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-grid-four/car-8.jpg" alt=""></a>
-																	</div>
-																	<div class="text_body">
-																		<a href="product-details.html"><h4>Bugatti Venon</h4></a>
-																		<h5>$16,000</h5>
-																		<p>Build year: <span>2015</span></p>
-																	</div>
-																	<div class="text_footer">
-																		<a href="#"><i class="icon-engine"></i> 2500</a>
-																		<a href="#"><i class="icon-gear1"></i> Manual</a>
-																		<a href="#"><i class="icon-oil"></i>20/24</a>
-																	</div>
-																</div>
-															</div>
-															<div class="col-lg-4 col-md-4 col-sm-6 wow animated fadeInUp" data-wow-delay="1s">
-																<div class="l_collection_item orange grid_four red">
-																	<div class="car_img">
-																		<a href="product-details.html"><img class="img-fluid" src="img/product/car-grid-four/car-1.jpg" alt=""></a>
-																	</div>
-																	<div class="text_body">
-																		<a href="product-details.html"><h4>Jaguer M1 Hybrid</h4></a>
-																		<h5>$16,000</h5>
-																		<p>Build year: <span>2015</span></p>
-																	</div>
-																	<div class="text_footer">
-																		<a href="#"><i class="icon-engine"></i> 2500</a>
-																		<a href="#"><i class="icon-gear1"></i> Manual</a>
-																		<a href="#"><i class="icon-oil"></i>20/24</a>
-																	</div>
-																</div>
-															</div>
-															<div class="col-lg-4 col-md-4 col-sm-6 wow animated fadeInUp" data-wow-delay="1.1s">
-																<div class="l_collection_item orange grid_four red">
-																	<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-grid-four/car-12.jpg" alt=""></a>
-																	</div>
-																	<div class="text_body">
-																		<a href="product-details.html"><h4>Ferrari 356</h4></a>
-																		<h5>$16,000</h5>
-																		<p>Build year: <span>2015</span></p>
-																	</div>
-																	<div class="text_footer">
-																		<a href="#"><i class="icon-engine"></i> 2500</a>
-																		<a href="#"><i class="icon-gear1"></i> Manual</a>
-																		<a href="#"><i class="icon-oil"></i>20/24</a>
-																	</div>
-																</div>
-															</div>
-															<div class="col-lg-4 col-md-4 col-sm-6 wow animated fadeInUp" data-wow-delay="1.2s">
-																<div class="l_collection_item orange grid_four red">
-																	<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-grid-four/car-13.jpg" alt=""></a>
-																	</div>
-																	<div class="text_body">
-																		<a href="product-details.html"><h4>Aventador</h4></a>
-																		<h5>$16,000</h5>
-																		<p>Build year: <span>2015</span></p>
-																	</div>
-																	<div class="text_footer">
-																		<a href="#"><i class="icon-engine"></i> 2500</a>
-																		<a href="#"><i class="icon-gear1"></i> Manual</a>
-																		<a href="#"><i class="icon-oil"></i>20/24</a>
-																	</div>
-																</div>
-															</div>
-															<div class="col-lg-4 col-md-4 col-sm-6 wow animated fadeInUp" data-wow-delay="1.3s">
-																<div class="l_collection_item orange grid_four red">
-																	<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-grid-four/car-14.jpg" alt=""></a>
-																	</div>
-																	<div class="text_body">
-																		<a href="product-details.html"><h4>Mitsubishi Classic</h4></a>
-																		<h5>$16,000</h5>
-																		<p>Build year: <span>2015</span></p>
-																	</div>
-																	<div class="text_footer">
-																		<a href="#"><i class="icon-engine"></i> 2500</a>
-																		<a href="#"><i class="icon-gear1"></i> Manual</a>
-																		<a href="#"><i class="icon-oil"></i>20/24</a>
-																	</div>
-																</div>
-															</div>
-															<div class="col-lg-4 col-md-4 col-sm-6 wow animated fadeInUp" data-wow-delay="1.4s">
-																<div class="l_collection_item orange grid_four red">
-																	<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-grid-four/car-15.jpg" alt=""></a>
-																	</div>
-																	<div class="text_body">
-																		<a href="product-details.html"><h4>Bently Corvet</h4></a>
-																		<h5>$16,000</h5>
-																		<p>Build year: <span>2015</span></p>
-																	</div>
-																	<div class="text_footer">
-																		<a href="#"><i class="icon-engine"></i> 2500</a>
-																		<a href="#"><i class="icon-gear1"></i> Manual</a>
-																		<a href="#"><i class="icon-oil"></i>20/24</a>
-																	</div>
-																</div>
-															</div>
-															<div class="col-lg-4 col-md-4 col-sm-6 wow animated fadeInUp" data-wow-delay="1.5s">
-																<div class="l_collection_item orange grid_four red">
-																	<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-grid-four/car-6.jpg" alt=""></a>
-																	</div>
-																	<div class="text_body">
-																		<a href="product-details.html"><h4>Lambo Gallardo</h4></a>
-																		<h5>$16,000</h5>
-																		<p>Build year: <span>2015</span></p>
-																	</div>
-																	<div class="text_footer">
-																		<a href="#"><i class="icon-engine"></i> 2500</a>
-																		<a href="#"><i class="icon-gear1"></i> Manual</a>
-																		<a href="#"><i class="icon-oil"></i>20/24</a>
-																	</div>
-																</div>
-															</div>
-															<div class="col-lg-4 col-md-4 col-sm-6 wow animated fadeInUp" data-wow-delay="1.6s">
-																<div class="l_collection_item orange grid_four red">
-																	<div class="car_img"><a href="product-details.html"><img class="img-fluid" src="img/product/car-grid-four/car-4.jpg" alt=""></a>
-																	</div>
-																	<div class="text_body">
-																		<a href="product-details.html"><h4>Jaguer Hybrid</h4></a>
-																		<h5>$16,000</h5>
-																		<p>Build year: <span>2015</span></p>
-																	</div>
-																	<div class="text_footer">
-																		<a href="#"><i class="icon-engine"></i> 2500</a>
-																		<a href="#"><i class="icon-gear1"></i> Manual</a>
-																		<a href="#"><i class="icon-oil"></i>20/24</a>
-																	</div>
-																</div>
-															</div>
+															-->
 														</div>
 													</div>
-													<nav aria-label="Page navigation example" class="pagination justify-content-center">
-														<ul class="pagination">
+													<nav aria-label="Page navigation example" class="pagination justify-content-center" style="padding-bottom: 5px;">
+														<ul class="pagination" id="">
 															<li class="page-item"><a class="page-link" href="#"><i class="icon-arrow"></i></a></li>
 															<li class="page-item active"><a class="page-link" href="#">1</a></li>
 															<li class="page-item"><a class="page-link" href="#">2</a></li>
@@ -622,35 +393,90 @@
 													<h4><img src="img/icon/flag-4.png" alt="" height="20px">Propostas</h4>
 												</div>
 												<!--================My Proposal Area=================-->
-												<div class="create_account_box">
-													<!-- 
-													<h6>Sign up with social network</h6>
-													<div class="social_singup">
-														<a href="#"><i class="fa fa-google-plus"></i></a>
-														<a href="#"><i class="fa fa-facebook"></i></a>
-														<a href="#"><i class="fa fa-twitter"></i></a>
+												<div class="row clearfix">
+													<div class="col-lg-12">
+														<div class="card chat-app">
+															<div id="plist" class="people-list">
+																<div class="input-group">
+																	<div class="input-group-prepend">
+																		<span class="input-group-text"><i class="fa fa-search"></i></span>
+																	</div>
+																	<input type="text" class="form-control" placeholder="Search...">
+																</div>
+																<ul class="list-unstyled chat-list mt-2 mb-0" id="historico_proposta">
+																	<!-- Exemplo de histórico do chat 
+																	<li class="clearfix">
+																		<img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar">
+																		
+																		<div class="about">
+																			<div class="name">Vincent Porter</div>
+																			<div class="status"> <i class="fa fa-circle offline"></i> left 7 mins ago </div>                                            
+																		</div>
+																		
+																	</li>
+																	-->
+																</ul>
+															</div>
+															<div class="chat">
+																<div class="chat-header clearfix" id="cabecalho_proposta">
+																	<!-- Exemplo de cabeçalho do chat
+																	<div class="row">
+																		<div class="col-lg-6">
+																			
+																			<a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
+																				<img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar">
+																			</a>
+																			<div class="chat-about">
+																				<h6 class="m-b-0">Aiden Chavez</h6>
+																				<small>Last seen: 2 hours ago</small>
+																			</div>
+																			
+																		</div>
+																		<div class="col-lg-6 hidden-sm text-right">
+																			<a href="javascript:void(0);" class="btn btn-outline-secondary"><i class="fa fa-camera"></i></a>
+																			<a href="javascript:void(0);" class="btn btn-outline-primary"><i class="fa fa-image"></i></a>
+																			<a href="javascript:void(0);" class="btn btn-outline-info"><i class="fa fa-cogs"></i></a>
+																			<a href="javascript:void(0);" class="btn btn-outline-warning"><i class="fa fa-question"></i></a>
+																		</div>
+																	</div>
+																	-->
+																</div>
+																<div class="chat-history">
+																	<ul class="m-b-0" id="historico_mensagem">
+																		<!-- Exemplo de mensagem
+																		<li class="clearfix">
+																			<div class="message-data text-right">
+																				<span class="message-data-time">10:10 AM, Today</span>
+																				<img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">
+																			</div>
+																			<div class="message other-message float-right"> Hi Aiden, how are you? How is the project coming along? </div>
+																		</li>
+																		<li class="clearfix">
+																			<div class="message-data">
+																				<span class="message-data-time">10:12 AM, Today</span>
+																			</div>
+																			<div class="message my-message">Are we meeting today?</div>                                    
+																		</li>                               
+																		<li class="clearfix">
+																			<div class="message-data">
+																				<span class="message-data-time">10:15 AM, Today</span>
+																			</div>
+																			<div class="message my-message">Project has been already finished and I have results to show you.</div>
+																		</li>
+																		-->
+																	</ul>
+																</div>
+																<div class="chat-message clearfix">
+																	<div class="input-group mb-0">
+																		<div class="input-group-prepend">
+																			<span class="input-group-text"><i class="fa fa-send"></i></span>
+																		</div>
+																		<input type="text" class="form-control" id="envio_mensagem" placeholder="Faça uma poposta">                                    
+																	</div>
+																</div>
+															</div>
+														</div>
 													</div>
-													<div class="or">
-														<p>or</p>
-													</div>
-													--->
-													<form class="row contact_form" method="POST"  id="contactForm">
-														<div class="form-group col-md-12">
-															<input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" >
-														</div>
-														<div class="form-group col-md-12">
-															<input type="text" class="form-control" id="cpf" name="cpf" placeholder="Cpf" >
-														</div>
-														<div class="form-group col-md-12">
-															<input type="email" class="form-control" id="email" name="email" placeholder="Email" >
-														</div>
-														<div class="form-group col-md-12">
-															<input type="text" class="form-control" id="celular" name="celular" placeholder="Telefone" >
-														</div>
-														<div class="form-group col-md-12">
-															<button type="submit" value="submit" class="btn submit_btn red form-control" >Alterar Dados</button>
-														</div>
-													</form>
 												</div>
 											</div>
 										</section>
@@ -670,7 +496,7 @@
 									<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"><i class="icon-lock"></i>Alterar Senha</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"><i class="icon-heart"></i> <span id="favoritos">Favoritos ()</span></a>
+									<a class="nav-link" id="nav_favorito" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"><i class="icon-heart"></i> <span id="favoritos">Favoritos ()</span></a>
 								</li>
 								<li class="nav-item">
 									<a class="nav-link" id="aira-tab" data-toggle="tab" href="#aira" role="tab" aria-controls="aira" aria-selected="false" style="line-height: 2.0;"><i class="icon-setting"></i>Escolher por onde receber Propostas</a>
@@ -854,22 +680,23 @@
         <script src="js/popper.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
        
-        <!-- Extra Plugin js -->
-        <script src="vendors/datetimepicker/moment.js"></script>
-        <script src="vendors/datetimepicker/tempusdominus-bootstrap-4.min.js"></script>
-        <script src="vendors/nice-select/js/jquery.nice-select.min.js"></script>
-        <script src="vendors/owl-carousel/owl.carousel.min.js"></script>
-        <script src="vendors/isotope/imagesloaded.pkgd.min.js"></script>
-        <script src="vendors/isotope/isotope.pkgd.min.js"></script>
-        <script src="vendors/slick/slick.js"></script>
-        <script src="vendors/counter-up/jquery.waypoints.min.js"></script>
-        <script src="vendors/counter-up/jquery.counterup.min.js"></script>
-        <script src="vendors/nice-scroll/jquery.nicescroll.min.js"></script>
-        <script src="vendors/jquery-ui/jquery-ui.js"></script>
-        <script src="vendors/nice-scroll/jquery.nicescroll.min.js"></script>
-        <script src="vendors/nice-scroll/jquery.mCustomScrollbar.concat.min.js"></script>
-        <script src="vendors/popup/jquery.magnific-popup.min.js"></script>
-        <script src="vendors/animate-css/wow.min.js"></script>
+         <!-- Extra Plugin js -->
+		 <script src="vendors/datetimepicker/moment.js"></script>
+		 <script src="vendors/datetimepicker/tempusdominus-bootstrap-4.min.js"></script>
+		 <script src="vendors/nice-select/js/jquery.nice-select.min.js"></script>
+		 <script src="vendors/owl-carousel/owl.carousel.min.js"></script>
+		 <script src="vendors/isotope/imagesloaded.pkgd.min.js"></script>
+		 <script src="vendors/isotope/isotope.pkgd.min.js"></script>
+		 <script src="vendors/slick/slick.js"></script>
+		 <script src="vendors/counter-up/jquery.waypoints.min.js"></script>
+		 <script src="vendors/counter-up/jquery.counterup.min.js"></script>
+		 <script src="vendors/nice-scroll/jquery.nicescroll.min.js"></script>
+		 <script src="vendors/jquery-ui/jquery-ui.js"></script>
+		 <script src="vendors/nice-scroll/jquery.nicescroll.min.js"></script>
+		 <script src="vendors/nice-scroll/jquery.mCustomScrollbar.concat.min.js"></script>
+		 <script src="vendors/popup/jquery.magnific-popup.min.js"></script>
+		 <script src="vendors/animate-css/wow.min.js"></script>
+		 
         
         
         <script src="js/theme-dist.js"></script>
@@ -887,11 +714,10 @@
 		<script src="bll/app-settings.js"></script>
 		<script src="bll/app-functions.js"></script>
 		<script src="bll/compartilhamento.js"></script>
-		<script src="bll/segmento-carros.js"></script>
-		<script src="bll/index.js"></script>
+		<script src="bll/usuario-perfil.js"></script>
 		<script src="bll/usuario.js"></script>
+		<script src="bll/segmento-carros.js"></script>
 		<script src="bll/rodape.js"></script>
-		<script src="bll/detalhes-carro.js"></script>
 		<!--RPassa-->
     </body>
 </html>

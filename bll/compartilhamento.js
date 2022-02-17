@@ -43,6 +43,11 @@ var TelaCompartilhamento = {
                     .tooltip({ items: "input" }).tooltip("show");
             }
         });
+
+        $(document.body).on('click', '.compartilhar', function (event) {
+            event.preventDefault();
+            TelaCompartilhamento.ExibirTela($(this).attr('data-url-compartilhar'));
+        });
     },
 
     DependenciasCss: function () {
