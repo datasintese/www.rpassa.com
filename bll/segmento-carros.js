@@ -168,16 +168,16 @@ var SegmentoCarros = {
 
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/especificacoes/carro/valores?chave=categoria',
-            type: "GET", cache: false, async: true, contentData: 'json',
+            type: "GET", cache: true, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
             beforeSend: function () {
                 this_.ResetarOwlCarouselTiposNavegacao(carousel);
             },
             success: function (result, textStatus, request) {
                 $.each(result, function (key, item) {
-                    if (item.contem_imagem) {
-                        carousel.owlCarousel('add', this_.HtmlItemTipoNavegacao(item)).owlCarousel('update');
-                    }
+                    // if (item.contem_imagem) {
+                    carousel.owlCarousel('add', this_.HtmlItemTipoNavegacao(item)).owlCarousel('update');
+                    // }
                 });
                 carousel.owlCarousel('show');
             },
@@ -197,6 +197,8 @@ var SegmentoCarros = {
             }
         });
     },
+
+   
 
     ResetarOwlCarouselTiposNavegacao(carousel) {
         carousel.trigger('destroy.owl.carousel');
@@ -236,13 +238,17 @@ var SegmentoCarros = {
     HtmlItemTipoNavegacao: function (item) {
         let url_imagem = localStorage.getItem('api') + '/v1/mobile/especificacoes/carro/valores/imagem?id_especificacao=' + item.id;
 
+        if (!item.contem_imagem) {
+            url_imagem = './img/car/car-2.png';
+        }
+
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/analitico/carro?categoria=' + item.valor,
-            type: "GET", cache: false, async: true, contentData: 'json',
+            type: "GET", cache: true, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
             success: async function (result, textStatus, request) {
-                //await sleep(300);
-                $('span#analitico_categoria_' + item.valor).html('(' + result.total + ')');
+                await sleep(300);
+                $('span#analitico_categoria_' + item.valor.replace('/','_')).html('(' + result.total + ')');
             },
             error: function (request, textStatus, errorThrown) {
             }
@@ -252,7 +258,7 @@ var SegmentoCarros = {
             <div class="car_c_item">
                 <a href="pesquisa-carro.html?especificacoes_ids=${encodeURIComponent("[" + item.id + "]")}"><img src="${url_imagem}" alt=""></a>
                 <a href="pesquisa-carro.html?especificacoes_ids=${encodeURIComponent("[" + item.id + "]")}">
-                    <h5>${item.valor} <span id=analitico_categoria_${item.valor}>(0)</span></h5>
+                    <h5>${item.valor} <span id=analitico_categoria_${item.valor.replace('/','_')}>(0)</span></h5>
                 </a>
             </div>
         </div>`;
@@ -390,7 +396,7 @@ var SegmentoCarros = {
         params['lote'] = this_.RolamentoPesquisa.lote;
 
         $.each(this.RolamentoPesquisa, function (key, value) {
-            if (value > 0) {
+            if (value != null) {
                 if (key.endsWith('_ids')) {
                     params[key] = '[' + value + ']'; // Coloca no formato de lista campos terminados em _ids
                 }
@@ -404,7 +410,7 @@ var SegmentoCarros = {
 
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/carros',
-            type: "GET", cache: false, async: true, contentData: 'json',
+            type: "GET", cache: true, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
             beforeSend: function (xhr) {
                 if (Logado()) {
@@ -454,7 +460,7 @@ var SegmentoCarros = {
 
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/carros',
-            type: "GET", cache: false, async: true, contentData: 'json',
+            type: "GET", cache: true, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
             beforeSend: function (xhr) {
                 if (Logado()) {
@@ -547,7 +553,7 @@ var SegmentoCarros = {
 
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/carros',
-            type: "GET", cache: false, async: true, contentData: 'json',
+            type: "GET", cache: true, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
             beforeSend: function (xhr) {
                 if (Logado()) {
@@ -614,7 +620,7 @@ var SegmentoCarros = {
 
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/categorias',
-            type: "GET", cache: false, async: true, contentData: 'json',
+            type: "GET", cache: true, async: true, contentData: 'json',
             success: function (result, textStatus, request) {
 
                 $.each(result, function (i, obj) {
@@ -644,7 +650,7 @@ var SegmentoCarros = {
 
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/carros/marcas',
-            type: "GET", cache: false, async: true, contentData: 'json',
+            type: "GET", cache: true, async: true, contentData: 'json',
             success: function (result, textStatus, request) {
 
                 $.each(result, function (i, obj) {
@@ -676,7 +682,7 @@ var SegmentoCarros = {
 
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/carros/modelos?marca_id=' + marca_id,
-            type: "GET", cache: false, async: true, contentData: 'json',
+            type: "GET", cache: true, async: true, contentData: 'json',
             success: function (result, textStatus, request) {
 
                 $.each(result, function (i, obj) {
@@ -706,7 +712,7 @@ var SegmentoCarros = {
 
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/carros/quilometragem',
-            type: "GET", cache: false, async: true, contentData: 'json',
+            type: "GET", cache: true, async: true, contentData: 'json',
             success: function (result, textStatus, request) {
 
                 $.each(result, function (i, obj) {
