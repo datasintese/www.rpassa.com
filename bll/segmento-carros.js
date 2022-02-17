@@ -168,7 +168,7 @@ var SegmentoCarros = {
 
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/especificacoes/carro/valores?chave=categoria',
-            type: "GET", cache: false, async: true, contentData: 'json',
+            type: "GET", cache: true, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
             beforeSend: function () {
                 this_.ResetarOwlCarouselTiposNavegacao(carousel);
@@ -244,7 +244,7 @@ var SegmentoCarros = {
 
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/analitico/carro?categoria=' + item.valor,
-            type: "GET", cache: false, async: true, contentData: 'json',
+            type: "GET", cache: true, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
             success: async function (result, textStatus, request) {
                 await sleep(300);
@@ -396,7 +396,7 @@ var SegmentoCarros = {
         params['lote'] = this_.RolamentoPesquisa.lote;
 
         $.each(this.RolamentoPesquisa, function (key, value) {
-            if (value > 0) {
+            if (value != null) {
                 if (key.endsWith('_ids')) {
                     params[key] = '[' + value + ']'; // Coloca no formato de lista campos terminados em _ids
                 }
@@ -410,7 +410,7 @@ var SegmentoCarros = {
 
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/carros',
-            type: "GET", cache: false, async: true, contentData: 'json',
+            type: "GET", cache: true, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
             beforeSend: function (xhr) {
                 if (Logado()) {
@@ -460,7 +460,7 @@ var SegmentoCarros = {
 
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/carros',
-            type: "GET", cache: false, async: true, contentData: 'json',
+            type: "GET", cache: true, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
             beforeSend: function (xhr) {
                 if (Logado()) {
@@ -553,7 +553,7 @@ var SegmentoCarros = {
 
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/carros',
-            type: "GET", cache: false, async: true, contentData: 'json',
+            type: "GET", cache: true, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
             beforeSend: function (xhr) {
                 if (Logado()) {
@@ -620,7 +620,7 @@ var SegmentoCarros = {
 
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/categorias',
-            type: "GET", cache: false, async: true, contentData: 'json',
+            type: "GET", cache: true, async: true, contentData: 'json',
             success: function (result, textStatus, request) {
 
                 $.each(result, function (i, obj) {
@@ -650,7 +650,7 @@ var SegmentoCarros = {
 
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/carros/marcas',
-            type: "GET", cache: false, async: true, contentData: 'json',
+            type: "GET", cache: true, async: true, contentData: 'json',
             success: function (result, textStatus, request) {
 
                 $.each(result, function (i, obj) {
@@ -682,7 +682,7 @@ var SegmentoCarros = {
 
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/carros/modelos?marca_id=' + marca_id,
-            type: "GET", cache: false, async: true, contentData: 'json',
+            type: "GET", cache: true, async: true, contentData: 'json',
             success: function (result, textStatus, request) {
 
                 $.each(result, function (i, obj) {
@@ -712,7 +712,7 @@ var SegmentoCarros = {
 
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/carros/quilometragem',
-            type: "GET", cache: false, async: true, contentData: 'json',
+            type: "GET", cache: true, async: true, contentData: 'json',
             success: function (result, textStatus, request) {
 
                 $.each(result, function (i, obj) {
