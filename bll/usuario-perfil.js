@@ -34,8 +34,9 @@ var UsuarioPerfil = {
        next_skip: 0,
        next_offset: 0
     },
-
-    QtdPaginas : 6,
+    
+    QtdPaginasFavoritos : 6,
+    TotPaginasFor : 6,
     PaginaAtual : 0, 
 
     Construtor() {
@@ -89,8 +90,6 @@ var UsuarioPerfil = {
         this.EventEscutarScrollHistoricoMensagem();
         this.EventEnviarMensagem();
         this.EventMenuFavoritoClick();
-        this.EventChangeOrdenacao();
-        
     },
 
     CarregarComboOrdernacao : function(){
@@ -608,7 +607,6 @@ var UsuarioPerfil = {
     },
 
     ObterFavoritos : function(){
-
         return new Promise(function(resolve, reject) {
             $.ajax({
                 url: StorageGetItem('api') + '/v1/mobile/carros?orderby=' + this_.RolamentoFavoritos.orderby + '&offset=' + this_.RolamentoFavoritos.offset + '&skip=' + this_.RolamentoFavoritos.skip + '&lote=' + this_.RolamentoFavoritos.lote + '&favoritos=1',
@@ -626,47 +624,7 @@ var UsuarioPerfil = {
                     reject(err) // Reject the promise and go to catch()
                 }
             });
-
-            /*
-            $.ajax({
-                url: StorageGetItem('api') + '/v1/mobile/carros?orderby=' + this_.RolamentoFavoritos.orderby + '&offset=' + this_.RolamentoFavoritos.offset + '&skip=' + this_.RolamentoFavoritos.skip + '&lote=' + this_.RolamentoFavoritos.lote + '&favoritos=1',
-                type: 'GET', cache: false, async: false, dataType:'json',
-                headers : {
-                    Authorization: 'Bearer ' + StorageGetItem("token")
-                },
-                contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-                success : function(result, textStatus, request){
-    
-                    resolve(result);
-                        this_.RolamentoFavoritos.offset = result.offset;
-                        this_.RolamentoFavoritos.lote = result.lote;
-                        this_.RolamentoFavoritos.skip = result.next_skip;
-                        this_.RolamentoFavoritos.next_skip = result.next_skip;
-                        this_.RolamentoFavoritos.next_offset = result.next_offset;
-            
-                        let favoritos_registros = result.registros; 
-        
-                        let html_favoritos = this_.spa.find("#segm_favorito");
-                        //html_favoritos.empty();
-                        $.each(favoritos_registros, function (i, favorito) {
-                            html_favoritos.append(this_.HtmlFavoritos(favorito, numPage, exibirPagina));
-                        });
-                    
-                },
-                error : function(request, textStatus, errorThrown){
-                    if (!MensagemErroAjax(request, errorThrown)) {
-                        try {
-                            var obj = $.parseJSON(request.responseText)
-                            Mensagem(obj.mensagem, 'warning', function () { this_.spa.find("#email").select(); });
-                        } catch (error) {
-                            Mensagem(request.responseText, 'error', function () { this_.spa.find("#email").select(); });
-                        }
-                    }
-                }
-            });
-            */
         });
-        
     },
 
     HtmlFavoritos : function(favorito, numPage, exibirPagina){
@@ -679,7 +637,7 @@ var UsuarioPerfil = {
                             ${SegmentoCarros.HtmlFaixaSuperiorProduto(favorito, 15, 20, 20)}
                         </div>
                         <div class="text_body">
-                            <a href="product-details.html"><h4>${favorito.nome}</h4></a>
+                            <a href="product-details.html"><h4>${favorito.anuncio}</h4></a>
                             <h5>R$ ${favorito.offset_preco}</h5>
                             <p>Ano/Modelo: <span>${favorito.ano}</span></p>
                             <p>Quilometragem: <span>${favorito.offset_km}</span></p>
@@ -698,18 +656,26 @@ var UsuarioPerfil = {
             this_.CarregarComboOrdernacao();
             this_.CarregarPaginasFavorito();
             this_.EventFavoritoClick();
+            this_.EventChangeOrdenacao();
             
         });
     },
 
-    CarregarPaginasFavorito : async function(){
+    CarregarPaginasFavorito : async function(pagina = 1){
         let exibirPagina = true;
 
         let pagination = this_.spa.find('ul.pagination');
-        pagination.empty();
-        pagination.append('<li class="page-item"><a class="page-link" href="#"><i class="icon-arrow"></i></a></li>');
+        let html_favoritos = this_.spa.find("#segm_favorito");
 
-        for(let i = 1; i <= this_.QtdPaginas; i++){
+        pagination.find('li#pag_proximo').remove();
+
+        if(pagina === 1){
+            pagination.empty();
+            html_favoritos.empty();
+            pagination.append('<li class="page-item" id="pag_anterior"><a class="page-link" href="#"><i class="icon-arrow"></i></a></li>');
+        }
+
+        for(let i = pagina; i <= this_.TotPaginasFor; i++){
             let result = await this_.ObterFavoritos();
 
             this_.RolamentoFavoritos.offset = result.offset;
@@ -720,35 +686,34 @@ var UsuarioPerfil = {
 
             let favoritos_registros = result.registros; 
 
-            let html_favoritos = this_.spa.find("#segm_favorito");
+            if(favoritos_registros.length > 0){
+                let html_favoritos = this_.spa.find("#segm_favorito");
 
-            $.each(favoritos_registros, function (j, favorito) {
-                html_favoritos.append(this_.HtmlFavoritos(favorito, i, exibirPagina));
-            });
-
-            pagination.append(this_.HtmlPagination(i, exibirPagina))
-            exibirPagina =  false;
-            this_.RolamentoFavoritos.offset = this_.RolamentoFavoritos.next_offset;
-            this_.RolamentoFavoritos.skip = this_.RolamentoFavoritos.next_skip;
-     
+                $.each(favoritos_registros, function (j, favorito) {
+                    html_favoritos.append(this_.HtmlFavoritos(favorito, i, exibirPagina));
+                });
+    
+                pagination.append(this_.HtmlPagination(i, exibirPagina))
+                exibirPagina =  false;
+                this_.RolamentoFavoritos.offset = this_.RolamentoFavoritos.next_offset;
+                this_.RolamentoFavoritos.skip = this_.RolamentoFavoritos.next_skip;
+            }
             if(this_.RolamentoFavoritos.next_skip < 0 || this_.RolamentoFavoritos.next_offset < 0){
-                // 
                 break;
             }
-            
         }
 
-        pagination.append('<li class="page-item"><a class="page-link" href="#"><i class="icon-arrow_2"></i></a></li>');
-        
-        this_.PaginaAtual = 1;
+        pagination.append('<li class="page-item" id="pag_proximo"><a class="page-link" href="#"><i class="icon-arrow_2"></i></a></li>');
+
+        this_.PaginaAtual = pagina;
+        this_.RemoverAssinaturaEventoPaginacao();
         this_.EventClickPaginacao();
     },
 
     HtmlPagination : function(numPage, exibirPagina){
-
         return `
-                    <li class="page-item ${exibirPagina? "active": ""}"><a class="page-link" href="#">${numPage}</a></li>
-                `
+            <li class="page-item ${exibirPagina? "active": ""}" numPage="${numPage}"><a class="page-link" href="#">${numPage}</a></li>
+        `
     },
 
     EventClickPaginacao : function(){
@@ -767,15 +732,60 @@ var UsuarioPerfil = {
                     if(numPageClicked <= 0){
                         return;
                     }
+
+                    if((this_.TotPaginasFor - numPageClicked) % this_.QtdPaginasFavoritos === 0){
+                        // Ocultar Lista atual
+                        for(let i = 1; i <= this_.QtdPaginasFavoritos; i++){
+                            this_.spa.find(`ul.pagination li.page-item[numPage="${numPageClicked + i}"]`).css('display','none');
+                        }
+
+                        // Exibir lista anterior
+                        for(let i = 1; i <= this_.QtdPaginasFavoritos; i++){
+                            this_.spa.find(`ul.pagination li.page-item[numPage="${numPageClicked + 1 - i}"]`).css('display','block');
+                        }
+                    }
                 }
                 // Próximo
                 else if(valor === 'icon-arrow_2'){
                     numPageClicked = parseInt(this_.PaginaAtual) + 1;
+
+                    let qtdPaginas = this_.spa.find('ul.pagination li').length -2;
+                    
+                    // Verificar se tem paginas na memoria
+                    if((numPageClicked-1) % this_.QtdPaginasFavoritos === 0 && numPageClicked < this_.TotPaginasFor){
+                          // Ocultar Lista atual
+                          for(let i = 1; i <= this_.QtdPaginasFavoritos; i++){
+                            this_.spa.find(`ul.pagination li.page-item[numPage="${numPageClicked - i}"]`).css('display','none');
+                        }
+
+                        // Exibir lista próximos
+                        for(let i = 1; i <= this_.QtdPaginasFavoritos; i++){
+                            this_.spa.find(`ul.pagination li.page-item[numPage="${numPageClicked - 1 + i}"]`).css('display','block');
+                        }
+                    }else{
+                        // Carregar mais paginas
+                        if(numPageClicked > qtdPaginas ){
+                        // Verificar se tem mais página para carregar
+                            if(this_.RolamentoFavoritos.next_skip < 0 || this_.RolamentoFavoritos.next_offset < 0){
+                                return;
+                            }else{
+                                this_.TotPaginasFor = numPageClicked + (this_.QtdPaginasFavoritos-1);
+                                
+                                // Ocultar lista anteriores
+                                for(let i = 1; i <= this_.QtdPaginasFavoritos; i++){
+                                    this_.spa.find(`ul.pagination li.page-item[numPage="${numPageClicked - i}"]`).css('display','none');
+                                }
+
+                                // Carregar Proximos
+                                this_.CarregarPaginasFavorito(numPageClicked);
+                            }
+                        }   
+                    }
                 }
             }
-            console.log($(this));
-            this_.spa.find('.pagination li.page-item.active').attr('class', 'page-item');
-            $(this).parent().attr('class', 'page-item active');
+
+            this_.spa.find('ul.pagination li.page-item.active').attr('class', 'page-item');
+            this_.spa.find(`ul.pagination li.page-item[numPage="${numPageClicked}"]`).attr('class', 'page-item active');
 
             html_favoritos.find(`div[numPage="${this_.PaginaAtual}"]`).each(function(i, element){
                 $(this).css('display','none');
@@ -787,9 +797,13 @@ var UsuarioPerfil = {
 
             this_.PaginaAtual = numPageClicked;
 
-            var target = this_.spa.find('#usuario_config').offset().top;
+            let target = this_.spa.find('ul.pagination').offset().top;
             $("html, body").animate( { scrollTop: target } );
         });
+    },
+
+    RemoverAssinaturaEventoPaginacao(){
+        this_.spa.find("a.page-link").off('click');
     },
 
     EventChangeOrdenacao : function(){
@@ -798,8 +812,9 @@ var UsuarioPerfil = {
                 this_.RolamentoFavoritos.orderby = $(this).val();
                 this_.RolamentoFavoritos.offset = 0;
                 this_.RolamentoFavoritos.skip = 0;
-                this_.RolamentoFavoritos.lote = 10;
+                this_.RolamentoFavoritos.lote = 9;
                 this_.RolamentoFavoritos.favoritos = 1;
+                this_.TotPaginasFor = this_.QtdPaginasFavoritos;
                 this_.CarregarPaginasFavorito();
             }
         });
@@ -819,7 +834,6 @@ var UsuarioPerfil = {
     },
 
     FavoritarDesfavoritar : function(ref){
-
         let produto = $(ref).closest('div[produto_id]').attr('produto_id');
         let isfavorito = $(ref).attr('isfavorito') == "true";
 
