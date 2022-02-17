@@ -167,44 +167,13 @@ var DetalhesCarro = {
         }
     },
 
-    HtmlFaixaSuperiorProduto: function (produto) {
-        var tooltipAlienado = (produto.alienado ? 'Alienado' : 'Quitado');
-        var imgAlienado = (produto.alienado ? 'tag-alienado.png' : 'tag-quitado.png');
-
-        var tooltipFavorito = (produto.favorito ? 'Desvaforitar' : 'Favoritar');
-        var imgFavorito = (produto.favorito ? 'favorite2.png' : 'favorite.png');
-
-        return `
-        <div style="position: absolute; overflow: hidden; top: 0; width: 100%; height: auto; padding: 0px 5px;">
-            <img style="float: left; width: 20px"
-                data-toggle="tooltip" data-placement="top" title="` + tooltipAlienado + `" 
-                src="img/` + imgAlienado + `"></img>
-            
-                <a class='favorito' href="#" style="float: right;"
-                    data-id-produto="` + produto.id + `">
-
-                    <img style="width: 20px"
-                        data-toggle="tooltip" data-placement="top" title="` + tooltipFavorito + `" 
-                        src="img/` + imgFavorito + `" isfavorito="${produto.favorito}"></img>
-                </a>
-
-                <a class='compartilhar' href="#" style="float: right; margin: 0px 5px 0px 0px"
-                    data-url-compartilhar="` + produto.url_compartilhamento + `">
-
-                    <img style="width: 20px"
-                        data-toggle="tooltip" data-placement="top" title="Compartilhar" 
-                        src="img/share.png"></img>
-                </a>
-        </div>`;
-    },
-
     HtmlItemImagemProduto: function (produto, use_faixa_superior, tipo_imagem, imagem_hash) { /* true = principal, false = secundária */
         var url_imagem = localStorage.getItem('api') + '/v1/mobile/carros/' + produto.id + '/imagens/' + imagem_hash + '?tipo=' + (tipo_imagem ? 'principal' : 'secundaria');
 
         var htmlFaixaSuperior = '';
 
         if (use_faixa_superior) {
-            htmlFaixaSuperior = this.HtmlFaixaSuperiorProduto(produto);
+            htmlFaixaSuperior = SegmentoCarros.HtmlFaixaSuperiorProduto(produto);
         }
 
         return `
@@ -220,7 +189,7 @@ var DetalhesCarro = {
         var htmlFaixaSuperior = '';
 
         if (use_faixa_superior) {
-            htmlFaixaSuperior = this.HtmlFaixaSuperiorProduto(produto);
+            htmlFaixaSuperior = SegmentoCarros.HtmlFaixaSuperiorProduto(produto);
         }
 
         return `
