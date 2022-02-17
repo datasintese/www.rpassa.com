@@ -77,8 +77,7 @@ var PesquisaCarro = {
         $('.nice_select#ordenacao').on('change', function (event) {
             event.preventDefault();
 
-            if (parseInt(this.value) > 0)
-            {
+            if (parseInt(this.value) > 0) {
                 this_.RolamentoPesquisa['orderby'] = parseInt(this.value);
                 this_.Pesquisar(true, false);
             }

@@ -198,8 +198,6 @@ var SegmentoCarros = {
         });
     },
 
-   
-
     ResetarOwlCarouselTiposNavegacao(carousel) {
         carousel.trigger('destroy.owl.carousel');
         carousel.html(carousel.find('.owl-stage-outer').html()).removeClass('owl-loaded');
@@ -248,7 +246,7 @@ var SegmentoCarros = {
             contentType: 'application/json;charset=utf-8',
             success: async function (result, textStatus, request) {
                 await sleep(300);
-                $('span#analitico_categoria_' + item.valor.replace('/','_')).html('(' + result.total + ')');
+                $('span#analitico_categoria_' + item.valor.replace('/', '_')).html('(' + result.total + ')');
             },
             error: function (request, textStatus, errorThrown) {
             }
@@ -258,7 +256,7 @@ var SegmentoCarros = {
             <div class="car_c_item">
                 <a href="pesquisa-carro.html?especificacoes_ids=${encodeURIComponent("[" + item.id + "]")}"><img src="${url_imagem}" alt=""></a>
                 <a href="pesquisa-carro.html?especificacoes_ids=${encodeURIComponent("[" + item.id + "]")}">
-                    <h5>${item.valor} <span id=analitico_categoria_${item.valor.replace('/','_')}>(0)</span></h5>
+                    <h5>${item.valor} <span id=analitico_categoria_${item.valor.replace('/', '_')}>(0)</span></h5>
                 </a>
             </div>
         </div>`;
