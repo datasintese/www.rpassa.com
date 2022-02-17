@@ -1,8 +1,9 @@
 
+
 var UsuarioPerfil = {
     spa : null,
     this_ : null,
-    
+
     proposta : [],
     palavra_chave : "result",
     chave : null,
@@ -26,7 +27,7 @@ var UsuarioPerfil = {
     },
 
     RolamentoFavoritos : {
-       orderby: 4,
+       orderby: 1,
        offset: 0,
        skip: 0,
        lote: 9,
@@ -101,7 +102,6 @@ var UsuarioPerfil = {
 
                 let menu_ordernacao = this_.spa.find('#order_by');
                 menu_ordernacao.empty();
-                menu_ordernacao.append(`<option selected="selected" value="0">Ordenação</option>`);
                 $.each(result, function (i, obj) {
                     menu_ordernacao.append(`<option value="${obj.id}">${obj.nome}</option>`);
                 });
@@ -552,6 +552,43 @@ var UsuarioPerfil = {
     EscutarMensagensUsuarioSelecionado : async function(){
         let obj = this_.proposta[this_.chave];
 
+        setInterval( function(){
+            $.ajax({
+                url: StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/proposta/mensagens?produto_id=' + obj.id_produto,
+                type: 'GET', cache: false, async:true, dataType:'json',
+                headers: {
+                    Authorization: 'Bearer ' + StorageGetItem("token")
+                },
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                success: function (result, textStatus, request) {
+                    try {
+                        if(result.length){
+                            let hist_mensagem = this_.spa.find("#historico_mensagem");
+                            $.each(result, function (i, mensagem) {
+                                hist_mensagem.append(this_.HtmlMensagemProposta(mensagem));
+                                hist_mensagem.parent().prop("scrollTop", hist_mensagem.parent().prop("scrollHeight"));
+                            });
+                        }
+                    } catch (error) {
+                        Mensagem(JSON.stringify(result), 'success');
+                    }
+                },
+                error: function (request, textStatus, errorThrown) {
+                    /*
+                    if (!MensagemErroAjax(request, errorThrown)) {
+                        try {
+                            var obj = $.parseJSON(request.responseText)
+                            Mensagem(obj.mensagem, 'warning', function () { this_.spa.find("#email").select(); });
+                        } catch (error) {
+                            Mensagem(request.responseText, 'error', function () { this_.spa.find("#email").select(); });
+                        }
+                    }
+                    */
+                }
+            });
+        },1000)
+
+     
         if(this_.client != null){
             this_.client.abort();
         }
@@ -604,6 +641,40 @@ var UsuarioPerfil = {
         }
 
         this_.client.send();
+     
+       
+
+        let url = StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/chat/mensagens?produto_id=' + obj.id_produto;
+        var cabecalho = { method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + StorageGetItem("token"),
+                },
+                //cache: false,
+                async : true,
+                dataType:'json',
+                contentType: 'application/x-www-form-urlencoded; charset=utf-8'
+             };
+        
+        const controller = new AbortController();
+        const  signal = controller;  
+
+        let request = fetch(url, cabecalho, signal);
+        request.then(async resp => {
+
+            let leitor = resp.body.getReader();
+
+            while(true){
+                let obj = await leitor.read();
+                let texto = new TextDecoder().decode(obj.value);
+                console.log(texto);
+                if(obj.done){
+                    break;
+                }
+            }
+        });
+
+        */
+
     },
 
     ObterFavoritos : function(){
@@ -657,7 +728,6 @@ var UsuarioPerfil = {
             this_.CarregarPaginasFavorito();
             this_.EventFavoritoClick();
             this_.EventChangeOrdenacao();
-            
         });
     },
 
@@ -797,8 +867,8 @@ var UsuarioPerfil = {
 
             this_.PaginaAtual = numPageClicked;
 
-            let target = this_.spa.find('ul.pagination').offset().top;
-            $("html, body").animate( { scrollTop: target } );
+            //let target = this_.spa.find('ul.pagination').offset().top;
+            //$("html, body").animate( { scrollTop: target } );
         });
     },
 
