@@ -209,7 +209,7 @@ var DetalhesCarro = {
 
         return `
         <div class="item">
-            <img src="` + url_imagem + `" alt="Imagem">
+            <img src="` + url_imagem + `" alt="Imagem" width="600px">
             ` + htmlFaixaSuperior + `
         </div>`;
     },
@@ -431,7 +431,7 @@ var DetalhesCarro = {
             success: function (result, textStatus, request) {
                 this_.spa.find('#marca_modelo').html(result.marca + ' - ' + result.modelo);
                 this_.spa.find('#preco').html(result.preco);
-                this_.spa.find('#sobre').html(result.sobre);
+                this_.spa.find('#sobre').html(result.avarias);
                 this_.spa.find('#data').html(result.data);
                 this_.spa.find('#ano').html(result.ano);
 
