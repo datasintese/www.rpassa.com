@@ -8,7 +8,6 @@ var UsuarioPerfil = {
     
     scrollAnterior : null, // Paginação da mensagem
 
-
     proposta: [],
     palavra_chave: "result",
     chave: null,
@@ -44,6 +43,10 @@ var UsuarioPerfil = {
     QtdPaginasFavoritos: 6,
     TotPaginasFor: 6,
     PaginaAtual: 0,
+
+    Intervalo : null,
+
+    UltimaAtivadadeCarregamentoFavorito : null,
 
     Construtor() {
         this_ = this;
@@ -112,6 +115,7 @@ var UsuarioPerfil = {
                     menu_ordernacao.append(`<option value="${obj.id}">${obj.nome}</option>`);
                 });
                 menu_ordernacao.niceSelect();
+                this_.spa.find('.nice-select').css('width', '200px');
             },
             error: function (request, textStatus, errorThrown) {
                 alert(JSON.stringify(request));
@@ -163,16 +167,23 @@ var UsuarioPerfil = {
 
     CarregarDetalhesFavorito: function () {
         var this_ = this;
+
+        let params = {};
+        params['orderby'] = 1;
+        params['analitico'] = 1;
+        params['favoritos'] = 1;
+        
         $.ajax({
-            url: StorageGetItem("api") + '/v1/mobile/carros/favoritos/detalhes',
+            url: StorageGetItem("api") + '/v1/mobile/carros',
             type: "GET", cache: false, async: true, dataType: 'json',
             headers: {
                 Authorization: 'Bearer ' + StorageGetItem("token")
             },
+            data: params,
             contentType: "application/x-www-form-urlencoded; charset=utf-8",
             success: function (result, textStatus, request) {
                 try {
-                    this_.spa.find('#favoritos').text('Favoritos (' + result.quantidade_favoritos + ')');
+                    this_.spa.find('#favoritos').text('Favoritos (' + result.encontrados + ')');
                 } catch (error) {
                     Mensagem(JSON.stringify(result), 'success');
                 }
@@ -234,7 +245,6 @@ var UsuarioPerfil = {
         var this_ = this;
         this.spa.find('#etapa2').submit(function (event) {
             event.preventDefault();
-
             let codigo_i = this_.spa.find('#codigo').val();
             let novo_email_i = this_.spa.find('#novo_email').val();
             let novo_celular_i = this_.spa.find('#novo_celular').val();
@@ -571,7 +581,12 @@ var UsuarioPerfil = {
     EscutarMensagensUsuarioSelecionado: async function () {
         var this_ = this;
         let obj = this_.proposta[this_.chave];
-        setInterval( function(){
+
+        if(this_.Intervalo != null){
+            clearInterval(this_.Intervalo);
+        }
+
+        this_.Intervalo = setInterval( function(){
             $.ajax({
                 url: StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/proposta/mensagens?produto_id=' + obj.id_produto,
                 type: 'GET', cache: false, async:true, dataType:'json',
@@ -606,93 +621,6 @@ var UsuarioPerfil = {
                 }
             });
         },1000)
-
-        /*
-        if (this_.client != null) {
-            this_.client.abort();
-        }
-        this_.client = new XMLHttpRequest();
-
-        var teste = new XMLHttpRequest();
-        teste.shift
-
-        this_.client.multipart = true;
-        this_.client.open('GET', StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/chat/mensagens?produto_id=' + obj.id_produto, true);
-        this_.client.setRequestHeader('Authorization', 'Bearer ' + StorageGetItem("token"));
-
-        let boundary = "";
-        let lastBytesRead = 0;
-        this_.client.onreadystatechange = function () {
-            if (this_.client.readyState == 2) {
-                console.log("Conectado!");
-
-                let contentType = this_.client.getResponseHeader("Content-Type");
-                let type = contentType.split(';');
-                let subTypeBoundary = type.find(element => element.trim().startsWith('boundary')).trim();
-                let boundSplit = subTypeBoundary.split('=')
-                boundary = boundSplit[1];
-            }
-            else if (this_.client.readyState == 3) {
-
-                let part = this_.client.responseText.substring(lastBytesRead);
-                lastBytesRead = this_.client.responseText.length;
-                let boundaryPart = part.split('\r\n\r\n');
-                boundaryPart = boundaryPart[1];
-                let idx = boundaryPart.lastIndexOf('\r\n--' + boundary + '\r\n');
-                if (idx > -1) {
-                    boundaryPart = boundaryPart.substring(0, idx);
-                }
-                let resFinal = JSON.parse(boundaryPart);
-
-                let hist_mensagem = this_.spa.find("#historico_mensagem");
-
-                $.each(resFinal, function (i, mensagem) {
-                    hist_mensagem.append(this_.HtmlMensagemProposta(mensagem));
-                    hist_mensagem.parent().prop("scrollTop", hist_mensagem.parent().prop("scrollHeight"));
-                });
-            }
-            else if (this_.client.readyState == 4) {
-                console.log("Desconectado!");
-            }
-            else {
-                console.log(this_.client.response);
-            }
-        }
-
-        this_.client.send();
-     
-       
-
-        let url = StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/chat/mensagens?produto_id=' + obj.id_produto;
-        var cabecalho = { method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + StorageGetItem("token"),
-                },
-                //cache: false,
-                async : true,
-                dataType:'json',
-                contentType: 'application/x-www-form-urlencoded; charset=utf-8'
-             };
-        
-        const controller = new AbortController();
-        const  signal = controller;  
-
-        let request = fetch(url, cabecalho, signal);
-        request.then(async resp => {
-
-            let leitor = resp.body.getReader();
-
-            while(true){
-                let obj = await leitor.read();
-                let texto = new TextDecoder().decode(obj.value);
-                console.log(texto);
-                if(obj.done){
-                    break;
-                }
-            }
-        });
-
-        */
     },
 
     ObterFavoritos: function () {
@@ -740,18 +668,31 @@ var UsuarioPerfil = {
                 </div>`
     },
 
-    EventMenuFavoritoClick: function () {
+    EventMenuFavoritoClick: async function () {
         var this_ = this;
         this_.spa.find("#nav_favorito").click(function () {
             this_.CarregarComboOrdernacao();
+            this_.CarregarRolamentoFavoritoPadrao();
             this_.CarregarPaginasFavorito();
             this_.EventFavoritoClick();
             this_.EventChangeOrdenacao();
         });
     },
 
+    CarregarRolamentoFavoritoPadrao : function(){
+        this_.RolamentoFavoritos.orderby = 1;
+        this_.RolamentoFavoritos.offset = 0;
+        this_.RolamentoFavoritos.skip = 0;
+        this_.RolamentoFavoritos.lote = 9;
+        this_.RolamentoFavoritos.favoritos = 1;
+        this_.RolamentoFavoritos.next_skip = 0;
+        this_.RolamentoFavoritos.next_offset = 0;
+    },
+
     CarregarPaginasFavorito: async function (pagina = 1) {
         var this_ = this;
+
+        const atividadeLocal = this_.UltimaAtivadadeCarregamentoFavorito = new Object();
 
         let exibirPagina = true;
 
@@ -761,13 +702,24 @@ var UsuarioPerfil = {
         pagination.find('li#pag_proximo').remove();
 
         if (pagina === 1) {
-            pagination.empty();
-            html_favoritos.empty();
-            pagination.append('<li class="page-item" id="pag_anterior"><a class="page-link" href="#"><i class="icon-arrow"></i></a></li>');
+            //pagination.empty();
+            //html_favoritos.empty();
+            //pagination.append('<li class="page-item" id="pag_anterior"><a class="page-link" href="#"><i class="icon-arrow"></i></a></li>');
         }
 
         for (let i = pagina; i <= this_.TotPaginasFor; i++) {
+
             let result = await this_.ObterFavoritos();
+
+            if(atividadeLocal !== this_.UltimaAtivadadeCarregamentoFavorito){
+                return;
+            }
+
+            if(i == 1){
+                pagination.empty();
+                html_favoritos.empty();
+                pagination.append('<li class="page-item" id="pag_anterior"><a class="page-link" href="#"><i class="icon-arrow"></i></a></li>');
+            }
 
             this_.RolamentoFavoritos.offset = result.offset;
             this_.RolamentoFavoritos.lote = result.lote;
@@ -798,7 +750,9 @@ var UsuarioPerfil = {
 
         this_.PaginaAtual = pagina;
         this_.RemoverAssinaturaEventoPaginacao();
+        this_.RemoverAssinaturaEventoClickFavorito
         this_.EventClickPaginacao();
+        this_.EventFavoritoClick();
     },
 
     HtmlPagination: function (numPage, exibirPagina) {
@@ -812,9 +766,10 @@ var UsuarioPerfil = {
         let html_favoritos = this_.spa.find("#segm_favorito");
         let link_pagina = this_.spa.find("a.page-link");
 
-        link_pagina.click(function (event) {
+        link_pagina.click(async function (event) {
             event.preventDefault();
             let numPageClicked = $(this).text();
+            let paginaAtual = this_.PaginaAtual;
 
             if (numPageClicked === '') {
                 let valor = $(this).children().attr('class');
@@ -869,7 +824,7 @@ var UsuarioPerfil = {
                                 }
 
                                 // Carregar Proximos
-                                this_.CarregarPaginasFavorito(numPageClicked);
+                                await this_.CarregarPaginasFavorito(numPageClicked);
                             }
                         }
                     }
@@ -879,7 +834,7 @@ var UsuarioPerfil = {
             this_.spa.find('ul.pagination li.page-item.active').attr('class', 'page-item');
             this_.spa.find(`ul.pagination li.page-item[numPage="${numPageClicked}"]`).attr('class', 'page-item active');
 
-            html_favoritos.find(`div[numPage="${this_.PaginaAtual}"]`).each(function (i, element) {
+            html_favoritos.find(`div[numPage="${paginaAtual}"]`).each(function (i, element) {
                 $(this).css('display', 'none');
             });
 
@@ -901,7 +856,7 @@ var UsuarioPerfil = {
 
     EventChangeOrdenacao: function () {
         var this_ = this;
-        this_.spa.find('#order_by').change(function () {
+        this_.spa.find('#order_by').change(async function () {
             if ($(this).val() != 0) {
                 this_.RolamentoFavoritos.orderby = $(this).val();
                 this_.RolamentoFavoritos.offset = 0;
@@ -912,6 +867,11 @@ var UsuarioPerfil = {
                 this_.CarregarPaginasFavorito();
             }
         });
+    },
+
+    RemoverAssinaturaEventoPaginacao() {
+        var this_ = this;
+        this_.spa.find("a.page-link").off('click');
     },
 
     EventFavoritoClick: function () {
@@ -925,6 +885,12 @@ var UsuarioPerfil = {
             }
             this_.FavoritarDesfavoritar(this);
         });
+    },
+    
+    RemoverAssinaturaEventoClickFavorito : function(){
+        var this_ = this;
+        let htmlFavorito = this_.spa.find("#segm_favorito");
+        htmlFavorito.find(".favorito img").off('click');
     },
 
     FavoritarDesfavoritar: function (ref) {
