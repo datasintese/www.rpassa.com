@@ -28,12 +28,15 @@ var PesquisaCarro = {
             if (this_.TagsLoaded) {
                 clearInterval(clock);
 
-                let preco_min = 0;
-                let preco_max = 0;
+                let preco_min = null;
+                let preco_max = null;
+                let ordenacao = null;
 
                 $.each(params, function (param, value) {
                     let values = value.split(',');
 
+                    if (param == 'ordenacao')
+                        ordenacao = values[0];
                     if (param == 'preco_min')
                         preco_min = values[0];
                     else if (param == 'preco_max')
@@ -49,17 +52,47 @@ var PesquisaCarro = {
                     }
                 });
 
-                $("#price_wd").slider("values", preco_min, preco_max);
-                this_.AdicionarTagPreco({ values: [preco_min, preco_max] }, false);
+                if (ordenacao != null) {
+                    // TODO: Checar o valor da ordenação pela lista Tags que foi carregada pelo endpoint de ordenacao
+
+                    let param_valor = 1;
+                    $.each(this_.Tags, function (key, obj) {
+                        if (obj.tag_chave == 'ordenacao' && obj.tag_legenda == ordenacao) {
+                            param_valor = obj.param_valor;
+                            return false;
+                        }
+                    });
+
+                    this_.RolamentoPesquisa['orderby'] = param_valor;
+                    $('.nice_select#ordenacao').val(param_valor).niceSelect('update');
+                    this_.AdicionarTagFiltroOrdenacao(ordenacao, param_valor, false);
+                }
+
+                var options = $('#price_wd').slider('option');
+
+                // Quando não há faixa de preço informado na QueryString
+                if (preco_min !== null && preco_max !== null) {
+                    $("#price_wd").slider("values", 0, preco_min);
+                    $("#price_wd").slider("values", 1, preco_max);
+                    this_.AdicionarTagFiltroPreco({ values: [preco_min, preco_max] }, false);
+                }
+                else if (preco_min != null) { // Quando há faixa de preço parcial informado na QueryString
+                    $("#price_wd").slider("values", 0, preco_min);
+                    $("#price_wd").slider("values", 1, options.max);
+                    this_.AdicionarTagFiltroPreco({ values: [preco_min, options.max] }, false);
+                }
+                else if (preco_max != null) { // Quando há faixa de preço parcial informado na QueryString
+                    $("#price_wd").slider("values", 0, options.min);
+                    $("#price_wd").slider("values", 1, preco_max);
+                    this_.AdicionarTagFiltroPreco({ values: [options.min, preco_max] }, false);
+                }
+
+                this_.AtualizarLegendaFaixaPreco();
 
                 this_.Pesquisar(false, true, true);
                 this_.Pesquisar(true, false, false);
             }
         }, 10); // 10ms
-
-        $('#accordionExample').collapse({
-            toggle: false
-        });
 
         this.CarregarComboOrdenacao();
         this.CarregarAcordaosFitro();
@@ -124,14 +157,18 @@ var PesquisaCarro = {
         $('.nice_select#ordenacao').on('change', function (event) {
             event.preventDefault();
 
+            let tag_legenda = $(this).find(":selected").text();
+
             if (parseInt(this.value) > 0) {
                 this_.RolamentoPesquisa['orderby'] = parseInt(this.value);
+
+                this_.AdicionarTagFiltroOrdenacao(tag_legenda, parseInt(this.value), false);
                 this_.Pesquisar(true, false);
             }
         });
 
         $("#price_wd").on("slidestop", function (event, ui) {
-            this_.AdicionarTagPreco(ui);
+            this_.AdicionarTagFiltroPreco(ui);
         });
     },
 
@@ -150,8 +187,8 @@ var PesquisaCarro = {
         if (tag_legenda === null) { // Deleta a chave independente do valor
             searchParams.delete(tag_chave);
         }
-        else { // Deleta o valor da chave
-            // Display the keys
+        else {
+            // Deleta o valor da chave
             for (var key of searchParams.keys()) {
                 if (tag_chave.toLowerCase() == key) {
                     var values = searchParams.get(key);
@@ -191,7 +228,18 @@ var PesquisaCarro = {
         window.history.replaceState({ url: url }, null, url);
     },
 
-    AdicionarTagPreco(ui, pesquisar = true) {
+    AdicionarTagFiltroOrdenacao(tag_legenda, param_valor, pesquisar = true) {
+        this.DeletarTagQueryStringURL('ordenacao', null);
+        this.DeletarTagFiltro('ordenacao');
+        this.AdicionarTagFiltro('ordenacao', tag_legenda, 'ordenacao', param_valor, false);
+
+        if (pesquisar) {
+            this.Pesquisar(true, false);
+            this.Pesquisar(false, true);
+        }
+    },
+
+    AdicionarTagFiltroPreco(ui, pesquisar = true) {
         this.DeletarTagQueryStringURL('preco_min', null);
         this.DeletarTagQueryStringURL('preco_max', null);
 
@@ -235,13 +283,13 @@ var PesquisaCarro = {
         let ja_existe = false;
         $.each(this.Filtro, function (key, value) {
             if (value !== undefined) {
-                if (param_valor == value.param_valor) {
+                if (param_chave == value.param_chave && param_valor == value.param_valor) {
                     ja_existe = true;
                     return false;
                 }
             }
         });
-        if (ja_existe) return false;
+        if (ja_existe) return false; // Evita adicionar tag duplicada no Filtro
 
         this.Filtro.push({
             tag_chave: tag_chave,
@@ -251,7 +299,6 @@ var PesquisaCarro = {
         });
 
         this.AdicionarTagQueryStringURL(tag_chave, queryStringValor);
-
         $('.tags_f').append(this.HtmlItemTag(tag_chave, tag_legenda, param_chave, param_valor, queryStringValor));
 
         return true;
@@ -259,6 +306,12 @@ var PesquisaCarro = {
 
     LimparTagsFiltro() {
         this.Filtro = [];
+
+        $('.nice_select#ordenacao').val(1).niceSelect('update');
+        this.RolamentoPesquisa['orderby'] = 1;
+
+        // TODO: Redefinir Faixa de Preço para padrão 0 ao máximo
+
         $('.tags_f').empty();
     },
 
@@ -362,12 +415,22 @@ var PesquisaCarro = {
     },
 
     CarregarComboOrdenacao() {
+        var this_ = this;
+
         this.LimparComboOrdenacao();
 
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/carros/ordenacao',
             type: "GET", cache: true, async: true, contentData: 'json',
             success: function (result, textStatus, request) {
+                $.each(result, function (key, obj) {
+                    this_.Tags.push({
+                        tag_chave: 'ordenacao',
+                        tag_legenda: obj.nome,
+                        param_chave: 'orderby',
+                        param_valor: obj.id
+                    });
+                });
 
                 $.each(result, function (i, obj) {
                     $('.nice_select#ordenacao').last()
@@ -493,19 +556,13 @@ var PesquisaCarro = {
             },
             // stop: this.EventoFaixaPreco
         });
+        this.AtualizarLegendaFaixaPreco();
+    },
+
+    AtualizarLegendaFaixaPreco() {
         $("#amount").val("R$" + $("#price_wd").slider("values", 0).toLocaleString('de-DE') +
             " - R$" + $("#price_wd").slider("values", 1).toLocaleString('de-DE'));
     },
-
-
-    // this_: this,
-    // EventoFaixaPreco: function (event, ui) {
-    //     this_.DeletarTagQueryStringURL('preco_min', null);
-    //     this_.DeletarTagQueryStringURL('preco_max', null);
-    //     this_.AdicionarTagFiltro('preco_min', ui.values[0], 'preco_min', ui.values[0]);
-    //     this_.AdicionarTagFiltro('preco_max', ui.values[1], 'preco_max', ui.values[1]);
-    // },
-
 
     HtmlItemAcordaoCategoria: function (item) {
         let url_imagem = localStorage.getItem('api') + '/v1/mobile/especificacoes/carro/valores/imagem?id_especificacao=' + item.id;
@@ -552,12 +609,12 @@ var PesquisaCarro = {
                 </button>
             </div>
             <div id="collapse${collaspedId}" class="collapse show" aria-labelledby="heading${collaspedId}"
-                data-parent="#accordionExample">
+                data-parent="">
 
                 <div class="card-body">
                     <div class="price_wd_inner">
                         <div id="price_wd" style="margin-right:15px"></div>
-                        <label for="amount">Preço:</label>
+                        
                         <input type="text" id="amount" readonly style="width:100%">
                     </div>
                 </div>
@@ -578,7 +635,7 @@ var PesquisaCarro = {
                 </button>
             </div>
             <div id="collapse${collapseId}" class="collapse show" aria-labelledby="heading${collapseId}" 
-                data-parent="#accordionExample">
+                data-parent="">
 
                 <div class="card-body">
                     <div class="row car_body">
