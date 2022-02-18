@@ -28,17 +28,29 @@ var PesquisaCarro = {
             if (this_.TagsLoaded) {
                 clearInterval(clock);
 
+                let preco_min = 0;
+                let preco_max = 0;
+
                 $.each(params, function (param, value) {
                     let values = value.split(',');
 
-                    $.each(values, function (idx, valueSplit) {
-                        $.each(this_.Tags, function (index, obj) {
-                            if (param == obj.tag_chave.toLowerCase() && valueSplit == obj.tag_legenda) {
-                                this_.AdicionarTagFiltro(obj.tag_chave, obj.tag_legenda, obj.param_chave, obj.param_valor);
-                            }
+                    if (param == 'preco_min')
+                        preco_min = values[0];
+                    else if (param == 'preco_max')
+                        preco_max = values[0];
+                    else {
+                        $.each(values, function (idx, valueSplit) {
+                            $.each(this_.Tags, function (index, obj) {
+                                if (param == obj.tag_chave.toLowerCase() && valueSplit == obj.tag_legenda) {
+                                    this_.AdicionarTagFiltro(obj.tag_chave, obj.tag_legenda, obj.param_chave, obj.param_valor);
+                                }
+                            });
                         });
-                    });
+                    }
                 });
+
+                $("#price_wd").slider("values", preco_min, preco_max);
+                this_.AdicionarTagPreco({ values: [preco_min, preco_max] }, false);
 
                 this_.Pesquisar(false, true, true);
                 this_.Pesquisar(true, false, false);
@@ -81,18 +93,18 @@ var PesquisaCarro = {
             let tag_legenda = $(this).attr('tag_legenda');
             let param_chave = $(this).attr('param_chave');
             let param_valor = $(this).attr('param_valor');
+            let use_valor = $(this).attr('use_valor') == 'true'; // Para outros tipos de tag que não seguem a mesma regra das especificacoes_ids
 
             $.each(this_.Filtro, function (key, value) {
-
                 if (value !== undefined) {
-                    if (param_valor == value.param_valor) {
+                    if (tag_chave == value.tag_chave && param_valor == value.param_valor) {
                         delete this_.Filtro[key];
                         return false;
                     }
                 }
             });
 
-            this_.DeletarTagQueryStringURL(tag_chave, tag_legenda);
+            this_.DeletarTagQueryStringURL(tag_chave, (use_valor ? null : tag_legenda));
 
             $(this).remove();
 
@@ -117,6 +129,10 @@ var PesquisaCarro = {
                 this_.Pesquisar(true, false);
             }
         });
+
+        $("#price_wd").on("slidestop", function (event, ui) {
+            this_.AdicionarTagPreco(ui);
+        });
     },
 
     LimparQueryStringURL() {
@@ -131,17 +147,22 @@ var PesquisaCarro = {
         const urlSearchParams = new URLSearchParams(window.location.search);
         const searchParams = new URLSearchParams(urlSearchParams);
 
-        // Display the keys
-        for (var key of searchParams.keys()) {
-            if (tag_chave.toLowerCase() == key) {
-                var values = searchParams.get(key);
-                var arr = values.split(',');
-                $.each(arr, function (k, val) {
-                    if (val !== undefined) {
-                        if (val == tag_legenda) delete arr[k];
-                    }
-                });
-                searchParams.set(tag_chave.toLowerCase(), arr.filter(x => x != '').join(","));
+        if (tag_legenda === null) { // Deleta a chave independente do valor
+            searchParams.delete(tag_chave);
+        }
+        else { // Deleta o valor da chave
+            // Display the keys
+            for (var key of searchParams.keys()) {
+                if (tag_chave.toLowerCase() == key) {
+                    var values = searchParams.get(key);
+                    var arr = values.split(',');
+                    $.each(arr, function (k, val) {
+                        if (val !== undefined) {
+                            if (val == tag_legenda) delete arr[k];
+                        }
+                    });
+                    searchParams.set(tag_chave.toLowerCase(), arr.filter(x => x != '').join(","));
+                }
             }
         }
         url.search = searchParams.toString();
@@ -149,12 +170,16 @@ var PesquisaCarro = {
         window.history.replaceState({ url: url }, null, url);
     },
 
-    AdicionarTagQueryStringURL(tag_chave, tag_legenda) {
+    AdicionarTagQueryStringURL(tag_chave, queryStringValor) {
         var values = [];
         $.each(this.Filtro, function (key, obj) {
             if (obj !== undefined)
-                if (obj.tag_chave == tag_chave)
-                    values.push(obj.tag_legenda)
+                if (obj.tag_chave == tag_chave) {
+                    if (queryStringValor)
+                        values.push(obj.param_valor)
+                    else
+                        values.push(obj.tag_legenda)
+                }
         });
 
         var url = new URL(window.location.href);
@@ -166,7 +191,47 @@ var PesquisaCarro = {
         window.history.replaceState({ url: url }, null, url);
     },
 
-    AdicionarTagFiltro: function (tag_chave, tag_legenda, param_chave, param_valor) {
+    AdicionarTagPreco(ui, pesquisar = true) {
+        this.DeletarTagQueryStringURL('preco_min', null);
+        this.DeletarTagQueryStringURL('preco_max', null);
+
+        this.DeletarTagFiltro('preco_min');
+        this.DeletarTagFiltro('preco_max');
+
+        this.AdicionarTagFiltro('preco_min', 'Preço Min: R$ ' + ui.values[0].toLocaleString('de-DE'), 'preco_min', ui.values[0], true);
+        this.AdicionarTagFiltro('preco_max', 'Preço Max: R$ ' + ui.values[1].toLocaleString('de-DE'), 'preco_max', ui.values[1], true);
+
+        if (pesquisar) {
+            this.Pesquisar(true, false);
+            this.Pesquisar(false, true);
+        }
+    },
+
+    DeletarTagFiltro(tag_chave) {
+        let this_ = this;
+
+        $.each(this.Filtro, function (key, value) {
+            if (value !== undefined) {
+                if (tag_chave == value.tag_chave) {
+                    delete this_.Filtro[key];
+                    return false;
+                }
+            }
+        });
+
+        $('.tag_filtro').each(function (key, value) {
+            let tag_chav = $(this).attr('tag_chave');
+            let tag_legenda = $(this).attr('tag_legenda');
+            let param_chave = $(this).attr('param_chave');
+            let param_valor = $(this).attr('param_valor');
+
+            if (tag_chav == tag_chave) {
+                $(this).remove();
+            }
+        });
+    },
+
+    AdicionarTagFiltro: function (tag_chave, tag_legenda, param_chave, param_valor, queryStringValor = false) {
         let ja_existe = false;
         $.each(this.Filtro, function (key, value) {
             if (value !== undefined) {
@@ -185,9 +250,9 @@ var PesquisaCarro = {
             param_valor: param_valor
         });
 
-        this.AdicionarTagQueryStringURL(tag_chave, tag_legenda);
+        this.AdicionarTagQueryStringURL(tag_chave, queryStringValor);
 
-        $('.tags_f').append(this.HtmlItemTag(tag_chave, tag_legenda, param_chave, param_valor));
+        $('.tags_f').append(this.HtmlItemTag(tag_chave, tag_legenda, param_chave, param_valor, queryStringValor));
 
         return true;
     },
@@ -197,8 +262,13 @@ var PesquisaCarro = {
         $('.tags_f').empty();
     },
 
-    HtmlItemTag: function (tag_chave, tag_legenda, param_chave, param_valor) {
-        return `<a href="#" class='tag_filtro' tag_chave='${tag_chave}' tag_legenda='${tag_legenda}' param_chave='${param_chave}' param_valor='${param_valor}'>${tag_legenda}<i class="ti-close"></i></a>`;
+    HtmlItemTag: function (tag_chave, tag_legenda, param_chave, param_valor, use_valor) {
+        return `<a href="#" class='tag_filtro' 
+            tag_chave='${tag_chave}' 
+            tag_legenda='${tag_legenda}' 
+            param_chave='${param_chave}' 
+            param_valor='${param_valor}'
+            use_valor='${use_valor}'>${tag_legenda}<i class="ti-close"></i></a>`;
     },
 
     Pesquisar(limpar = false, analitico = false, async = true) {
@@ -245,7 +315,7 @@ var PesquisaCarro = {
                         params[value.param_chave] = '[' + value.param_valor + ']';
                 }
                 else
-                    params[key] = value;
+                    params[value.param_chave] = value.param_valor;
             }
         });
 
@@ -357,9 +427,15 @@ var PesquisaCarro = {
 
     CarregarAcordaosFitro() {
         $('.accordion#accordionExample').empty();
+        $('#accordionExample').collapse('dispose');
 
-        this.CarregarAcordaoCategoria(0);
-        this.CarregarAcordaoFaixaPreco(1);
+        this.CarregarAcordaoFaixaPreco('0');
+        this.CarregarAcordaoCategoria('1');
+
+        $('#accordionExample').collapse({
+            heightStyle: "content",
+            toggle: true
+        })
     },
 
     CarregarAcordaoCategoria(collaspedId) {
@@ -405,8 +481,31 @@ var PesquisaCarro = {
     },
 
     CarregarAcordaoFaixaPreco(collaspedId) {
-        $('.accordion#accordionExample').prepend(this.HtmlAcordaoFaixaPreco(collaspedId));
+        $('.accordion#accordionExample').append(this.HtmlAcordaoFaixaPreco(collaspedId));
+
+        $("#price_wd").slider({
+            range: true,
+            min: 0,
+            max: 500000,
+            values: [0, 500000],
+            slide: function (event, ui) {
+                $("#amount").val("R$" + ui.values[0].toLocaleString('de-DE') + " - R$" + ui.values[1].toLocaleString('de-DE'));
+            },
+            // stop: this.EventoFaixaPreco
+        });
+        $("#amount").val("R$" + $("#price_wd").slider("values", 0).toLocaleString('de-DE') +
+            " - R$" + $("#price_wd").slider("values", 1).toLocaleString('de-DE'));
     },
+
+
+    // this_: this,
+    // EventoFaixaPreco: function (event, ui) {
+    //     this_.DeletarTagQueryStringURL('preco_min', null);
+    //     this_.DeletarTagQueryStringURL('preco_max', null);
+    //     this_.AdicionarTagFiltro('preco_min', ui.values[0], 'preco_min', ui.values[0]);
+    //     this_.AdicionarTagFiltro('preco_max', ui.values[1], 'preco_max', ui.values[1]);
+    // },
+
 
     HtmlItemAcordaoCategoria: function (item) {
         let url_imagem = localStorage.getItem('api') + '/v1/mobile/especificacoes/carro/valores/imagem?id_especificacao=' + item.id;
@@ -453,12 +552,13 @@ var PesquisaCarro = {
                 </button>
             </div>
             <div id="collapse${collaspedId}" class="collapse show" aria-labelledby="heading${collaspedId}"
-                data-parent="">
+                data-parent="#accordionExample">
+
                 <div class="card-body">
                     <div class="price_wd_inner">
-                        <div id="price_wd"></div>
+                        <div id="price_wd" style="margin-right:15px"></div>
                         <label for="amount">Preço:</label>
-                        <input type="text" id="amount" readonly>
+                        <input type="text" id="amount" readonly style="width:100%">
                     </div>
                 </div>
             </div>
@@ -471,13 +571,15 @@ var PesquisaCarro = {
         return `<div class="card">
             <div class="card-header" id="heading${collapseId}">
                 <button class="btn btn-link" type="button" data-toggle="collapse"
-                    data-target="#collapse${collapseId}" aria-expanded="true" aria-controls="collapse${collapseId}">
+                    data-target="#collapse${collapseId}" aria-expanded="true" aria-controls="collapse${collapseId}" >
                     Categoria
                     <i class="ti-plus"></i>
                     <i class="ti-minus"></i>
                 </button>
             </div>
-            <div id="collapse${collapseId}" class="collapse show" aria-labelledby="heading${collapseId}">
+            <div id="collapse${collapseId}" class="collapse show" aria-labelledby="heading${collapseId}" 
+                data-parent="#accordionExample">
+
                 <div class="card-body">
                     <div class="row car_body">
                         ${htmlItems}
