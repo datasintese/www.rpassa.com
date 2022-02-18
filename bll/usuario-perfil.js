@@ -111,10 +111,12 @@ var UsuarioPerfil = {
 
                 let menu_ordernacao = this_.spa.find('#order_by');
                 menu_ordernacao.empty();
+                
                 $.each(result, function (i, obj) {
                     menu_ordernacao.append(`<option value="${obj.id}">${obj.nome}</option>`);
                 });
                 menu_ordernacao.niceSelect();
+                menu_ordernacao.val(1).niceSelect('update');
                 this_.spa.find('.nice-select').css('width', '200px');
             },
             error: function (request, textStatus, errorThrown) {
@@ -292,7 +294,6 @@ var UsuarioPerfil = {
             });
         });
     },
-
     EventAlterarSenhaUsuario: function () {
         var this_ = this;
         this_.spa.find('#formSenha').submit(function (event) {
@@ -654,10 +655,10 @@ var UsuarioPerfil = {
                             ${SegmentoCarros.HtmlFaixaSuperiorProduto(favorito, 15, 20, 20)}
                         </div>
                         <div class="text_body">
-                            <a href="product-details.html"><h4>${favorito.anuncio}</h4></a>
-                            <h5>R$ ${favorito.offset_preco}</h5>
+                            <a href="product-details.html"><h4>${favorito.marca} - ${favorito.modelo}</h4></a>
+                            <h5>${favorito.preco}</h5>
                             <p>Ano/Modelo: <span>${favorito.ano}</span></p>
-                            <p>Quilometragem: <span>${favorito.offset_km}</span></p>
+                            <p>Quilometragem: <span>${favorito.km.split(' ')[0]}</span></p>
                         </div>
                         <div class="text_footer">
                             <a href="#"><i class="icon-engine"></i> 2500</a>
@@ -673,6 +674,8 @@ var UsuarioPerfil = {
         this_.spa.find("#nav_favorito").click(function () {
             this_.CarregarComboOrdernacao();
             this_.CarregarRolamentoFavoritoPadrao();
+            this_.TotPaginasFor= this_.QtdPaginasFavoritos;
+            this_.PaginaAtual = 0;
             this_.CarregarPaginasFavorito();
             this_.EventFavoritoClick();
             this_.EventChangeOrdenacao();
@@ -720,7 +723,7 @@ var UsuarioPerfil = {
                 html_favoritos.empty();
                 pagination.append('<li class="page-item" id="pag_anterior"><a class="page-link" href="#"><i class="icon-arrow"></i></a></li>');
             }
-
+            
             this_.RolamentoFavoritos.offset = result.offset;
             this_.RolamentoFavoritos.lote = result.lote;
             this_.RolamentoFavoritos.skip = result.next_skip;
@@ -824,7 +827,7 @@ var UsuarioPerfil = {
                                 }
 
                                 // Carregar Proximos
-                                await this_.CarregarPaginasFavorito(numPageClicked);
+                                this_.CarregarPaginasFavorito(numPageClicked);
                             }
                         }
                     }
