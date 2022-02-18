@@ -1,6 +1,6 @@
 var PesquisaCarro = {
     Filtro: [], /* Lista dinâmica de tags selecionadas pelo usuário ou pela query string */
-    Tags: [], /* Fonte de todas as tags das especificações ids */
+    Tags: [], /* Fonte de todas as tags das especificações ids carregadas do banco de dados */
     TagsLoaded: false,
 
     RolamentoPesquisa: {
@@ -39,6 +39,9 @@ var PesquisaCarro = {
                         });
                     });
                 });
+
+                this_.Pesquisar(false, true, true);
+                this_.Pesquisar(true, false, false);
             }
         }, 10); // 10ms
 
@@ -49,10 +52,9 @@ var PesquisaCarro = {
         this.CarregarComboOrdenacao();
         this.CarregarAcordaosFitro();
 
-        this.Pesquisar(true, false, false);
-        this.Pesquisar(false, true, false);
-
         this.AssinarEventos();
+
+        this.LimparItensProdutos();
     },
 
     AssinarEventos() {
@@ -66,11 +68,10 @@ var PesquisaCarro = {
             let param_chave = $(this).attr('param_chave');
             let param_valor = $(this).attr('param_valor');
 
-            this_.AdicionarTagFiltro(tag_chave, tag_legenda, param_chave, param_valor);
-            // this_.ConverterTagsEmFiltro();
-
-            this_.Pesquisar(true, false);
-            this_.Pesquisar(false, true);
+            if (this_.AdicionarTagFiltro(tag_chave, tag_legenda, param_chave, param_valor)) {
+                this_.Pesquisar(true, false);
+                this_.Pesquisar(false, true);
+            }
         });
 
         $(document).on('click', '.tag_filtro', function (event) {
@@ -91,6 +92,8 @@ var PesquisaCarro = {
                 }
             });
 
+            this_.DeletarTagQueryStringURL(tag_chave, tag_legenda);
+
             $(this).remove();
 
             this_.Pesquisar(true, false);
@@ -99,10 +102,9 @@ var PesquisaCarro = {
 
         $(document.body).on('click', '#limpar_tags_filtro', function (event) {
             event.preventDefault();
-
             this_.LimparTagsFiltro();
+            this_.LimparQueryStringURL();
 
-            // this_.ConverterTagsEmFiltro();
             this_.Pesquisar(true, false);
             this_.Pesquisar(false, true);
         });
@@ -117,7 +119,54 @@ var PesquisaCarro = {
         });
     },
 
-    AdicionarTagFiltro(tag_chave, tag_legenda, param_chave, param_valor) {
+    LimparQueryStringURL() {
+        var url = new URL(window.location.href);
+        url.search = '';
+        url = url.toString();
+        window.history.replaceState({ url: url }, null, url);
+    },
+
+    DeletarTagQueryStringURL(tag_chave, tag_legenda) {
+        var url = new URL(window.location.href);
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const searchParams = new URLSearchParams(urlSearchParams);
+
+        // Display the keys
+        for (var key of searchParams.keys()) {
+            if (tag_chave.toLowerCase() == key) {
+                var values = searchParams.get(key);
+                var arr = values.split(',');
+                $.each(arr, function (k, val) {
+                    if (val !== undefined) {
+                        if (val == tag_legenda) delete arr[k];
+                    }
+                });
+                searchParams.set(tag_chave.toLowerCase(), arr.filter(x => x != '').join(","));
+            }
+        }
+        url.search = searchParams.toString();
+        url = url.toString();
+        window.history.replaceState({ url: url }, null, url);
+    },
+
+    AdicionarTagQueryStringURL(tag_chave, tag_legenda) {
+        var values = [];
+        $.each(this.Filtro, function (key, obj) {
+            if (obj !== undefined)
+                if (obj.tag_chave == tag_chave)
+                    values.push(obj.tag_legenda)
+        });
+
+        var url = new URL(window.location.href);
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const searchParams = new URLSearchParams(urlSearchParams);
+        searchParams.set(tag_chave.toLowerCase(), values.join(','));
+        url.search = searchParams.toString();
+        url = url.toString();
+        window.history.replaceState({ url: url }, null, url);
+    },
+
+    AdicionarTagFiltro: function (tag_chave, tag_legenda, param_chave, param_valor) {
         let ja_existe = false;
         $.each(this.Filtro, function (key, value) {
             if (value !== undefined) {
@@ -127,7 +176,7 @@ var PesquisaCarro = {
                 }
             }
         });
-        if (ja_existe) return;
+        if (ja_existe) return false;
 
         this.Filtro.push({
             tag_chave: tag_chave,
@@ -136,42 +185,11 @@ var PesquisaCarro = {
             param_valor: param_valor
         });
 
+        this.AdicionarTagQueryStringURL(tag_chave, tag_legenda);
+
         $('.tags_f').append(this.HtmlItemTag(tag_chave, tag_legenda, param_chave, param_valor));
-    },
 
-    // ConverterTagsEmFiltro() {
-    //     var this_ = this;
-
-    //     $('.tags_f').find('a').each(function (key, value) {
-    //         let tag_chave = $(this).attr('tag_chave');
-    //         let tag_legenda = $(this).attr('tag_legenda');
-    //         let param_chave = $(this).attr('param_chave');
-    //         let param_valor = $(this).attr('param_valor');
-
-    //         // if (param_chave.endsWith('_ids')) {
-    //         //     if (this_.Filtro.hasOwnProperty(param_chave)) {
-    //         //         let arr = JSON.parse(this_.Filtro[param_chave]);
-    //         //         arr.push(parseInt(param_valor));
-    //         //         var str = JSON.stringify($.unique(arr));
-    //         //         this_.Filtro[param_chave] = str;
-    //         //     }
-    //         //     else
-    //         //         this_.Filtro[param_chave] = '[' + param_valor + ']';
-    //         // }
-    //         // else {
-    //         //     this_.Filtro[param_chave] = param_valor;
-    //         // }
-
-    //     });
-    // },
-
-    AtualizarTagsFiltro() {
-        let this_ = this;
-        $('.tags_f').empty();
-
-        // $.each(this.Filtro, function (key, value) {
-        //     $('.tags_f').append(this_.HtmlItemTag(value));
-        // });
+        return true;
     },
 
     LimparTagsFiltro() {
@@ -340,10 +358,11 @@ var PesquisaCarro = {
     CarregarAcordaosFitro() {
         $('.accordion#accordionExample').empty();
 
-        this.CarregarAcordaoCategoria();
+        this.CarregarAcordaoCategoria(0);
+        this.CarregarAcordaoFaixaPreco(1);
     },
 
-    CarregarAcordaoCategoria() {
+    CarregarAcordaoCategoria(collaspedId) {
         let this_ = this;
 
         $.ajax({
@@ -366,7 +385,7 @@ var PesquisaCarro = {
 
                 this_.TagsLoaded = true;
 
-                $('.accordion#accordionExample').append(this_.HtmlAcordaoCategoria(htmlItems, 0));
+                $('.accordion#accordionExample').append(this_.HtmlAcordaoCategoria(htmlItems, collaspedId));
             },
             error: function (request, textStatus, errorThrown) {
                 StorageClear();
@@ -383,6 +402,10 @@ var PesquisaCarro = {
                 // }
             }
         });
+    },
+
+    CarregarAcordaoFaixaPreco(collaspedId) {
+        $('.accordion#accordionExample').prepend(this.HtmlAcordaoFaixaPreco(collaspedId));
     },
 
     HtmlItemAcordaoCategoria: function (item) {
@@ -417,6 +440,29 @@ var PesquisaCarro = {
             </div>
         </div>
         `;
+    },
+
+    HtmlAcordaoFaixaPreco: function (collaspedId) {
+        return `<div class="card">
+            <div class="card-header" id="heading${collaspedId}">
+                <button class="btn btn-link" type="button" data-toggle="collapse"
+                    data-target="#collapse${collaspedId}" aria-expanded="true" aria-controls="collapse${collaspedId}">
+                    Preço
+                    <i class="ti-plus"></i>
+                    <i class="ti-minus"></i>
+                </button>
+            </div>
+            <div id="collapse${collaspedId}" class="collapse show" aria-labelledby="heading${collaspedId}"
+                data-parent="">
+                <div class="card-body">
+                    <div class="price_wd_inner">
+                        <div id="price_wd"></div>
+                        <label for="amount">Preço:</label>
+                        <input type="text" id="amount" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>`;
     },
 
     HtmlAcordaoCategoria: function (htmlItems, collapseId) {
