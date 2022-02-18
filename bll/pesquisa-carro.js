@@ -49,8 +49,8 @@ var PesquisaCarro = {
         this.CarregarComboOrdenacao();
         this.CarregarAcordaosFitro();
 
-        this.Pesquisar(true);
-        this.Pesquisar(false, true);
+        this.Pesquisar(true, false, false);
+        this.Pesquisar(false, true, false);
 
         this.AssinarEventos();
     },
@@ -183,11 +183,10 @@ var PesquisaCarro = {
         return `<a href="#" class='tag_filtro' tag_chave='${tag_chave}' tag_legenda='${tag_legenda}' param_chave='${param_chave}' param_valor='${param_valor}'>${tag_legenda}<i class="ti-close"></i></a>`;
     },
 
-    Pesquisar(limpar = false, analitico = false) {
+    Pesquisar(limpar = false, analitico = false, async = true) {
         var this_ = this;
 
         if (limpar) {
-            this.LimparItensProdutos();
             this_.RolamentoPesquisa.offset = 0;
             this_.RolamentoPesquisa.skip = 0;
         }
@@ -214,7 +213,7 @@ var PesquisaCarro = {
             }
         });
 
-        // Converte Filtro em Parâmetros do endpoint
+        // Converte o filtro em parâmetros para o endpoint de pesquisa
         $.each(this_.Filtro, function (key, value) {
             if (value !== undefined && value !== null) {
                 if (value.param_chave.endsWith('_ids')) {
@@ -234,13 +233,17 @@ var PesquisaCarro = {
 
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/carros',
-            type: "GET", cache: true, async: !limpar, contentData: 'json',
+            type: "GET", cache: true, async: async, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
             beforeSend: function (xhr) {
                 if (Logado()) xhr.setRequestHeader('Authorization', "Bearer " + StorageGetItem("token")); // Mágica aqui
             },
             data: params,
             success: function (result, textStatus, request) {
+                if (limpar) {
+                    this_.LimparItensProdutos();
+                };
+
                 if (analitico) {
                     $('#encontrados').html(result.encontrados);
                 }
