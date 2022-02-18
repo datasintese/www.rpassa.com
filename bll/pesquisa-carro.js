@@ -141,6 +141,11 @@ var PesquisaCarro = {
 
             $(this).remove();
 
+            if (tag_chave == 'ordenacao') {
+                $('.nice_select#ordenacao').val(1).niceSelect('update');
+                this_.RolamentoPesquisa['orderby'] = 1;
+            }
+
             this_.Pesquisar(true, false);
             this_.Pesquisar(false, true);
         });
@@ -543,6 +548,48 @@ var PesquisaCarro = {
         });
     },
 
+    CarregarAcordaoAnoFabricacao(collaspedId) {
+        let this_ = this;
+
+        // $.ajax({
+        //     url: localStorage.getItem('api') + '/v1/mobile/especificacoes/carro/valores?chave=categoria',
+        //     type: "GET", cache: true, async: true, contentData: 'json',
+        //     contentType: 'application/json;charset=utf-8',
+        //     success: function (result, textStatus, request) {
+        //         let htmlItems = '';
+
+        //         $.each(result, function (key, item) {
+        //             this_.Tags.push({
+        //                 tag_chave: item.chave,
+        //                 tag_legenda: item.valor,
+        //                 param_chave: 'especificacoes_ids',
+        //                 param_valor: item.id
+        //             });
+
+        //             htmlItems += this_.HtmlItemAcordaoCategoria(item);
+        //         });
+
+        //         this_.TagsLoaded = true;
+
+        //         $('.accordion#accordionExample').append(this_.HtmlAcordaoCategoria(htmlItems, collaspedId));
+        //     },
+        //     error: function (request, textStatus, errorThrown) {
+        //         StorageClear();
+
+        //         alert(JSON.stringify(request));
+
+        //         // if (!MensagemErroAjax(request, errorThrown)) {
+        //         //     try {
+        //         //         var obj = $.parseJSON(request.responseText)
+        //         //         Mensagem(obj.mensagem, 'warning');
+        //         //     } catch (error) {
+        //         //         Mensagem(request.responseText, 'warning');
+        //         //     }
+        //         // }
+        //     }
+        // });
+    },
+
     CarregarAcordaoFaixaPreco(collaspedId) {
         $('.accordion#accordionExample').append(this.HtmlAcordaoFaixaPreco(collaspedId));
 
@@ -553,8 +600,7 @@ var PesquisaCarro = {
             values: [0, 500000],
             slide: function (event, ui) {
                 $("#amount").val("R$" + ui.values[0].toLocaleString('de-DE') + " - R$" + ui.values[1].toLocaleString('de-DE'));
-            },
-            // stop: this.EventoFaixaPreco
+            }
         });
         this.AtualizarLegendaFaixaPreco();
     },
@@ -596,6 +642,40 @@ var PesquisaCarro = {
             </div>
         </div>
         `;
+    },
+
+    HtmlAcordaoItemAnoFabricacao: function (item, optionId) {
+        let quantidade = 16;
+
+        return `<li>
+            <div class="creat_account">
+                <input type="checkbox" id="fp-option-${optionId}" name="selector">
+                <label for="fp-option-${optionId}">2019 <span>(${quantidade})</span></label>
+                <div class="check"></div>
+            </div>
+        </li>`;
+    },
+
+    HtmlAcordaoAnoFabricacao: function (htmlItems, collaspedId) {
+        return `<div class="card">
+        <div class="card-header" id="heading${collaspedId}">
+            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                data-target="#collapse${collaspedId}" aria-expanded="false"
+                aria-controls="collapse${collaspedId}">
+                Ano de Fabricação
+                <i class="ti-plus"></i>
+                <i class="ti-minus"></i>
+            </button>
+        </div>
+        <div id="collapse${collaspedId}" class="collapse" aria-labelledby="heading${collaspedId}"
+            data-parent="">
+            <div class="card-body">
+                <ul class="nav flex-column wd_scroll">
+                    ${htmlItems}
+                </ul>
+            </div>
+        </div>
+    </div>`;
     },
 
     HtmlAcordaoFaixaPreco: function (collaspedId) {
