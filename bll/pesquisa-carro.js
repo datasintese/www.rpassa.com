@@ -28,9 +28,11 @@ var PesquisaCarro = {
             if (this_.TagsLoaded) {
                 clearInterval(clock);
 
+                let ordenacao = null;
                 let preco_min = null;
                 let preco_max = null;
-                let ordenacao = null;
+                let km_min = null;
+                let km_max = null;
 
                 $.each(params, function (param, value) {
                     let values = value.split(',');
@@ -41,6 +43,10 @@ var PesquisaCarro = {
                         preco_min = values[0];
                     else if (param == 'preco_max')
                         preco_max = values[0];
+                    if (param == 'km_min')
+                        km_min = values[0];
+                    else if (param == 'km_max')
+                        km_max = values[0];
                     else {
                         $.each(values, function (idx, valueSplit) {
                             $.each(this_.Tags, function (index, obj) {
@@ -68,7 +74,26 @@ var PesquisaCarro = {
                     this_.AdicionarTagFiltroOrdenacao(ordenacao, param_valor, false);
                 }
 
-                var options = $('#price_wd').slider('option');
+                var km_options = $('#km_wd').slider('option');
+
+                // Quando não há faixa de km informado na QueryString
+                if (km_min !== null && km_max !== null) {
+                    $("#km_wd").slider("values", 0, km_min);
+                    $("#km_wd").slider("values", 1, km_max);
+                    this_.AdicionarTagFiltroQuilometragem({ values: [km_min, km_max] }, false);
+                }
+                else if (km_min != null) { // Quando há faixa de km parcial informado na QueryString
+                    $("#km_wd").slider("values", 0, km_min);
+                    $("#km_wd").slider("values", 1, km_options.max);
+                    this_.AdicionarTagFiltroQuilometragem({ values: [km_min, km_options.max] }, false);
+                }
+                else if (km_max != null) { // Quando há faixa de km parcial informado na QueryString
+                    $("#km_wd").slider("values", 0, km_options.min);
+                    $("#km_wd").slider("values", 1, km_max);
+                    this_.AdicionarTagFiltroQuilometragem({ values: [km_options.min, km_max] }, false);
+                }
+
+                var preco_options = $('#price_wd').slider('option');
 
                 // Quando não há faixa de preço informado na QueryString
                 if (preco_min !== null && preco_max !== null) {
@@ -78,16 +103,19 @@ var PesquisaCarro = {
                 }
                 else if (preco_min != null) { // Quando há faixa de preço parcial informado na QueryString
                     $("#price_wd").slider("values", 0, preco_min);
-                    $("#price_wd").slider("values", 1, options.max);
-                    this_.AdicionarTagFiltroPreco({ values: [preco_min, options.max] }, false);
+                    $("#price_wd").slider("values", 1, preco_options.max);
+                    this_.AdicionarTagFiltroPreco({ values: [preco_min, preco_options.max] }, false);
                 }
                 else if (preco_max != null) { // Quando há faixa de preço parcial informado na QueryString
-                    $("#price_wd").slider("values", 0, options.min);
+                    $("#price_wd").slider("values", 0, preco_options.min);
                     $("#price_wd").slider("values", 1, preco_max);
-                    this_.AdicionarTagFiltroPreco({ values: [options.min, preco_max] }, false);
+                    this_.AdicionarTagFiltroPreco({ values: [preco_options.min, preco_max] }, false);
                 }
 
                 this_.AtualizarLegendaFaixaPreco();
+                this_.AtualizarLegendaFaixaQuilometragem();
+
+                this_.PosInicializar();
 
                 this_.Pesquisar(false, true, true);
                 this_.Pesquisar(true, false, false);
@@ -100,6 +128,17 @@ var PesquisaCarro = {
         this.AssinarEventos();
 
         this.LimparItensProdutos();
+    },
+
+    PosInicializar() {
+        $(".wd_scroll").mCustomScrollbar({
+            theme: "dark",
+        });
+
+        $('#accordionExample').collapse({
+            heightStyle: "fill",
+            toggle: true
+        })
     },
 
     AssinarEventos() {
@@ -174,6 +213,10 @@ var PesquisaCarro = {
 
         $("#price_wd").on("slidestop", function (event, ui) {
             this_.AdicionarTagFiltroPreco(ui);
+        });
+
+        $("#km_wd").on("slidestop", function (event, ui) {
+            this_.AdicionarTagFiltroQuilometragem(ui);
         });
     },
 
@@ -253,6 +296,22 @@ var PesquisaCarro = {
 
         this.AdicionarTagFiltro('preco_min', 'Preço Min: R$ ' + ui.values[0].toLocaleString('de-DE'), 'preco_min', ui.values[0], true);
         this.AdicionarTagFiltro('preco_max', 'Preço Max: R$ ' + ui.values[1].toLocaleString('de-DE'), 'preco_max', ui.values[1], true);
+
+        if (pesquisar) {
+            this.Pesquisar(true, false);
+            this.Pesquisar(false, true);
+        }
+    },
+
+    AdicionarTagFiltroQuilometragem(ui, pesquisar = true) {
+        this.DeletarTagQueryStringURL('km_min', null);
+        this.DeletarTagQueryStringURL('km_max', null);
+
+        this.DeletarTagFiltro('km_min');
+        this.DeletarTagFiltro('km_max');
+
+        this.AdicionarTagFiltro('km_min', 'Km Min: ' + ui.values[0].toLocaleString('de-DE'), 'km_min', ui.values[0], true);
+        this.AdicionarTagFiltro('km_max', 'Km Max: ' + ui.values[1].toLocaleString('de-DE'), 'km_max', ui.values[1], true);
 
         if (pesquisar) {
             this.Pesquisar(true, false);
@@ -497,13 +556,9 @@ var PesquisaCarro = {
         $('.accordion#accordionExample').empty();
         $('#accordionExample').collapse('dispose');
 
-        this.CarregarAcordaoFaixaPreco('0');
-        this.CarregarAcordaoCategoria('1');
-
-        $('#accordionExample').collapse({
-            heightStyle: "content",
-            toggle: true
-        })
+        this.CarregarAcordaoFaixaPreco('one');
+        this.CarregarAcordaoFaixaQuilometragem('two');
+        this.CarregarAcordaoCategoria('three');
     },
 
     CarregarAcordaoCategoria(collaspedId) {
@@ -516,6 +571,8 @@ var PesquisaCarro = {
             success: function (result, textStatus, request) {
                 let htmlItems = '';
 
+                var count = 0;
+
                 $.each(result, function (key, item) {
                     this_.Tags.push({
                         tag_chave: item.chave,
@@ -524,7 +581,12 @@ var PesquisaCarro = {
                         param_valor: item.id
                     });
 
+                    count++;
+                    if (count % 2 != 0) htmlItems += '<div class="row">';
+
                     htmlItems += this_.HtmlItemAcordaoCategoria(item);
+
+                    if (count % 2 == 0) htmlItems += '</div>';
                 });
 
                 this_.TagsLoaded = true;
@@ -590,8 +652,8 @@ var PesquisaCarro = {
         // });
     },
 
-    CarregarAcordaoFaixaPreco(collaspedId) {
-        $('.accordion#accordionExample').append(this.HtmlAcordaoFaixaPreco(collaspedId));
+    CarregarAcordaoFaixaPreco(collapsedId) {
+        $('.accordion#accordionExample').append(this.HtmlAcordaoFaixaPreco(collapsedId));
 
         $("#price_wd").slider({
             range: true,
@@ -605,9 +667,29 @@ var PesquisaCarro = {
         this.AtualizarLegendaFaixaPreco();
     },
 
+    CarregarAcordaoFaixaQuilometragem(collapsedId) {
+        $('.accordion#accordionExample').append(this.HtmlAcordaoFaixaQuilometragem(collapsedId));
+
+        $("#km_wd").slider({
+            range: true,
+            min: 0,
+            max: 500000,
+            values: [0, 500000],
+            slide: function (event, ui) {
+                $("#km_amount").val(ui.values[0].toLocaleString('de-DE') + " km - " + ui.values[1].toLocaleString('de-DE') + " km");
+            }
+        });
+        this.AtualizarLegendaFaixaQuilometragem();
+    },
+
     AtualizarLegendaFaixaPreco() {
         $("#amount").val("R$" + $("#price_wd").slider("values", 0).toLocaleString('de-DE') +
             " - R$" + $("#price_wd").slider("values", 1).toLocaleString('de-DE'));
+    },
+
+    AtualizarLegendaFaixaQuilometragem() {
+        $("#km_amount").val($("#km_wd").slider("values", 0).toLocaleString('de-DE') +
+            " km - " + $("#km_wd").slider("values", 1).toLocaleString('de-DE') + " km");
     },
 
     HtmlItemAcordaoCategoria: function (item) {
@@ -660,7 +742,7 @@ var PesquisaCarro = {
         return `<div class="card">
         <div class="card-header" id="heading${collaspedId}">
             <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                data-target="#collapse${collaspedId}" aria-expanded="false"
+                data-target="#collapse${collaspedId}" aria-expanded="true"
                 aria-controls="collapse${collaspedId}">
                 Ano de Fabricação
                 <i class="ti-plus"></i>
@@ -678,24 +760,53 @@ var PesquisaCarro = {
     </div>`;
     },
 
-    HtmlAcordaoFaixaPreco: function (collaspedId) {
+    HtmlAcordaoFaixaPreco: function (collapsedId) {
         return `<div class="card">
-            <div class="card-header" id="heading${collaspedId}">
+            <div class="card-header" id="heading${collapsedId}">
                 <button class="btn btn-link" type="button" data-toggle="collapse"
-                    data-target="#collapse${collaspedId}" aria-expanded="true" aria-controls="collapse${collaspedId}">
+                    data-target="#collapse${collapsedId}" aria-expanded="true" aria-controls="collapse${collapsedId}"
+                    style="padding: 10px 0px !important">
                     Preço
                     <i class="ti-plus"></i>
                     <i class="ti-minus"></i>
                 </button>
             </div>
-            <div id="collapse${collaspedId}" class="collapse show" aria-labelledby="heading${collaspedId}"
+            <div id="collapse${collapsedId}" class="collapse show" aria-labelledby="heading${collapsedId}"
                 data-parent="">
 
-                <div class="card-body">
-                    <div class="price_wd_inner">
+                <div class="card-body"
+                style="padding-bottom: 15px !important">
+                    <div class="price_wd_inner ">
                         <div id="price_wd" style="margin-right:15px"></div>
                         
                         <input type="text" id="amount" readonly style="width:100%">
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    },
+
+    HtmlAcordaoFaixaQuilometragem: function (collapsedId) {
+        return `<div class="card">
+            <div class="card-header" id="heading${collapsedId}">
+                <button class="btn btn-link" type="button" data-toggle="collapse"
+                    data-target="#collapse${collapsedId}" aria-expanded="true" aria-controls="collapse${collapsedId}"
+                    style="padding: 10px 0px !important">
+                    Quilometragem
+                    <i class="ti-plus"></i>
+                    <i class="ti-minus"></i>
+                </button>
+            </div>
+            <div id="collapse${collapsedId}" class="collapse show" aria-labelledby="heading${collapsedId}"
+                data-parent="" >
+
+                <div class="card-body" 
+                    style="padding-bottom: 15px !important" >
+
+                    <div class="price_wd_inner">
+                        <div id="km_wd" style="margin-right:15px"></div>
+                        
+                        <input type="text" id="km_amount" readonly style="width:100%">
                     </div>
                 </div>
             </div>
@@ -718,7 +829,7 @@ var PesquisaCarro = {
                 data-parent="">
 
                 <div class="card-body">
-                    <div class="row car_body">
+                    <div class="row car_body wd_scroll">
                         ${htmlItems}
                     </div>
                 </div>
