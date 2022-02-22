@@ -9,8 +9,13 @@
     UsuarioFavorito.Construtor();
     UsuarioFavorito.Inicializar();
 
+    
+    UsuarioMeusCarros.Construtor();
+    UsuarioMeusCarros.Inicializar();
+
     TelaCompartilhamento.Inicializar();
 
     UsuarioProposta.Construtor();
     UsuarioProposta.Inicializar();
+
 })(jQuery)

@@ -35,7 +35,7 @@ var UsuarioFavorito = {
             type: "GET", cache: false, async: true, contentData: 'json',
             success: function (result, textStatus, request) {
 
-                let menu_ordernacao = this_.spa.find('#order_by');
+                let menu_ordernacao = this_.spa.find('#order_by_favoritos');
                 menu_ordernacao.empty();
                 
                 $.each(result, function (i, obj) {
@@ -125,7 +125,7 @@ var UsuarioFavorito = {
 
     EventChangeOrdenacao: function () {
         var this_ = this;
-        this_.spa.find('#order_by').change(async function () {
+        this_.spa.find('#order_by_favoritos').change(async function () {
             if ($(this).val() != 0) {
                 this_.RolamentoFavoritos.orderby = $(this).val();
                 this_.RolamentoFavoritos.offset = 0;
@@ -141,7 +141,7 @@ var UsuarioFavorito = {
     EventClickPaginacao: function () {
         var this_ = this;
         let html_favoritos = this_.spa.find("#segm_favorito");
-        let link_pagina = this_.spa.find("a.page-link");
+        let link_pagina = this_.spa.find(".pagination.favoritos a.page-link");
 
         link_pagina.click(async function (event) {
             event.preventDefault();
@@ -160,12 +160,12 @@ var UsuarioFavorito = {
                     if ((this_.TotPaginasFor - numPageClicked) % this_.QtdPaginasFavoritos === 0) {
                         // Ocultar Lista atual
                         for (let i = 1; i <= this_.QtdPaginasFavoritos; i++) {
-                            this_.spa.find(`ul.pagination li.page-item[numPage="${numPageClicked + i}"]`).css('display', 'none');
+                            this_.spa.find(`ul.pagination.favoritos li.page-item[numPage="${numPageClicked + i}"]`).css('display', 'none');
                         }
 
                         // Exibir lista anterior
                         for (let i = 1; i <= this_.QtdPaginasFavoritos; i++) {
-                            this_.spa.find(`ul.pagination li.page-item[numPage="${numPageClicked + 1 - i}"]`).css('display', 'block');
+                            this_.spa.find(`ul.pagination.favoritos li.page-item[numPage="${numPageClicked + 1 - i}"]`).css('display', 'block');
                         }
                     }
                 }
@@ -173,18 +173,18 @@ var UsuarioFavorito = {
                 else if (valor === 'icon-arrow_2') {
                     numPageClicked = parseInt(this_.PaginaAtual) + 1;
 
-                    let qtdPaginas = this_.spa.find('ul.pagination li').length - 2;
+                    let qtdPaginas = this_.spa.find('ul.pagination.favoritos li').length - 2;
 
                     // Verificar se tem paginas na memoria
                     if ((numPageClicked - 1) % this_.QtdPaginasFavoritos === 0 && numPageClicked < this_.TotPaginasFor) {
                         // Ocultar Lista atual
                         for (let i = 1; i <= this_.QtdPaginasFavoritos; i++) {
-                            this_.spa.find(`ul.pagination li.page-item[numPage="${numPageClicked - i}"]`).css('display', 'none');
+                            this_.spa.find(`ul.pagination.favoritos li.page-item[numPage="${numPageClicked - i}"]`).css('display', 'none');
                         }
 
                         // Exibir lista próximos
                         for (let i = 1; i <= this_.QtdPaginasFavoritos; i++) {
-                            this_.spa.find(`ul.pagination li.page-item[numPage="${numPageClicked - 1 + i}"]`).css('display', 'block');
+                            this_.spa.find(`ul.pagination.favoritos li.page-item[numPage="${numPageClicked - 1 + i}"]`).css('display', 'block');
                         }
                     } else {
                         // Carregar mais paginas
@@ -197,7 +197,7 @@ var UsuarioFavorito = {
 
                                 // Ocultar lista anteriores
                                 for (let i = 1; i <= this_.QtdPaginasFavoritos; i++) {
-                                    this_.spa.find(`ul.pagination li.page-item[numPage="${numPageClicked - i}"]`).css('display', 'none');
+                                    this_.spa.find(`ul.pagination.favoritos li.page-item[numPage="${numPageClicked - i}"]`).css('display', 'none');
                                 }
 
                                 // Carregar Proximos
@@ -208,8 +208,8 @@ var UsuarioFavorito = {
                 }
             }
 
-            this_.spa.find('ul.pagination li.page-item.active').attr('class', 'page-item');
-            this_.spa.find(`ul.pagination li.page-item[numPage="${numPageClicked}"]`).attr('class', 'page-item active');
+            this_.spa.find('ul.pagination.favoritos li.page-item.active').attr('class', 'page-item');
+            this_.spa.find(`ul.pagination.favoritos li.page-item[numPage="${numPageClicked}"]`).attr('class', 'page-item active');
 
             html_favoritos.find(`div[numPage="${paginaAtual}"]`).each(function (i, element) {
                 $(this).css('display', 'none');
@@ -234,7 +234,7 @@ var UsuarioFavorito = {
 
     RemoverAssinaturaEventoPaginacao() {
         var this_ = this;
-        this_.spa.find("a.page-link").off('click');
+        this_.spa.find(".pagination.favoritos a.page-link").off('click');
     },
 
     ObterFavoritos: function () {
@@ -257,39 +257,6 @@ var UsuarioFavorito = {
                 }
             });
         });
-    },
-
-    CarregarComboOrdernacao: function () {
-        var this_ = this;
-
-        $.ajax({
-            url: localStorage.getItem('api') + '/v1/mobile/carros/ordenacao',
-            type: "GET", cache: false, async: true, contentData: 'json',
-            success: function (result, textStatus, request) {
-
-                let menu_ordernacao = this_.spa.find('#order_by');
-                menu_ordernacao.empty();
-                
-                $.each(result, function (i, obj) {
-                    menu_ordernacao.append(`<option value="${obj.id}">${obj.nome}</option>`);
-                });
-                menu_ordernacao.niceSelect();
-                menu_ordernacao.val(1).niceSelect('update');
-                this_.spa.find('.nice-select').css('width', '200px');
-            },
-            error: function (request, textStatus, errorThrown) {
-                alert(JSON.stringify(request));
-
-                // if (!MensagemErroAjax(request, errorThrown)) {
-                //     try {
-                //         var obj = $.parseJSON(request.responseText)
-                //         Mensagem(obj.mensagem, 'warning');
-                //     } catch (error) {
-                //         Mensagem(request.responseText, 'warning');
-                //     }
-                // }
-            }
-        })
     },
 
     CarregarRolamentoFavoritoPadrao : function(){
@@ -341,6 +308,12 @@ var UsuarioFavorito = {
 
                 $.each(favoritos_registros, function (j, favorito) {
                     html_favoritos.append(this_.HtmlFavoritos(favorito, i, exibirPagina));
+
+                    this_.RemoverAssinaturaEventoPaginacao();
+                    this_.EventClickPaginacao();
+
+                    this_.RemoverAssinaturaEventoClickFavorito();
+                    this_.EventFavoritoClick();
                 });
 
                 pagination.append(this_.HtmlPagination(i, exibirPagina))
@@ -354,12 +327,10 @@ var UsuarioFavorito = {
         }
 
         pagination.append('<li class="page-item" id="pag_proximo"><a class="page-link" href="#"><i class="icon-arrow_2"></i></a></li>');
-
-        this_.PaginaAtual = pagina;
         this_.RemoverAssinaturaEventoPaginacao();
-        this_.RemoverAssinaturaEventoClickFavorito();
         this_.EventClickPaginacao();
-        this_.EventFavoritoClick();
+        this_.PaginaAtual = pagina;
+        
     },
 
     
