@@ -1,7 +1,9 @@
 var PesquisaCarro = {
     Filtro: [], /* Lista dinâmica de tags selecionadas pelo usuário ou pela query string */
     Tags: [], /* Fonte de todas as tags das especificações ids carregadas do banco de dados */
-    TagsLoaded: false,
+    TagsLoading: {}, /* Sinaliza se as tags ainda estão sendo carregadas do servidor */
+
+    TamanhoTituloCategorias: 16, /* Valor em px */
 
     RolamentoPesquisa: {
         categoria_id: null,
@@ -25,22 +27,44 @@ var PesquisaCarro = {
 
         // Converte Query String em tags de filtro
         var clock = setInterval(function () {
-            if (this_.TagsLoaded) {
+            let TagsLoaded = false;
+
+            $.each(this_.TagsLoading, function (k, v) {
+                if (this_.TagsLoading[k] == true) {
+                    TagsLoaded = false;
+                    return false;
+                }
+                TagsLoaded = true;
+            });
+
+            if (TagsLoaded) {
                 clearInterval(clock);
 
+                let ordenacao = null;
                 let preco_min = null;
                 let preco_max = null;
-                let ordenacao = null;
+                let km_min = null;
+                let km_max = null;
+                let ano_min = null;
+                let ano_max = null;
 
                 $.each(params, function (param, value) {
                     let values = value.split(',');
 
                     if (param == 'ordenacao')
                         ordenacao = values[0];
-                    if (param == 'preco_min')
+                    else if (param == 'preco_min')
                         preco_min = values[0];
                     else if (param == 'preco_max')
                         preco_max = values[0];
+                    else if (param == 'km_min')
+                        km_min = values[0];
+                    else if (param == 'km_max')
+                        km_max = values[0];
+                    else if (param == 'ano_min')
+                        ano_min = values[0];
+                    else if (param == 'ano_max')
+                        ano_max = values[0];
                     else {
                         $.each(values, function (idx, valueSplit) {
                             $.each(this_.Tags, function (index, obj) {
@@ -68,7 +92,45 @@ var PesquisaCarro = {
                     this_.AdicionarTagFiltroOrdenacao(ordenacao, param_valor, false);
                 }
 
-                var options = $('#price_wd').slider('option');
+                var ano_options = $('#ano_wd').slider('option');
+
+                // Quando não há faixa de km informado na QueryString
+                if (ano_min !== null && ano_max !== null) {
+                    $("#ano_wd").slider("values", 0, ano_min);
+                    $("#ano_wd").slider("values", 1, ano_max);
+                    this_.AdicionarTagFiltroAno({ values: [ano_min, ano_max] }, false);
+                }
+                else if (ano_min != null) { // Quando há faixa de km parcial informado na QueryString
+                    $("#ano_wd").slider("values", 0, ano_min);
+                    $("#ano_wd").slider("values", 1, ano_options.max);
+                    this_.AdicionarTagFiltroAno({ values: [ano_min, ano_options.max] }, false);
+                }
+                else if (ano_max != null) { // Quando há faixa de km parcial informado na QueryString
+                    $("#ano_wd").slider("values", 0, ano_options.min);
+                    $("#ano_wd").slider("values", 1, ano_max);
+                    this_.AdicionarTagFiltroAno({ values: [ano_options.min, ano_max] }, false);
+                }
+
+                var km_options = $('#km_wd').slider('option');
+
+                // Quando não há faixa de km informado na QueryString
+                if (km_min !== null && km_max !== null) {
+                    $("#km_wd").slider("values", 0, km_min);
+                    $("#km_wd").slider("values", 1, km_max);
+                    this_.AdicionarTagFiltroQuilometragem({ values: [km_min, km_max] }, false);
+                }
+                else if (km_min != null) { // Quando há faixa de km parcial informado na QueryString
+                    $("#km_wd").slider("values", 0, km_min);
+                    $("#km_wd").slider("values", 1, km_options.max);
+                    this_.AdicionarTagFiltroQuilometragem({ values: [km_min, km_options.max] }, false);
+                }
+                else if (km_max != null) { // Quando há faixa de km parcial informado na QueryString
+                    $("#km_wd").slider("values", 0, km_options.min);
+                    $("#km_wd").slider("values", 1, km_max);
+                    this_.AdicionarTagFiltroQuilometragem({ values: [km_options.min, km_max] }, false);
+                }
+
+                var preco_options = $('#price_wd').slider('option');
 
                 // Quando não há faixa de preço informado na QueryString
                 if (preco_min !== null && preco_max !== null) {
@@ -78,16 +140,20 @@ var PesquisaCarro = {
                 }
                 else if (preco_min != null) { // Quando há faixa de preço parcial informado na QueryString
                     $("#price_wd").slider("values", 0, preco_min);
-                    $("#price_wd").slider("values", 1, options.max);
-                    this_.AdicionarTagFiltroPreco({ values: [preco_min, options.max] }, false);
+                    $("#price_wd").slider("values", 1, preco_options.max);
+                    this_.AdicionarTagFiltroPreco({ values: [preco_min, preco_options.max] }, false);
                 }
                 else if (preco_max != null) { // Quando há faixa de preço parcial informado na QueryString
-                    $("#price_wd").slider("values", 0, options.min);
+                    $("#price_wd").slider("values", 0, preco_options.min);
                     $("#price_wd").slider("values", 1, preco_max);
-                    this_.AdicionarTagFiltroPreco({ values: [options.min, preco_max] }, false);
+                    this_.AdicionarTagFiltroPreco({ values: [preco_options.min, preco_max] }, false);
                 }
 
                 this_.AtualizarLegendaFaixaPreco();
+                this_.AtualizarLegendaFaixaAno();
+                this_.AtualizarLegendaFaixaQuilometragem();
+
+                this_.PosInicializar();
 
                 this_.Pesquisar(false, true, true);
                 this_.Pesquisar(true, false, false);
@@ -100,6 +166,20 @@ var PesquisaCarro = {
         this.AssinarEventos();
 
         this.LimparItensProdutos();
+    },
+
+    PosInicializar() {
+        $(".wd_scroll").mCustomScrollbar({
+
+            theme: "dark",
+            setHeight: "20%",
+            mouseWheel: { enable: true }
+        });
+
+        $('#accordionExample').collapse({
+            heightStyle: "fill",
+            toggle: true
+        })
     },
 
     AssinarEventos() {
@@ -117,6 +197,32 @@ var PesquisaCarro = {
                 this_.Pesquisar(true, false);
                 this_.Pesquisar(false, true);
             }
+        });
+
+        $(document.body).on('click', '.tag_item_check', function (event) {
+            let tag_chave = $(this).attr('tag_chave');
+            let tag_legenda = 'Final Placa ' + $(this).attr('tag_legenda');
+            let param_chave = $(this).attr('param_chave');
+            let param_valor = $(this).attr('param_valor');
+
+            var element = $(this).parent().find("input[type=checkbox]");
+            let checked = element.is(':checked');
+
+            if (checked)
+                $(this).parent().find("input[type=checkbox]").removeAttr('checked');
+            else
+                $(this).parent().find("input[type=checkbox]").attr('checked', 'checked');
+
+            if (checked) {
+                this_.DeletarTagQueryStringURL(tag_chave, tag_legenda);
+                this_.DeletarTagFiltro(tag_chave, null, param_valor);
+            }
+            else {
+                this_.AdicionarTagFiltro(tag_chave, tag_legenda, param_chave, param_valor);
+            }
+
+            this_.Pesquisar(true, false);
+            this_.Pesquisar(false, true);
         });
 
         $(document).on('click', '.tag_filtro', function (event) {
@@ -175,6 +281,14 @@ var PesquisaCarro = {
         $("#price_wd").on("slidestop", function (event, ui) {
             this_.AdicionarTagFiltroPreco(ui);
         });
+
+        $("#km_wd").on("slidestop", function (event, ui) {
+            this_.AdicionarTagFiltroQuilometragem(ui);
+        });
+
+        $("#ano_wd").on("slidestop", function (event, ui) {
+            this_.AdicionarTagFiltroAno(ui);
+        });
     },
 
     LimparQueryStringURL() {
@@ -212,12 +326,12 @@ var PesquisaCarro = {
         window.history.replaceState({ url: url }, null, url);
     },
 
-    AdicionarTagQueryStringURL(tag_chave, queryStringValor) {
+    AdicionarTagQueryStringURL(tag_chave, useParamValor) {
         var values = [];
         $.each(this.Filtro, function (key, obj) {
             if (obj !== undefined)
                 if (obj.tag_chave == tag_chave) {
-                    if (queryStringValor)
+                    if (useParamValor)
                         values.push(obj.param_valor)
                     else
                         values.push(obj.tag_legenda)
@@ -260,31 +374,93 @@ var PesquisaCarro = {
         }
     },
 
-    DeletarTagFiltro(tag_chave) {
+    AdicionarTagFiltroQuilometragem(ui, pesquisar = true) {
+        this.DeletarTagQueryStringURL('km_min', null);
+        this.DeletarTagQueryStringURL('km_max', null);
+
+        this.DeletarTagFiltro('km_min');
+        this.DeletarTagFiltro('km_max');
+
+        this.AdicionarTagFiltro('km_min', 'Km Min: ' + ui.values[0].toLocaleString('de-DE'), 'km_min', ui.values[0], true);
+        this.AdicionarTagFiltro('km_max', 'Km Max: ' + ui.values[1].toLocaleString('de-DE'), 'km_max', ui.values[1], true);
+
+        if (pesquisar) {
+            this.Pesquisar(true, false);
+            this.Pesquisar(false, true);
+        }
+    },
+
+    AdicionarTagFiltroAno(ui, pesquisar = true) {
+        this.DeletarTagQueryStringURL('ano_min', null);
+        this.DeletarTagQueryStringURL('ano_max', null);
+
+        this.DeletarTagFiltro('ano_min');
+        this.DeletarTagFiltro('ano_max');
+
+        this.AdicionarTagFiltro('ano_min', 'Ano Min: ' + ui.values[0].toLocaleString('de-DE'), 'ano_min', ui.values[0], true);
+        this.AdicionarTagFiltro('ano_max', 'Ano Max: ' + ui.values[1].toLocaleString('de-DE'), 'ano_max', ui.values[1], true);
+
+        if (pesquisar) {
+            this.Pesquisar(true, false);
+            this.Pesquisar(false, true);
+        }
+    },
+
+    DeletarTagFiltro(tag_chave, tag_legenda = null, param_valor = null) {
         let this_ = this;
 
         $.each(this.Filtro, function (key, value) {
             if (value !== undefined) {
-                if (tag_chave == value.tag_chave) {
-                    delete this_.Filtro[key];
-                    return false;
+                // Remova tag pelo param_valor (elemento por elemento do grupo)
+                if (param_valor !== null) {
+                    if (tag_chave == value.tag_chave && param_valor == value.param_valor) {
+                        delete this_.Filtro[key];
+                    }
+                }
+                // Remova tag pela legenda (elemento por elemento do grupo)
+                else if (tag_legenda !== null) {
+                    if (tag_chave == value.tag_chave && tag_legenda == value.tag_legenda) {
+                        delete this_.Filtro[key];
+                    }
+                }
+                // Remova tag pela chave (todos os elementos do grupo)
+                else {
+                    if (tag_chave == value.tag_chave) {
+                        delete this_.Filtro[key];
+                        return false;
+                    }
                 }
             }
         });
 
         $('.tag_filtro').each(function (key, value) {
             let tag_chav = $(this).attr('tag_chave');
-            let tag_legenda = $(this).attr('tag_legenda');
-            let param_chave = $(this).attr('param_chave');
-            let param_valor = $(this).attr('param_valor');
+            let tag_legend = $(this).attr('tag_legenda');
+            let param_chav = $(this).attr('param_chave');
+            let param_val = $(this).attr('param_valor');
 
-            if (tag_chav == tag_chave) {
-                $(this).remove();
+            // Remova tag pela legenda (elemento por elemento do grupo)
+            if (param_valor !== null) {
+                if (tag_chav == tag_chave && param_valor == param_val) {
+                    $(this).remove();
+                }
+            }
+            // Remova tag pela legenda (elemento por elemento do grupo)
+            else if (tag_legenda !== null) {
+                if (tag_chav == tag_chave && tag_legend == tag_legenda) {
+                    $(this).remove();
+                }
+            }
+            // Remova tag pela chave (todos os elementos do grupo)
+            else {
+                if (tag_chav == tag_chave) {
+                    $(this).remove();
+                }
             }
         });
     },
 
-    AdicionarTagFiltro: function (tag_chave, tag_legenda, param_chave, param_valor, queryStringValor = false) {
+    AdicionarTagFiltro: function (tag_chave, tag_legenda, param_chave, param_valor, useParamValor = false) {
         let ja_existe = false;
         $.each(this.Filtro, function (key, value) {
             if (value !== undefined) {
@@ -294,7 +470,9 @@ var PesquisaCarro = {
                 }
             }
         });
-        if (ja_existe) return false; // Evita adicionar tag duplicada no Filtro
+        if (ja_existe) {
+            return false;
+        }
 
         this.Filtro.push({
             tag_chave: tag_chave,
@@ -303,8 +481,8 @@ var PesquisaCarro = {
             param_valor: param_valor
         });
 
-        this.AdicionarTagQueryStringURL(tag_chave, queryStringValor);
-        $('.tags_f').append(this.HtmlItemTag(tag_chave, tag_legenda, param_chave, param_valor, queryStringValor));
+        this.AdicionarTagQueryStringURL(tag_chave, useParamValor);
+        $('.tags_f').append(this.HtmlItemTag(tag_chave, tag_legenda, param_chave, param_valor, useParamValor));
 
         return true;
     },
@@ -364,16 +542,18 @@ var PesquisaCarro = {
             if (value !== undefined && value !== null) {
                 if (value.param_chave.endsWith('_ids')) {
                     if (params.hasOwnProperty(value.param_chave)) {
+                        // Valor agregado na Array
                         let arr = JSON.parse(params[value.param_chave]);
                         arr.push(parseInt(value.param_valor));
                         var str = JSON.stringify($.unique(arr));
                         params[value.param_chave] = str;
                     }
                     else
+                        // Primeiro valor da Array
                         params[value.param_chave] = '[' + value.param_valor + ']';
                 }
                 else
-                    params[value.param_chave] = value.param_valor;
+                    params[value.param_chave] = value.param_valor; // Não terminados em '_ids' é valor único
             }
         });
 
@@ -420,6 +600,7 @@ var PesquisaCarro = {
     },
 
     CarregarComboOrdenacao() {
+        this.TagsLoading['ordenacao'] = true;
         var this_ = this;
 
         this.LimparComboOrdenacao();
@@ -436,6 +617,7 @@ var PesquisaCarro = {
                         param_valor: obj.id
                     });
                 });
+                this_.TagsLoading['ordenacao'] = false;
 
                 $.each(result, function (i, obj) {
                     $('.nice_select#ordenacao').last()
@@ -473,7 +655,7 @@ var PesquisaCarro = {
                         <h4>${produto.marca} - ${produto.modelo}</h4>
                     </a>
                     <h5>${produto.preco}</h5>
-                    <p>Ano/Modelo: <span>${produto.ano}</span></p>
+                    <p>Ano/Modelo <span>${produto.ano}</span></p>
                 </div>
                 <div class="text_footer">
                     <a href="#"><i class="icon-engine"></i> 2500</a>
@@ -497,24 +679,29 @@ var PesquisaCarro = {
         $('.accordion#accordionExample').empty();
         $('#accordionExample').collapse('dispose');
 
-        this.CarregarAcordaoFaixaPreco('0');
-        this.CarregarAcordaoCategoria('1');
-
-        $('#accordionExample').collapse({
-            heightStyle: "content",
-            toggle: true
-        })
+        this.CarregarAcordaoFaixaPreco('one');
+        this.CarregarAcordaoFaixaAno('two');
+        this.CarregarAcordaoFaixaQuilometragem('three');
+        this.CarregarAcordaoCarrosNovosUsados('four');
+        this.CarregarAcordaoFinalDePlaca('five');
+        this.CarregarAcordaoCategoria('six');
     },
 
-    CarregarAcordaoCategoria(collaspedId) {
+    CarregarAcordaoCarrosNovosUsados: function (collaspedId) {
+        $('.accordion#accordionExample').append(this.HtmlAcordaoCarrosNovosUsados(collaspedId));
+    },
+
+    CarregarAcordaoFinalDePlaca: function (collapsedId) {
+        this.TagsLoading['final_de_placa'] = true;
         let this_ = this;
 
         $.ajax({
-            url: localStorage.getItem('api') + '/v1/mobile/especificacoes/carro/valores?chave=categoria',
+            url: localStorage.getItem('api') + '/v1/mobile/especificacoes/carro/valores?chave=final da placa',
             type: "GET", cache: true, async: true, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
             success: function (result, textStatus, request) {
                 let htmlItems = '';
+                let index = 0;
 
                 $.each(result, function (key, item) {
                     this_.Tags.push({
@@ -524,12 +711,62 @@ var PesquisaCarro = {
                         param_valor: item.id
                     });
 
-                    htmlItems += this_.HtmlItemAcordaoCategoria(item);
+                    htmlItems += this_.HtmlItemAcordaoFinalDePlaca(item, index);
+                    index++;
                 });
 
-                this_.TagsLoaded = true;
+                this_.TagsLoading['final_de_placa'] = false;
+                $('.accordion#accordionExample').append(this_.HtmlAcordaoFinalDePlaca(htmlItems, collapsedId));
+            },
+            error: function (request, textStatus, errorThrown) {
+                StorageClear();
+                alert(JSON.stringify(request));
 
-                $('.accordion#accordionExample').append(this_.HtmlAcordaoCategoria(htmlItems, collaspedId));
+                // if (!MensagemErroAjax(request, errorThrown)) {
+                //     try {
+                //         var obj = $.parseJSON(request.responseText)
+                //         Mensagem(obj.mensagem, 'warning');
+                //     } catch (error) {
+                //         Mensagem(request.responseText, 'warning');
+                //     }
+                // }
+            }
+        });
+
+    },
+
+    CarregarAcordaoCategoria(collapsedId) {
+        this.TagsLoading['categoria'] = true;
+
+        let this_ = this;
+        $.ajax({
+            url: localStorage.getItem('api') + '/v1/mobile/especificacoes/carro/valores?chave=categoria',
+            type: "GET", cache: true, async: true, contentData: 'json',
+            contentType: 'application/json;charset=utf-8',
+            success: function (result, textStatus, request) {
+                let htmlItems = '';
+
+                var count = 0;
+
+                $.each(result, function (key, item) {
+                    this_.Tags.push({
+                        tag_chave: item.chave,
+                        tag_legenda: item.valor,
+                        param_chave: 'especificacoes_ids',
+                        param_valor: item.id
+                    });
+
+                    count++;
+                    if (count % 2 != 0) htmlItems += '<div class="row">';
+
+                    htmlItems += this_.HtmlItemAcordaoCategoria(item);
+
+                    if (count % 2 == 0) htmlItems += '</div>';
+                });
+
+                this_.TagsLoading['categoria'] = false;
+
+                $('.accordion#accordionExample').append(this_.HtmlAcordaoCategoria(htmlItems, collapsedId));
             },
             error: function (request, textStatus, errorThrown) {
                 StorageClear();
@@ -548,50 +785,23 @@ var PesquisaCarro = {
         });
     },
 
-    CarregarAcordaoAnoFabricacao(collaspedId) {
-        let this_ = this;
+    CarregarAcordaoFaixaAno(collapsedId) {
+        $('.accordion#accordionExample').append(this.HtmlAcordaoFaixaAno(collapsedId));
 
-        // $.ajax({
-        //     url: localStorage.getItem('api') + '/v1/mobile/especificacoes/carro/valores?chave=categoria',
-        //     type: "GET", cache: true, async: true, contentData: 'json',
-        //     contentType: 'application/json;charset=utf-8',
-        //     success: function (result, textStatus, request) {
-        //         let htmlItems = '';
-
-        //         $.each(result, function (key, item) {
-        //             this_.Tags.push({
-        //                 tag_chave: item.chave,
-        //                 tag_legenda: item.valor,
-        //                 param_chave: 'especificacoes_ids',
-        //                 param_valor: item.id
-        //             });
-
-        //             htmlItems += this_.HtmlItemAcordaoCategoria(item);
-        //         });
-
-        //         this_.TagsLoaded = true;
-
-        //         $('.accordion#accordionExample').append(this_.HtmlAcordaoCategoria(htmlItems, collaspedId));
-        //     },
-        //     error: function (request, textStatus, errorThrown) {
-        //         StorageClear();
-
-        //         alert(JSON.stringify(request));
-
-        //         // if (!MensagemErroAjax(request, errorThrown)) {
-        //         //     try {
-        //         //         var obj = $.parseJSON(request.responseText)
-        //         //         Mensagem(obj.mensagem, 'warning');
-        //         //     } catch (error) {
-        //         //         Mensagem(request.responseText, 'warning');
-        //         //     }
-        //         // }
-        //     }
-        // });
+        $("#ano_wd").slider({
+            range: true,
+            min: 1900,
+            max: 2050,
+            values: [1900, 2050],
+            slide: function (event, ui) {
+                $("#ano_amount").val(ui.values[0] + " - " + ui.values[1]);
+            }
+        });
+        this.AtualizarLegendaFaixaPreco();
     },
 
-    CarregarAcordaoFaixaPreco(collaspedId) {
-        $('.accordion#accordionExample').append(this.HtmlAcordaoFaixaPreco(collaspedId));
+    CarregarAcordaoFaixaPreco(collapsedId) {
+        $('.accordion#accordionExample').append(this.HtmlAcordaoFaixaPreco(collapsedId));
 
         $("#price_wd").slider({
             range: true,
@@ -605,9 +815,46 @@ var PesquisaCarro = {
         this.AtualizarLegendaFaixaPreco();
     },
 
+    CarregarAcordaoFaixaQuilometragem(collapsedId) {
+        $('.accordion#accordionExample').append(this.HtmlAcordaoFaixaQuilometragem(collapsedId));
+
+        $("#km_wd").slider({
+            range: true,
+            min: 0,
+            max: 500000,
+            values: [0, 500000],
+            slide: function (event, ui) {
+                $("#km_amount").val(ui.values[0].toLocaleString('de-DE') + " km - " + ui.values[1].toLocaleString('de-DE') + " km");
+            }
+        });
+        this.AtualizarLegendaFaixaQuilometragem();
+    },
+
     AtualizarLegendaFaixaPreco() {
         $("#amount").val("R$" + $("#price_wd").slider("values", 0).toLocaleString('de-DE') +
             " - R$" + $("#price_wd").slider("values", 1).toLocaleString('de-DE'));
+    },
+
+    AtualizarLegendaFaixaAno() {
+        $("#ano_amount").val($("#ano_wd").slider("values", 0) +
+            " - " + $("#ano_wd").slider("values", 1));
+    },
+
+    AtualizarLegendaFaixaQuilometragem() {
+        $("#km_amount").val($("#km_wd").slider("values", 0).toLocaleString('de-DE') +
+            " km - " + $("#km_wd").slider("values", 1).toLocaleString('de-DE') + " km");
+    },
+
+    HtmlItemAcordaoFinalDePlaca: function (item, index) {
+        return `<div class="col-6">
+                    <div class="creat_account">
+                        <input type="checkbox" id="p-option-final-placa-${index}" name="selector" checked>
+                        <label class="tag_item_check" for="p-option-final-placa-${index}"
+                            tag_legenda='${item.valor}' tag_chave='${item.chave}' param_chave='especificacoes_ids' param_valor='${item.id}'
+                            >${item.valor}</label>
+                        <div class="check"></div>
+                    </div>
+                </div>`;
     },
 
     HtmlItemAcordaoCategoria: function (item) {
@@ -617,6 +864,7 @@ var PesquisaCarro = {
             url_imagem = './img/car/car-2.png';
         }
 
+        // Analítico
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/analitico/carro?categoria=' + item.valor,
             type: "GET", cache: true, async: true, contentData: 'json',
@@ -644,55 +892,51 @@ var PesquisaCarro = {
         `;
     },
 
-    HtmlAcordaoItemAnoFabricacao: function (item, optionId) {
-        let quantidade = 16;
-
-        return `<li>
-            <div class="creat_account">
-                <input type="checkbox" id="fp-option-${optionId}" name="selector">
-                <label for="fp-option-${optionId}">2019 <span>(${quantidade})</span></label>
-                <div class="check"></div>
-            </div>
-        </li>`;
-    },
-
-    HtmlAcordaoAnoFabricacao: function (htmlItems, collaspedId) {
+    HtmlAcordaoFaixaAno: function (collapsedId) {
         return `<div class="card">
-        <div class="card-header" id="heading${collaspedId}">
-            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                data-target="#collapse${collaspedId}" aria-expanded="false"
-                aria-controls="collapse${collaspedId}">
-                Ano de Fabricação
-                <i class="ti-plus"></i>
-                <i class="ti-minus"></i>
-            </button>
-        </div>
-        <div id="collapse${collaspedId}" class="collapse" aria-labelledby="heading${collaspedId}"
-            data-parent="">
-            <div class="card-body">
-                <ul class="nav flex-column wd_scroll">
-                    ${htmlItems}
-                </ul>
-            </div>
-        </div>
-    </div>`;
-    },
-
-    HtmlAcordaoFaixaPreco: function (collaspedId) {
-        return `<div class="card">
-            <div class="card-header" id="heading${collaspedId}">
+            <div class="card-header" id="heading${collapsedId}">
                 <button class="btn btn-link" type="button" data-toggle="collapse"
-                    data-target="#collapse${collaspedId}" aria-expanded="true" aria-controls="collapse${collaspedId}">
+                    data-target="#collapse${collapsedId}" aria-expanded="true" aria-controls="collapse${collapsedId}"
+                    style="padding: 10px 0px !important; font-size: ${this.TamanhoTituloCategorias}px !important">
+                    Ano
+                    <i class="ti-plus"></i>
+                    <i class="ti-minus"></i>
+                </button>
+            </div>
+            <div id="collapse${collapsedId}" class="collapse show" aria-labelledby="heading${collapsedId}"
+                data-parent="">
+
+                <div class="card-body"
+                    style="padding-bottom: 0px !important">
+
+                    <div class="price_wd_inner ">
+                        <div id="ano_wd" style="margin-right:15px"></div>
+                        
+                        <input type="text" id="ano_amount" readonly style="width:100%">
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    },
+
+    HtmlAcordaoFaixaPreco: function (collapsedId) {
+        return `<div class="card">
+            <div class="card-header" id="heading${collapsedId}">
+                <button class="btn btn-link" type="button" data-toggle="collapse"
+                    data-target="#collapse${collapsedId}" aria-expanded="true" aria-controls="collapse${collapsedId}"
+                    style="padding: 10px 0px !important; font-size: ${this.TamanhoTituloCategorias}px !important">
                     Preço
                     <i class="ti-plus"></i>
                     <i class="ti-minus"></i>
                 </button>
             </div>
-            <div id="collapse${collaspedId}" class="collapse show" aria-labelledby="heading${collaspedId}"
+            <div id="collapse${collapsedId}" class="collapse show" aria-labelledby="heading${collapsedId}"
                 data-parent="">
 
-                <div class="card-body">
-                    <div class="price_wd_inner">
+                <div class="card-body"
+                style="padding-bottom: 0px !important">
+
+                    <div class="price_wd_inner ">
                         <div id="price_wd" style="margin-right:15px"></div>
                         
                         <input type="text" id="amount" readonly style="width:100%">
@@ -702,13 +946,39 @@ var PesquisaCarro = {
         </div>`;
     },
 
-    HtmlAcordaoCategoria: function (htmlItems, collapseId) {
-        // data-parent="#accordionExample">
+    HtmlAcordaoFaixaQuilometragem: function (collapsedId) {
+        return `<div class="card">
+            <div class="card-header" id="heading${collapsedId}">
+                <button class="btn btn-link" type="button" data-toggle="collapse"
+                    data-target="#collapse${collapsedId}" aria-expanded="true" aria-controls="collapse${collapsedId}"
+                    style="padding: 10px 0px !important; font-size: ${this.TamanhoTituloCategorias}px !important">
+                    Quilometragem
+                    <i class="ti-plus"></i>
+                    <i class="ti-minus"></i>
+                </button>
+            </div>
+            <div id="collapse${collapsedId}" class="collapse show" aria-labelledby="heading${collapsedId}"
+                data-parent="" >
 
+                <div class="card-body" 
+                    style="padding-bottom: 0px !important" >
+
+                    <div class="price_wd_inner">
+                        <div id="km_wd" style="margin-right:15px"></div>
+                        
+                        <input type="text" id="km_amount" readonly style="width:100%">
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    },
+
+    HtmlAcordaoCategoria: function (htmlItems, collapseId) {
         return `<div class="card">
             <div class="card-header" id="heading${collapseId}">
                 <button class="btn btn-link" type="button" data-toggle="collapse"
-                    data-target="#collapse${collapseId}" aria-expanded="true" aria-controls="collapse${collapseId}" >
+                    data-target="#collapse${collapseId}" aria-expanded="true" aria-controls="collapse${collapseId}" 
+                    style="padding: 10px 0px !important; font-size: ${this.TamanhoTituloCategorias}px !important">
                     Categoria
                     <i class="ti-plus"></i>
                     <i class="ti-minus"></i>
@@ -717,13 +987,88 @@ var PesquisaCarro = {
             <div id="collapse${collapseId}" class="collapse show" aria-labelledby="heading${collapseId}" 
                 data-parent="">
 
-                <div class="card-body">
-                    <div class="row car_body">
+                <div class="card-body" 
+                    style="padding-bottom: 0px !important" >
+
+                    <div class="row car_body wd_scroll">
                         ${htmlItems}
                     </div>
                 </div>
             </div>
         </div>`
+    },
+
+    HtmlAcordaoCarrosNovosUsados: function (collapseId) {
+        return `<div class="card">
+            <div class="card-header" id="heading${collapseId}">
+                <button class="btn btn-link" type="button" data-toggle="collapse"
+                    data-target="#collapse${collapseId}" aria-expanded="true" aria-controls="collapse${collapseId}" 
+                    style="padding: 10px 0px !important; font-size: ${this.TamanhoTituloCategorias}px !important">
+                    Carros
+                    <i class="ti-plus"></i>
+                    <i class="ti-minus"></i>
+                </button>
+            </div>
+            <div id="collapse${collapseId}" class="collapse show" aria-labelledby="heading${collapseId}"
+                data-parent="">
+                
+                <div class="row card-body"
+                    style="padding-bottom: 0px !important" >
+                    
+                    <div class="col-6">
+                        <div class="creat_account">
+                            <input type="checkbox" id="p-option-1" name="selector" checked>
+                            <label for="p-option-1">Novos</label>
+                            <div class="check"></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="creat_account">
+                            <input type="checkbox" id="p-option-2" name="selector" checked>
+                            <label for="p-option-2">Usados</label>
+                            <div class="check"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                    <div class="creat_account">
+                        <input type="checkbox" id="p-option-3" name="selector" checked>
+                        <label for="p-option-3">Quitados</label>
+                        <div class="check"></div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="creat_account">
+                        <input type="checkbox" id="p-option-4" name="selector" checked>
+                        <label for="p-option-4">Alienados</label>
+                        <div class="check"></div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>`;
+    },
+
+    HtmlAcordaoFinalDePlaca: function (htmlItems, collapseId) {
+        return `<div class="card">
+                    <div class="card-header" id="heading${collapseId}">
+                        <button class="btn btn-link" type="button" data-toggle="collapse"
+                            data-target="#collapse${collapseId}" aria-expanded="true" aria-controls="collapse${collapseId}" 
+                            style="padding: 10px 0px !important; font-size: ${this.TamanhoTituloCategorias}px !important">
+                            Final de Placa
+                            <i class="ti-plus"></i>
+                            <i class="ti-minus"></i>
+                        </button>
+                    </div>
+                    <div id="collapse${collapseId}" class="collapse show" aria-labelledby="heading${collapseId}"
+                        data-parent="">
+                        
+                        <div class="row card-body"
+                            style="padding-bottom: 0px !important" >
+                                ${htmlItems}
+                        </div>
+                    </div>
+                </div>`;
     }
 };
 
