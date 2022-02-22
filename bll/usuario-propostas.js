@@ -249,11 +249,6 @@ var UsuarioProposta = {
             success: function (result, textStatus, request) {
                 try {
 
-
-                    if(atividadeLocal !== this_.UltimaAtivadadeCarregamentoFavorito){
-                        return;
-                    }
-
                     this_.RolamentoMensagens.offset = result.offset;
                     this_.RolamentoMensagens.lote = result.lote;
                     this_.RolamentoMensagens.next_offset = result.next_offset;
