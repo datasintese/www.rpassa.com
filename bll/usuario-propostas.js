@@ -25,6 +25,8 @@ var UsuarioProposta = {
 
     Intervalo : null,
 
+    UltimaAtivadade : null,
+
     Construtor(){
         var baseTela = '.spa.our_service_area.service_two.p_100.perfil_usuario';
         this.spa = $(baseTela);
@@ -32,11 +34,60 @@ var UsuarioProposta = {
 
     Inicializar(){
         this.spa.find("#historico_proposta").empty();
-
-        this.ObterHistoricoProposta();
-        this.EventEscutarScrollHistoricoProposta();
         this.EventEscutarScrollHistoricoMensagem();
         this.EventEnviarMensagem();
+        this.EventMenuPropostaClick();
+        this.CarregarDetalhesProposta();
+    },
+
+    CarregarDetalhesProposta: function () {
+        var this_ = this;
+        $.ajax({
+            url: StorageGetItem("api") + '/v1/usuarios',
+            type: "GET", cache: false, async: true, dataType: 'json',
+            headers: {
+                Authorization: 'Bearer ' + StorageGetItem("token")
+            },
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function (result, textStatus, request) {
+                try {
+                    this_.spa.find('#minhas_propostas').text('Minhas Propostas (' + result.quantidade_propostas + ')');
+                } catch (error) {
+                    Mensagem(JSON.stringify(result), 'success');
+                }
+            },
+            error: function (request, textStatus, errorThrown) {
+                if (!MensagemErroAjax(request, errorThrown)) {
+                    try {
+                        var obj = $.parseJSON(request.responseText)
+                        Mensagem(obj.mensagem, 'error');
+                    } catch (error) {
+                        Mensagem(request.responseText, 'error');
+                    }
+                }
+            }
+        });
+    },
+
+    EventMenuPropostaClick: async function () {
+        var this_ = this;
+        this_.spa.find("#nav_propostas").click(function () {
+
+            this_.RemoverAssinaturaEventoScrollHistorico();
+
+            this_.spa.find("#historico_proposta").empty();
+            this_.spa.find("#historico_mensagem").empty();
+            this_.spa.find("#cabecalho_proposta").empty();
+
+            this_.proposta = [];
+
+            this_.RolamentoHistoricoChat.offset = 0;
+            this_.RolamentoHistoricoChat.lote = 15;
+            this_.RolamentoHistoricoChat.next_offset = null;
+            this_.RolamentoHistoricoChat.usuario_principal = null;
+
+            this_.ObterHistoricoProposta();
+        });
     },
     
     EventEscutarScrollHistoricoProposta: function () {
@@ -57,6 +108,7 @@ var UsuarioProposta = {
         historicoProposta.click(function () {
             this_.chave = $(this).attr('id');
             this_.ObterMensagensProposta(this_.chave, false);
+            
             this_.EscutarMensagensUsuarioSelecionado();
         });
     },
@@ -93,8 +145,14 @@ var UsuarioProposta = {
         historicoProposta.off('click');
     },
 
+    RemoverAssinaturaEventoScrollHistorico() {
+        var this_ = this;
+        let historicoProposta = this_.spa.find(".people-list");
+        historicoProposta.off('scroll');
+    },
     ObterHistoricoProposta: function () {
         var this_ = this;
+        const atividadeLocal = this_.UltimaAtivadade = new Object(); 
         $.ajax({
             url: StorageGetItem('api') + '/v1/usuarios/propostas/historico?offset=' + this_.RolamentoHistoricoChat.offset + '&lote=' + this_.RolamentoHistoricoChat.lote,
             type: 'GET', cache: false, async: true, dataType: 'json',
@@ -104,6 +162,10 @@ var UsuarioProposta = {
             contentType: "application/x-www-form-urlencoded; charset=utf-8",
             success: function (result, textStatus, request) {
                 try {
+                    
+                    if(atividadeLocal !== this_.UltimaAtivadade){
+                        return;
+                    }
 
                     this_.RolamentoHistoricoChat.offset = result.offset;
                     this_.RolamentoHistoricoChat.lote = result.lote;
@@ -116,6 +178,7 @@ var UsuarioProposta = {
                     });
                     this_.RemoverAssinaturaEvento();
                     this_.EventObterMensagemUsuarioSelecionado();
+                    this_.EventEscutarScrollHistoricoProposta();
 
                 } catch (error) {
                     Mensagem(JSON.stringify(result), 'success');
@@ -186,7 +249,10 @@ var UsuarioProposta = {
             success: function (result, textStatus, request) {
                 try {
 
-                    //console.log(result);
+
+                    if(atividadeLocal !== this_.UltimaAtivadadeCarregamentoFavorito){
+                        return;
+                    }
 
                     this_.RolamentoMensagens.offset = result.offset;
                     this_.RolamentoMensagens.lote = result.lote;
@@ -289,7 +355,9 @@ var UsuarioProposta = {
             <img src="${url_imagem}" alt="avatar">
             <div class="about">
                 <div class="name">${this_.proposta[this_.palavra_chave + historico_proposta.id].nome_usuario}</div>
-                <div class="status"> <i class="fa fa-circle offline"></i> ${historico_proposta.tempo_corrido_ult_conversa} </div>                                            
+                <div class="status"> ${historico_proposta.mensagem} </div>  
+                <div class="status"> ${historico_proposta.tempo_corrido_ult_conversa} </div>    
+                <div class="status"> ${historico_proposta.status_anuncio === 'PUBLICO' ? 'Produto ativo': 'Produto inativo' } </div>                                           
             </div>
         </li>`
     },

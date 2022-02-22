@@ -113,7 +113,6 @@ var UsuarioMeusCarros = {
     EventFavoritoClick: function () {
         var this_ = this;
         let html_meus_carros = this_.spa.find("#segm_meus_carros");
-        console.log(html_meus_carros);
         html_meus_carros.find(".favorito img").click(function (event) {
             event.preventDefault();
             if (!Logado()) {
@@ -244,8 +243,6 @@ var UsuarioMeusCarros = {
 
     ObterMeusCarros: function () {
         var this_ = this;
-        console.log(StorageGetItem('api') + '/v1/mobile/carros?orderby=' + this_.RolamentoMeusCarros.orderby + '&offset=' + this_.RolamentoMeusCarros.offset + '&skip=' + this_.RolamentoMeusCarros.skip + '&lote=' + this_.RolamentoMeusCarros.lote + '&meus_carros=1',)
-        console.log('Bearer ' + StorageGetItem("token"));
         return new Promise(function (resolve, reject) {
             $.ajax({
                 url: StorageGetItem('api') + '/v1/mobile/carros?orderby=' + this_.RolamentoMeusCarros.orderby + '&offset=' + this_.RolamentoMeusCarros.offset + '&skip=' + this_.RolamentoMeusCarros.skip + '&lote=' + this_.RolamentoMeusCarros.lote + '&meus_carros=1',
