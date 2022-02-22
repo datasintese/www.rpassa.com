@@ -7,12 +7,6 @@ var UsuarioProposta = {
     
     scrollAnterior : null, // Paginação da mensagem
 
-    proposta: [],
-    palavra_chave: "result",
-    chave: null,
-
-    scrollAnterior: null, // Paginação da mensagem
-
     client: null,
 
     RolamentoHistoricoChat: {
