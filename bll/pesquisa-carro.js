@@ -71,6 +71,11 @@ var PesquisaCarro = {
                                 if (param == obj.tag_chave.toLowerCase() && valueSplit == obj.tag_legenda) {
                                     this_.AdicionarTagFiltro(obj.tag_chave, obj.tag_legenda, obj.param_chave, obj.param_valor);
                                 }
+                                else if (param == obj.tag_chave.toLowerCase() && valueSplit.endsWith(obj.tag_legenda)) {
+                                    let left = valueSplit.substring(0, valueSplit.length - obj.tag_legenda.length).trim();
+
+                                    this_.AdicionarTagFiltro(obj.tag_chave, left + ' ' + obj.tag_legenda, obj.param_chave, obj.param_valor);
+                                }
                             });
                         });
                     }
@@ -537,10 +542,19 @@ var PesquisaCarro = {
             }
         });
 
+        let dicEspecificacoes = {};
+
         // Converte o filtro em parâmetros para o endpoint de pesquisa
         $.each(this_.Filtro, function (key, value) {
             if (value !== undefined && value !== null) {
-                if (value.param_chave.endsWith('_ids')) {
+                if (value.param_chave == 'especificacoes_ids') {
+                    if (dicEspecificacoes.hasOwnProperty(value.tag_chave)) {
+                        dicEspecificacoes[value.tag_chave].push(parseInt(value.param_valor));
+                    }
+                    else
+                        dicEspecificacoes[value.tag_chave] = [value.param_valor];
+                }
+                else if (value.param_chave.endsWith('_ids')) {
                     if (params.hasOwnProperty(value.param_chave)) {
                         // Valor agregado na Array
                         let arr = JSON.parse(params[value.param_chave]);
@@ -553,9 +567,16 @@ var PesquisaCarro = {
                         params[value.param_chave] = '[' + value.param_valor + ']';
                 }
                 else
-                    params[value.param_chave] = value.param_valor; // Não terminados em '_ids' é valor único
+                    params[value.param_chave] = value.param_valor; // Não terminados em '_ids' é valor string ou inteiro!
             }
         });
+
+        params['especificacoes_ids'] = [];
+        $.each(dicEspecificacoes, function (key, value) {
+            params['especificacoes_ids'].push(value);
+        });
+        params['especificacoes_ids'] = JSON.stringify(params['especificacoes_ids']);
+
 
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/carros',
@@ -1055,7 +1076,7 @@ var PesquisaCarro = {
                         <button class="btn btn-link" type="button" data-toggle="collapse"
                             data-target="#collapse${collapseId}" aria-expanded="true" aria-controls="collapse${collapseId}" 
                             style="padding: 10px 0px !important; font-size: ${this.TamanhoTituloCategorias}px !important">
-                            Final de Placa
+                            Final da Placa
                             <i class="ti-plus"></i>
                             <i class="ti-minus"></i>
                         </button>
