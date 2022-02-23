@@ -25,95 +25,25 @@ var UsuarioFavorito = {
         this.CarregarComboOrdernacao();
         this.CarregarDetalhesFavorito();
         this.EventMenuFavoritoClick();
-    },
-
-    CarregarComboOrdernacao: function () {
-        var this_ = this;
-
-        $.ajax({
-            url: localStorage.getItem('api') + '/v1/mobile/carros/ordenacao',
-            type: "GET", cache: false, async: true, contentData: 'json',
-            success: function (result, textStatus, request) {
-
-                let menu_ordernacao = this_.spa.find('#order_by_favoritos');
-                menu_ordernacao.empty();
-                
-                $.each(result, function (i, obj) {
-                    menu_ordernacao.append(`<option value="${obj.id}">${obj.nome}</option>`);
-                });
-                menu_ordernacao.niceSelect();
-                menu_ordernacao.val(1).niceSelect('update');
-                this_.spa.find('.nice-select').css('width', '200px');
-            },
-            error: function (request, textStatus, errorThrown) {
-                alert(JSON.stringify(request));
-
-                // if (!MensagemErroAjax(request, errorThrown)) {
-                //     try {
-                //         var obj = $.parseJSON(request.responseText)
-                //         Mensagem(obj.mensagem, 'warning');
-                //     } catch (error) {
-                //         Mensagem(request.responseText, 'warning');
-                //     }
-                // }
-            }
-        })
-
-    },
-
-    CarregarDetalhesFavorito: function () {
-        var this_ = this;
-
-        let params = {};
-        params['orderby'] = 1;
-        params['analitico'] = 1;
-        params['favoritos'] = 1;
-        
-        $.ajax({
-            url: StorageGetItem("api") + '/v1/mobile/carros',
-            type: "GET", cache: false, async: true, dataType: 'json',
-            headers: {
-                Authorization: 'Bearer ' + StorageGetItem("token")
-            },
-            data: params,
-            contentType: "application/x-www-form-urlencoded; charset=utf-8",
-            success: function (result, textStatus, request) {
-                try {
-                    this_.spa.find('#favoritos').text('Favoritos (' + result.encontrados + ')');
-                } catch (error) {
-                    Mensagem(JSON.stringify(result), 'success');
-                }
-            },
-            error: function (request, textStatus, errorThrown) {
-                if (!MensagemErroAjax(request, errorThrown)) {
-                    try {
-                        var obj = $.parseJSON(request.responseText)
-                        Mensagem(obj.mensagem, 'error');
-                    } catch (error) {
-                        Mensagem(request.responseText, 'error');
-                    }
-                }
-            }
-        });
+        this.EventImgFavoritoClick();
+        this.EventChangeOrdenacao();
+        this.EventClickPaginacao();
     },
 
     EventMenuFavoritoClick: async function () {
         var this_ = this;
-        this_.spa.find("#nav_favorito").click(function () {
+        $(document).on('click', '#nav_favorito', function(){
             this_.CarregarComboOrdernacao();
             this_.CarregarRolamentoFavoritoPadrao();
             this_.TotPaginasFor= this_.QtdPaginasFavoritos;
             this_.PaginaAtual = 0;
             this_.CarregarPaginasFavorito();
-            this_.EventFavoritoClick();
-            this_.EventChangeOrdenacao();
         });
     },
 
-    EventFavoritoClick: function () {
+    EventImgFavoritoClick: function () {
         var this_ = this;
-        let htmlFavorito = this_.spa.find("#segm_favorito");
-        htmlFavorito.find(".favorito img").click(function (event) {
+        $(document).on('click', '.favorito img', function(event){
             event.preventDefault();
             if (!Logado()) {
                 Redirecionar('autenticacao.html');
@@ -125,7 +55,7 @@ var UsuarioFavorito = {
 
     EventChangeOrdenacao: function () {
         var this_ = this;
-        this_.spa.find('#order_by_favoritos').change(async function () {
+        this_.spa.find('#order_by_favoritos').change(function () {
             if ($(this).val() != 0) {
                 this_.RolamentoFavoritos.orderby = $(this).val();
                 this_.RolamentoFavoritos.offset = 0;
@@ -143,7 +73,7 @@ var UsuarioFavorito = {
         let html_favoritos = this_.spa.find("#segm_favorito");
         let link_pagina = this_.spa.find(".pagination.favoritos a.page-link");
 
-        link_pagina.click(async function (event) {
+        $(document).on('click', '.pagination.favoritos a.page-link', function(event){
             event.preventDefault();
             let numPageClicked = $(this).text();
             let paginaAtual = this_.PaginaAtual;
@@ -226,36 +156,72 @@ var UsuarioFavorito = {
         });
     },
 
-    RemoverAssinaturaEventoClickFavorito : function(){
+    CarregarComboOrdernacao: function () {
         var this_ = this;
-        let htmlFavorito = this_.spa.find("#segm_favorito");
-        htmlFavorito.find(".favorito img").off('click');
+
+        $.ajax({
+            url: localStorage.getItem('api') + '/v1/mobile/carros/ordenacao',
+            type: "GET", cache: false, async: true, contentData: 'json',
+            success: function (result, textStatus, request) {
+
+                let menu_ordernacao = this_.spa.find('#order_by_favoritos');
+                menu_ordernacao.empty();
+                
+                $.each(result, function (i, obj) {
+                    menu_ordernacao.append(`<option value="${obj.id}">${obj.nome}</option>`);
+                });
+                menu_ordernacao.niceSelect();
+                menu_ordernacao.val(1).niceSelect('update');
+                this_.spa.find('.nice-select').css('width', '200px');
+            },
+            error: function (request, textStatus, errorThrown) {
+                alert(JSON.stringify(request));
+
+                // if (!MensagemErroAjax(request, errorThrown)) {
+                //     try {
+                //         var obj = $.parseJSON(request.responseText)
+                //         Mensagem(obj.mensagem, 'warning');
+                //     } catch (error) {
+                //         Mensagem(request.responseText, 'warning');
+                //     }
+                // }
+            }
+        })
     },
 
-    RemoverAssinaturaEventoPaginacao() {
+    CarregarDetalhesFavorito: function () {
         var this_ = this;
-        this_.spa.find(".pagination.favoritos a.page-link").off('click');
-    },
 
-    ObterFavoritos: function () {
-        var this_ = this;
-        return new Promise(function (resolve, reject) {
-            $.ajax({
-                url: StorageGetItem('api') + '/v1/mobile/carros?orderby=' + this_.RolamentoFavoritos.orderby + '&offset=' + this_.RolamentoFavoritos.offset + '&skip=' + this_.RolamentoFavoritos.skip + '&lote=' + this_.RolamentoFavoritos.lote + '&favoritos=1',
-                type: 'GET', cache: false, async: true, dataType: 'json',
-                headers: {
-                    Authorization: 'Bearer ' + StorageGetItem("token")
-                },
-                contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-                beforeSend: function () {
-                },
-                success: function (result, textStatus, request) {
-                    resolve(result)
-                },
-                error: function (err) {
-                    reject(err) // Reject the promise and go to catch()
+        let params = {};
+        params['orderby'] = 1;
+        params['analitico'] = 1;
+        params['favoritos'] = 1;
+        
+        $.ajax({
+            url: StorageGetItem("api") + '/v1/mobile/carros',
+            type: "GET", cache: false, async: true, dataType: 'json',
+            headers: {
+                Authorization: 'Bearer ' + StorageGetItem("token")
+            },
+            data: params,
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function (result, textStatus, request) {
+                try {
+                    this_.spa.find('#favoritos').text('Favoritos (' + result.encontrados + ')');
+                } catch (error) {
+                    Mensagem(JSON.stringify(result), 'success');
                 }
-            });
+            },
+            error: function (request, textStatus, errorThrown) {
+                if (!MensagemErroAjax(request, errorThrown)) {
+                    try {
+                        var obj = $.parseJSON(request.responseText)
+                        Mensagem(obj.mensagem, 'error');
+                    } catch (error) {
+                        Mensagem(request.responseText, 'error');
+                    }
+                }
+            }
         });
     },
 
@@ -308,12 +274,6 @@ var UsuarioFavorito = {
 
                 $.each(favoritos_registros, function (j, favorito) {
                     html_favoritos.append(this_.HtmlFavoritos(favorito, i, exibirPagina));
-
-                    this_.RemoverAssinaturaEventoPaginacao();
-                    this_.EventClickPaginacao();
-
-                    this_.RemoverAssinaturaEventoClickFavorito();
-                    this_.EventFavoritoClick();
                 });
 
                 pagination.append(this_.HtmlPagination(i, exibirPagina))
@@ -327,15 +287,32 @@ var UsuarioFavorito = {
         }
 
         pagination.append('<li class="page-item" id="pag_proximo"><a class="page-link" href="#"><i class="icon-arrow_2"></i></a></li>');
-        this_.RemoverAssinaturaEventoPaginacao();
-        this_.EventClickPaginacao();
         this_.PaginaAtual = pagina;
-        
     },
 
-    
+    ObterFavoritos: function () {
+        var this_ = this;
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                url: StorageGetItem('api') + '/v1/mobile/carros?orderby=' + this_.RolamentoFavoritos.orderby + '&offset=' + this_.RolamentoFavoritos.offset + '&skip=' + this_.RolamentoFavoritos.skip + '&lote=' + this_.RolamentoFavoritos.lote + '&favoritos=1',
+                type: 'GET', cache: false, async: true, dataType: 'json',
+                headers: {
+                    Authorization: 'Bearer ' + StorageGetItem("token")
+                },
+                contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+                beforeSend: function () {
+                },
+                success: function (result, textStatus, request) {
+                    resolve(result)
+                },
+                error: function (err) {
+                    reject(err) // Reject the promise and go to catch()
+                }
+            });
+        });
+    },
 
-    FavoritarDesfavoritar: function (ref) {
+    FavoritarDesfavoritar: async function (ref) {
         let produto = $(ref).closest('div[produto_id]').attr('produto_id');
         let isfavorito = $(ref).attr('isfavorito') == "true";
 
