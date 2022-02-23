@@ -34,8 +34,6 @@ var UsuarioProposta = {
 
     Inicializar(){
         this.spa.find("#historico_proposta").empty();
-        this.EventEscutarScrollHistoricoMensagem();
-        this.EventEnviarMensagem();
         this.EventMenuPropostaClick();
         this.CarregarDetalhesProposta();
     },
@@ -69,11 +67,13 @@ var UsuarioProposta = {
         });
     },
 
-    EventMenuPropostaClick: async function () {
+    EventMenuPropostaClick: function () {
         var this_ = this;
         this_.spa.find("#nav_propostas").click(function () {
 
             this_.RemoverAssinaturaEventoScrollHistorico();
+            this_.RemoverAssinaturaEventoClickUsuario();
+            this_.RemoverEventScrollHistoricoMensagem();
 
             this_.spa.find("#historico_proposta").empty();
             this_.spa.find("#historico_mensagem").empty();
@@ -81,12 +81,17 @@ var UsuarioProposta = {
 
             this_.proposta = [];
 
+            this_.RolamentoMensagens.offset = 0;
+            this_.RolamentoMensagens.lote = 15;
+            this_.RolamentoMensagens.next_offset = null;
+
             this_.RolamentoHistoricoChat.offset = 0;
             this_.RolamentoHistoricoChat.lote = 15;
             this_.RolamentoHistoricoChat.next_offset = null;
             this_.RolamentoHistoricoChat.usuario_principal = null;
 
             this_.ObterHistoricoProposta();
+            
         });
     },
     
@@ -105,10 +110,14 @@ var UsuarioProposta = {
     EventObterMensagemUsuarioSelecionado() {
         var this_ = this;
         let historicoProposta = this_.spa.find("li.clearfix.conversa");
-        historicoProposta.click(function () {
+        historicoProposta.click(async function () {
             this_.chave = $(this).attr('id');
-            this_.ObterMensagensProposta(this_.chave, false);
-            
+
+            this_.RolamentoMensagens.offset = 0;
+            this_.RolamentoMensagens.lote = 15;
+            this_.RolamentoMensagens.next_offset = null;
+
+            await this_.ObterMensagensProposta(this_.chave, false);
             this_.EscutarMensagensUsuarioSelecionado();
         });
     },
@@ -139,7 +148,7 @@ var UsuarioProposta = {
         });
     },
 
-    RemoverAssinaturaEvento() {
+    RemoverAssinaturaEventoClickUsuario() {
         var this_ = this;
         let historicoProposta = this_.spa.find("li.clearfix.conversa");
         historicoProposta.off('click');
@@ -150,6 +159,12 @@ var UsuarioProposta = {
         let historicoProposta = this_.spa.find(".people-list");
         historicoProposta.off('scroll');
     },
+
+    RemoverEventScrollHistoricoMensagem() {
+        var this_ = this;
+        this_.spa.find("#historico_mensagem").parent().off('scroll');
+    },
+
     ObterHistoricoProposta: function () {
         var this_ = this;
         const atividadeLocal = this_.UltimaAtivadade = new Object(); 
@@ -176,9 +191,10 @@ var UsuarioProposta = {
                     $.each(historico_proposta, function (i, historico) {
                         this_.spa.find("#historico_proposta").last().append(this_.HtmlHistoricoProposta(historico));
                     });
-                    this_.RemoverAssinaturaEvento();
+
                     this_.EventObterMensagemUsuarioSelecionado();
                     this_.EventEscutarScrollHistoricoProposta();
+                    this_.EventEscutarScrollHistoricoMensagem();
 
                 } catch (error) {
                     Mensagem(JSON.stringify(result), 'success');
@@ -350,7 +366,7 @@ var UsuarioProposta = {
             <img src="${url_imagem}" alt="avatar">
             <div class="about">
                 <div class="name">${this_.proposta[this_.palavra_chave + historico_proposta.id].nome_usuario}</div>
-                <div class="status"> ${historico_proposta.mensagem} </div>  
+                <div class="status"> ${historico_proposta.mensagem.substring(0, 18)} ${ historico_proposta.mensagem.length > 18 ? '...' : ''} </div>  
                 <div class="status"> ${historico_proposta.tempo_corrido_ult_conversa} </div>    
                 <div class="status"> ${historico_proposta.status_anuncio === 'PUBLICO' ? 'Produto ativo': 'Produto inativo' } </div>                                           
             </div>
