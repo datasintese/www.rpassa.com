@@ -24,96 +24,25 @@ var UsuarioMeusCarros = {
         this.CarregarComboOrdernacao();
         this.CarregarDetalhes();
         this.EventMenuClick();
-        this.EventFavoritoClick();
-    },
-
-    CarregarComboOrdernacao: function () {
-        var this_ = this;
-
-        $.ajax({
-            url: localStorage.getItem('api') + '/v1/mobile/carros/ordenacao',
-            type: "GET", cache: false, async: true, contentData: 'json',
-            success: function (result, textStatus, request) {
-
-                let menu_ordernacao = this_.spa.find('#order_by_meus_carros');
-                menu_ordernacao.empty();
-                
-                $.each(result, function (i, obj) {
-                    menu_ordernacao.append(`<option value="${obj.id}">${obj.nome}</option>`);
-                });
-                menu_ordernacao.niceSelect();
-                menu_ordernacao.val(1).niceSelect('update');
-                this_.spa.find('.nice-select').css('width', '200px');
-            },
-            error: function (request, textStatus, errorThrown) {
-                alert(JSON.stringify(request));
-
-                // if (!MensagemErroAjax(request, errorThrown)) {
-                //     try {
-                //         var obj = $.parseJSON(request.responseText)
-                //         Mensagem(obj.mensagem, 'warning');
-                //     } catch (error) {
-                //         Mensagem(request.responseText, 'warning');
-                //     }
-                // }
-            }
-        })
-    },
-
-    CarregarDetalhes: function () {
-        var this_ = this;
-
-        let params = {};
-        params['orderby'] = 1;
-        params['meus_carros'] = 1;
-        params['analitico'] = 1;
-        
-        $.ajax({
-            url: StorageGetItem("api") + '/v1/mobile/carros',
-            type: "GET", cache: false, async: true, dataType: 'json',
-            headers: {
-                Authorization: 'Bearer ' + StorageGetItem("token")
-            },
-            data: params,
-            contentType: "application/x-www-form-urlencoded; charset=utf-8",
-            success: function (result, textStatus, request) {
-                try {
-                    this_.spa.find('#meus_carros').text('Meus Carros (' + result.encontrados + ')');
-                } catch (error) {
-                    Mensagem(JSON.stringify(result), 'success');
-                }
-            },
-            error: function (request, textStatus, errorThrown) {
-                if (!MensagemErroAjax(request, errorThrown)) {
-                    try {
-                        var obj = $.parseJSON(request.responseText)
-                        Mensagem(obj.mensagem, 'error');
-                    } catch (error) {
-                        Mensagem(request.responseText, 'error');
-                    }
-                }
-            }
-        });
+        //this.EventImgFavoritoClick();
+        this.EventChangeOrdenacao();
+        this.EventClickPaginacao()
     },
 
     EventMenuClick: async function () {
         var this_ = this;
-        this_.spa.find("#nav_meus_carros").click(function () {
+        $(document).on('click', '#nav_meus_carros', function(event) {
             this_.CarregarComboOrdernacao();
             this_.CarregarRolamentoPadrao();
             this_.TotPaginasFor= this_.QtdPaginas;
             this_.PaginaAtual = 0;
             this_.CarregarPaginas();
-            this_.EventFavoritoClick();
-            this_.RemoverAssinaturaEventoOrdenacao();
-            this_.EventChangeOrdenacao();
         });
     },
 
-    EventFavoritoClick: function () {
+    EventImgFavoritoClick: function () {
         var this_ = this;
-        let html_meus_carros = this_.spa.find("#segm_meus_carros");
-        html_meus_carros.find(".favorito img").click(function (event) {
+        $(document).on('click', '.favorito img', function(event) {
             event.preventDefault();
             if (!Logado()) {
                 Redirecionar('autenticacao.html');
@@ -140,9 +69,8 @@ var UsuarioMeusCarros = {
     EventClickPaginacao: function () {
         var this_ = this;
         let html_meus_carros = this_.spa.find("#segm_meus_carros");
-        let link_pagina = this_.spa.find(".pagination.meus_carros a.page-link");
 
-        link_pagina.click(async function (event) {
+        $(document).on('click', '.pagination.meus_carros a.page-link', function(event) {
             event.preventDefault();
             let numPageClicked = $(this).text();
             let paginaAtual = this_.PaginaAtual;
@@ -225,22 +153,6 @@ var UsuarioMeusCarros = {
         });
     },
 
-    RemoverAssinaturaEventoClick : function(){
-        var this_ = this;
-        let html_meus_carro = this_.spa.find("#segm_meus_carros");
-        html_meus_carro.find(".favorito img").off('click');
-    },
-
-    RemoverAssinaturaEventoPaginacao() {
-        var this_ = this;
-        this_.spa.find(".pagination.meus_carros a.page-link").off('click');
-    },
-
-    RemoverAssinaturaEventoOrdenacao(){
-        var this_ = this;
-        this_.spa.find("#order_by_meus_carros").off('click');
-    },
-
     ObterMeusCarros: function () {
         var this_ = this;
         return new Promise(function (resolve, reject) {
@@ -260,6 +172,75 @@ var UsuarioMeusCarros = {
                     reject(err) // Reject the promise and go to catch()
                 }
             });
+        });
+    },
+
+    CarregarComboOrdernacao: function () {
+        var this_ = this;
+
+        $.ajax({
+            url: localStorage.getItem('api') + '/v1/mobile/carros/ordenacao',
+            type: "GET", cache: false, async: true, contentData: 'json',
+            success: function (result, textStatus, request) {
+
+                let menu_ordernacao = this_.spa.find('#order_by_meus_carros');
+                menu_ordernacao.empty();
+                
+                $.each(result, function (i, obj) {
+                    menu_ordernacao.append(`<option value="${obj.id}">${obj.nome}</option>`);
+                });
+                menu_ordernacao.niceSelect();
+                menu_ordernacao.val(1).niceSelect('update');
+                this_.spa.find('.nice-select').css('width', '200px');
+            },
+            error: function (request, textStatus, errorThrown) {
+                alert(JSON.stringify(request));
+
+                // if (!MensagemErroAjax(request, errorThrown)) {
+                //     try {
+                //         var obj = $.parseJSON(request.responseText)
+                //         Mensagem(obj.mensagem, 'warning');
+                //     } catch (error) {
+                //         Mensagem(request.responseText, 'warning');
+                //     }
+                // }
+            }
+        })
+    },
+
+    CarregarDetalhes: function () {
+        var this_ = this;
+
+        let params = {};
+        params['orderby'] = 1;
+        params['meus_carros'] = 1;
+        params['analitico'] = 1;
+        
+        $.ajax({
+            url: StorageGetItem("api") + '/v1/mobile/carros',
+            type: "GET", cache: false, async: true, dataType: 'json',
+            headers: {
+                Authorization: 'Bearer ' + StorageGetItem("token")
+            },
+            data: params,
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function (result, textStatus, request) {
+                try {
+                    this_.spa.find('#meus_carros').text('Meus Carros (' + result.encontrados + ')');
+                } catch (error) {
+                    Mensagem(JSON.stringify(result), 'success');
+                }
+            },
+            error: function (request, textStatus, errorThrown) {
+                if (!MensagemErroAjax(request, errorThrown)) {
+                    try {
+                        var obj = $.parseJSON(request.responseText)
+                        Mensagem(obj.mensagem, 'error');
+                    } catch (error) {
+                        Mensagem(request.responseText, 'error');
+                    }
+                }
+            }
         });
     },
 
@@ -314,10 +295,6 @@ var UsuarioMeusCarros = {
                     html_meus_carro.append(this_.HtmlMeusCarros(carro, i, exibirPagina));
 
                     this_.PaginaAtual = pagina;
-                    this_.RemoverAssinaturaEventoPaginacao();
-
-                    this_.RemoverAssinaturaEventoClick();
-                    this_.EventFavoritoClick();
                 });
 
                 pagination.append(this_.HtmlPagination(i, exibirPagina))
@@ -333,9 +310,6 @@ var UsuarioMeusCarros = {
         pagination.append('<li class="page-item" id="pag_proximo"><a class="page-link" href="#"><i class="icon-arrow_2"></i></a></li>');
 
         this_.PaginaAtual = pagina;
-        this_.RemoverAssinaturaEventoPaginacao();
-       
-        this_.EventClickPaginacao();
     },
 
     FavoritarDesfavoritar: function (ref) {

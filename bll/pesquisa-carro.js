@@ -3,6 +3,9 @@ var PesquisaCarro = {
     Tags: [], /* Fonte de todas as tags das especificações ids carregadas do banco de dados */
     TagsLoading: {}, /* Sinaliza se as tags ainda estão sendo carregadas do servidor */
 
+    xhrAjaxAnalitico: null,
+    xhrAjaxPesquisa: null,
+
     TamanhoTituloCategorias: 16, /* Valor em px */
 
     RolamentoPesquisa: {
@@ -160,6 +163,7 @@ var PesquisaCarro = {
 
                 this_.PosInicializar();
 
+                this_.AbortarPesquisasEmAndamento();
                 this_.Pesquisar(false, true, true);
                 this_.Pesquisar(true, false, false);
             }
@@ -171,6 +175,17 @@ var PesquisaCarro = {
         this.AssinarEventos();
 
         this.LimparItensProdutos();
+    },
+
+    AbortarPesquisasEmAndamento() {
+        if (this.xhrAjaxAnalitico !== null) {
+            if (this.xhrAjaxAnalitico.status != 200 && this.xhrAjaxAnalitico.status != 0) this.xhrAjaxAnalitico.abort();
+            this.xhrAjaxAnalitico = null;
+        }
+        if (this.xhrAjaxPesquisa !== null) {
+            if (this.xhrAjaxPesquisa.status != 200 && this.xhrAjaxPesquisa.status != 0) this.xhrAjaxPesquisa.abort();
+            this.xhrAjaxPesquisa = null;
+        }
     },
 
     PosInicializar() {
@@ -199,6 +214,13 @@ var PesquisaCarro = {
             let param_valor = $(this).attr('param_valor');
 
             if (this_.AdicionarTagFiltro(tag_chave, tag_legenda, param_chave, param_valor)) {
+                this_.AbortarPesquisasEmAndamento();
+                this_.Pesquisar(true, false);
+                this_.Pesquisar(false, true);
+            } else {
+                this_.DeletarTagFiltro(tag_chave, tag_legenda, param_valor);
+                this_.DeletarTagQueryStringURL(tag_chave, tag_legenda);
+                this_.AbortarPesquisasEmAndamento();
                 this_.Pesquisar(true, false);
                 this_.Pesquisar(false, true);
             }
@@ -226,6 +248,7 @@ var PesquisaCarro = {
                 this_.AdicionarTagFiltro(tag_chave, tag_legenda, param_chave, param_valor);
             }
 
+            this_.AbortarPesquisasEmAndamento();
             this_.Pesquisar(true, false);
             this_.Pesquisar(false, true);
         });
@@ -257,6 +280,7 @@ var PesquisaCarro = {
                 this_.RolamentoPesquisa['orderby'] = 1;
             }
 
+            this_.AbortarPesquisasEmAndamento();
             this_.Pesquisar(true, false);
             this_.Pesquisar(false, true);
         });
@@ -266,6 +290,7 @@ var PesquisaCarro = {
             this_.LimparTagsFiltro();
             this_.LimparQueryStringURL();
 
+            this_.AbortarPesquisasEmAndamento();
             this_.Pesquisar(true, false);
             this_.Pesquisar(false, true);
         });
@@ -279,6 +304,8 @@ var PesquisaCarro = {
                 this_.RolamentoPesquisa['orderby'] = parseInt(this.value);
 
                 this_.AdicionarTagFiltroOrdenacao(tag_legenda, parseInt(this.value), false);
+
+                this_.AbortarPesquisasEmAndamento();
                 this_.Pesquisar(true, false);
             }
         });
@@ -358,6 +385,7 @@ var PesquisaCarro = {
         this.AdicionarTagFiltro('ordenacao', tag_legenda, 'ordenacao', param_valor, false);
 
         if (pesquisar) {
+            this.AbortarPesquisasEmAndamento();
             this.Pesquisar(true, false);
             this.Pesquisar(false, true);
         }
@@ -374,6 +402,7 @@ var PesquisaCarro = {
         this.AdicionarTagFiltro('preco_max', 'Preço Max: R$ ' + ui.values[1].toLocaleString('de-DE'), 'preco_max', ui.values[1], true);
 
         if (pesquisar) {
+            this.AbortarPesquisasEmAndamento();
             this.Pesquisar(true, false);
             this.Pesquisar(false, true);
         }
@@ -390,6 +419,7 @@ var PesquisaCarro = {
         this.AdicionarTagFiltro('km_max', 'Km Max: ' + ui.values[1].toLocaleString('de-DE'), 'km_max', ui.values[1], true);
 
         if (pesquisar) {
+            this.AbortarPesquisasEmAndamento();
             this.Pesquisar(true, false);
             this.Pesquisar(false, true);
         }
@@ -406,6 +436,7 @@ var PesquisaCarro = {
         this.AdicionarTagFiltro('ano_max', 'Ano Max: ' + ui.values[1].toLocaleString('de-DE'), 'ano_max', ui.values[1], true);
 
         if (pesquisar) {
+            this.AbortarPesquisasEmAndamento();
             this.Pesquisar(true, false);
             this.Pesquisar(false, true);
         }
@@ -416,6 +447,7 @@ var PesquisaCarro = {
 
         $.each(this.Filtro, function (key, value) {
             if (value !== undefined) {
+
                 // Remova tag pelo param_valor (elemento por elemento do grupo)
                 if (param_valor !== null) {
                     if (tag_chave == value.tag_chave && param_valor == value.param_valor) {
@@ -437,6 +469,10 @@ var PesquisaCarro = {
                 }
             }
         });
+
+        // if (filtro.lenght == 0) {
+        //     this.LimparQueryStringURL();
+        // }
 
         $('.tag_filtro').each(function (key, value) {
             let tag_chav = $(this).attr('tag_chave');
@@ -475,9 +511,7 @@ var PesquisaCarro = {
                 }
             }
         });
-        if (ja_existe) {
-            return false;
-        }
+        if (ja_existe) return false;
 
         this.Filtro.push({
             tag_chave: tag_chave,
@@ -512,7 +546,7 @@ var PesquisaCarro = {
             use_valor='${use_valor}'>${tag_legenda}<i class="ti-close"></i></a>`;
     },
 
-    Pesquisar(limpar = false, analitico = false, async = true) {
+    Pesquisar: function (limpar = false, analitico = false, async = true) {
         var this_ = this;
 
         if (limpar) {
@@ -571,15 +605,18 @@ var PesquisaCarro = {
             }
         });
 
+        console.log(localStorage.getItem('api') + '/v1/mobile/carros');
+
         params['especificacoes_ids'] = [];
         $.each(dicEspecificacoes, function (key, value) {
             params['especificacoes_ids'].push(value);
         });
         params['especificacoes_ids'] = JSON.stringify(params['especificacoes_ids']);
 
+        let url = localStorage.getItem('api') + '/v1/mobile/carros';
 
-        $.ajax({
-            url: localStorage.getItem('api') + '/v1/mobile/carros',
+        var xhr = $.ajax({
+            url: url,
             type: "GET", cache: true, async: async, contentData: 'json',
             contentType: 'application/json;charset=utf-8',
             beforeSend: function (xhr) {
@@ -605,19 +642,13 @@ var PesquisaCarro = {
                 }
             },
             error: function (request, textStatus, errorThrown) {
-                StorageClear();
-                alert(JSON.stringify(request));
-
-                // if (!MensagemErroAjax(request, errorThrown)) {
-                //     try {
-                //         var obj = $.parseJSON(request.responseText)
-                //         Mensagem(obj.mensagem, 'warning');
-                //     } catch (error) {
-                //         Mensagem(request.responseText, 'warning');
-                //     }
-                // }
             }
         });
+
+        if (analitico)
+            this.xhrAjaxAnalitico = xhr;
+        else
+            this.xhrAjaxPesquisa = xhr;
     },
 
     CarregarComboOrdenacao() {
@@ -869,7 +900,7 @@ var PesquisaCarro = {
     HtmlItemAcordaoFinalDePlaca: function (item, index) {
         return `<div class="col-6">
                     <div class="creat_account">
-                        <input type="checkbox" id="p-option-final-placa-${index}" name="selector" checked>
+                        <input type="checkbox" id="p-option-final-placa-${index}" name="selector">
                         <label class="tag_item_check" for="p-option-final-placa-${index}"
                             tag_legenda='${item.valor}' tag_chave='${item.chave}' param_chave='especificacoes_ids' param_valor='${item.id}'
                             >${item.valor}</label>
@@ -1038,14 +1069,14 @@ var PesquisaCarro = {
                     
                     <div class="col-6">
                         <div class="creat_account">
-                            <input type="checkbox" id="p-option-1" name="selector" checked>
+                            <input type="checkbox" id="p-option-1" name="selector">
                             <label for="p-option-1">Novos</label>
                             <div class="check"></div>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="creat_account">
-                            <input type="checkbox" id="p-option-2" name="selector" checked>
+                            <input type="checkbox" id="p-option-2" name="selector">
                             <label for="p-option-2">Usados</label>
                             <div class="check"></div>
                         </div>
@@ -1053,14 +1084,14 @@ var PesquisaCarro = {
 
                     <div class="col-6">
                     <div class="creat_account">
-                        <input type="checkbox" id="p-option-3" name="selector" checked>
+                        <input type="checkbox" id="p-option-3" name="selector">
                         <label for="p-option-3">Quitados</label>
                         <div class="check"></div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="creat_account">
-                        <input type="checkbox" id="p-option-4" name="selector" checked>
+                        <input type="checkbox" id="p-option-4" name="selector">
                         <label for="p-option-4">Alienados</label>
                         <div class="check"></div>
                     </div>
