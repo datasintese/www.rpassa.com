@@ -168,9 +168,11 @@
 	<!--================Our Service Area =================-->
 	<section class="spa our_service_area service_two p_100 perfil_usuario">
 		<div class="container" id="usuario_config">
+			<!--
 			<div class="flag_center_title wow animated fadeInUp" data-wow-delay="0.2s">
 				<h2><img src="img/icon/flag-2.png" alt="">Usuário</h2>
 			</div>
+			-->
 			<div class="or_service_inner">
 				<div class="row flex-row-reverse">
 					<div class="col-lg-8">
@@ -278,58 +280,55 @@
 								</div>
 								<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
 									<div class="service_ex">
-										<div class="container">
-											<div class="row main_product_inner flex-row-reverse">
-												<div class="col-lg-12">
-													<div class="car_found d-flex justify-content-between">
-														<div class="left">
-															<h4><img src="img/icon/flag-4.png" alt="" height="20px">Favoritos</h4>
-														</div>
-														<div class="right">
-															<div class="price_filter">
-																<select id="order_by">
+										<section class="create_account_area p_100" style="padding-top: 15px;">
+											<div class="container">
+												<div class="row main_product_inner flex-row-reverse">
+													<div class="col-lg-12">
+														<div class="car_found d-flex justify-content-between">
+															<div class="left">
+																<h4><img src="img/icon/flag-4.png" alt="" height="20px">Favoritos</h4>
+															</div>
+															<div class="right">
+																<select id="order_by_favoritos">
 																</select>
 															</div>
 														</div>
-													</div>
-													<div class="product_grid_inner">
-														<div class="row" id="segm_favorito">
-															<!-- Exemplo favorito
-															<div class="col-lg-4 col-md-4 col-sm-6 wow animated fadeInUp" data-wow-delay="0.2s">
-																<div class="l_collection_item orange grid_four red">
-																	<div class="car_img">
-																		<a href="product-details.html"><img class="img-fluid" src="img/product/car-grid-four/car-2.jpg" alt=""></a>
-																	</div>
-																	<div class="text_body">
-																		<a href="product-details.html"><h4>La Ferrari Coupe</h4></a>
-																		<h5>$16,000</h5>
-																		<p>Build year: <span>2015</span></p>
-																	</div>
-																	<div class="text_footer">
-																		<a href="#"><i class="icon-engine"></i> 2500</a>
-																		<a href="#"><i class="icon-gear1"></i> Manual</a>
-																		<a href="#"><i class="icon-oil"></i>20/24</a>
+														<div class="product_grid_inner">
+															<div class="row" id="segm_favorito">
+																<!-- Exemplo favorito
+																<div class="col-lg-4 col-md-4 col-sm-6 wow animated fadeInUp" data-wow-delay="0.2s">
+																	<div class="l_collection_item orange grid_four red">
+																		<div class="car_img">
+																			<a href="product-details.html"><img class="img-fluid" src="img/product/car-grid-four/car-2.jpg" alt=""></a>
+																		</div>
+																		<div class="text_body">
+																			<a href="product-details.html"><h4>La Ferrari Coupe</h4></a>
+																			<h5>$16,000</h5>
+																			<p>Build year: <span>2015</span></p>
+																		</div>
+																		<div class="text_footer">
+																			<a href="#"><i class="icon-engine"></i> 2500</a>
+																			<a href="#"><i class="icon-gear1"></i> Manual</a>
+																			<a href="#"><i class="icon-oil"></i>20/24</a>
+																		</div>
 																	</div>
 																</div>
+																-->
 															</div>
-															-->
 														</div>
+														<nav aria-label="Page navigation example" class="pagination justify-content-center" style="padding-bottom: 5px;">
+															<ul class="pagination favoritos">
+																<!--Exemplo item paginação
+																<li class="page-item"><a class="page-link" href="#"><i class="icon-arrow"></i></a></li>
+																<li class="page-item active"><a class="page-link" href="#">1</a></li>
+																<li class="page-item"><a class="page-link" href="#"><i class="icon-arrow_2"></i></a></li>
+																-->
+															</ul>
+														</nav>
 													</div>
-													<nav aria-label="Page navigation example" class="pagination justify-content-center" style="padding-bottom: 5px;">
-														<ul class="pagination" id="">
-															<li class="page-item"><a class="page-link" href="#"><i class="icon-arrow"></i></a></li>
-															<li class="page-item active"><a class="page-link" href="#">1</a></li>
-															<li class="page-item"><a class="page-link" href="#">2</a></li>
-															<li class="page-item"><a class="page-link" href="#">3</a></li>
-															<li class="page-item"><a class="page-link" href="#">4</a></li>
-															<li class="page-item"><a class="page-link" href="#">5</a></li>
-															<li class="page-item"><a class="page-link" href="#">6</a></li>
-															<li class="page-item"><a class="page-link" href="#"><i class="icon-arrow_2"></i></a></li>
-														</ul>
-													</nav>
 												</div>
 											</div>
-										</div>
+										</section>
         								<!--================End Favorite Area=================-->
 									</div>
 								</div>
@@ -337,48 +336,50 @@
 									<div class="service_ex">
 										<section class="create_account_area p_100" style="padding-top: 15px;">
 											<div class="container">
-												<div class="flag_center_title" data-wow-delay="0.2s" style="margin-bottom: 0px;">
-													<h4><img src="img/icon/flag-4.png" alt="" height="20px">Escolha por onde receber as propostas</h4>
-												</div>
-												<div class="create_account_box">
-													<form class="row contact_form" method="POST"  id="formSenha">
-														<div class="card-body">
-															<ul class="nav flex-column wd_scroll">
-																<li>
-																	<div class="creat_account">
-																		<input type="checkbox" id="option-email">
-																		<label for="option-email" class="checkbox-inline">Email</label>
-																		<div class="check"></div>
+												<div class="row main_product_inner flex-row-reverse">
+													<div class="col-lg-12">
+														<div class="car_found d-flex justify-content-between">
+															<div class="left">
+																<h4><img src="img/icon/flag-4.png" alt="" height="20px">Meus Carros</h4>
+															</div>
+															<div class="right">
+																<select id="order_by_meus_carros">
+																</select>
+															</div>
+														</div>
+														<div class="product_grid_inner">
+															<div class="row" id="segm_meus_carros">
+																<!-- Exemplo favorito
+																<div class="col-lg-4 col-md-4 col-sm-6 wow animated fadeInUp" data-wow-delay="0.2s">
+																	<div class="l_collection_item orange grid_four red">
+																		<div class="car_img">
+																			<a href="product-details.html"><img class="img-fluid" src="img/product/car-grid-four/car-2.jpg" alt=""></a>
+																		</div>
+																		<div class="text_body">
+																			<a href="product-details.html"><h4>La Ferrari Coupe</h4></a>
+																			<h5>$16,000</h5>
+																			<p>Build year: <span>2015</span></p>
+																		</div>
+																		<div class="text_footer">
+																			<a href="#"><i class="icon-engine"></i> 2500</a>
+																			<a href="#"><i class="icon-gear1"></i> Manual</a>
+																			<a href="#"><i class="icon-oil"></i>20/24</a>
+																		</div>
 																	</div>
-																</li>
-																<li>
-																	<div class="creat_account">
-																		<input type="checkbox" id="option-whatsapp">
-																		<label for="option-whatsapp" class="checkbox-inline">Whatsapp</label>
-																		<div class="check"></div>
-																	</div>
-																</li>
-																<li>
-																	<div class="creat_account">
-																		<input type="checkbox" id="option-rpassa">
-																		<label for="option-rpassa" class="checkbox-inline">Rpassa</label>
-																		<div class="check"></div>
-																	</div>
-
-																</li>
-																<li>
-																	<div class="creat_account">
-																		<input type="checkbox" id="option-telefone">
-																		<label for="option-telefone" class="checkbox-inline">Telefone</label>
-																		<div class="check"></div>
-																	</div>
-																</li>
+																</div>
+																-->
+															</div>
+														</div>
+														<nav aria-label="Page navigation example" class="pagination justify-content-center" style="padding-bottom: 5px;">
+															<ul class="pagination meus_carros">
+																<!--Exemplo item paginação
+																<li class="page-item"><a class="page-link" href="#"><i class="icon-arrow"></i></a></li>
+																<li class="page-item active"><a class="page-link" href="#">1</a></li>
+																<li class="page-item"><a class="page-link" href="#"><i class="icon-arrow_2"></i></a></li>
+																-->
 															</ul>
-														</div>
-														<div class="form-group col-md-12">
-															<button type="submit" value="submit" class="btn submit_btn red form-control" >Salvar</button>
-														</div>
-													</form>
+														</nav>
+													</div>
 												</div>
 											</div>
 										</section>
@@ -398,10 +399,12 @@
 														<div class="card chat-app">
 															<div id="plist" class="people-list">
 																<div class="input-group">
+																	<!--
 																	<div class="input-group-prepend">
 																		<span class="input-group-text"><i class="fa fa-search"></i></span>
 																	</div>
 																	<input type="text" class="form-control" placeholder="Search...">
+																	-->
 																</div>
 																<ul class="list-unstyled chat-list mt-2 mb-0" id="historico_proposta">
 																	<!-- Exemplo de histórico do chat 
@@ -499,10 +502,10 @@
 									<a class="nav-link" id="nav_favorito" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"><i class="icon-heart"></i> <span id="favoritos">Favoritos ()</span></a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" id="aira-tab" data-toggle="tab" href="#aira" role="tab" aria-controls="aira" aria-selected="false" style="line-height: 2.0;"><i class="icon-setting"></i>Escolher por onde receber Propostas</a>
+									<a class="nav-link" id="nav_meus_carros" data-toggle="tab" href="#aira" role="tab" aria-controls="aira" aria-selected="false" ><i class="icon icon-car_body"></i><span id="meus_carros">Meus Carros ()</span></a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" id="acc-tab" data-toggle="tab" href="#acc" role="tab" aria-controls="acc" aria-selected="false"><i class="icon-accident"></i>Minhas Propostas</a>
+									<a class="nav-link" id="nav_propostas" data-toggle="tab" href="#acc" role="tab" aria-controls="acc" aria-selected="false"><i class="icon-envelop_2"></i><span id="minhas_propostas">Minhas Propostas ()</span></a>
 								</li>
 							</ul>
 						</div>
@@ -715,8 +718,12 @@
 		<script src="bll/app-functions.js"></script>
 		<script src="bll/compartilhamento.js"></script>
 		<script src="bll/usuario-perfil.js"></script>
+		<script src="bll/usuario-alterar-senha.js"></script>
+		<script src="bll/usuario-favoritos.js"></script>
+		<script src="bll/usuario-propostas.js"></script>
+		<script src="bll/usuario-meus-carros.js"></script>
 		<script src="bll/usuario.js"></script>
-		<script src="bll/segmento-carros.js"></script>
+		<script src="bll/index-carros.js"></script>
 		<script src="bll/rodape.js"></script>
 		<!--RPassa-->
     </body>

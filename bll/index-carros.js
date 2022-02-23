@@ -159,10 +159,10 @@ var SegmentoCarros = {
         this.CarregarComboCarroQuilometragem();
         this.VitrineCarregarMaisRecentes(true);
         this.VitrineCarregarMelhoresOfertasCarrosel(true);
-        this.CarregarTiposNavegacao();
+        this.CarregarCategoriasCarroCarrosel();
     },
 
-    CarregarTiposNavegacao() {
+    CarregarCategoriasCarroCarrosel() {
         var this_ = this;
         var carousel = this.spa.find('.vitrine').find('.car_browse_area').find('.car_browse_slider.owl-carousel');
 
@@ -176,7 +176,7 @@ var SegmentoCarros = {
             success: function (result, textStatus, request) {
                 $.each(result, function (key, item) {
                     // if (item.contem_imagem) {
-                    carousel.owlCarousel('add', this_.HtmlItemTipoNavegacao(item)).owlCarousel('update');
+                    carousel.owlCarousel('add', this_.HtmlItemCategoriaCarro(item)).owlCarousel('update');
                     // }
                 });
                 carousel.owlCarousel('show');
@@ -197,8 +197,6 @@ var SegmentoCarros = {
             }
         });
     },
-
-   
 
     ResetarOwlCarouselTiposNavegacao(carousel) {
         carousel.trigger('destroy.owl.carousel');
@@ -235,7 +233,7 @@ var SegmentoCarros = {
         })
     },
 
-    HtmlItemTipoNavegacao: function (item) {
+    HtmlItemCategoriaCarro: function (item) {
         let url_imagem = localStorage.getItem('api') + '/v1/mobile/especificacoes/carro/valores/imagem?id_especificacao=' + item.id;
 
         if (!item.contem_imagem) {
@@ -248,7 +246,7 @@ var SegmentoCarros = {
             contentType: 'application/json;charset=utf-8',
             success: async function (result, textStatus, request) {
                 await sleep(300);
-                $('span#analitico_categoria_' + item.valor.replace('/','_')).html('(' + result.total + ')');
+                $('span#analitico_categoria_' + item.valor.replace('/', '_')).html('(' + result.total + ')');
             },
             error: function (request, textStatus, errorThrown) {
             }
@@ -256,9 +254,9 @@ var SegmentoCarros = {
 
         return `<div class="item">
             <div class="car_c_item">
-                <a href="pesquisa-carro.html?especificacoes_ids=${encodeURIComponent("[" + item.id + "]")}"><img src="${url_imagem}" alt=""></a>
-                <a href="pesquisa-carro.html?especificacoes_ids=${encodeURIComponent("[" + item.id + "]")}">
-                    <h5>${item.valor} <span id=analitico_categoria_${item.valor.replace('/','_')}>(0)</span></h5>
+                <a href="pesquisa-carro.html?categoria=${encodeURIComponent(item.valor)}"><img src="${url_imagem}" alt=""></a>
+                <a href="pesquisa-carro.html?categoria=${encodeURIComponent(item.valor)}">
+                    <h5>${item.valor} <span id=analitico_categoria_${item.valor.replace('/', '_')}>(0)</span></h5>
                 </a>
             </div>
         </div>`;
