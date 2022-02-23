@@ -35,6 +35,10 @@ var UsuarioProposta = {
     Inicializar(){
         this.spa.find("#historico_proposta").empty();
         this.EventMenuPropostaClick();
+        this.EventObterMensagemUsuarioSelecionado();
+        this.EventEscutarScrollHistoricoProposta();
+        this.EventEscutarScrollHistoricoMensagem();
+        this.EventEnviarMensagem();
         this.CarregarDetalhesProposta();
     },
 
@@ -71,10 +75,6 @@ var UsuarioProposta = {
         var this_ = this;
         this_.spa.find("#nav_propostas").click(function () {
 
-            this_.RemoverAssinaturaEventoScrollHistorico();
-            this_.RemoverAssinaturaEventoClickUsuario();
-            this_.RemoverEventScrollHistoricoMensagem();
-
             this_.spa.find("#historico_proposta").empty();
             this_.spa.find("#historico_mensagem").empty();
             this_.spa.find("#cabecalho_proposta").empty();
@@ -91,12 +91,12 @@ var UsuarioProposta = {
             this_.RolamentoHistoricoChat.usuario_principal = null;
 
             this_.ObterHistoricoProposta();
-            
         });
     },
     
     EventEscutarScrollHistoricoProposta: function () {
         var this_ = this;
+        console.log($(document));
         this_.spa.find(".people-list").scroll(function () {
             if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight - 1) {
                 if (this_.RolamentoHistoricoChat.next_offset > -1) {
@@ -109,21 +109,21 @@ var UsuarioProposta = {
 
     EventObterMensagemUsuarioSelecionado() {
         var this_ = this;
-        let historicoProposta = this_.spa.find("li.clearfix.conversa");
-        historicoProposta.click(async function () {
+
+        $(document).on('click', 'li.clearfix.conversa', function (event) {
             this_.chave = $(this).attr('id');
 
             this_.RolamentoMensagens.offset = 0;
             this_.RolamentoMensagens.lote = 15;
             this_.RolamentoMensagens.next_offset = null;
 
-            await this_.ObterMensagensProposta(this_.chave, false);
+            this_.ObterMensagensProposta(this_.chave, false);
             this_.EscutarMensagensUsuarioSelecionado();
         });
     },
 
     EventEscutarScrollHistoricoMensagem: function () {
-        var this_ = this;
+        var this_ = this; 
         this_.spa.find("#historico_mensagem").parent().scroll(function () {
             if ($(this).scrollTop() <= 0) {
                 this_.scrollAnterior = $(this)[0].scrollHeight;
@@ -137,7 +137,8 @@ var UsuarioProposta = {
 
     EventEnviarMensagem: function () {
         var this_ = this;
-        this_.spa.find("#envio_mensagem").keydown(function (event) {
+        
+        $(document).on('keydown', '.envio_mensagem', function(event){
             if (event.keyCode === 13) {
                 let mensagem = $(this).val();
                 if (mensagem != '') {
@@ -146,23 +147,6 @@ var UsuarioProposta = {
                 }
             }
         });
-    },
-
-    RemoverAssinaturaEventoClickUsuario() {
-        var this_ = this;
-        let historicoProposta = this_.spa.find("li.clearfix.conversa");
-        historicoProposta.off('click');
-    },
-
-    RemoverAssinaturaEventoScrollHistorico() {
-        var this_ = this;
-        let historicoProposta = this_.spa.find(".people-list");
-        historicoProposta.off('scroll');
-    },
-
-    RemoverEventScrollHistoricoMensagem() {
-        var this_ = this;
-        this_.spa.find("#historico_mensagem").parent().off('scroll');
     },
 
     ObterHistoricoProposta: function () {
@@ -192,9 +176,11 @@ var UsuarioProposta = {
                         this_.spa.find("#historico_proposta").last().append(this_.HtmlHistoricoProposta(historico));
                     });
 
-                    this_.EventObterMensagemUsuarioSelecionado();
-                    this_.EventEscutarScrollHistoricoProposta();
-                    this_.EventEscutarScrollHistoricoMensagem();
+                    //this_.EventObterMensagemUsuarioSelecionado();
+                    //this_.EventEscutarScrollHistoricoProposta();
+                    
+                    //this_.RemoverEventScrollHistoricoMensagem();
+                    //this_.EventEscutarScrollHistoricoMensagem();
 
                 } catch (error) {
                     Mensagem(JSON.stringify(result), 'success');
