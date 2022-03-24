@@ -11,15 +11,12 @@
         <link rel="stylesheet" href="css/font-awesome.min.css">
         <link rel="stylesheet" href="vendors/icomoon-icon/style.css">
         <link rel="stylesheet" href="vendors/themify-icon/themify-icons.css">
-        <link rel="stylesheet" href="vendors/linericon/style.css">
         <!-- Extra Plugin CSS -->
         <link rel="stylesheet" href="vendors/datetimepicker/tempusdominus-bootstrap-4.min.css">
         <link rel="stylesheet" href="vendors/nice-select/css/nice-select.css">
         <link rel="stylesheet" href="vendors/owl-carousel/assets/owl.carousel.min.css">
         <link rel="stylesheet" href="vendors/slick/slick.css">
         <link rel="stylesheet" href="vendors/slick/slick-theme.css">
-        <link rel="stylesheet" href="vendors/jquery-ui/jquery-ui.css">
-        <link rel="stylesheet" href="vendors/nice-scroll/jquery.mCustomScrollbar.css">
         <link rel="stylesheet" href="vendors/popup/magnific-popup.css">
         <link rel="stylesheet" href="vendors/animate-css/animate.css">
         
@@ -29,14 +26,14 @@
     </head>
     <body data-scroll-animation="true">
         
-       <div class="preloader">
+        <div class="preloader">
         	<div class="main-loader">
 			  <span class="loader1"></span>
 			  <span class="loader2"></span>
 			  <span class="loader3"></span>
 			</div>
         </div>
-       
+    
         <!--================Header Area =================-->
 		<header class="header_area menu_two menu_three">
 			<div class="top_menu">
@@ -92,7 +89,7 @@
 										<li><a href="#">Depoimentos</a></li>
 										<li><a href="cadastro.html">Cadastre-se</a></li>
 										<li><a href="autenticacao.html">Área do Usuário</a></li>
-										<li><a id="logout">Sair</a></li>
+										<li><a href="#" id="logout">Sair</a></li>
 									</ul>
 								</li>
 								<li class="dropdown submenu">
@@ -108,7 +105,7 @@
 									<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
 										aria-haspopup="true" aria-expanded="false">Comprar</a>
 									<ul class="dropdown-menu">
-										<li><a href="#">Veículos</a></li>
+										<li><a href="#">Carros</a></li>
 										<li><a href="#">Motocicletas</a></li>
 										<li><a href="#">Embarcações</a></li>
 										<li><a href="#">Aeronaves</a></li>
@@ -120,7 +117,7 @@
 									<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
 										aria-haspopup="true" aria-expanded="false">Repassa</a>
 									<ul class="dropdown-menu">
-										<li><a href="#">Veículos</a></li>
+										<li><a href="#">Carros</a></li>
 										<li><a href="#">Motocicletas</a></li>
 										<li><a href="#">Embarcações</a></li>
 										<li><a href="#">Aeronaves</a></li>
@@ -130,77 +127,138 @@
 							</ul>
 							<ul class="nav navbar-nav navbar-right">
 								<li class="search_icon"><a class="search popup-with-zoom-anim" href="#test-search"><i
-											class="icon-search1"></i></a></li>
+									class="icon-search1"></i></a></li>
+								<li class="search_icon"><a href="usuario.html"><i class="icon-user-circle" heigh="32" width="32"></i></a></li>
 							</ul>
 						</div>
 					</nav>
 				</div>
 			</div>
 		</header>
-		<!--================End Footer Area =================-->
+
+		<style>
+			.list {
+				max-height: 500px;
+				overflow-y: scroll !important;
+			}
+		</style>
+        <!--================End Footer Area =================-->
         
         <!--================Breadcrumb Area =================-->
-        <section class="breadcrumb_area" style="background: url(img/breadcrumb/breadcrumb-bg-4.jpg)">
+        <section class="breadcrumb_area" style="background: url(img/breadcrumb/breadcrumb-bg-5.jpg)">
         	<div class="container">
         		<div class="breadcrumb_inner">
-        			<h3>Criar Conta</h3>
+        			<h3>Politica de Privacidade</h3>
         			<div class="link">
-        				<a href="index.html">Início</a>
-        				<a href="#">Cadastrar</a>
+        				<a href="index.html">Home</a>
+        				<a href="#">Politica de Privacidades</a>
         			</div>
         		</div>
         	</div>
         </section>
         <!--================End Breadcrumb Area =================-->
         
-        <!--================Create Account Area =================-->
-        <section class="create_account_area p_100">
+        <!--================General Question Area =================-->
+        <section class="general_ques_area p_100">
         	<div class="container">
-        		<div class="flag_center_title wow animated fadeInUp" data-wow-delay="0.2s">
-        			<h2><img src="img/icon/flag-4.png" alt="">Criar Conta</h2>
-        		</div>
-        		<div class="create_account_box">
-					<!-- 
-        			<h6>Sign up with social network</h6>
-        			<div class="social_singup">
-        				<a href="#"><i class="fa fa-google-plus"></i></a>
-        				<a href="#"><i class="fa fa-facebook"></i></a>
-        				<a href="#"><i class="fa fa-twitter"></i></a>
+        		<div class="general_ques_inner">
+        			<div class="accordion" id="accordionExample">
+        				<div class="card">
+        					<div class="card-header" id="headingOne">
+								<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+									Que tipo de informações coletamos?
+									<i class="ti-plus"></i>
+									<i class="ti-minus"></i>
+								</button>
+							</div>
+        					<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+        						<div class="card-body">
+        							Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        						</div>
+        					</div>
+        				</div>
+        				<div class="card">
+        					<div class="card-header" id="headingTwo">
+								<button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+									Como usamos essas informações?
+									<i class="ti-plus"></i>
+									<i class="ti-minus"></i>
+								</button>
+        					</div>
+        					<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+        						<div class="card-body">
+        							Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        						</div>
+        					</div>
+        				</div>
+        				<div class="card">
+        					<div class="card-header" id="headingThree">
+								<button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+									Como essas informações são compartilhadas?
+									<i class="ti-plus"></i>
+									<i class="ti-minus"></i>
+								</button>
+        					</div>
+        					<div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+        						<div class="card-body">
+        							Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        						</div>
+        					</div>
+        				</div>
+        				<div class="card">
+        					<div class="card-header" id="headingfour">
+								<button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapsefour" aria-expanded="false" aria-controls="collapsefour">
+									Como faço para controlar ou excluir informações sobre mim?
+									<i class="ti-plus"></i>
+									<i class="ti-minus"></i>
+								</button>
+        					</div>
+        					<div id="collapsefour" class="collapse" aria-labelledby="headingfour" data-parent="#accordionExample">
+        						<div class="card-body">
+        							Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        						</div>
+        					</div>
+        				</div>
+        				<div class="card">
+        					<div class="card-header" id="headingfive">
+								<button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapsefive" aria-expanded="false" aria-controls="collapsefive">
+									Como respondemos a solicitações legais ou prevenimos danos?
+									<i class="ti-plus"></i>
+									<i class="ti-minus"></i>
+								</button>
+        					</div>
+        					<div id="collapsefive" class="collapse" aria-labelledby="headingfive" data-parent="#accordionExample">
+        						<div class="card-body">
+        							Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        						</div>
+        					</div>
+        				</div>
+						<div class="card">
+        					<div class="card-header" id="headingfive">
+								<button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapsefive" aria-expanded="false" aria-controls="collapsefive">
+									Como entrar em contato conosco em caso de dúvidas ?
+									<i class="ti-plus"></i>
+									<i class="ti-minus"></i>
+								</button>
+        					</div>
+        					<div id="collapsefive" class="collapse" aria-labelledby="headingfive" data-parent="#accordionExample">
+        						<div class="card-body">
+        							Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        						</div>
+        					</div>
+        				</div>
         			</div>
-        			<div class="or">
-        				<p>or</p>
-        			</div>
-					--->
-        			<form class="row contact_form" method="POST"  id="contactForm">
-						<div class="form-group col-md-12">
-							<input type="text" class="form-control" id="cpf" name="cpf" placeholder="Cpf" >
-						</div>
-						<div class="form-group col-md-12">
-							<input type="text" class="form-control" id="data-nascimento" name="nascimento" placeholder="Data Nascimento" >
-						</div>
-						<div class="form-group col-md-12">
-							<input type="email" class="form-control" id="email" name="email" placeholder="Email" >
-						</div>
-						<div class="form-group col-md-12">
-							<input type="text" class="form-control" id="celular" name="celular" placeholder="Celular" >
-						</div>
-						<div class="form-group col-md-12">
-							<input type="password" class="form-control" id="password" name="password" placeholder="Senha" >
-						</div>
-						<div class="form-group col-md-12">
-							<input type="password" class="form-control" id="c-password" name="c-password" placeholder="Confime a Senha" >
-						</div>
-						<div class="form-group col-md-12">
-							<button type="submit" value="submit" class="btn submit_btn red form-control" id="cadastro">Cadastrar</button>
-							<h5>Já tem uma conta? <a href="autenticacao.html">Login</a></h5>
-						</div>
-					</form>
         		</div>
         	</div>
         </section>
-        <!--================End Create Account Area =================-->
+        <!--================End General Question Area =================-->
         
-		<!--================Footer Area =================-->
+        <!--================End Question Form Area =================-->
+        <div class="container">
+        	<div class="solid_br"></div>
+        </div>
+        
+        <!--================Footer Area =================-->
 		<footer class="footer_area red_footer_area budget_footer">
 			<div class="footer_widgets">
 				<div class="container">
@@ -237,12 +295,12 @@
 									<h3>Informação Legal</h3>
 								</div>
 								<ul class="nav flex-column">
-									<li><a href="politica_privacidade.html">Política de Privacidade</a></li>
+									<li><a href="#">Política de Privacidade</a></li>
 									<li><a href="termos_uso.html">Termos e Condições</a></li>
 								</ul>
 							</aside>
 						</div>
-	
+
 						<div class="col-lg-4 col-sm-6">
 							<form id="newsletter">
 								<aside class="f_widget subscribe_widget wow animated fadeInUp" data-wow-delay="0.8s">
@@ -296,7 +354,7 @@
 						<div class="right">
 							<ul class="nav">
 								<li><a href="#">Termos e Condições</a></li>
-	
+
 								<li><a href="#">Política de Privacidade</a></li>
 							</ul>
 						</div>
@@ -304,8 +362,7 @@
 				</div>
 			</div>
 		</footer>
-		<!--================End Footer Area =================-->
-			
+        <!--================End Footer Area =================-->
         
         <!--================Cart Sidebar Area =================-->
         <div class="cart_sidebar">
@@ -368,9 +425,6 @@
         <script src="js/jquery-3.4.1.min.js"></script>
         <script src="js/popper.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
-
-
-
        
         <!-- Extra Plugin js -->
         <script src="vendors/datetimepicker/moment.js"></script>
@@ -382,24 +436,9 @@
         <script src="vendors/slick/slick.js"></script>
         <script src="vendors/counter-up/jquery.waypoints.min.js"></script>
         <script src="vendors/counter-up/jquery.counterup.min.js"></script>
-        <script src="vendors/nice-scroll/jquery.nicescroll.min.js"></script>
-        <script src="vendors/jquery-ui/jquery-ui.js"></script>
-        <script src="vendors/nice-scroll/jquery.nicescroll.min.js"></script>
-        <script src="vendors/nice-scroll/jquery.mCustomScrollbar.concat.min.js"></script>
         <script src="vendors/popup/jquery.magnific-popup.min.js"></script>
         <script src="vendors/animate-css/wow.min.js"></script>
+        
         <script src="js/theme-dist.js"></script>
-
-
-		<!--RPassa-->
-		<script src="js/sweetalert2.all.min.js"></script>
-		<script src="js/jquery.inputmask.min.js"></script>
-		<script src="bll/app-settings.js"></script>
-		<script src="bll/app-functions.js"></script>
-		<script src="bll/compartilhamento.js"></script>
-		<script src="bll/index-carros.js"></script>
-		<script src="bll/rodape.js"></script>
-		<script src="bll/cadastro.js"></script>
-		<!--RPassa-->
     </body>
 </html>
