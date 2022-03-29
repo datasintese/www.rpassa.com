@@ -158,7 +158,7 @@
         <!--================End Breadcrumb Area =================-->
         
         <!--================Finance Calculator Area =================-->
-        <section class="calculator_area p_100" style="padding-top: 30px;">
+        <section class="spa calculator_area p_100 cadastro_carro" style="padding-top: 30px;">
         	<div class="container">
         		<div class="flag_center_title">
         			<h3><img src="img/icon/flag-2.png" alt="">Vamos prosseguir com seu anúncio?</h3>
@@ -167,13 +167,13 @@
        				<div class="create_account_area">
        					<form class="row contact_form" action="#" method="post" id="contactForm" novalidate="novalidate">
 							<div class="form-group col-md-12">
-								<div class="nice-select nice_select" tabindex="0">
-									<select class="nice_select" id="ordenacao">
-										<option value="1">Escolha a marca</option>
-										<option value="2">1</option>
-										<option value="3">2</option>
-									</select>
-								</div>
+
+								<select class="combo_marca">
+									<option value="1">Escolha a marca</option>
+									<option value="2">1</option>
+									<option value="3">2</option>
+								</select>
+
 							</div>
 							<div class="form-group col-md-12">
 								<div class="nice-select nice_select" tabindex="0">
@@ -234,7 +234,7 @@
 								</div>
 							</div><div class="form-group col-md-12">
 								<div class="nice-select nice_select" tabindex="0">
-									<select class="nice_select" id="ordenacao">
+									<select class="nice_select">
 										<option value="1">Selecione a quantidade de acentos</option>
 										<option value="2">1</option>
 										<option value="3">2</option>
@@ -543,5 +543,15 @@
         <script src="vendors/popup/jquery.magnific-popup.min.js"></script>
         
         <script src="js/theme-dist.js"></script>
+
+		<!--RPassa-->
+		<script src="js/sweetalert2.all.min.js"></script>
+		<script src="js/jquery.inputmask.min.js"></script>
+		<script src="bll/app-settings.js"></script>
+		<script src="bll/app-functions.js"></script>
+		<script src="bll/cadastro_carro.js"></script>
+		<script src="bll/index-carros.js"></script>
+		<script src="bll/rodape.js"></script>
+		<!--RPassa-->
     </body>
 </html>
