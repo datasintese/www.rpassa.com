@@ -165,7 +165,7 @@
         		</div>
        			<div class="create_account_box">
        				<div class="create_account_area">
-       					<form class="row contact_form" action="#" method="post" id="contactForm" novalidate="novalidate">
+       					<form class="row contact_form dados_cadastro_carro" novalidate="novalidate">
 							<div class="form-group col-md-12">
 								<select class="combo_marca">
 								</select>
@@ -187,147 +187,102 @@
 								</select>
 							</div>
 							<div class="form-group col-md-12">
+								<select class="combo_cores">
+								</select>
+							</div>
+							<div class="form-group col-md-12">
+								<input type="text" class="form-control" id="placa" name="placa" placeholder="Qual é a placa do seu carro?">
+							</div>				
+							<div class="form-group col-md-12">
+								<input type="text" class="form-control" id="cep" name="cep" placeholder="Qual é o cep do seu carro?">
+							</div>
+							<div class="form-group col-md-12">
 								<input type="text" class="form-control" id="km" name="km" placeholder="Quanto seu carro já rodou? (KM)">
 							</div>
 							<div class="form-group col-md-12">
 								<input type="text" class="form-control" id="preco" name="preco" placeholder="Por quanto quer vender seu carro?">
 							</div>
-							<div class="form-group col-md-12">
-								<input type="text" class="form-control" id="placa" name="placa" placeholder="Qual é a placa do seu carro?">
-							</div>
-							
-							<div class="form-group col-md-12">
-								<input type="text" class="form-control" id="versao" name="versao" placeholder="Qual é o cep do seu carro?">
-							</div>
-							<div class="form-group col-md-12">
-								<div class="nice-select nice_select" tabindex="0">
-									<select class="nice_select" id="ordenacao">
-										<option value="1">Selecione o tipo de direção?</option>
-										<option value="2">1</option>
-										<option value="3">2</option>
+							<div style="display: block;">
+								<div class="form-group col-md-12">
+									<select class="combo_direcao">
 									</select>
 								</div>
-							</div><div class="form-group col-md-12">
-								<div class="nice-select nice_select" tabindex="0">
-									<select class="nice_select">
-										<option value="1">Selecione a quantidade de acentos</option>
-										<option value="2">1</option>
-										<option value="3">2</option>
+								<div class="form-group col-md-12">
+									<select class="combo_assentos">
 									</select>
 								</div>
-							</div>
-							<div class="form-group col-md-12">
-								<div class="nice-select nice_select" tabindex="0">
-									<select class="nice_select" id="ordenacao">
-										<option value="1">Selecione a categoria</option>
-										<option value="2">1</option>
-										<option value="3">2</option>
+								<div class="form-group col-md-12">
+									<select class="combo_categorias">
 									</select>
 								</div>
-							</div>
-							<div class="form-group col-md-12">
-								<div class="nice-select nice_select" tabindex="0">
-									<select class="nice_select" id="ordenacao">
-										<option value="1">Selecione o combustível</option>
-										<option value="2">1</option>
-										<option value="3">2</option>
+								<div class="form-group col-md-12">
+									<div class="nice-select nice_select" tabindex="0">
+										<select class="nice_select" id="ordenacao">
+											<option value="1">Selecione o combustível</option>
+											<option value="2">1</option>
+											<option value="3">2</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group col-md-12">
+									<select class="combo_portas" id="ordenacao">
 									</select>
 								</div>
-							</div>
-							<div class="form-group col-md-12">
-								<div class="nice-select nice_select" tabindex="0">
-									<select class="nice_select" id="ordenacao">
-										<option value="1">Selecione a quantidade de portas</option>
-										<option value="2">1</option>
-										<option value="3">2</option>
+								<div class="form-group col-md-12">
+									<select class="combo_tamanhos_motor">
 									</select>
 								</div>
-							</div>
-							<div class="form-group col-md-12">
-								<div class="nice-select nice_select" tabindex="0">
-									<select class="nice_select" id="ordenacao">
-										<option value="1">Selecione o tamanho do motor</option>
-										<option value="2">1</option>
-										<option value="3">2</option>
+								<div class="form-group col-md-12">
+									<select class="combo_transmisao">
 									</select>
 								</div>
-							</div>
-							<div class="form-group col-md-12">
-								<div class="nice-select nice_select" tabindex="0">
-									<select class="nice_select" id="ordenacao">
-										<option value="1">Selecione o tipo de transmissão</option>
-										<option value="2">1</option>
-										<option value="3">2</option>
+								<div class="form-group col-md-12">
+									<select class="combo_freios_dianteiro">
 									</select>
 								</div>
-							</div>
-							<div class="form-group col-md-12">
-								<div class="nice-select nice_select" tabindex="0">
-									<select class="nice_select" id="ordenacao">
-										<option value="1">Selecione o tipo de freios dianteiro</option>
-										<option value="2">1</option>
-										<option value="3">2</option>
+								<div class="form-group col-md-12">
+									<select class="combo_freios_traseiro">
 									</select>
 								</div>
-							</div>
-							<div class="form-group col-md-12">
-								<div class="nice-select nice_select" tabindex="0">
-									<select class="nice_select" id="ordenacao">
-										<option value="1">Selecione o tipo de freios traseiro</option>
-										<option value="2">1</option>
-										<option value="3">2</option>
+								<div class="form-group col-md-12">
+									<select class="combo_suspensoes_dianteira">
 									</select>
 								</div>
-							</div>
-							<div class="form-group col-md-12">
-								<div class="nice-select nice_select" tabindex="0">
-									<select class="nice_select" id="ordenacao">
-										<option value="1">Selecione o tipo de suspensão dianteira</option>
-										<option value="2">1</option>
-										<option value="3">2</option>
+								<div class="form-group col-md-12">
+									<select class="combo_suspensoes_traseira">
 									</select>
 								</div>
-							</div>
-							<div class="form-group col-md-12">
-								<div class="nice-select nice_select" tabindex="0">
-									<select class="nice_select" id="ordenacao">
-										<option value="1">Selecione o tipo de suspensão traseira</option>
-										<option value="2">1</option>
-										<option value="3">2</option>
+								<div class="form-group col-md-12">
+									<select class="combo_tamanhos_roda">
 									</select>
 								</div>
-							</div>
-							<div class="form-group col-md-12">
-								<div class="nice-select nice_select" tabindex="0">
-									<select class="nice_select" id="ordenacao">
-										<option value="1">Selecione o tamanho da roda</option>
-										<option value="2">1</option>
-										<option value="3">2</option>
-									</select>
+								<div class="form-group col-md-12">
+									<div class="creat_account">
+										<input type="checkbox" id="f-option" name="selector">
+										<label for="f-option">Airbags de cortina</label>
+										<div class="check"></div>
+									</div>
+								</div>
+								<div class="form-group col-md-12">
+									<div class="creat_account">
+										<input type="checkbox" id="f-option" name="selector">
+										<label for="f-option">Airbags frontais</label>
+										<div class="check"></div>
+									</div>
+								</div>
+								<div class="form-group col-md-12">
+									<div class="creat_account">
+										<input type="checkbox" id="f-option" name="selector">
+										<label for="f-option">Assistente de farol alto</label>
+										<div class="check"></div>
+									</div>
 								</div>
 							</div>
 							<div class="form-group col-md-12">
-								<div class="creat_account">
-									<input type="checkbox" id="f-option" name="selector">
-									<label for="f-option">Airbags de cortina</label>
-									<div class="check"></div>
-								</div>
+								<button type="submit" value="submit" class="btn submit_btn red form-control" id="voltar_etapa">Voltar</button>
+								<button type="submit" value="submit" class="btn submit_btn red form-control" id="prox_etapa">Continuar</button>
 							</div>
-							<div class="form-group col-md-12">
-								<div class="creat_account">
-									<input type="checkbox" id="f-option" name="selector">
-									<label for="f-option">Airbags frontais</label>
-									<div class="check"></div>
-								</div>
-							</div>
-							<div class="form-group col-md-12">
-								<div class="creat_account">
-									<input type="checkbox" id="f-option" name="selector">
-									<label for="f-option">Assistente de farol alto</label>
-									<div class="check"></div>
-								</div>
-							</div>
-							<div class="form-group col-md-12">
+							<div class="form-group col-md-12" style="display: none;">
 								<button type="submit" value="submit" class="btn submit_btn red form-control">Anunciar</button>
 							</div>
 						</form>
