@@ -1,7 +1,8 @@
 var CadastroCarro = {
     versoes : null,
     etapa : 1,
-    especificaoes: [],
+    especificacoes: [],
+    detalhes : [],
 
     Construtor(){
         var baseTela = '.spa.calculator_area.p_100.cadastro_carro';
@@ -165,6 +166,69 @@ var CadastroCarro = {
             }
         });
     },
+
+    Cadastrar : function(placa, 
+                         cep, 
+                         marca_id, 
+                         modelo_id, 
+                         versao_id, 
+                         ano_modelo, 
+                         ano_fabricacao, 
+                         km , 
+                         preco, 
+                         detalhes,
+                         avarias, 
+                         instituicao_financeira,
+                         parcelas_pagas,
+                         parcelas_em_atraso,
+                         especicacoes_ids,
+                         dia_vencimento
+                        )
+    {
+        $.ajax({
+            url: StorageGetItem('api') + '/v1/mobile/carros/alterar',
+            type: 'PUT', cache: false, async: true, dataType: 'json',
+            headers: {
+                Authorization: 'Bearer ' + StorageGetItem("token")
+            },
+            data: {
+                placa: placa,
+                cep: cep,
+                id_marca: marca_id,
+                id_modelo: modelo_id,
+                id_versao: versao_id,
+                ano_fabricacao: ano_fabricacao,
+                ano_modelo: ano_modelo,
+                km: km,
+                preco: preco,
+                detalhes: detalhes,
+                avarias: avarias,
+                instituicao_financeira: instituicao_financeira,
+                parcelas_pagas: parcelas_pagas,
+                parcelas_em_atraso: parcelas_em_atraso,
+                especicacoes_ids: especicacoes_ids,
+                dia_vencimento: dia_vencimento
+            },
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function (result, textStatus, request) {
+                try {
+                    Mensagem(result.mensagem, 'success');
+                } catch (error) {
+                    Mensagem(JSON.stringify(result), 'success');
+                }
+            },
+            error: function (request, textStatus, errorThrown) {
+                if (!MensagemErroAjax(request, errorThrown)) {
+                    try {
+                        var obj = $.parseJSON(request.responseText)
+                        Mensagem(obj.mensagem, 'warning', function () { this_.spa.find("#" + obj.campo.toLowerCase()).select(); });
+                    } catch (error) {
+                        Mensagem(request.responseText, 'error', function () { this_.spa.find("#" + obj.campo.toLowerCase()).select(); });
+                    }
+                }
+            }
+        });
+    },
     
     HtmlComboEspecificada : function(result, classeCombo, opcaoPadrao, tipoCampo){
         var this_ = this;
@@ -244,20 +308,22 @@ var CadastroCarro = {
                 
                 dados_cadastro_carro.append(
                     `<div class="creat_account">
-                        <input type="checkbox" id="f-option_${combo.id}">
-                        <label for="f-option_${combo.id}">${combo.chave}</label>
+                        <input type="checkbox" id="esp-option_${combo.id}" required>
+                        <label for="esp-option_${combo.id}">${combo.chave}</label>
                         <div class="check"></div>
                     </div>`
                 );
+                this_.especificacoes.push( {id : combo.id, idHtml : `#esp-option_${combo.id}`, obrigatorio : combo.obrigatorio, tipoCampo : 'checkbox', chave : combo.chave});
                                          
             }else{
 
                 // Se a chave não existe adicionado cria caso contrario somente atualiza
                 let especificacao_tipo = this_.spa.find('#combo_' + idCombo)
                 if(especificacao_tipo.length <= 0){
+                    this_.especificacoes.push( {id : combo.id, idHtml : '#combo_' + idCombo, obrigatorio : combo.obrigatorio, tipoCampo : 'select', chave : combo.chave} )
                     dados_cadastro_carro.append(`
                         <div class="form-group col-md-12">
-                            <select id="combo_${idCombo}">
+                            <select id="combo_${idCombo}" required>
                             </select>
                         </div> <br>`);
                     especificacao_tipo = this_.spa.find('#combo_' + idCombo)
@@ -275,16 +341,54 @@ var CadastroCarro = {
     },
 
     HtmlTagsDetalhes : function(result){
+        var this_ = this;
         let dados_cadastro_carro = this.spa.find('.dados_cadastro_carro');
-        $.each(result, function (i, combo) {
-            dados_cadastro_carro.append(
-                `<div class="creat_account">
-                    <input type="checkbox" id="f-option_${combo.id}">
-                    <label for="f-option_${combo.id}">${combo.nome}</label>
-                    <div class="check"></div>
-                </div>`
-            );
+        $.each(result, function (i, detalhe) {
+            if(detalhe.exibir_ao_editar){
+                dados_cadastro_carro.append(
+                    `<div class="creat_account">
+                        <input type="checkbox" id="tag-option_${detalhe.id}">
+                        <label for="tag-option_${detalhe.id}">${detalhe.nome}</label>
+                        <div class="check"></div>
+                    </div>`
+                );
+                this_.detalhes.push({ id: detalhe.id, idHtml: `#tag-option_${detalhe.id}` });
+            }
         });
+        //TODO
+        this_.HtmlAvarias();
+    },
+
+    HtmlDadosAlienado: function(){
+        let dados_cadastro_carro = this.spa.find('.dados_cadastro_carro');
+
+        dados_cadastro_carro.append(`
+            <div id="dados_alienado">
+                <div class="form-group col-md-12">
+                    <input type="text" class="form-control" id="instituicao_financeira" name="instituicao_financeira" placeholder="instituicao_financeira">
+                </div>
+                <div class="form-group col-md-12">
+                    <input type="text" class="form-control" id="parcelas_pagas" name="parcelas_pagas" placeholder="Parcelas pagas">
+                </div>
+                <div class="form-group col-md-12">
+                    <input type="text" class="form-control" id="parcelas_em_atraso" name="parcelas_em_atraso" placeholder="Parcelas em atraso">
+                </div>
+                <div class="form-group col-md-12">
+                    <input type="text" class="form-control" id="dia_vencimento" name="dia_vencimento" placeholder="Dia vencimento">
+                </div>
+            </div>`
+        );
+
+    },  
+    HtmlAvarias : function(){
+        let dados_cadastro_carro = this.spa.find('.dados_cadastro_carro');
+
+        dados_cadastro_carro.append(`
+            <div class="form-group col-md-12">
+                <input type="text-area" class="form-control" id="avarias" name="avarias" placeholder="Avarias">
+            </div> <br>`
+        );
+   
     },
 
     EventChangeMarca : function(){
@@ -346,29 +450,139 @@ var CadastroCarro = {
         var this_ = this;
         $(document).on('click', '#prox_etapa', function(event) {
             event.preventDefault();
+            var dados_cadastro_carro = this_.spa.find('.dados_cadastro_carro');
+            
+            // Principais
+            let marcaSelecionada = dados_cadastro_carro.find('.combo_marca');
+            let modeloSelecionado = dados_cadastro_carro.find('.combo_modelo');
+            let versaoSelecionada = dados_cadastro_carro.find('.combo_versoes');
+            let anoModeloSelecionado = dados_cadastro_carro.find('.combo_ano_modelo');
+            let anoFabricacaoSelecionado = dados_cadastro_carro.find('.combo_ano_fabricacao');
 
-            let marcaSelecionada = this_.spa.find('.combo_marca');
-            let modeloSelecionado = this_.spa.find('.combo_modelo');
-            let versaoSelecionada = this_.spa.find('.combo_versoes');
-            let anoModeloSelecionado = this_.spa.find('.combo_ano_modelo');
-            let anoFabricacaoSelecionado = this_.spa.find('.combo_ano_fabricacao');
+            let placa = dados_cadastro_carro.find('#placa');
+            let cep = dados_cadastro_carro.find('#cep');
+            let km = dados_cadastro_carro.find('#km');
+            let preco = dados_cadastro_carro.find('#preco');
 
-            /*
-            if(){
 
+            if(marcaSelecionada.val() == 0){
+                Mensagem('Selecione a marca', 'warning', function () { marcaSelecionada.select(); });
+                return;
+            }else if(modeloSelecionado.val() == 0){
+                Mensagem('Selecione o modelo', 'warning', function () { modeloSelecionado.select(); });
+                return;
+            }else if(versaoSelecionada.val() == 0){
+                Mensagem('Selecione a versao', 'warning', function () { versaoSelecionada.select(); });
+                return;
+            }else if(anoModeloSelecionado.val() == 0){
+                Mensagem('Selecione o ano do modelo', 'warning', function () { anoModeloSelecionado.select(); });
+                return;
+            }else if(anoFabricacaoSelecionado.val() == 0){
+                Mensagem('Selecione o ano de fabricacao', 'warning', function () { anoFabricacaoSelecionado.select(); });
+                return;
+            }else if(placa.val() == 0){
+                Mensagem('Selecione o modelo', 'warning', function () { modeloSelecionado.select(); });
+                return;
+            }else if(cep.val() == 0){
+                Mensagem('Selecione a versao', 'warning', function () { versaoSelecionada.select(); });
+                return;
+            }else if(km.val() == 0){
+                Mensagem('Selecione o ano do modelo', 'warning', function () { anoModeloSelecionado.select(); });
+                return;
+            }else if(preco.val() == 0){
+                Mensagem('Selecione o ano de fabricacao', 'warning', function () { anoFabricacaoSelecionado.select(); });
+                return;
             }
 
-            /*
-            this_.spa.find('#voltar_etapa').show();
+            // Especificações
+            let paramsEspecificacoes = [];
+            
+            let qtdEspecificacoes = this_.especificacoes.length;
+            for(let i = 0; i < qtdEspecificacoes; i++){
+                let especificacao = this_.especificacoes[i];
+                let especificacao_localizada =  dados_cadastro_carro.find(especificacao.idHtml);
+                if(especificacao.tipoCampo == 'checkbox'){
+                    let valor = especificacao_localizada.prop('checked');
+                    if(valor){
+                        paramsEspecificacoes.push(especificacao.id)
+                    }
+                }else if(especificacao.tipoCampo == 'select'){
+                    let valor = especificacao_localizada.val();
+                    if(especificacao.obrigatorio){
+                        if(valor == 0){
+                            Mensagem(`Selecione ${especificacao.chave}` , 'warning', function () { dados_cadastro_carro.find(especificacao.idHtml).focus(); });
+                            //return
+                        }
+                        paramsEspecificacoes.push(especificacao.id);
+                    }
+                }
+            };
 
-            if(this_.etapa == 1) {
+            // Tags 
+            let isAlienado = false;
+            let paramsTagDetalhe = [];
+            var dados_cadastro_carro = this_.spa.find('.dados_cadastro_carro');
+            let qtdDetalhes = this_.detalhes.length;
+            for(let i = 0; i < qtdDetalhes; i++){
+                let detalhe = this_.detalhes[i];
+                let detalhe_localizado =  dados_cadastro_carro.find(detalhe.idHtml);
+                let valor = detalhe_localizado.prop('checked');
+                if(valor){
+                    paramsTagDetalhe.push(detalhe.id)
+                    if(detalhe.id == 1){
+                        is.isAlienado = true;
+                        this_.HtmlDadosAlienado();
+                    }
+                }
+            };
+            
+            let instituicao_financeira = null;
+            let parcelas_pagas = null;
+            let parcelas_em_atraso = null;
+            let dia_vencimento = null;
+            
+            // Alienado
+            if(isAlienado){
+                instituicao_financeira = dados_cadastro_carro.find('#instituicao_financeira');
+                parcelas_pagas = dados_cadastro_carro.find('#parcelas_pagas');
+                parcelas_em_atraso = dados_cadastro_carro.find('#parcelas_em_atraso');
+                dia_vencimento = dados_cadastro_carro.find('#dia_vencimento');
 
-            }else if(this_.etapa == 2){
-                
-                
+                if(instituicao_financeira.val() == ''){
+                    Mensagem('Selecione a marca', 'warning', function () { instituicao_financeira.select(); });
+                    return;
+                }else if(parcelas_pagas.val() == ''){
+                    Mensagem('Selecione o modelo', 'warning', function () { parcelas_pagas.select(); });
+                    return;
+                }else if(parcelas_em_atraso.val() == ''){
+                    Mensagem('Selecione o modelo', 'warning', function () { parcelas_em_atraso.select(); });
+                    return;
+                }else if(dia_vencimento.val() == ''){
+                    Mensagem('Selecione o modelo', 'warning', function () { dia_vencimento.select(); });
+                    return;
+                }
             }
-            ++this_.etapa;
-            */
+
+            let avarias = dados_cadastro_carro.find('#avarias').val();
+
+            this_.Cadastrar(
+                placa.val(), 
+                cep.val(), 
+                marcaSelecionada.val(),
+                modeloSelecionado.val(),
+                versaoSelecionada.val(),
+                anoModeloSelecionado.val(),
+                anoFabricacaoSelecionado.val(),
+                km.val(),
+                preco.val(),
+                paramsTagDetalhe,
+                avarias,
+                instituicao_financeira.val(),
+                parcelas_pagas.val(),
+                parcelas_em_atraso.val(),
+                paramsEspecificacoes,
+                dia_vencimento.val()
+            )
         });
     }
 };
