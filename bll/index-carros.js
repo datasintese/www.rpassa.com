@@ -52,8 +52,11 @@ var SegmentoCarros = {
             this_.RolamentoPesquisa.marcas_ids = parseInt(this_.spa.find('.nice_select#marca').val());
             this_.RolamentoPesquisa.modelos_ids = parseInt(this_.spa.find('.nice_select#modelo').val());
 
+            let pesquisa_km = this_.spa.find('.nice_select#quilometragem').val();
+
             this_.RolamentoPesquisa.km_min = parseInt(this_.spa.find('.nice_select#quilometragem').val().split('|')[0]);
             this_.RolamentoPesquisa.km_max = parseInt(this_.spa.find('.nice_select#quilometragem').val().split('|')[1]);
+            
 
             var target = this_.spa.find('.pesquisa');
             target.fadeIn();
@@ -395,13 +398,19 @@ var SegmentoCarros = {
 
         $.each(this.RolamentoPesquisa, function (key, value) {
             if (value != null) {
-                if (key.endsWith('_ids')) {
+                if (isNaN(value) || value == undefined) {
+                    delete params[key];
+                }
+                else if(value == 0 && key != 'skip' && key != 'offset'){
+                    delete params[key];
+                }
+                else if (key.endsWith('_ids')) {
                     params[key] = '[' + value + ']'; // Coloca no formato de lista campos terminados em _ids
                 }
                 else
                     params[key] = value;
             }
-            else if (value == NaN || value == undefined || value == null) {
+            else if (value == null) {
                 delete params[key];
             }
         });
