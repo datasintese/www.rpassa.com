@@ -742,5 +742,78 @@ var SegmentoCarros = {
                 // }
             }
         });
+    },
+
+    CarregarMarcasPopulares(){
+        let spa = this.spa;
+
+        $.ajax({
+            url: localStorage.getItem('api') + '/v1/mobile/carros/marcas/populares',
+            type: "GET", cache: true, async: true, contentData: 'json',
+            success: function (result, textStatus, request) {
+                return result;
+            },
+            error: function (request, textStatus, errorThrown) {
+                StorageClear();
+                alert(JSON.stringify(request));
+
+                // if (!MensagemErroAjax(request, errorThrown)) {
+                //     try {
+                //         var obj = $.parseJSON(request.responseText)
+                //         Mensagem(obj.mensagem, 'warning');
+                //     } catch (error) {
+                //         Mensagem(request.responseText, 'warning');
+                //     }
+                // }
+            }
+        })
+    },
+
+    CarregarAnaliticoMarcas(){
+        let this_ = this;
+        let marcas_populares = this.CarregarMarcasPopulares();
+        if(marcas_populares.length > 0){
+            $.each(marcas_populares, function (i, marca_popular) {
+                param["marca"] = marca_popular.nome;
+                $.ajax({
+                    url: localStorage.getItem('api') + '/v1/mobile/analitico/carro',
+                    type: "GET", cache: true, async: true, contentData: 'json',
+                    data:param,
+                    success: function (result, textStatus, request) {
+                        this_.HtmlAnaliticoMarcas(marca_popular.id, marca_popular.nome, result);
+                    },
+                    error: function (request, textStatus, errorThrown) {
+                        StorageClear();
+                        alert(JSON.stringify(request));
+        
+                        // if (!MensagemErroAjax(request, errorThrown)) {
+                        //     try {
+                        //         var obj = $.parseJSON(request.responseText)
+                        //         Mensagem(obj.mensagem, 'warning');
+                        //     } catch (error) {
+                        //         Mensagem(request.responseText, 'warning');
+                        //     }
+                        // }
+                    }
+                })
+            });
+        }
+    },
+
+    HtmlAnaliticoMarcas(id_marca, marca, result_analitico){
+        let regiao_marca_populates = this.spa.find('.car_company_slider.owl-carousel');
+
+        let url_imagem = localStorage.getItem('api') + '/v1/mobile/carros/marcas/imagem?id_marca=' + id_marca;
+        
+        regiao_marca_populates.append(
+            `<div class="item">
+                <div class="car_c_item">
+                    <a href="#"><img src="${url_imagem}" alt=""></a>
+                    <a href="#">
+                        <h5>${marca} <span>(${result_analitico.total})</span></h5>
+                    </a>
+                </div>
+            </div>`
+        );
     }
 };

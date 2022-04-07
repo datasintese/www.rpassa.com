@@ -160,52 +160,79 @@
         <!--================Finance Calculator Area =================-->
         <section class="spa calculator_area p_100 cadastro_carro" style="padding-top: 30px;">
         	<div class="container">
-        		<div class="flag_center_title">
-        			<h3><img src="img/icon/flag-2.png" alt="">Vamos prosseguir com seu anúncio?</h3>
-        		</div>
+        		
        			<div class="create_account_box">
        				<div class="create_account_area">
        					<form class="contact_form" novalidate="novalidate" style="display:block;">
-							<div class="row dados_cadastro_carro">
-								<div class="form-group col-md-12">
-									<select class="combo_marca">
-									</select>
+							<div class="dados_cadastro_carro">
+								<div class="row" id="etapa1">
+									<div class="flag_center_title">
+										<h3><img src="img/icon/flag-2.png" alt="">Vamos prosseguir com seu anúncio?</h3>
+									</div>
+									<div class="form-group col-md-12">
+										<select class="combo_marca">
+										</select>
+									</div>
+									<div class="form-group col-md-12">
+										<select class="combo_modelo">
+										</select>
+									</div>
+									<div class="form-group col-md-12">
+										<select class="combo_versoes">
+										</select>
+									</div>
+									<div class="form-group col-md-12">
+										<select class="combo_ano_modelo">
+										</select>
+									</div>
+									<div class="form-group col-md-12">
+										<select class="combo_ano_fabricacao">
+										</select>
+									</div>
+									<div class="form-group col-md-12">
+										<input type="text" class="form-control" id="placa" name="placa" placeholder="Qual é a placa do seu carro?">
+									</div>				
+									<div class="form-group col-md-12">
+										<input type="text" class="form-control" id="cep" name="cep" placeholder="Qual é o cep do seu carro?">
+									</div>
+									<div class="form-group col-md-12">
+										<input type="text" class="form-control" id="km" name="km" placeholder="Quanto seu carro já rodou? (KM)">
+									</div>
+									<div class="form-group col-md-12">
+										<input type="text" class="form-control" id="preco" name="preco" placeholder="Por quanto quer vender seu carro?">
+									</div>
 								</div>
-								<div class="form-group col-md-12">
-									<select class="combo_modelo">
-									</select>
+							
+								<div class="row" id="etapa2">
+									<div class="flag_center_title">
+										<h3><img src="img/icon/flag-2.png" alt="">Ótimo! Conta um pouco mais das especificações do seu carro</h3>
+									</div>
 								</div>
-								<div class="form-group col-md-12">
-									<select class="combo_versoes">
-									</select>
+								<div class="row" id="etapa3">
+									<div class="flag_center_title">
+										<h3><img src="img/icon/flag-2.png" alt="">Muito bom! Conta nos agora sobre alguns detalhes do seu carro!</h3>
+									</div>
 								</div>
-								<div class="form-group col-md-12">
-									<select class="combo_ano_modelo">
-									</select>
+								<div id="etapa4">
+									<div class="flag_center_title">
+										<h3><img src="img/icon/flag-2.png" alt="">Eu prometo somente mais essas informações</h3>
+									</div>
 								</div>
-								<div class="form-group col-md-12">
-									<select class="combo_ano_fabricacao">
-									</select>
-								</div>
-								<div class="form-group col-md-12">
-									<input type="text" class="form-control" id="placa" name="placa" placeholder="Qual é a placa do seu carro?">
-								</div>				
-								<div class="form-group col-md-12">
-									<input type="text" class="form-control" id="cep" name="cep" placeholder="Qual é o cep do seu carro?">
-								</div>
-								<div class="form-group col-md-12">
-									<input type="text" class="form-control" id="km" name="km" placeholder="Quanto seu carro já rodou? (KM)">
-								</div>
-								<div class="form-group col-md-12">
-									<input type="text" class="form-control" id="preco" name="preco" placeholder="Por quanto quer vender seu carro?">
+								<div class="row" id="etapa5">
+									<div class="flag_center_title">
+										<h3><img src="img/icon/flag-2.png" alt="">Legal tudo pronto podemos anunciar?</h3>
+									</div>
 								</div>
 							</div>
-							<div class="form-group col-md-12">
-								<button type="submit" value="submit" class="btn submit_btn red form-control" id="voltar_etapa">Voltar</button>
-								<button type="submit" value="submit" class="btn submit_btn red form-control" id="prox_etapa">Continuar</button>
-							</div>
-							<div class="form-group col-md-12" style="display: none;">
-								<button type="submit" value="submit" class="btn submit_btn red form-control">Anunciar</button>
+							<br>
+							<div class="row">
+								<div class="form-group col-md-12">
+									<button type="submit" value="submit" class="btn submit_btn red form-control" id="voltar_etapa">Voltar</button>
+									<button type="submit" value="submit" class="btn submit_btn red form-control" id="prox_etapa">Continuar</button>
+								</div>
+								<div class="form-group col-md-12" style="display: none;">
+									<button type="submit" value="submit" class="btn submit_btn red form-control">Anunciar</button>
+								</div>
 							</div>
 						</form>
        				</div>
