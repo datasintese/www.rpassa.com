@@ -3,6 +3,7 @@ var CadastroCarro = {
     etapa : 1,
     especificacoes: [],
     detalhes : [],
+    params : [],
 
     Construtor(){
         var baseTela = '.spa.calculator_area.p_100.cadastro_carro';
@@ -191,7 +192,7 @@ var CadastroCarro = {
                          instituicao_financeira,
                          parcelas_pagas,
                          parcelas_em_atraso,
-                         especicacoes_ids,
+                         especificacoes_ids,
                          dia_vencimento
                         )
     {
@@ -216,7 +217,7 @@ var CadastroCarro = {
                 instituicao_financeira: instituicao_financeira,
                 parcelas_pagas: parcelas_pagas,
                 parcelas_em_atraso: parcelas_em_atraso,
-                especicacoes_ids: especicacoes_ids,
+                especificacoes_ids: especificacoes_ids,
                 dia_vencimento: dia_vencimento
             },
             contentType: "application/x-www-form-urlencoded; charset=utf-8",
@@ -318,7 +319,7 @@ var CadastroCarro = {
                 if(combo.valor == 'true' || combo.valor == 'false'){
                 
                     dados_cadastro_carro.append(
-                        `<div class="creat_account">
+                        `<div class="creat_account" style="z-index:1">
                             <input type="checkbox" id="esp-option_${combo.id}" required>
                             <label for="esp-option_${combo.id}">${combo.chave}</label>
                             <div class="check"></div>
@@ -334,7 +335,7 @@ var CadastroCarro = {
                         this_.especificacoes.push( {id : combo.id, idHtml : '#combo_' + idCombo, obrigatorio : combo.obrigatorio, tipoCampo : 'select', chave : combo.chave} )
                         dados_cadastro_carro.append(`
                             <div class="form-group col-md-12">
-                                <select id="combo_${idCombo}" required>
+                                <select id="combo_${idCombo}" style="position:absolute;">
                                 </select>
                             </div> <br>`);
                         especificacao_tipo = this_.spa.find('#combo_' + idCombo)
@@ -358,7 +359,7 @@ var CadastroCarro = {
         $.each(result, function (i, detalhe) {
             if(detalhe.exibir_ao_editar){
                 dados_cadastro_carro.append(
-                    `<div class="creat_account">
+                    `<div class="creat_account" style="z-index:1">
                         <input type="checkbox" id="tag-option_${detalhe.id}">
                         <label for="tag-option_${detalhe.id}">${detalhe.nome}</label>
                         <div class="check"></div>
@@ -373,7 +374,7 @@ var CadastroCarro = {
 
     HtmlDadosAlienado: function(){
         let dados_cadastro_carro = this.spa.find('.dados_cadastro_carro>#etapa4');
-        
+        dados_cadastro_carro.empty();
 
         dados_cadastro_carro.append(`
             <div class="row" id="dados_alienado">
@@ -467,6 +468,10 @@ var CadastroCarro = {
                 $(this).hide();
             }
 
+            if(this_.etapa < 5){
+                this_.spa.find('.grupo-btn>#prox_etapa').text("Continuar");
+            }
+
             this_.spa.find('.dados_cadastro_carro>#etapa' + (this_.etapa + ocultar)).hide();
             this_.spa.find('.dados_cadastro_carro>#etapa' + this_.etapa).show();
             this_.RetrocederScrollInicio();
@@ -482,43 +487,43 @@ var CadastroCarro = {
 
             // Principais parte 1
             if(this_.etapa == 1){
-                let marcaSelecionada = dados_cadastro_carro.find('.combo_marca');
-                let modeloSelecionado = dados_cadastro_carro.find('.combo_modelo');
-                let versaoSelecionada = dados_cadastro_carro.find('.combo_versoes');
-                let anoModeloSelecionado = dados_cadastro_carro.find('.combo_ano_modelo');
-                let anoFabricacaoSelecionado = dados_cadastro_carro.find('.combo_ano_fabricacao');
+                this_.params['marcaSelecionada'] = dados_cadastro_carro.find('.combo_marca');
+                this_.params['modeloSelecionado'] = dados_cadastro_carro.find('.combo_modelo');
+                this_.params['versaoSelecionada'] = dados_cadastro_carro.find('.combo_versoes');
+                this_.params['anoModeloSelecionado'] = dados_cadastro_carro.find('.combo_ano_modelo');
+                this_.params['anoFabricacaoSelecionado'] = dados_cadastro_carro.find('.combo_ano_fabricacao');
     
-                let placa = dados_cadastro_carro.find('#placa');
-                let cep = dados_cadastro_carro.find('#cep');
-                let km = dados_cadastro_carro.find('#km');
-                let preco = dados_cadastro_carro.find('#preco');
+                this_.params['placa'] = dados_cadastro_carro.find('#placa');
+                this_.params['cep'] = dados_cadastro_carro.find('#cep');
+                this_.params['km'] = dados_cadastro_carro.find('#km');
+                this_.params['preco'] = dados_cadastro_carro.find('#preco');
     
-                if(marcaSelecionada.val() == 0){
-                    Mensagem('Selecione a marca', 'warning', function () { marcaSelecionada.select(); });
+                if(this_.params['marcaSelecionada'].val() == 0){
+                    Mensagem('Selecione a marca', 'warning', function () { this_.params['marcaSelecionada'].select(); });
                     return;
-                }else if(modeloSelecionado.val() == 0){
-                    Mensagem('Selecione o modelo', 'warning', function () { modeloSelecionado.select(); });
+                }else if(this_.params['modeloSelecionado'].val() == 0){
+                    Mensagem('Selecione o modelo', 'warning', function () { this_.params['modeloSelecionado'].select(); });
                     return;
-                }else if(versaoSelecionada.val() == 0){
-                    Mensagem('Selecione a versao', 'warning', function () { versaoSelecionada.select(); });
+                }else if(this_.params['versaoSelecionada'].val() == 0){
+                    Mensagem('Selecione a versao', 'warning', function () { this_.params['versaoSelecionada'].select(); });
                     return;
-                }else if(anoModeloSelecionado.val() == 0){
-                    Mensagem('Selecione o ano do modelo', 'warning', function () { anoModeloSelecionado.select(); });
+                }else if(this_.params['anoModeloSelecionado'].val() == 0){
+                    Mensagem('Selecione o ano do modelo', 'warning', function () { this_.params['anoModeloSelecionado'].select(); });
                     return;
-                }else if(anoFabricacaoSelecionado.val() == 0){
-                    Mensagem('Selecione o ano de fabricacao', 'warning', function () { anoFabricacaoSelecionado.select(); });
+                }else if(this_.params['anoFabricacaoSelecionado'].val() == 0){
+                    Mensagem('Selecione o ano de fabricacao', 'warning', function () { this_.params['anoFabricacaoSelecionado'].select(); });
                     return;
-                }else if(placa.val() == 0){
-                    Mensagem('Selecione o modelo', 'warning', function () { modeloSelecionado.select(); });
+                }else if(this_.params['placa'].val() == ''){
+                    Mensagem('Placa obrigatória', 'warning', function () { this_.params['placa'].select(); });
                     return;
-                }else if(cep.val() == 0){
-                    Mensagem('Selecione a versao', 'warning', function () { versaoSelecionada.select(); });
+                }else if(this_.params['cep'].val() == ''){
+                    Mensagem('CEP obrigatório', 'warning', function () { this_.params['cep'].select(); });
                     return;
-                }else if(km.val() == 0){
-                    Mensagem('Selecione o ano do modelo', 'warning', function () { anoModeloSelecionado.select(); });
+                }else if(this_.params['km'].val() == ''){
+                    Mensagem('Informe a quantidade de quilômetros que seu carro rodou!', 'warning', function () { this_.params['km'].select(); });
                     return;
-                }else if(preco.val() == 0){
-                    Mensagem('Selecione o ano de fabricacao', 'warning', function () { anoFabricacaoSelecionado.select(); });
+                }else if(this_.params['preco'].val() == 0){
+                    Mensagem('Preço do veículo obrigatório!', 'warning', function () { this_.params['preco'].select(); });
                     return;
                 }
 
@@ -540,9 +545,8 @@ var CadastroCarro = {
             // Especificações
 
             if(this_.etapa == 2){
-                let paramsEspecificacoes = [];
-            
-                let qtdEspecificacoes = this_.especificacoes.length;
+                var paramsEspecificacoes = [];
+                var qtdEspecificacoes = this_.especificacoes.length;
                 for(let i = 0; i < qtdEspecificacoes; i++){
                     let especificacao = this_.especificacoes[i];
                     let especificacao_localizada =  dados_cadastro_carro.find(especificacao.idHtml);
@@ -558,10 +562,12 @@ var CadastroCarro = {
                                 Mensagem(`Selecione ${especificacao.chave}` , 'warning', function () { dados_cadastro_carro.find(especificacao.idHtml).focus(); });
                                 return
                             }
-                            paramsEspecificacoes.push(especificacao.id);
                         }
+                        paramsEspecificacoes.push(especificacao.id);
                     }
                 };
+
+                this_.params["paramsEspecificacoes"] = JSON.stringify(paramsEspecificacoes);
 
                 // Passar para etapa 3 liberar tags
                 ++this_.etapa;
@@ -574,14 +580,13 @@ var CadastroCarro = {
 
             // -----------------------------------------------------------------
 
-
             // Parte 3
             // Tags 
 
             if(this_.etapa == 3){
-                let isAlienado = false;
-                let paramsTagDetalhe = [];
-                var dados_cadastro_carro = this_.spa.find('.dados_cadastro_carro');
+                this_.params['isAlienado'] = false;
+                var paramsTagDetalhe = [];
+                let dados_cadastro_carro = this_.spa.find('.dados_cadastro_carro');
                 let qtdDetalhes = this_.detalhes.length;
                 for(let i = 0; i < qtdDetalhes; i++){
                     let detalhe = this_.detalhes[i];
@@ -590,14 +595,15 @@ var CadastroCarro = {
                     if(valor){
                         paramsTagDetalhe.push(detalhe.id)
                         if(detalhe.id == 1){
-                            isAlienado = true;
+                            this_.params['isAlienado'] = true;
                         }
                     }
                 };
+                this_.params["paramsTagDetalhe"] = JSON.stringify(paramsTagDetalhe);
                 // Setar o value do botao para Cadastrar
                 $(this).text("Anunciar");
                 this_.RetrocederScrollInicio();
-                if(isAlienado){
+                if(this_.params['isAlienado']){
                     // Passar para etapa 4 liberar campos de alienação.
                     ++this_.etapa;
                     dados_cadastro_carro.find('#etapa3').hide();
@@ -617,28 +623,28 @@ var CadastroCarro = {
             // Parte 4
             // Alienado
             if(this_.etapa == 4){
-                let instituicao_financeira = null;
-                let parcelas_pagas = null;
-                let parcelas_em_atraso = null;
-                let dia_vencimento = null;
+                this_.params["instituicao_financeira"] = null;
+                this_.params["parcelas_pagas"] = null;
+                this_.params["parcelas_em_atraso"] = null;
+                this_.params["dia_vencimento"] = null;
                 
-                if(isAlienado){
-                    instituicao_financeira = dados_cadastro_carro.find('#instituicao_financeira');
-                    parcelas_pagas = dados_cadastro_carro.find('#parcelas_pagas');
-                    parcelas_em_atraso = dados_cadastro_carro.find('#parcelas_em_atraso');
-                    dia_vencimento = dados_cadastro_carro.find('#dia_vencimento');
+                if(this_.params['isAlienado']){
+                    this_.params["instituicao_financeira"] = dados_cadastro_carro.find('#instituicao_financeira');
+                    this_.params["parcelas_pagas"] = dados_cadastro_carro.find('#parcelas_pagas');
+                    this_.params["parcelas_em_atraso"] = dados_cadastro_carro.find('#parcelas_em_atraso');
+                    this_.params["dia_vencimento"] = dados_cadastro_carro.find('#dia_vencimento');
     
-                    if(instituicao_financeira.val() == ''){
-                        Mensagem('Selecione a marca', 'warning', function () { instituicao_financeira.select(); });
+                    if(this_.params["instituicao_financeira"].val() == ''){
+                        Mensagem('Instituição financeira obrigatório', 'warning', function () { instituicao_financeira.select(); });
                         return;
-                    }else if(parcelas_pagas.val() == ''){
-                        Mensagem('Selecione o modelo', 'warning', function () { parcelas_pagas.select(); });
+                    }else if(this_.params["parcelas_pagas"].val() == ''){
+                        Mensagem('Parcelas pagas obrigatório', 'warning', function () { parcelas_pagas.select(); });
                         return;
-                    }else if(parcelas_em_atraso.val() == ''){
-                        Mensagem('Selecione o modelo', 'warning', function () { parcelas_em_atraso.select(); });
+                    }else if(this_.params["parcelas_em_atraso"].val() == ''){
+                        Mensagem('Parcelas em atraso obrigatório', 'warning', function () { parcelas_em_atraso.select(); });
                         return;
-                    }else if(dia_vencimento.val() == ''){
-                        Mensagem('Selecione o modelo', 'warning', function () { dia_vencimento.select(); });
+                    }else if(this_.params["dia_vencimento"].val() == ''){
+                        Mensagem('Dia do vencimento obrigatório', 'warning', function () { dia_vencimento.select(); });
                         return;
                     }
                 }
@@ -646,25 +652,25 @@ var CadastroCarro = {
             }
 
             if(this_.etapa == 5){
-                let avarias = dados_cadastro_carro.find('#avarias').val();
+                var avarias = dados_cadastro_carro.find('#avarias').val();
 
                 this_.Cadastrar(
-                    placa.val(), 
-                    cep.val(), 
-                    marcaSelecionada.val(),
-                    modeloSelecionado.val(),
-                    versaoSelecionada.val(),
-                    anoModeloSelecionado.val(),
-                    anoFabricacaoSelecionado.val(),
-                    km.val(),
-                    preco.val(),
-                    paramsTagDetalhe,
+                    this_.params["placa"].val(), 
+                    this_.params["cep"].val(), 
+                    this_.params["marcaSelecionada"].val(),
+                    this_.params["modeloSelecionado"].val(),
+                    this_.params["versaoSelecionada"].val(),
+                    this_.params["anoModeloSelecionado"].val(),
+                    this_.params["anoFabricacaoSelecionado"].val(),
+                    this_.params["km"].val(),
+                    this_.params["preco"].val(),
+                    this_.params["paramsTagDetalhe"],
                     avarias ?? null,
-                    instituicao_financeira != null ? instituicao_financeira.val() : instituicao_financeira,
-                    parcelas_pagas != null ? parcelas_pagas.val() : parcelas_pagas,
-                    parcelas_em_atraso != null ? parcelas_em_atraso.val() : parcelas_em_atraso,
-                    paramsEspecificacoes,
-                    dia_vencimento != null ? dia_vencimento.val() : dia_vencimento
+                    this_.params["instituicao_financeira"] != null ? this_.params["instituicao_financeira"].val() : this_.params["instituicao_financeira"],
+                    this_.params["parcelas_pagas"] != null ? this_.params["parcelas_pagas"].val() : this_.params["parcelas_pagas"],
+                    this_.params["parcelas_em_atraso"] != null ? this_.params["parcelas_em_atraso"].val() : this_.params["parcelas_em_atraso"],
+                    this_.params["paramsEspecificacoes"],
+                    this_.params["dia_vencimento"] != null ? this_.params["dia_vencimento"].val() : this_.params["dia_vencimento"]
                 )
             }     
         });
@@ -676,6 +682,3 @@ var CadastroCarro = {
     CadastroCarro.Construtor();
     CadastroCarro.Inicializar();
 })(jQuery)
-
-
-
