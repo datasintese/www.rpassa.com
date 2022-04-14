@@ -4,6 +4,8 @@ var CadastroCarro = {
     especificacoes: [],
     detalhes : [],
     params : [],
+    imagens_carregada : [],
+    id_produto : null,
 
     Construtor(){
         var baseTela = '.spa.calculator_area.p_100.cadastro_carro';
@@ -14,7 +16,6 @@ var CadastroCarro = {
         this.ObterMarcas();
         this.ObterTodasEspecificacoes();
         this.ObterTagsDetalhes();
-        this.ObterImagensPartesExternas();
 
         this.EventChangeMarca();
         this.EventChangeModelo();
@@ -24,6 +25,7 @@ var CadastroCarro = {
         this.EventClickVoltarEtapa();
         this.EventClickProxEtapa();
         this.EventChangeImage();
+        this.EventClickRemoverImagem();
         this.EventClickSalvarImagens();
 
         this.spa.find('.combo_modelo').hide();
@@ -42,6 +44,7 @@ var CadastroCarro = {
         this.spa.find('.dados_cadastro_carro>#etapa3').hide();
         this.spa.find('.dados_cadastro_carro>#etapa4').hide();
         this.spa.find('.dados_cadastro_carro>#etapa5').hide();
+        this.spa.find('.feature_bike_area.container').hide();
 
         // this.spa.find('#placa').inputmask('aaa-999');
         // this.spa.find('#cep').inputmask('99999-999');
@@ -213,6 +216,7 @@ var CadastroCarro = {
             dots: false,
             center: false,
             autoplayHoverPause : true,
+            startPosition: 0,
             responsive: {
                 0: {
                     items: 1,
@@ -245,9 +249,10 @@ var CadastroCarro = {
                          dia_vencimento
                         )
     {
+        let this_ = this;
         $.ajax({
             url: StorageGetItem('api') + '/v1/mobile/carros/alterar',
-            type: 'PUT', cache: false, async: true, dataType: 'json',
+            type: 'PUT', cache: false, async: false, dataType: 'json',
             headers: {
                 Authorization: 'Bearer ' + StorageGetItem("token")
             },
@@ -271,58 +276,58 @@ var CadastroCarro = {
             },
             contentType: "application/x-www-form-urlencoded; charset=utf-8",
             success: function (result, textStatus, request) {
-                try {
-                    return result;
-                } catch (error) {
-                    Mensagem(JSON.stringify(result), 'success');
+                this_.ResetarVariavesPosCadastro();
+                this_.id_produto = result.id_produto;
+                if(this_.id_produto > 0 ){
+                    this_.ObterImagensPartesExternas();
+                    Mensagem('Seu veiculo foi anunciado com êxito. Você também poderá editas as informações do veiculo.' +
+                                'Para melhores resultados adicione todas imagens solicitadas pois demonstram o estado do veículo quanto mais nítidas melhor e ainda receba o selo do rpassa', 'success');
+                    this_.spa.find('.create_account_box').hide();
+                    this_.spa.find('.feature_bike_area.container').show();
                 }
             },
             error: function (request, textStatus, errorThrown) {
                 if (!MensagemErroAjax(request, errorThrown)) {
                     try {
                         var obj = $.parseJSON(request.responseText)
-                        Mensagem(obj.mensagem, 'warning', function () { this_.spa.find("#" + obj.campo.toLowerCase()).select(); });
+                        Mensagem(obj.mensagem, 'warning');
                     } catch (error) {
-                        Mensagem(request.responseText, 'error', function () { this_.spa.find("#" + obj.campo.toLowerCase()).select(); });
+                        Mensagem(request.responseText, 'error');
                     }
                 }
             }
         });
     },
 
-    SalvarImagensPrincipal : function(imagem_principal){
+    SalvarImagensPrincipal : function(imagem_principal, id_produto){
         $.ajax({
-            url: StorageGetItem('api') + '/v1/mobile/carros/1013/imagem_principal',
+            url: StorageGetItem('api') + '/v1/mobile/carros/'+id_produto+'/imagem_principal',
             type: 'post', cache: false, async: true, dataType: 'json',
             headers: {
                 Authorization: 'Bearer ' + StorageGetItem("token")
             },
-            data: imagens.dados,
-            contentType: imagens.mime_type,
+            data: imagem_principal.dados,
+            contentType: imagem_principal.mime_type,
             processData: false,
             success: function (result, textStatus, request) {
-                try {
-                    Mensagem('deu certo kkkk', 'success');
-                } catch (error) {
-                    Mensagem(JSON.stringify(result), 'success');
-                }
+
             },
             error: function (request, textStatus, errorThrown) {
                 if (!MensagemErroAjax(request, errorThrown)) {
                     try {
                         var obj = $.parseJSON(request.responseText)
-                        Mensagem(obj.mensagem, 'warning', function () { this_.spa.find("#" + obj.campo.toLowerCase()).select(); });
+                        Mensagem(obj.mensagem, 'warning');
                     } catch (error) {
-                        Mensagem(request.responseText, 'error', function () { this_.spa.find("#" + obj.campo.toLowerCase()).select(); });
+                        Mensagem(request.responseText, 'error');
                     }
                 }
             }
         });
     },
 
-    SalvarImagensSecundaria : function(imagem_secundaria){
+    SalvarImagensSecundaria : function(imagem_secundaria, id_produto){
         $.ajax({
-            url: StorageGetItem('api') + '/v1/mobile/carros/1013/imagem_secundaria?id_parte_externa=' + imagem_secundaria.id_parte_externa,
+            url: StorageGetItem('api') + '/v1/mobile/carros/' + id_produto + '/imagem_secundaria?id_parte_externa=' + imagem_secundaria.id_parte_externa,
             type: 'post', cache: false, async: true, dataType: 'json',
             headers: {
                 Authorization: 'Bearer ' + StorageGetItem("token")
@@ -331,19 +336,15 @@ var CadastroCarro = {
             contentType: imagem_secundaria.mime_type,
             processData: false,
             success: function (result, textStatus, request) {
-                try {
-                    Mensagem('deu certo kkkk', 'success');
-                } catch (error) {
-                    Mensagem(JSON.stringify(result), 'success');
-                }
+                
             },
             error: function (request, textStatus, errorThrown) {
                 if (!MensagemErroAjax(request, errorThrown)) {
                     try {
                         var obj = $.parseJSON(request.responseText)
-                        Mensagem(obj.mensagem, 'warning', function () { this_.spa.find("#" + obj.campo.toLowerCase()).select(); });
+                        Mensagem(obj.mensagem, 'warning');
                     } catch (error) {
-                        Mensagem(request.responseText, 'error', function () { this_.spa.find("#" + obj.campo.toLowerCase()).select(); });
+                        Mensagem(request.responseText, 'error');
                     }
                 }
             }
@@ -354,16 +355,30 @@ var CadastroCarro = {
         let this_ = this;
         if(imagens.length > 0){
             $.each(imagens, function (i, imagem) {
-                if(imagem.id == '0'){
-                    this_.SalvarImagensPrincipal(imagem);
+                if(imagem.id_parte_externa == '0'){
+                    this_.SalvarImagensPrincipal(imagem, this_.id_produto);
                 }
                 else{
-                    this_.SalvarImagensSecundaria(imagem);
+                    this_.SalvarImagensSecundaria(imagem, this_.id_produto);
                 }
             });
+            Mensagem('Imagem cadastrada com exito!', 'success');
         }else{
             Mensagem('Nenhuma imagem selecionada!', 'warning');
         }
+    },
+
+    ResetarVariavesPosCadastro : function(){
+        this.versoes = null;
+        this.etapa = 1;
+        this.especificacoes = [];
+        this.detalhes = [];
+        this.params = [];
+    },
+
+    ResetarVariavesPosCadastroImg : function(){
+        this.id_produto = null;
+        this.imagens_carregada = [];
     },
     
     HtmlComboEspecificada : function(result, classeCombo, opcaoPadrao, tipoCampo){
@@ -530,20 +545,38 @@ var CadastroCarro = {
     },
 
     HtmlCadastroImagem(result){
-        carousel = this.spa.find('.feature_bike_slider.owl-carousel');
+        let carousel = this.spa.find('.feature_bike_slider.owl-carousel');
         this.ResetarOwlCarousel(carousel);
         carousel.owlCarousel();
+        
+        let html_item = `
+                <div class="bike_s_item red2">
 
+                    <img src="${localStorage.getItem('api') + '/v1/mobile/carros/partes_externas/imagens/9794c87d204e8385b2a09e2c795f167a'}" id="img_0" alt="">
+
+                    <div class="bike_text">
+                        <h5>Imagem de destaque</h5>
+                        <div display="inline-block">
+                            <label style="cursor: pointer; padding:5px; font-size: 10pt;" for="0" class="main_btn red">Selecione arquivo</label>
+                            <button style="padding:5px; font-size: 10pt;" class="main_btn red" id="remover_imagem_0" hash="9794c87d204e8385b2a09e2c795f167a" >Remover</button>
+                        </div>
+                        <input type="file" id="0" style="display:none;"/>
+                    </div>
+                </div>`;
+
+        carousel.owlCarousel('add', html_item).owlCarousel('update');
         
         $.each(result, function (i, parte_externa) {
             html_item = `
                 <div class="bike_s_item red2">
-                    <img src="${localStorage.getItem('api') + '/v1/mobile/carros/partes_externas/imagens/' + parte_externa.imagem_hash }" alt="">
+
+                    <img src="${localStorage.getItem('api') + '/v1/mobile/carros/partes_externas/imagens/' + parte_externa.imagem_hash }" id="img_${parte_externa.id}" alt="">
+
                     <div class="bike_text">
                         <h5>${parte_externa.nome}</h5>
                         <div display="inline-block">
                             <label style="cursor: pointer; padding:5px; font-size: 10pt;" for="${parte_externa.id}" class="main_btn red">Selecione arquivo</label>
-                            <label style="cursor: pointer; padding:5px; font-size: 10pt;" class="main_btn red">Remover</label>
+                            <button style="padding:5px; font-size: 10pt;" class="main_btn red" id="remover_imagem_${parte_externa.id}" hash="${parte_externa.imagem_hash}" >Remover</button>
                         </div>
                         <input type="file" id="${parte_externa.id}" style="display:none;"/>
                     </div>
@@ -798,12 +831,11 @@ var CadastroCarro = {
                 }
                 ++this_.etapa;
             }
-            var id_produto = 0;
 
             if(this_.etapa == 5){
                 var avarias = dados_cadastro_carro.find('#avarias').val();
 
-                id_produto = this_.Cadastrar(
+                this_.Cadastrar(
                                 this_.params["placa"].val(), 
                                 this_.params["cep"].val(), 
                                 this_.params["marcaSelecionada"].val(),
@@ -822,29 +854,49 @@ var CadastroCarro = {
                                 this_.params["dia_vencimento"] != null ? this_.params["dia_vencimento"].val() : this_.params["dia_vencimento"]
                             )
             }  
-            
-            if(id_produto > 0 ){
-
-            }
         });
     },
-
-    imagens_carregada : [],
 
     EventChangeImage: function(){
         let this_ = this;
         $(document).on('change', '.bike_s_item.red2>.bike_text>input[type="file"]', function(event){
 
             if(event.target.files != null && event.target.files.length != 0){
+                
                 let id_parte = $(this).attr('id');
                 var arquivo = event.target.files[0];
+                
                 var reader = new FileReader();
-                reader.onloadend = function() {
+                reader.onloadend = function(event) {
                     this_.imagens_carregada.push({id_parte_externa: id_parte, mime_type : arquivo.type, dados : reader.result});
                 }
                 reader.readAsArrayBuffer(arquivo);
+                
+                // Setar imagem 
+                var leitura_arquivo = new FileReader();
+                leitura_arquivo.onloadend = function(event){
+                    let img = this_.spa.find('.bike_s_item.red2>#img_' + id_parte);
+                    img.attr("src",event.target.result);
+
+                }
+                leitura_arquivo.readAsDataURL(arquivo);
             }
         });
+    },
+
+    EventClickRemoverImagem : function(){
+        let this_ = this;
+        $(document).on('click', '.bike_s_item.red2>.bike_text>div>button', function(){
+            let id_parte_externa = $(this).attr('id').split('_')[2];
+            let indice = this_.imagens_carregada.findIndex(x => x.id_parte_externa == id_parte_externa);
+            if(indice > -1){
+                this_.imagens_carregada.splice(indice, 1);
+
+                let hash = $(this).attr('hash');
+                let img = this_.spa.find('.bike_s_item.red2>#img_' + id_parte_externa);
+                img.attr("src",`${localStorage.getItem('api') + '/v1/mobile/carros/partes_externas/imagens/' + hash }`);
+            }
+        })
     },
 
     EventClickSalvarImagens : function(){
@@ -852,6 +904,8 @@ var CadastroCarro = {
         $(document).on('click', '#salvar_imagens', function(event){
             event.preventDefault();
             this_.SalvarImagens(this_.imagens_carregada);
+            this_.ResetarVariavesPosCadastroImg();
+            Redirecionar('index.html');
         });
     }
 };
