@@ -13,7 +13,12 @@ var CadastroCarro = {
     },
 
     Inicializar(){
+
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const param_query = Object.fromEntries(urlSearchParams.entries());
+
         this.ObterMarcas();
+            
         this.ObterTodasEspecificacoes();
         this.ObterTagsDetalhes();
 
@@ -60,6 +65,17 @@ var CadastroCarro = {
                                             'prefix': 'R$ ',
                                             'placeholder': ''
                                         }); */
+
+
+        if(param_query.length <= 0 || !('id_produto' in param_query)){
+            // Cadastro
+
+        }else if('id_produto' in param_query){
+            // Edição
+
+            this.id_produto = param_query['id_produto']
+            this.ObterDetalhesCarro(this.id_produto );
+        }
         
     },
 
@@ -67,12 +83,13 @@ var CadastroCarro = {
         var this_ = this;
         $.ajax({
             url: StorageGetItem('api') + '/v1/mobile/carros/marcas',
-            type: 'GET', cache: false, async: true, dataType: 'json',
+            type: 'GET', cache: false, async: false, dataType: 'json',
             contentType: 'application/x-www-form-urlencoded; charset=utf-8',
             beforeSend: function () {
             },
             success: function (result, textStatus, request) {
                 this_.HtmlMarcas(result, '.combo_marca', 'Selecione a marca');
+                return result;
             },
             error: function (err) {
                 reject(err) // Reject the promise and go to catch()
@@ -90,7 +107,7 @@ var CadastroCarro = {
 
         $.ajax({
             url: StorageGetItem('api') + '/v1/mobile/carros/modelos?marca_id=' + marca_id,
-            type: 'GET', cache: false, async: true, dataType: 'json',
+            type: 'GET', cache: false, async: false, dataType: 'json',
             contentType: 'application/x-www-form-urlencoded; charset=utf-8',
             beforeSend: function () {
             },
@@ -113,7 +130,7 @@ var CadastroCarro = {
 
         $.ajax({
             url: StorageGetItem('api') + '/v1/mobile/carros/versoes?modelo_id=' + modelo_id,
-            type: 'GET', cache: false, async: true, dataType: 'json',
+            type: 'GET', cache: false, async: false, dataType: 'json',
             contentType: 'application/x-www-form-urlencoded; charset=utf-8',
             beforeSend: function () {
             },
@@ -166,7 +183,7 @@ var CadastroCarro = {
         var this_ = this;
         $.ajax({
             url: StorageGetItem('api') + '/v1/mobile/carros/tags',
-            type: 'GET', cache: false, async: true, dataType: 'json',
+            type: 'GET', cache: false, async: false, dataType: 'json',
             contentType: 'application/x-www-form-urlencoded; charset=utf-8',
             beforeSend: function () {
             },
@@ -246,7 +263,8 @@ var CadastroCarro = {
                          parcelas_pagas,
                          parcelas_em_atraso,
                          especificacoes_ids,
-                         dia_vencimento
+                         dia_vencimento,
+                         id_produto,
                         )
     {
         let this_ = this;
@@ -272,18 +290,27 @@ var CadastroCarro = {
                 parcelas_pagas: parcelas_pagas,
                 parcelas_em_atraso: parcelas_em_atraso,
                 especificacoes_ids: especificacoes_ids,
-                dia_vencimento: dia_vencimento
+                dia_vencimento: dia_vencimento,
+                id_produto: id_produto
             },
             contentType: "application/x-www-form-urlencoded; charset=utf-8",
             success: function (result, textStatus, request) {
                 this_.ResetarVariavesPosCadastro();
-                this_.id_produto = result.id_produto;
-                if(this_.id_produto > 0 ){
-                    this_.ObterImagensPartesExternas();
-                    Mensagem('Seu veiculo foi anunciado com êxito. Você também poderá editas as informações do veiculo.' +
-                                'Para melhores resultados adicione todas imagens solicitadas pois demonstram o estado do veículo quanto mais nítidas melhor e ainda receba o selo do rpassa', 'success');
-                    this_.spa.find('.create_account_box').hide();
-                    this_.spa.find('.feature_bike_area.container').show();
+                
+                if(result.id_produto > 0 ){
+                    if(this_.id_produto == null){
+                        this_.ObterImagensPartesExternas();
+                        this_.id_produto = result.id_produto;
+                        Mensagem('Seu veiculo foi anunciado com êxito. Você também poderá editas as informações do veiculo.' +
+                                    'Para melhores resultados adicione todas imagens solicitadas pois demonstram o estado do veículo quanto mais nítidas melhor e ainda receba o selo do rpassa', 'success');
+                        this_.spa.find('.create_account_box').hide();
+                        this_.spa.find('.feature_bike_area.container').show();
+                    }else{
+                        Mensagem('Seu veiculo foi anunciado com êxito. Você também poderá editas as informações do veiculo.' +
+                        'Para melhores resultados adicione todas imagens solicitadas pois demonstram o estado do veículo quanto mais nítidas melhor e ainda receba o selo do rpassa', 'success');
+                        this_.spa.find('.create_account_box').hide();
+                        this_.spa.find('.feature_bike_area.container').show();
+                    }
                 }
             },
             error: function (request, textStatus, errorThrown) {
@@ -362,7 +389,11 @@ var CadastroCarro = {
                     this_.SalvarImagensSecundaria(imagem, this_.id_produto);
                 }
             });
-            Mensagem('Imagem cadastrada com exito!', 'success');
+            Mensagem('Imagens cadastrada com exito!', 'success', function(){
+                this_.ResetarVariavesPosCadastroImg();
+                Redirecionar('index.html');
+            
+            });
         }else{
             Mensagem('Nenhuma imagem selecionada!', 'warning');
         }
@@ -380,7 +411,123 @@ var CadastroCarro = {
         this.id_produto = null;
         this.imagens_carregada = [];
     },
-    
+
+    ObterDetalhesCarro : function(id_produto){
+        let this_ = this;
+        $.ajax({
+            url: StorageGetItem('api') + '/v1/mobile/carros/' + id_produto + '/detalhes?modo=2',
+            type: 'get', cache: false, async: true, dataType: 'json',
+            headers: {
+                Authorization: 'Bearer ' + StorageGetItem("token")
+            },
+            contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+            success: function (result) {
+                this_.CarregarDetalhes(result);
+            },
+            error: function (request, textStatus, errorThrown) {
+                if (!MensagemErroAjax(request, errorThrown)) {
+                    try {
+                        var obj = $.parseJSON(request.responseText)
+                        Mensagem(obj.mensagem, 'warning');
+                    } catch (error) {
+                        Mensagem(request.responseText, 'error');
+                    }
+                }
+            }
+        });
+    },
+
+    CarregarDetalhes : async function(detalhes){
+        let combo_marca = this.spa.find('.combo_marca');
+        let combo_modelo = this.spa.find('.combo_modelo');
+        let combo_versao = this.spa.find('.combo_versoes');
+        let combo_ano_modelo = this.spa.find('.combo_ano_modelo');
+        let combo_ano_fabricacao = this.spa.find('.combo_ano_fabricacao');
+
+        combo_marca.val(combo_marca.find('option:contains("' + detalhes.marca + '")').val()).niceSelect('update');
+        combo_marca.trigger('change');
+
+        combo_modelo.val(combo_modelo.find('option:contains("' + detalhes.modelo + '")').val()).niceSelect('update');
+        combo_modelo.trigger('change');
+
+        combo_versao.val(combo_versao.find('option:contains("' + detalhes.versao + '")').val()).niceSelect('update');
+        combo_versao.trigger('change');
+
+        let ano_modelo = detalhes.ano.split('/')[0];
+        let ano_fabricacao = detalhes.ano.split('/')[1];
+
+        combo_ano_modelo.val(combo_ano_modelo.find('option:contains("' + ano_modelo + '")').val()).niceSelect('update');
+        combo_ano_modelo.trigger('change');
+
+        combo_ano_fabricacao.val(combo_ano_fabricacao.find('option:contains("' + ano_fabricacao + '")').val()).niceSelect('update');
+        combo_ano_fabricacao.trigger('change');
+
+        let placa = this.spa.find('#placa');
+        let cep = this.spa.find('#cep');
+        let km = this.spa.find('#km');
+        let preco = this.spa.find('#preco');
+
+        placa.val(detalhes.placa);
+        cep.val(detalhes.cep);
+        km.val(detalhes.km);
+        preco.val(detalhes.preco);
+
+        // Especificacoes
+        let this_ = this;
+        $.each(detalhes.especificacoes, function (i, especificacao) {
+            let idCombo = especificacao.chave.replace(/ /g, '_').trim();
+            let especificacao_tipo;
+            
+            if(especificacao.valor == 'true' || especificacao.valor == 'false'){
+                especificacao_tipo = this_.spa.find(`#esp-option_${especificacao.id}`);
+                especificacao_tipo.attr('checked',true);
+            }else{
+                especificacao_tipo = this_.spa.find(`#combo_${idCombo}`);
+                especificacao_tipo.val(especificacao.id);
+                especificacao_tipo.niceSelect('update');
+            }
+        });
+
+        // Detalhes
+        $.each(detalhes.detalhes, function (i, detalhe) {
+            let detalhe_html = this_.spa.find(`#tag-option_${detalhe.id}`);
+            detalhe_html.attr('checked',true);
+        });
+
+        // Avarias
+        let avarias = this.spa.find('#avarias');
+        avarias.val(detalhes.avarias);
+
+        // Imagens
+        
+        this.ObterImagensPartesExternas();
+        let img;
+        let url_imagem;
+        if(detalhes.imagem_principal != null){
+            img = this_.spa.find('.bike_s_item.red2>#img_' + 0);
+            url_imagem = `${localStorage.getItem('api') + '/v1/mobile/carros/' + this_.id_produto + '/imagens/' + detalhes.imagem_principal + '?tipo=principal'}`
+
+            fetch(url_imagem).then(async function(response){
+
+                this_.imagens_carregada.push({id_parte_externa : 0, mime_type : 'image/jpg', dados : await response.arrayBuffer()});
+            })
+
+            img.attr("src",url_imagem);
+        }
+
+        $.each(detalhes.imagens_hashs, function (i, imagem) {
+            img = this_.spa.find('.bike_s_item.red2>#img_' + imagem.id);
+            url_imagem = `${localStorage.getItem('api') + '/v1/mobile/carros/' + this_.id_produto + '/imagens/' + detalhes.imagem_principal + '?tipo=principal'}`
+            fetch(url_imagem).then(async function(response){
+
+                this_.imagens_carregada.push({id_parte_externa : imagem.id,  mime_type : 'image/jpg', dados : await response.arrayBuffer()});
+            })
+
+
+            img.attr("src",`${localStorage.getItem('api') + '/v1/mobile/carros/' + this_.id_produto + '/imagens/' + imagem.hash + '?tipo=secundario'}`);
+        });
+    },
+
     HtmlComboEspecificada : function(result, classeCombo, opcaoPadrao, tipoCampo){
         var this_ = this;
         let combo_html = this_.spa.find(classeCombo);
@@ -671,8 +818,8 @@ var CadastroCarro = {
                 this_.params['marcaSelecionada'] = dados_cadastro_carro.find('.combo_marca');
                 this_.params['modeloSelecionado'] = dados_cadastro_carro.find('.combo_modelo');
                 this_.params['versaoSelecionada'] = dados_cadastro_carro.find('.combo_versoes');
-                this_.params['anoModeloSelecionado'] = dados_cadastro_carro.find('.combo_ano_modelo');
-                this_.params['anoFabricacaoSelecionado'] = dados_cadastro_carro.find('.combo_ano_fabricacao');
+                this_.params['anoModeloSelecionado'] = dados_cadastro_carro.find('.combo_ano_modelo>option:selected');
+                this_.params['anoFabricacaoSelecionado'] = dados_cadastro_carro.find('.combo_ano_fabricacao>option:selected');
     
                 this_.params['placa'] = dados_cadastro_carro.find('#placa');
                 this_.params['cep'] = dados_cadastro_carro.find('#cep');
@@ -803,12 +950,13 @@ var CadastroCarro = {
 
             // Parte 4
             // Alienado
+           
             if(this_.etapa == 4){
                 this_.params["instituicao_financeira"] = null;
                 this_.params["parcelas_pagas"] = null;
                 this_.params["parcelas_em_atraso"] = null;
                 this_.params["dia_vencimento"] = null;
-                
+
                 if(this_.params['isAlienado']){
                     this_.params["instituicao_financeira"] = dados_cadastro_carro.find('#instituicao_financeira');
                     this_.params["parcelas_pagas"] = dados_cadastro_carro.find('#parcelas_pagas');
@@ -841,8 +989,8 @@ var CadastroCarro = {
                                 this_.params["marcaSelecionada"].val(),
                                 this_.params["modeloSelecionado"].val(),
                                 this_.params["versaoSelecionada"].val(),
-                                this_.params["anoModeloSelecionado"].val(),
-                                this_.params["anoFabricacaoSelecionado"].val(),
+                                this_.params["anoModeloSelecionado"].text(),
+                                this_.params["anoFabricacaoSelecionado"].text(),
                                 this_.params["km"].val(),
                                 this_.params["preco"].val(),
                                 this_.params["paramsTagDetalhe"],
@@ -851,7 +999,8 @@ var CadastroCarro = {
                                 this_.params["parcelas_pagas"] != null ? this_.params["parcelas_pagas"].val() : this_.params["parcelas_pagas"],
                                 this_.params["parcelas_em_atraso"] != null ? this_.params["parcelas_em_atraso"].val() : this_.params["parcelas_em_atraso"],
                                 this_.params["paramsEspecificacoes"],
-                                this_.params["dia_vencimento"] != null ? this_.params["dia_vencimento"].val() : this_.params["dia_vencimento"]
+                                this_.params["dia_vencimento"] != null ? this_.params["dia_vencimento"].val() : this_.params["dia_vencimento"],
+                                this_.id_produto ?? undefined
                             )
             }  
         });
@@ -895,6 +1044,10 @@ var CadastroCarro = {
                 let hash = $(this).attr('hash');
                 let img = this_.spa.find('.bike_s_item.red2>#img_' + id_parte_externa);
                 img.attr("src",`${localStorage.getItem('api') + '/v1/mobile/carros/partes_externas/imagens/' + hash }`);
+            }else{
+                let hash = $(this).attr('hash');
+                let img = this_.spa.find('.bike_s_item.red2>#img_' + id_parte_externa);
+                img.attr("src",`${localStorage.getItem('api') + '/v1/mobile/carros/partes_externas/imagens/' + hash }`);
             }
         })
     },
@@ -905,7 +1058,6 @@ var CadastroCarro = {
             event.preventDefault();
             this_.SalvarImagens(this_.imagens_carregada);
             this_.ResetarVariavesPosCadastroImg();
-            Redirecionar('index.html');
         });
     }
 };
