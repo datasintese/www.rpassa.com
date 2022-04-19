@@ -380,10 +380,9 @@ var UsuarioMeusCarros = {
                             <p>Ano/Modelo: <span>${meu_carro.ano}</span></p>
                             <p>Quilometragem: <span>${meu_carro.km.split(' ')[0]}</span></p>
                         </div>
-                        <div class="text_footer">
-                            <a href="#"><i class="icon-engine"></i> 2500</a>
-                            <a href="#"><i class="icon-gear1"></i> Manual</a>
-                            <a href="#"><i class="icon-oil"></i>20/24</a>
+                        <div class="cat_list" style="inline-block">
+                            <a style="background:#FF2A39; color:#fff; text-decoration:none; padding:5px;" href="cadastro_carro.html?id_produto=${meu_carro.id}" class="icon-edit1"> Editar</a>
+                            <a style="background:#FF2A39; color:#fff; text-decoration:none; padding:5px;" href="#" class="icon-remove"> Excluir</a>
                         </div>
                     </div>
                 </div>`
