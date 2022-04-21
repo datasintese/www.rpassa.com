@@ -203,7 +203,7 @@ var UsuarioProposta = {
         var this_ = this;
         let obj = this_.proposta[this_.chave];
         $.ajax({
-            url: StorageGetItem('api') + '/v1/usuarios/chat/mensagens',
+            url: StorageGetItem('api') + '/v1/usuarios/proposta/mensagens',
             type: 'POST', cache: false, async: true, dataType: 'json',
             headers: {
                 Authorization: 'Bearer ' + StorageGetItem("token")
@@ -242,7 +242,7 @@ var UsuarioProposta = {
         var this_ = this;
         let obj = this_.proposta[chave];
         $.ajax({
-            url: StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/chat/mensagens/historico?offset=' + this_.RolamentoMensagens.offset + '&lote=' + this_.RolamentoMensagens.lote + '&produto_id=' + obj.id_produto,
+            url: StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/proposta/mensagens/historico?offset=' + this_.RolamentoMensagens.offset + '&lote=' + this_.RolamentoMensagens.lote + '&produto_id=' + obj.id_produto,
             type: 'GET', cache: false, async: true, dataType: 'json',
             headers: {
                 Authorization: 'Bearer ' + StorageGetItem("token")

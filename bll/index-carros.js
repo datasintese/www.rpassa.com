@@ -52,8 +52,11 @@ var SegmentoCarros = {
             this_.RolamentoPesquisa.marcas_ids = parseInt(this_.spa.find('.nice_select#marca').val());
             this_.RolamentoPesquisa.modelos_ids = parseInt(this_.spa.find('.nice_select#modelo').val());
 
+            let pesquisa_km = this_.spa.find('.nice_select#quilometragem').val();
+
             this_.RolamentoPesquisa.km_min = parseInt(this_.spa.find('.nice_select#quilometragem').val().split('|')[0]);
             this_.RolamentoPesquisa.km_max = parseInt(this_.spa.find('.nice_select#quilometragem').val().split('|')[1]);
+            
 
             var target = this_.spa.find('.pesquisa');
             target.fadeIn();
@@ -395,13 +398,19 @@ var SegmentoCarros = {
 
         $.each(this.RolamentoPesquisa, function (key, value) {
             if (value != null) {
-                if (key.endsWith('_ids')) {
+                if (isNaN(value) || value == undefined) {
+                    delete params[key];
+                }
+                else if(value == 0 && key != 'skip' && key != 'offset'){
+                    delete params[key];
+                }
+                else if (key.endsWith('_ids')) {
                     params[key] = '[' + value + ']'; // Coloca no formato de lista campos terminados em _ids
                 }
                 else
                     params[key] = value;
             }
-            else if (value == NaN || value == undefined || value == null) {
+            else if (value == null) {
                 delete params[key];
             }
         });
@@ -733,5 +742,78 @@ var SegmentoCarros = {
                 // }
             }
         });
+    },
+
+    CarregarMarcasPopulares(){
+        let spa = this.spa;
+
+        $.ajax({
+            url: localStorage.getItem('api') + '/v1/mobile/carros/marcas/populares',
+            type: "GET", cache: true, async: true, contentData: 'json',
+            success: function (result, textStatus, request) {
+                return result;
+            },
+            error: function (request, textStatus, errorThrown) {
+                StorageClear();
+                alert(JSON.stringify(request));
+
+                // if (!MensagemErroAjax(request, errorThrown)) {
+                //     try {
+                //         var obj = $.parseJSON(request.responseText)
+                //         Mensagem(obj.mensagem, 'warning');
+                //     } catch (error) {
+                //         Mensagem(request.responseText, 'warning');
+                //     }
+                // }
+            }
+        })
+    },
+
+    CarregarAnaliticoMarcas(){
+        let this_ = this;
+        let marcas_populares = this.CarregarMarcasPopulares();
+        if(marcas_populares.length > 0){
+            $.each(marcas_populares, function (i, marca_popular) {
+                param["marca"] = marca_popular.nome;
+                $.ajax({
+                    url: localStorage.getItem('api') + '/v1/mobile/analitico/carro',
+                    type: "GET", cache: true, async: true, contentData: 'json',
+                    data:param,
+                    success: function (result, textStatus, request) {
+                        this_.HtmlAnaliticoMarcas(marca_popular.id, marca_popular.nome, result);
+                    },
+                    error: function (request, textStatus, errorThrown) {
+                        StorageClear();
+                        alert(JSON.stringify(request));
+        
+                        // if (!MensagemErroAjax(request, errorThrown)) {
+                        //     try {
+                        //         var obj = $.parseJSON(request.responseText)
+                        //         Mensagem(obj.mensagem, 'warning');
+                        //     } catch (error) {
+                        //         Mensagem(request.responseText, 'warning');
+                        //     }
+                        // }
+                    }
+                })
+            });
+        }
+    },
+
+    HtmlAnaliticoMarcas(id_marca, marca, result_analitico){
+        let regiao_marca_populates = this.spa.find('.car_company_slider.owl-carousel');
+
+        let url_imagem = localStorage.getItem('api') + '/v1/mobile/carros/marcas/imagem?id_marca=' + id_marca;
+        
+        regiao_marca_populates.append(
+            `<div class="item">
+                <div class="car_c_item">
+                    <a href="#"><img src="${url_imagem}" alt=""></a>
+                    <a href="#">
+                        <h5>${marca} <span>(${result_analitico.total})</span></h5>
+                    </a>
+                </div>
+            </div>`
+        );
     }
 };

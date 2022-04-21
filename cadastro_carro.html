@@ -11,23 +11,19 @@
         <link rel="stylesheet" href="css/font-awesome.min.css">
         <link rel="stylesheet" href="vendors/icomoon-icon/style.css">
         <link rel="stylesheet" href="vendors/themify-icon/themify-icons.css">
-        <link rel="stylesheet" href="vendors/linericon/style.css">
         <!-- Extra Plugin CSS -->
         <link rel="stylesheet" href="vendors/datetimepicker/tempusdominus-bootstrap-4.min.css">
         <link rel="stylesheet" href="vendors/nice-select/css/nice-select.css">
         <link rel="stylesheet" href="vendors/owl-carousel/assets/owl.carousel.min.css">
         <link rel="stylesheet" href="vendors/slick/slick.css">
         <link rel="stylesheet" href="vendors/slick/slick-theme.css">
-        <link rel="stylesheet" href="vendors/jquery-ui/jquery-ui.css">
-        <link rel="stylesheet" href="vendors/nice-scroll/jquery.mCustomScrollbar.css">
         <link rel="stylesheet" href="vendors/popup/magnific-popup.css">
-        <link rel="stylesheet" href="vendors/animate-css/animate.css">
         
         <!-- main css -->
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/responsive.css">
     </head>
-    <body data-scroll-animation="true">
+    <body>
         
        <div class="preloader">
         	<div class="main-loader">
@@ -37,7 +33,7 @@
 			</div>
         </div>
        
-        <!--================Header Area =================-->
+       <!--================Header Area =================-->
 		<header class="header_area menu_two menu_three">
 			<div class="top_menu">
 				<div class="container">
@@ -70,15 +66,15 @@
 									<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
 										aria-haspopup="true" aria-expanded="false">Segmentos</a>
 									<ul class="dropdown-menu">
-										<li><a href="index.html?segmento=carros"><img src="img/menu/menu-1.jpg"
-													alt="">Veículos</a></li>
-										<li><a href="index.html?segmento=motos"><img src="img/menu/menu-2.jpg"
+										<li><a class="menu-segmento" id="carros" href="index.html?segmento=carros"><img src="img/menu/menu-1.jpg"
+													alt="">Carros</a></li>
+										<li><a class="menu-segmento" id="motos" href="index.html?segmento=motos"><img src="img/menu/menu-2.jpg"
 													alt="">Motocicletas</a></li>
-										<li><a href="index.html?segmento=embarcacoes"><img src="img/menu/menu-3.jpg"
-													alt="">Embarcações</a></li>
-										<li><a href="index.html?segmento=aeronaves"><img src="img/menu/menu-4.jpg"
+										<li><a class="menu-segmento" id="embarcacoes" href="index.html?segmento=embarcacoes"><img
+													src="img/menu/menu-3.jpg" alt="">Embarcações</a></li>
+										<li><a class="menu-segmento" id="aeronaves" href="index.html?segmento=aeronaves"><img src="img/menu/menu-4.jpg"
 													alt="">Aeronaves</a></li>
-										<li><a href="index.html?segmento=imoveis"><img src="img/menu/menu-5.jpg"
+										<li><a class="menu-segmento" id="imoveis" href="index.html?segmento=imoveis"><img src="img/menu/menu-5.jpg"
 													alt="">Imóveis</a></li>
 									</ul>
 								</li>
@@ -92,7 +88,7 @@
 										<li><a href="#">Depoimentos</a></li>
 										<li><a href="cadastro.html">Cadastre-se</a></li>
 										<li><a href="autenticacao.html">Área do Usuário</a></li>
-										<li><a id="logout">Sair</a></li>
+										<li><a href="#" id="logout">Sair</a></li>
 									</ul>
 								</li>
 								<li class="dropdown submenu">
@@ -108,7 +104,7 @@
 									<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
 										aria-haspopup="true" aria-expanded="false">Comprar</a>
 									<ul class="dropdown-menu">
-										<li><a href="#">Veículos</a></li>
+										<li><a href="#">Carros</a></li>
 										<li><a href="#">Motocicletas</a></li>
 										<li><a href="#">Embarcações</a></li>
 										<li><a href="#">Aeronaves</a></li>
@@ -120,7 +116,7 @@
 									<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
 										aria-haspopup="true" aria-expanded="false">Repassa</a>
 									<ul class="dropdown-menu">
-										<li><a href="#">Veículos</a></li>
+										<li><a href="#">Carros</a></li>
 										<li><a href="#">Motocicletas</a></li>
 										<li><a href="#">Embarcações</a></li>
 										<li><a href="#">Aeronaves</a></li>
@@ -130,77 +126,165 @@
 							</ul>
 							<ul class="nav navbar-nav navbar-right">
 								<li class="search_icon"><a class="search popup-with-zoom-anim" href="#test-search"><i
-											class="icon-search1"></i></a></li>
+									class="icon-search1"></i></a></li>
+								<li class="search_icon"><a href="usuario.html"><i class="icon-user-circle" heigh="32" width="32"></i></a></li>
 							</ul>
 						</div>
 					</nav>
 				</div>
 			</div>
 		</header>
-		<!--================End Footer Area =================-->
+
+		<style>
+			.list {
+				max-height: 500px;
+				overflow-y: scroll !important;
+			}
+		</style>
+        <!--================End Footer Area =================-->
         
         <!--================Breadcrumb Area =================-->
         <section class="breadcrumb_area" style="background: url(img/breadcrumb/breadcrumb-bg-4.jpg)">
         	<div class="container">
         		<div class="breadcrumb_inner">
-        			<h3>Criar Conta</h3>
+        			<h3>Anunciar Carro</h3>
         			<div class="link">
-        				<a href="index.html">Início</a>
-        				<a href="#">Cadastrar</a>
+        				<a href="index.html">Home</a>
+        				<a href="#">Anunciar carro</a>
         			</div>
         		</div>
         	</div>
         </section>
         <!--================End Breadcrumb Area =================-->
         
-        <!--================Create Account Area =================-->
-        <section class="create_account_area p_100">
+        <!--================Finance Calculator Area =================-->
+        <section class="spa calculator_area p_100 cadastro_carro" style="padding-top: 30px;">
         	<div class="container">
-        		<div class="flag_center_title wow animated fadeInUp" data-wow-delay="0.2s">
-        			<h2><img src="img/icon/flag-4.png" alt="">Criar Conta</h2>
-        		</div>
-        		<div class="create_account_box">
-					<!-- 
-        			<h6>Sign up with social network</h6>
-        			<div class="social_singup">
-        				<a href="#"><i class="fa fa-google-plus"></i></a>
-        				<a href="#"><i class="fa fa-facebook"></i></a>
-        				<a href="#"><i class="fa fa-twitter"></i></a>
-        			</div>
-        			<div class="or">
-        				<p>or</p>
-        			</div>
-					--->
-        			<form class="row contact_form" method="POST"  id="contactForm">
-						<div class="form-group col-md-12">
-							<input type="text" class="form-control" id="cpf" name="cpf" placeholder="Cpf" >
+        		
+       			<div class="create_account_box">
+       				<div class="create_account_area">
+       					<form class="contact_form" novalidate="novalidate" style="display:block;">
+							<div class="dados_cadastro_carro">
+								<div class="row" id="etapa1">
+									<div class="flag_center_title">
+										<h3><img src="img/icon/flag-2.png" alt="">Vamos prosseguir com seu anúncio?</h3>
+									</div>
+									<div class="form-group col-md-12">
+										<select class="combo_marca">
+										</select>
+									</div>
+									<div class="form-group col-md-12">
+										<select class="combo_modelo">
+										</select>
+									</div>
+									<div class="form-group col-md-12">
+										<select class="combo_versoes">
+										</select>
+									</div>
+									<div class="form-group col-md-12">
+										<select class="combo_ano_modelo">
+										</select>
+									</div>
+									<div class="form-group col-md-12">
+										<select class="combo_ano_fabricacao">
+										</select>
+									</div>
+									<div class="form-group col-md-12">
+										<input type="text" class="form-control" id="placa" name="placa" placeholder="Qual é a placa do seu carro?">
+									</div>				
+									<div class="form-group col-md-12">
+										<input type="text" class="form-control" id="cep" name="cep" placeholder="Qual é o cep do seu carro?">
+									</div>
+									<div class="form-group col-md-12">
+										<input type="text" class="form-control" id="km" name="km" placeholder="Quanto seu carro já rodou? (KM)">
+									</div>
+									<div class="form-group col-md-12">
+										<input type="text" class="form-control" id="preco" name="preco" placeholder="Por quanto quer vender seu carro?">
+									</div>
+								</div>
+							
+								<div class="row" id="etapa2">
+									<div class="flag_center_title">
+										<h4><img src="img/icon/flag-2.png" alt="">Ótimo! Conta um pouco mais das especificações do seu carro</h4>
+									</div>
+								</div>
+								<div class="row" id="etapa3">
+									<div class="flag_center_title">
+										<h4><img src="img/icon/flag-2.png" alt="">Muito bom! Conta nos agora sobre alguns detalhes do seu carro!</h4>
+									</div>
+								</div>
+								<div id="etapa4">
+									<div class="flag_center_title">
+										<h4><img src="img/icon/flag-2.png" alt="">Eu prometo somente mais essas informações</h4>
+									</div>
+								</div>
+								<div class="row" id="etapa5">
+									<div class="flag_center_title">
+										<h4><img src="img/icon/flag-2.png" alt="">Legal tudo pronto podemos anunciar?</h4>
+									</div>
+								</div>
+							</div>
+							<div class="grupo-btn" style="margin-top: 25px;">
+								<button type="submit" value="submit" class="btn submit_btn red" id="voltar_etapa" >Voltar</button>
+								<button type="submit" value="submit" class="btn submit_btn red" id="prox_etapa" >Continuar</button>
+							</div>
 						</div>
-						<div class="form-group col-md-12">
-							<input type="text" class="form-control" id="data-nascimento" name="nascimento" placeholder="Data Nascimento" >
-						</div>
-						<div class="form-group col-md-12">
-							<input type="email" class="form-control" id="email" name="email" placeholder="Email" >
-						</div>
-						<div class="form-group col-md-12">
-							<input type="text" class="form-control" id="celular" name="celular" placeholder="Celular" >
-						</div>
-						<div class="form-group col-md-12">
-							<input type="password" class="form-control" id="password" name="password" placeholder="Senha" >
-						</div>
-						<div class="form-group col-md-12">
-							<input type="password" class="form-control" id="c-password" name="c-password" placeholder="Confime a Senha" >
-						</div>
-						<div class="form-group col-md-12">
-							<button type="submit" value="submit" class="btn submit_btn red form-control" id="cadastro">Cadastrar</button>
-							<h5>Já tem uma conta? <a href="autenticacao.html">Login</a></h5>
-						</div>
-					</form>
-        		</div>
+       				</div>
+       			</div>
         	</div>
+			<!--================Feature Bike Area =================-->
+			<div class="feature_bike_area container">
+				<div class="title_two text-center red2 wow animated fadeInUp" data-wow-delay="0.2s">
+					<div class="flag_center_title">
+						<h4><img src="img/icon/flag-2.png" alt="">Para melhores resultado e engajamento, selecione todas as imagens solicitada!</h4>
+					</div>
+				</div>
+				
+				<div class="feature_bike_slider owl-carousel">
+				<!--
+					<div class="item">
+						<div class="bike_s_item red2">
+							<img src="img/bike-slider/bike-1.jpg" alt="">
+							<div class="bike_text">
+								<h3>790 ADVENTURE 2019</h3>
+								<h5>$11,500.00</h5>
+								<a class="view_btn red2" href="#">View Details</a>
+							</div>
+						</div>
+					</div>
+					<div class="item">
+						<div class="bike_s_item red2">
+							<img src="img/bike-slider/bike-2.jpg" alt="">
+							<div class="bike_text">
+								<h3>790 ADVENTURE 2019</h3>
+								<h5>$11,500.00</h5>
+								<a class="view_btn red2" href="#">View Details</a>
+							</div>
+						</div>
+					</div>
+					<div class="item">
+						<div class="bike_s_item red2">
+							<img src="img/bike-slider/bike-3.jpg" alt="">
+							<div class="bike_text">
+								<h3>790 ADVENTURE 2019</h3>
+								<h5>$11,500.00</h5>
+								<a class="view_btn red2" href="#">View Details</a>
+							</div>
+						</div>
+					</div>
+				-->
+				</div>
+				<div class="grupo-btn">
+					<button style="margin: 0 auto; display: block;" type="submit" value="submit" class="btn submit_btn red" id="salvar_imagens" >Salvar imagens</button>
+				</div>
+			</div>
+			<!--================End Feature Bike Area =================-->
         </section>
-        <!--================End Create Account Area =================-->
+        <!--================End Finance Calculator Area =================-->
+
+		 
         
-		<!--================Footer Area =================-->
+        <!--================Footer Area =================-->
 		<footer class="footer_area red_footer_area budget_footer">
 			<div class="footer_widgets">
 				<div class="container">
@@ -242,7 +326,7 @@
 								</ul>
 							</aside>
 						</div>
-	
+
 						<div class="col-lg-4 col-sm-6">
 							<form id="newsletter">
 								<aside class="f_widget subscribe_widget wow animated fadeInUp" data-wow-delay="0.8s">
@@ -296,7 +380,7 @@
 						<div class="right">
 							<ul class="nav">
 								<li><a href="#">Termos e Condições</a></li>
-	
+
 								<li><a href="#">Política de Privacidade</a></li>
 							</ul>
 						</div>
@@ -305,7 +389,7 @@
 			</div>
 		</footer>
 		<!--================End Footer Area =================-->
-			
+        
         
         <!--================Cart Sidebar Area =================-->
         <div class="cart_sidebar">
@@ -362,44 +446,35 @@
         
         
         
-        
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="js/jquery-3.4.1.min.js"></script>
         <script src="js/popper.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
-
-
-
        
-        <!-- Extra Plugin js -->
-        <script src="vendors/datetimepicker/moment.js"></script>
-        <script src="vendors/datetimepicker/tempusdominus-bootstrap-4.min.js"></script>
-        <script src="vendors/nice-select/js/jquery.nice-select.min.js"></script>
-        <script src="vendors/owl-carousel/owl.carousel.min.js"></script>
-        <script src="vendors/isotope/imagesloaded.pkgd.min.js"></script>
-        <script src="vendors/isotope/isotope.pkgd.min.js"></script>
-        <script src="vendors/slick/slick.js"></script>
-        <script src="vendors/counter-up/jquery.waypoints.min.js"></script>
-        <script src="vendors/counter-up/jquery.counterup.min.js"></script>
-        <script src="vendors/nice-scroll/jquery.nicescroll.min.js"></script>
-        <script src="vendors/jquery-ui/jquery-ui.js"></script>
-        <script src="vendors/nice-scroll/jquery.nicescroll.min.js"></script>
-        <script src="vendors/nice-scroll/jquery.mCustomScrollbar.concat.min.js"></script>
-        <script src="vendors/popup/jquery.magnific-popup.min.js"></script>
-        <script src="vendors/animate-css/wow.min.js"></script>
-        <script src="js/theme-dist.js"></script>
-
+		<script src="vendors/datetimepicker/moment.js"></script>
+		<script src="vendors/datetimepicker/tempusdominus-bootstrap-4.min.js"></script>
+		<script src="vendors/nice-select/js/jquery.nice-select.min.js"></script>
+		<script src="vendors/owl-carousel/owl.carousel.min.js"></script>
+		<script src="vendors/isotope/imagesloaded.pkgd.min.js"></script>
+		<script src="vendors/isotope/isotope.pkgd.min.js"></script>
+		<script src="vendors/slick/slick.min.js"></script>
+		<script src="vendors/counter-up/jquery.waypoints.min.js"></script>
+		<script src="vendors/counter-up/jquery.counterup.min.js"></script>
+		<script src="vendors/nice-scroll/jquery.nicescroll.min.js"></script>
+		<script src="vendors/popup/jquery.magnific-popup.min.js"></script>
+		<script src="vendors/animate-css/wow.min.js"></script>
+	
+		<script src="js/theme-dist.js"></script>
 
 		<!--RPassa-->
 		<script src="js/sweetalert2.all.min.js"></script>
 		<script src="js/jquery.inputmask.min.js"></script>
 		<script src="bll/app-settings.js"></script>
 		<script src="bll/app-functions.js"></script>
-		<script src="bll/compartilhamento.js"></script>
+		<script src="bll/cadastro_carro.js"></script>
 		<script src="bll/index-carros.js"></script>
 		<script src="bll/rodape.js"></script>
-		<script src="bll/cadastro.js"></script>
 		<!--RPassa-->
     </body>
 </html>

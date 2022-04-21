@@ -10,16 +10,12 @@
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/font-awesome.min.css">
         <link rel="stylesheet" href="vendors/icomoon-icon/style.css">
-        <link rel="stylesheet" href="vendors/themify-icon/themify-icons.css">
-        <link rel="stylesheet" href="vendors/linericon/style.css">
         <!-- Extra Plugin CSS -->
         <link rel="stylesheet" href="vendors/datetimepicker/tempusdominus-bootstrap-4.min.css">
         <link rel="stylesheet" href="vendors/nice-select/css/nice-select.css">
         <link rel="stylesheet" href="vendors/owl-carousel/assets/owl.carousel.min.css">
         <link rel="stylesheet" href="vendors/slick/slick.css">
         <link rel="stylesheet" href="vendors/slick/slick-theme.css">
-        <link rel="stylesheet" href="vendors/jquery-ui/jquery-ui.css">
-        <link rel="stylesheet" href="vendors/nice-scroll/jquery.mCustomScrollbar.css">
         <link rel="stylesheet" href="vendors/popup/magnific-popup.css">
         <link rel="stylesheet" href="vendors/animate-css/animate.css">
         
@@ -92,7 +88,7 @@
 										<li><a href="#">Depoimentos</a></li>
 										<li><a href="cadastro.html">Cadastre-se</a></li>
 										<li><a href="autenticacao.html">Área do Usuário</a></li>
-										<li><a id="logout">Sair</a></li>
+										<li><a href="#" id="logout">Sair</a></li>
 									</ul>
 								</li>
 								<li class="dropdown submenu">
@@ -108,7 +104,7 @@
 									<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
 										aria-haspopup="true" aria-expanded="false">Comprar</a>
 									<ul class="dropdown-menu">
-										<li><a href="#">Veículos</a></li>
+										<li><a href="#">Carros</a></li>
 										<li><a href="#">Motocicletas</a></li>
 										<li><a href="#">Embarcações</a></li>
 										<li><a href="#">Aeronaves</a></li>
@@ -120,7 +116,7 @@
 									<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
 										aria-haspopup="true" aria-expanded="false">Repassa</a>
 									<ul class="dropdown-menu">
-										<li><a href="#">Veículos</a></li>
+										<li><a href="#">Carros</a></li>
 										<li><a href="#">Motocicletas</a></li>
 										<li><a href="#">Embarcações</a></li>
 										<li><a href="#">Aeronaves</a></li>
@@ -130,78 +126,104 @@
 							</ul>
 							<ul class="nav navbar-nav navbar-right">
 								<li class="search_icon"><a class="search popup-with-zoom-anim" href="#test-search"><i
-											class="icon-search1"></i></a></li>
+									class="icon-search1"></i></a></li>
+								<li class="search_icon"><a href="usuario.html"><i class="icon-user-circle" heigh="32" width="32"></i></a></li>
 							</ul>
 						</div>
 					</nav>
 				</div>
 			</div>
 		</header>
-		<!--================End Footer Area =================-->
+	
+		<style>
+			.list {
+				max-height: 500px;
+				overflow-y: scroll !important;
+			}
+		</style>
+        <!--================End Footer Area =================-->
         
         <!--================Breadcrumb Area =================-->
-        <section class="breadcrumb_area" style="background: url(img/breadcrumb/breadcrumb-bg-4.jpg)">
+        <section class="breadcrumb_area" style="background: url(img/breadcrumb/breadcrumb-bg-5.jpg)">
         	<div class="container">
         		<div class="breadcrumb_inner">
-        			<h3>Criar Conta</h3>
+        			<h3>Fale Conosco</h3>
         			<div class="link">
-        				<a href="index.html">Início</a>
-        				<a href="#">Cadastrar</a>
+        				<a href="index.html">Home</a>
+        				<a href="#">Contato</a>
         			</div>
         		</div>
         	</div>
         </section>
         <!--================End Breadcrumb Area =================-->
         
-        <!--================Create Account Area =================-->
-        <section class="create_account_area p_100">
+        <!--================End Breadcrumb Area =================-->
+        <section class="contact_information p_100" style="padding-bottom: 0px;">
         	<div class="container">
-        		<div class="flag_center_title wow animated fadeInUp" data-wow-delay="0.2s">
-        			<h2><img src="img/icon/flag-4.png" alt="">Criar Conta</h2>
-        		</div>
-        		<div class="create_account_box">
-					<!-- 
-        			<h6>Sign up with social network</h6>
-        			<div class="social_singup">
-        				<a href="#"><i class="fa fa-google-plus"></i></a>
-        				<a href="#"><i class="fa fa-facebook"></i></a>
-        				<a href="#"><i class="fa fa-twitter"></i></a>
+        		<div class="row contact_info_inner justify-content-center">
+        			<div class="col-lg-4 col-sm-6 wow animated fadeIn" data-wow-delay="0.2s">
+        				<div class="contact_info_item">
+        					<i class="icon-map_marker"></i>
+        					<h4>Localização</h4>
+        					<p>Av. Copacabana, 190
+								Empresarial 18 do Forte
+								Barueri - SP, 06472-001
+							</p>
+        				</div>
         			</div>
-        			<div class="or">
-        				<p>or</p>
+        			<div class="col-lg-4 col-sm-6 wow animated fadeIn" data-wow-delay="0.4s">
+        				<div class="contact_info_item">
+        					<i class="icon-phone1"></i>
+        					<h4>Contato</h4>
+        					<h5><a href="tel:3199-6400">(11) 3199-6400</a> <span>(Suporte)</span></h5>
+        				</div>
         			</div>
-					--->
-        			<form class="row contact_form" method="POST"  id="contactForm">
-						<div class="form-group col-md-12">
-							<input type="text" class="form-control" id="cpf" name="cpf" placeholder="Cpf" >
-						</div>
-						<div class="form-group col-md-12">
-							<input type="text" class="form-control" id="data-nascimento" name="nascimento" placeholder="Data Nascimento" >
-						</div>
-						<div class="form-group col-md-12">
-							<input type="email" class="form-control" id="email" name="email" placeholder="Email" >
-						</div>
-						<div class="form-group col-md-12">
-							<input type="text" class="form-control" id="celular" name="celular" placeholder="Celular" >
-						</div>
-						<div class="form-group col-md-12">
-							<input type="password" class="form-control" id="password" name="password" placeholder="Senha" >
-						</div>
-						<div class="form-group col-md-12">
-							<input type="password" class="form-control" id="c-password" name="c-password" placeholder="Confime a Senha" >
-						</div>
-						<div class="form-group col-md-12">
-							<button type="submit" value="submit" class="btn submit_btn red form-control" id="cadastro">Cadastrar</button>
-							<h5>Já tem uma conta? <a href="autenticacao.html">Login</a></h5>
-						</div>
-					</form>
+        			<div class="col-lg-4 col-sm-6 wow animated fadeIn" data-wow-delay="0.6s">
+        				<div class="contact_info_item">
+        					<i class="icon-envelop"></i>
+        					<h4>Emails</h4>
+        					<h5><a href="mailto:sac@rpassa.com">sac@rpassa.com</a></h5>
+							<h5><a href="mailto:contato@grupoacreditti.com">contato@grupoacreditti.com</a></h5>
+        				</div>
+        			</div>
         		</div>
         	</div>
         </section>
-        <!--================End Create Account Area =================-->
+        <!--================End Breadcrumb Area =================-->
         
-		<!--================Footer Area =================-->
-		<footer class="footer_area red_footer_area budget_footer">
+        <!--================Main contact Area =================-->
+        <section class="main_contact_area p_100" style="padding-top: 30px;">
+        	<div class="container">
+        		<div class="flag_center_title wow animated fadeInUp" data-wow-delay="0.2s">
+        			<h5>Dúvidas, sugestões ou comentários? Preencha o formulário abaixo que, em breve, entraremos em contato.</h5>
+        		</div>
+        		<div class="main_contact_inner">
+        			<form class="row contact_form" action="contact_process.php" method="post" id="contactForm" novalidate="novalidate">
+						<div class="form-group col-md-4">
+							<input type="text" class="form-control" id="name" name="name" placeholder="Nome">
+						</div>
+						<div class="form-group col-md-4">
+							<input type="text" class="form-control" id="number" name="number" placeholder="Telefone">
+						</div>
+						<div class="form-group col-md-4">
+							<input type="email" class="form-control" id="email" name="email" placeholder="Email">
+						</div>
+						<div class="form-group col-md-12">
+							<textarea class="form-control" name="message" id="message" rows="1" placeholder="Mensagem"></textarea>
+						</div>
+						<div class="form-group col-md-12">
+							<button type="submit" value="submit" class="btn submit_btn red form-control">Enviar</button>
+						</div>
+					</form>
+                    <div id="success">Your message succesfully sent!</div>
+                    <div id="error">Opps! There is something wrong. Please try again</div>
+        		</div>
+        	</div>
+        </section>
+        <!--================End Main contact Area =================-->
+        
+        <!--================Footer Area =================-->
+        <footer class="footer_area red_footer_area budget_footer">
 			<div class="footer_widgets">
 				<div class="container">
 					<div class="row f_widgets_inner">
@@ -304,8 +326,7 @@
 				</div>
 			</div>
 		</footer>
-		<!--================End Footer Area =================-->
-			
+        <!--================End Footer Area =================-->
         
         <!--================Cart Sidebar Area =================-->
         <div class="cart_sidebar">
@@ -368,9 +389,6 @@
         <script src="js/jquery-3.4.1.min.js"></script>
         <script src="js/popper.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
-
-
-
        
         <!-- Extra Plugin js -->
         <script src="vendors/datetimepicker/moment.js"></script>
@@ -382,24 +400,18 @@
         <script src="vendors/slick/slick.js"></script>
         <script src="vendors/counter-up/jquery.waypoints.min.js"></script>
         <script src="vendors/counter-up/jquery.counterup.min.js"></script>
-        <script src="vendors/nice-scroll/jquery.nicescroll.min.js"></script>
-        <script src="vendors/jquery-ui/jquery-ui.js"></script>
-        <script src="vendors/nice-scroll/jquery.nicescroll.min.js"></script>
-        <script src="vendors/nice-scroll/jquery.mCustomScrollbar.concat.min.js"></script>
         <script src="vendors/popup/jquery.magnific-popup.min.js"></script>
         <script src="vendors/animate-css/wow.min.js"></script>
+        
+        <!--gmaps Js-->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqrqPZOVegy1VIdyIcndxZY9YGoK-x0Yo&callback=initMap"></script>
+        <script src="js/gmaps.min.js"></script>
+        <script src="js/map-active.js"></script>
+        <!-- contact js -->
+        <script src="js/jquery.form.js"></script>
+        <script src="js/jquery.validate.min.js"></script>
+        <script src="js/contact.js"></script>
+        
         <script src="js/theme-dist.js"></script>
-
-
-		<!--RPassa-->
-		<script src="js/sweetalert2.all.min.js"></script>
-		<script src="js/jquery.inputmask.min.js"></script>
-		<script src="bll/app-settings.js"></script>
-		<script src="bll/app-functions.js"></script>
-		<script src="bll/compartilhamento.js"></script>
-		<script src="bll/index-carros.js"></script>
-		<script src="bll/rodape.js"></script>
-		<script src="bll/cadastro.js"></script>
-		<!--RPassa-->
     </body>
 </html>
