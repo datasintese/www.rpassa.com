@@ -162,6 +162,7 @@ var PesquisaCarro = {
 
         this.CarregarComboOrdenacao();
         this.CarregarAcordaosFitro();
+        
 
         this.AssinarEventos();
 
@@ -679,12 +680,14 @@ var PesquisaCarro = {
         $('.accordion#accordionExample').empty();
         $('#accordionExample').collapse('dispose');
 
+        this.CarregarMarcas('seven');
         this.CarregarAcordaoFaixaPreco('one');
         this.CarregarAcordaoFaixaAno('two');
         this.CarregarAcordaoFaixaQuilometragem('three');
         this.CarregarAcordaoCarrosNovosUsados('four');
         this.CarregarAcordaoFinalDePlaca('five');
         this.CarregarAcordaoCategoria('six');
+        
     },
 
     CarregarAcordaoCarrosNovosUsados: function (collaspedId) {
@@ -828,6 +831,55 @@ var PesquisaCarro = {
             }
         });
         this.AtualizarLegendaFaixaQuilometragem();
+    },
+
+    CarregarMarcas: function(){
+        this.TagsLoading['marca'] = true;
+        let this_ = this;
+        $.ajax({
+            url: localStorage.getItem('api') + '/v1/mobile/carros/marcas',
+            type: "GET", cache: true, async: false, contentData: 'json',
+            contentType: 'application/json;charset=utf-8',
+            success: function (result, textStatus, request) {
+
+                htmlItems = '';
+                
+                this_.TagsLoading['marca'] = false;
+                console.log(result);
+
+                htmlItems += '<select id="combo_marca">'
+                htmlItems += '</select>'
+
+                $('.accordion#accordionExample').append(this_.HtmlAcordaoMarcaModeloVersao(htmlItems))
+                let combo_marca = $('.accordion#accordionExample').find('#combo_marca');
+     
+                combo_marca.empty();
+                combo_marca.niceSelect('destroy');
+                combo_marca.append(`<option value="0">Selecione a marca</option>`);
+                $.each(result, function (i, combo) {
+                    combo_marca.append(`<option value="${combo.id}">${combo.valor}</option>`);
+                });
+        
+                combo_marca.niceSelect();
+                combo_marca.val(0).niceSelect('update');
+                let niceSelectEspe = this_.spa.find('.nice-select' + classeCombo);
+                niceSelectEspe.css('width', '100%');
+            },
+            error: function (request, textStatus, errorThrown) {
+                StorageClear();
+
+                alert(JSON.stringify(request));
+
+                // if (!MensagemErroAjax(request, errorThrown)) {
+                //     try {
+                //         var obj = $.parseJSON(request.responseText)
+                //         Mensagem(obj.mensagem, 'warning');
+                //     } catch (error) {
+                //         Mensagem(request.responseText, 'warning');
+                //     }
+                // }
+            }
+        });
     },
 
     AtualizarLegendaFaixaPreco() {
@@ -1069,6 +1121,29 @@ var PesquisaCarro = {
                         </div>
                     </div>
                 </div>`;
+    },
+
+    HtmlAcordaoMarcaModeloVersao : function(htmlItems, collapseId){
+        return `<div class="card">
+                    <div class="card-header" id="heading0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse"
+                            data-target="#collapse0" aria-expanded="true" aria-controls="collapse0" 
+                            style="padding: 10px 0px !important; font-size: 15px !important">
+                            Marca, Modelo, Versão
+                            <i class="ti-plus"></i>
+                            <i class="ti-minus"></i>
+                        </button>
+                    </div>
+                    <div id="collapse0" class="collapse show" aria-labelledby="heading0" 
+                        data-parent="">
+
+                        <div class="card-body" style="padding-bottom: 0px !important; height:150px;">
+                            <div class="row car_body wd_scroll" style="height:150px;">
+                                ${htmlItems}
+                            </div>
+                        </div>
+                    </div>
+                </div>`
     }
 };
 
