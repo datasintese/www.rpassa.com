@@ -115,6 +115,7 @@ var PesquisaCarro = {
                                     let left = valueSplit.substring(0, valueSplit.length - obj.tag_legenda.length).trim();
 
                                     this_.AdicionarTagFiltro(obj.tag_chave, left + ' ' + obj.tag_legenda, obj.param_chave, obj.param_valor);
+                                    objSelecaoMult.get(param).push(obj.param_valor);
                                 }
                             });
                         });
@@ -236,10 +237,6 @@ var PesquisaCarro = {
                     }
                 }
 
-                console.log(objSelecaoMult);
-
-                console.log(objSelecaoMult.has('carro'));
-
                 if(objSelecaoMult.has('carro')){
                     let elementos = $('.accordion#accordionExample').find('label[tag_chave="carro"]');
 
@@ -289,7 +286,6 @@ var PesquisaCarro = {
         this.CarregarAcordaosFitro();
         
         this.AssinarEventos();
-        
 
         this.LimparItensProdutos();
     },
@@ -483,9 +479,6 @@ var PesquisaCarro = {
             await this_.CarregarPaginas(undefined, true, false);
             await this_.CarregarPaginas(undefined, false, true);
 
-            this_.AbortarPesquisasEmAndamento();
-            this_.Pesquisar(true, false);
-            this_.Pesquisar(false, true);
         });
 
         $(document.body).on('click', '#limpar_tags_filtro', async function (event) {
@@ -1091,56 +1084,62 @@ var PesquisaCarro = {
         });
 
         return new Promise( function (resolve, reject ) {
-            $.ajax({
-                url: localStorage.getItem('api') + '/v1/mobile/carros',
-                type: "GET", cache: true, async: async, contentData: 'json',
-                contentType: 'application/json;charset=utf-8',
-                beforeSend: function (xhr) {
-                    if (Logado()) xhr.setRequestHeader('Authorization', "Bearer " + StorageGetItem("token")); // Mágica aqui
-                },
-                data: params,
-                success: function (result, textStatus, request) {
-                    resolve(result);
+            var xhr = $.ajax({
+                            url: localStorage.getItem('api') + '/v1/mobile/carros',
+                            type: "GET", cache: true, async: async, contentData: 'json',
+                            contentType: 'application/json;charset=utf-8',
+                            beforeSend: function (xhr) {
+                                if (Logado()) xhr.setRequestHeader('Authorization', "Bearer " + StorageGetItem("token")); // Mágica aqui
+                            },
+                            data: params,
+                            success: function (result, textStatus, request) {
+                                resolve(result);
 
-                    /*
-                    if (limpar) {
-                        this_.LimparItensProdutos();
-                    };
+                                /*
+                                if (limpar) {
+                                    this_.LimparItensProdutos();
+                                };
 
-                    if (analitico) {
-                        $('#encontrados').html(result.encontrados);
-                    }
-                    else {
-                        
-                        this_.RolamentoPesquisa.offset = result.next_offset;
-                        this_.RolamentoPesquisa.skip = result.next_skip;
+                                if (analitico) {
+                                    $('#encontrados').html(result.encontrados);
+                                }
+                                else {
+                                    
+                                    this_.RolamentoPesquisa.offset = result.next_offset;
+                                    this_.RolamentoPesquisa.skip = result.next_skip;
 
-                        var produtos = result.registros;
-                        $.each(produtos, function (i, produto) {
-                            $('.product_grid_inner').children('.row').append(this_.HtmlItemProduto(produto));
+                                    var produtos = result.registros;
+                                    $.each(produtos, function (i, produto) {
+                                        $('.product_grid_inner').children('.row').append(this_.HtmlItemProduto(produto));
+                                    });
+                                }
+                                */
+
+                            },
+                            error: function (request, textStatus, errorThrown) {
+                                //StorageClear();
+                                alert(JSON.stringify(request));
+
+                                reject(errorThrown)
+                                
+
+                                // if (!MensagemErroAjax(request, errorThrown)) {
+                                //     try {
+                                //         var obj = $.parseJSON(request.responseText)
+                                //         Mensagem(obj.mensagem, 'warning');
+                                //     } catch (error) {
+                                //         Mensagem(request.responseText, 'warning');
+                                //     }
+                                // }
+                            }
                         });
-                    }
-                    */
 
-                },
-                error: function (request, textStatus, errorThrown) {
-                    StorageClear();
-                    alert(JSON.stringify(request));
-
-                    reject(errorThrown)
-                    
-
-                    // if (!MensagemErroAjax(request, errorThrown)) {
-                    //     try {
-                    //         var obj = $.parseJSON(request.responseText)
-                    //         Mensagem(obj.mensagem, 'warning');
-                    //     } catch (error) {
-                    //         Mensagem(request.responseText, 'warning');
-                    //     }
-                    // }
-                }
-            });
+            if (analitico)
+                this.xhrAjaxAnalitico = xhr;
+            else
+                this.xhrAjaxPesquisa = xhr;
         });
+            
     },
 
     async CarregarPaginas(pagina = 1, limpar = false, analitico = false, async = true) {
@@ -1301,11 +1300,6 @@ var PesquisaCarro = {
             //let target = this_.spa.find('ul.pagination.meus_carros').offset().top;
             //$("html, body").animate( { scrollTop: target } );
         });
-
-        if (analitico)
-            this.xhrAjaxAnalitico = xhr;
-        else
-            this.xhrAjaxPesquisa = xhr;
     },
 
     CarregarComboOrdenacao() {
@@ -1335,7 +1329,7 @@ var PesquisaCarro = {
                 $('.nice_select#ordenacao').niceSelect('update');
             },
             error: function (request, textStatus, errorThrown) {
-                StorageClear();
+                // StorageClear();
                 alert(JSON.stringify(request));
 
                 // if (!MensagemErroAjax(request, errorThrown)) {
@@ -1454,7 +1448,7 @@ var PesquisaCarro = {
                 this_.TagsLoading['carro'] = false;
             },
             error: function (request, textStatus, errorThrown) {
-                StorageClear();
+                //StorageClear();
                 alert(JSON.stringify(request));
 
                 // if (!MensagemErroAjax(request, errorThrown)) {
@@ -1497,7 +1491,7 @@ var PesquisaCarro = {
                 $('.accordion#accordionExample').append(this_.HtmlAcordaoFinalDePlaca(htmlItems, collapsedId));
             },
             error: function (request, textStatus, errorThrown) {
-                StorageClear();
+                // StorageClear();
                 alert(JSON.stringify(request));
 
                 // if (!MensagemErroAjax(request, errorThrown)) {
@@ -1546,7 +1540,7 @@ var PesquisaCarro = {
                 $('.accordion#accordionExample').append(this_.HtmlAcordaoCategoria(htmlItems, collapsedId));
             },
             error: function (request, textStatus, errorThrown) {
-                StorageClear();
+                // StorageClear();
 
                 alert(JSON.stringify(request));
 
@@ -1995,7 +1989,7 @@ var PesquisaCarro = {
 
         return `<div class="col-6">
                     <div class="creat_account">
-                        <input type="checkbox" id="p-option-final-placa-${index}" name="selector">
+                        <input type="checkbox" id="p-option-final-placa-${index}" name="selector" checked="true">
                         <label class="tag_item_check" for="p-option-final-placa-${index}"
                             tag_legenda='${item.valor}' tag_chave='${item.chave}' param_chave='especificacoes_ids' param_valor='${item.id}'
                             >${item.valor} <br><span id="analitico_final_de_placa_${item.valor.replace(/ /g, '_')}">(0)</span></label>
