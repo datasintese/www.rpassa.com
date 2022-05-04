@@ -67,13 +67,11 @@ var CadastroCarro = {
                                         }); */
 
 
-        if(param_query.length <= 0 || !('id_produto' in param_query)){
-            // Cadastro
+        
 
-        }else if('id_produto' in param_query){
+        if('id_produto' in param_query){
             // Edição
-
-            this.id_produto = param_query['id_produto']
+            this.id_produto = param_query['id_produto'];
             this.ObterDetalhesCarro(this.id_produto );
         }
         
@@ -526,6 +524,9 @@ var CadastroCarro = {
 
             img.attr("src",`${localStorage.getItem('api') + '/v1/mobile/carros/' + this_.id_produto + '/imagens/' + imagem.hash + '?tipo=secundario'}`);
         });
+
+        let niceSelectEspe = this_.spa.find('.nice-select');
+        niceSelectEspe.css('width', '100%');
     },
 
     HtmlComboEspecificada : function(result, classeCombo, opcaoPadrao, tipoCampo){
