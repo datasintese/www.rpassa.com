@@ -3,6 +3,9 @@ var PesquisaCarro = {
     Tags: [], /* Fonte de todas as tags das especificações ids carregadas do banco de dados */
     TagsLoading: {}, /* Sinaliza se as tags ainda estão sendo carregadas do servidor */
 
+    xhrAjaxAnalitico: null,
+    xhrAjaxPesquisa: null,
+
     TamanhoTituloCategorias: 16, /* Valor em px */
 
     RolamentoPesquisa: {
@@ -39,6 +42,7 @@ var PesquisaCarro = {
         var this_ = this;
         this_.LimparTagsFiltro();
 
+        this_.AbortarPesquisasEmAndamento();
         this_.CarregarPaginas(undefined,false,true,true).then();
         this_.CarregarPaginas(undefined, true, false, false);
 
@@ -106,6 +110,11 @@ var PesquisaCarro = {
                                 if (param.toLowerCase() == obj.tag_chave.toLowerCase() && valueSplit == obj.tag_legenda) {
                                     this_.AdicionarTagFiltro(obj.tag_chave, obj.tag_legenda, obj.param_chave, obj.param_valor);
                                     objSelecaoMult.get(param).push(obj.param_valor);
+                                }
+                                else if (param == obj.tag_chave.toLowerCase() && valueSplit.endsWith(obj.tag_legenda)) {
+                                    let left = valueSplit.substring(0, valueSplit.length - obj.tag_legenda.length).trim();
+
+                                    this_.AdicionarTagFiltro(obj.tag_chave, left + ' ' + obj.tag_legenda, obj.param_chave, obj.param_valor);
                                 }
                             });
                         });
@@ -273,11 +282,6 @@ var PesquisaCarro = {
                 this_.AtualizarLegendaFaixaQuilometragem();
 
                 this_.PosInicializar();
-
-                /*
-                this_.Pesquisar(false, true, true);
-                this_.Pesquisar(true, false, false);
-                */
             }
         }, 10); // 10ms
         
@@ -288,6 +292,17 @@ var PesquisaCarro = {
         
 
         this.LimparItensProdutos();
+    },
+
+    AbortarPesquisasEmAndamento() {
+        if (this.xhrAjaxAnalitico !== null) {
+            if (this.xhrAjaxAnalitico.status != 200 && this.xhrAjaxAnalitico.status != 0) this.xhrAjaxAnalitico.abort();
+            this.xhrAjaxAnalitico = null;
+        }
+        if (this.xhrAjaxPesquisa !== null) {
+            if (this.xhrAjaxPesquisa.status != 200 && this.xhrAjaxPesquisa.status != 0) this.xhrAjaxPesquisa.abort();
+            this.xhrAjaxPesquisa = null;
+        }
     },
 
     PosInicializar() {
@@ -317,6 +332,14 @@ var PesquisaCarro = {
             let param_valor = $(this).attr('param_valor');
 
             if (this_.AdicionarTagFiltro(tag_chave, tag_legenda, param_chave, param_valor)) {
+                this_.AbortarPesquisasEmAndamento();
+                await this_.CarregarPaginas(undefined,true, false);
+                await this_.CarregarPaginas(undefined,false, true);
+
+            } else {
+                this_.DeletarTagFiltro(tag_chave, tag_legenda, param_valor);
+                this_.DeletarTagQueryStringURL(tag_chave, tag_legenda);
+                this_.AbortarPesquisasEmAndamento();
                 await this_.CarregarPaginas(undefined,true, false);
                 await this_.CarregarPaginas(undefined,false, true);
             }
@@ -358,6 +381,7 @@ var PesquisaCarro = {
                 }
             });
 
+            this_.AbortarPesquisasEmAndamento();
             await this_.CarregarPaginas(undefined,true,false);
             await this_.CarregarPaginas(undefined, false, true);
         });
@@ -455,8 +479,13 @@ var PesquisaCarro = {
                 this_.AtualizarLegendaFaixaQuilometragem();
             }
 
+            this_.AbortarPesquisasEmAndamento();
             await this_.CarregarPaginas(undefined, true, false);
             await this_.CarregarPaginas(undefined, false, true);
+
+            this_.AbortarPesquisasEmAndamento();
+            this_.Pesquisar(true, false);
+            this_.Pesquisar(false, true);
         });
 
         $(document.body).on('click', '#limpar_tags_filtro', async function (event) {
@@ -466,9 +495,11 @@ var PesquisaCarro = {
                 this_.LimparTagsFiltro();
                 this_.LimparQueryStringURL();
     
+                this_.AbortarPesquisasEmAndamento();
                 await this_.CarregarPaginas(undefined,true, false);
                 await this_.CarregarPaginas(undefined,false, true);
             }
+
         });
 
         $('.nice_select#ordenacao').on('change', function (event) {
@@ -480,6 +511,8 @@ var PesquisaCarro = {
                 this_.RolamentoPesquisa['orderby'] = parseInt(this.value);
 
                 this_.AdicionarTagFiltroOrdenacao(tag_legenda, parseInt(this.value), false);
+
+                this_.AbortarPesquisasEmAndamento();
                 this_.CarregarPaginas(undefined,true, false);
             }
         });
@@ -736,6 +769,7 @@ var PesquisaCarro = {
         this.AdicionarTagFiltro('ordenacao', tag_legenda, 'ordenacao', param_valor, false);
 
         if (pesquisar) {
+            this.AbortarPesquisasEmAndamento();
             await this.CarregarPaginas(undefined,true, false);
             await this.CarregarPaginas(undefined,false, true);
         }
@@ -752,6 +786,7 @@ var PesquisaCarro = {
         this.AdicionarTagFiltro('preco_max', 'Preço Max: R$ ' + ui.values[1].toLocaleString('de-DE'), 'preco_max', ui.values[1], true);
 
         if (pesquisar) {
+            this.AbortarPesquisasEmAndamento();
             await this.CarregarPaginas(undefined,true, false);
             await this.CarregarPaginas(undefined,false, true);
         }
@@ -768,6 +803,7 @@ var PesquisaCarro = {
         this.AdicionarTagFiltro('km_max', 'Km Max: ' + ui.values[1].toLocaleString('de-DE'), 'km_max', ui.values[1], true);
 
         if (pesquisar) {
+            this.AbortarPesquisasEmAndamento();
             await this.CarregarPaginas(undefined,true, false);
             await this.CarregarPaginas(undefined,false, true);
         }
@@ -806,6 +842,7 @@ var PesquisaCarro = {
         this.AdicionarTagFiltro('modelo', tag_legenda, 'modelo', param_valor, false);
 
         if (pesquisar) {
+            this.AbortarPesquisasEmAndamento();
             await this.CarregarPaginas(undefined,true, false);
             await this.CarregarPaginas(undefined,false, true);
         }
@@ -817,6 +854,7 @@ var PesquisaCarro = {
         this.AdicionarTagFiltro('versao', tag_legenda, 'versao', param_valor, false);
 
         if (pesquisar) {
+            this.AbortarPesquisasEmAndamento();
             await this.CarregarPaginas(undefined,true, false);
             await this.CarregarPaginas(undefined,false, true);
         }
@@ -828,6 +866,7 @@ var PesquisaCarro = {
         this.AdicionarTagFiltro('estado', tag_legenda, 'estado', param_valor, false);
 
         if (pesquisar) {
+            this.AbortarPesquisasEmAndamento();
             await this.CarregarPaginas(undefined,true, false);
             await this.CarregarPaginas(undefined,false, true);
         }
@@ -839,6 +878,7 @@ var PesquisaCarro = {
         this.AdicionarTagFiltro('cidade', tag_legenda, 'cidade', param_valor, false);
 
         if (pesquisar) {
+            this.AbortarPesquisasEmAndamento();
             await this.CarregarPaginas(undefined,true, false);
             await this.CarregarPaginas(undefined,false, true);
         }
@@ -849,6 +889,7 @@ var PesquisaCarro = {
 
         $.each(this.Filtro, function (key, value) {
             if (value !== undefined) {
+
                 // Remova tag pelo param_valor (elemento por elemento do grupo)
                 if (param_valor !== null) {
                     if (tag_chave == value.tag_chave && param_valor == value.param_valor) {
@@ -870,6 +911,10 @@ var PesquisaCarro = {
                 }
             }
         });
+
+        // if (filtro.lenght == 0) {
+        //     this.LimparQueryStringURL();
+        // }
 
         $('.tag_filtro').each(function (key, value) {
             let tag_chav = $(this).attr('tag_chave');
@@ -908,9 +953,7 @@ var PesquisaCarro = {
                 }
             }
         });
-        if (ja_existe) {
-            return false;
-        }
+        if (ja_existe) return false;
 
         this.Filtro.push({
             tag_chave: tag_chave,
@@ -1018,10 +1061,19 @@ var PesquisaCarro = {
             }
         });
 
+        let dicEspecificacoes = {};
+
         // Converte o filtro em parâmetros para o endpoint de pesquisa
         $.each(this_.Filtro, function (key, value) {
             if (value !== undefined && value !== null) {
-                if (value.param_chave.endsWith('_ids')) {
+                if (value.param_chave == 'especificacoes_ids') {
+                    if (dicEspecificacoes.hasOwnProperty(value.tag_chave)) {
+                        dicEspecificacoes[value.tag_chave].push(parseInt(value.param_valor));
+                    }
+                    else
+                        dicEspecificacoes[value.tag_chave] = [value.param_valor];
+                }
+                else if (value.param_chave.endsWith('_ids')) {
                     if (params.hasOwnProperty(value.param_chave)) {
                         // Valor agregado na Array
                         let arr = JSON.parse(params[value.param_chave]);
@@ -1034,7 +1086,7 @@ var PesquisaCarro = {
                         params[value.param_chave] = '[' + value.param_valor + ']';
                 }
                 else
-                    params[value.param_chave] = value.param_valor; // Não terminados em '_ids' é valor único
+                    params[value.param_chave] = value.param_valor; // Não terminados em '_ids' é valor string ou inteiro!
             }
         });
 
@@ -1048,7 +1100,6 @@ var PesquisaCarro = {
                 },
                 data: params,
                 success: function (result, textStatus, request) {
-
                     resolve(result);
 
                     /*
@@ -1250,6 +1301,11 @@ var PesquisaCarro = {
             //let target = this_.spa.find('ul.pagination.meus_carros').offset().top;
             //$("html, body").animate( { scrollTop: target } );
         });
+
+        if (analitico)
+            this.xhrAjaxAnalitico = xhr;
+        else
+            this.xhrAjaxPesquisa = xhr;
     },
 
     CarregarComboOrdenacao() {
@@ -1939,7 +1995,7 @@ var PesquisaCarro = {
 
         return `<div class="col-6">
                     <div class="creat_account">
-                        <input type="checkbox" id="p-option-final-placa-${index}" name="selector" checked>
+                        <input type="checkbox" id="p-option-final-placa-${index}" name="selector">
                         <label class="tag_item_check" for="p-option-final-placa-${index}"
                             tag_legenda='${item.valor}' tag_chave='${item.chave}' param_chave='especificacoes_ids' param_valor='${item.id}'
                             >${item.valor} <br><span id="analitico_final_de_placa_${item.valor.replace(/ /g, '_')}">(0)</span></label>
@@ -2103,8 +2159,7 @@ var PesquisaCarro = {
             <div id="collapse${collapseId}" class="collapse show" aria-labelledby="heading${collapseId}"
                 data-parent="">
                 
-                <div class="row card-body"
-                    style="padding-bottom: 0px !important height:150px;" >
+                <div class="row card-body" style="padding-bottom: 0px !important height:150px;" >
                     ${htmlItems}
                 </div>
             </div>
@@ -2117,7 +2172,7 @@ var PesquisaCarro = {
                         <button class="btn btn-link" type="button" data-toggle="collapse"
                             data-target="#collapse${collapseId}" aria-expanded="true" aria-controls="collapse${collapseId}" 
                             style="padding: 10px 0px !important; font-size: ${this.TamanhoTituloCategorias}px !important">
-                            Final de Placa
+                            Final da Placa
                             <i class="ti-plus"></i>
                             <i class="ti-minus"></i>
                         </button>

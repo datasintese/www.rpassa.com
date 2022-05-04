@@ -369,21 +369,23 @@ var DetalhesCarro = {
     },
 
     CarregarDetalhes: function (detalhes) {
-        var row = this.spa.find(".product_overview_text").find('.row');
+        if (detalhes !== null) {
+            var row = this.spa.find(".product_overview_text").find('.row');
 
-        var left = row.find('.nav:eq(0)');
-        var right = row.find('.nav:eq(1)');
+            var left = row.find('.nav:eq(0)');
+            var right = row.find('.nav:eq(1)');
 
-        var valores = detalhes.split(' ⬤ ');
+            var valores = detalhes.split(' ⬤ ');
 
-        $.each(valores, function (key, value) {
-            let par = key % 2 == 0;
+            $.each(valores, function (key, value) {
+                let par = key % 2 == 0;
 
-            if (par)
-                left.append(`<li><img src="img/icon/green.png" alt="">` + value + `</li>`);
-            else
-                right.append(`<li><img src="img/icon/green.png" alt="">` + value + `</li>`);
-        });
+                if (par)
+                    left.append(`<li><img src="img/icon/green.png" alt="">` + value + `</li>`);
+                else
+                    right.append(`<li><img src="img/icon/green.png" alt="">` + value + `</li>`);
+            });
+        }
     },
 
     CarregarProduto: function () {
