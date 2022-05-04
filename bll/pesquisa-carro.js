@@ -167,7 +167,7 @@ var PesquisaCarro = {
                 }
 
                 var preco_options = $('#price_wd').slider('option');
-                
+
                 // Quando não há faixa de preço informado na QueryString
                 if (preco_min !== null && preco_max !== null) {
                     $("#price_wd").slider("values", 0, preco_min);
@@ -461,7 +461,8 @@ var PesquisaCarro = {
 
         $(document.body).on('click', '#limpar_tags_filtro', async function (event) {
             event.preventDefault();
-            if($('.tags_f').length > 0){
+            let tagsFiltro = $('.tags_f').children();
+            if(tagsFiltro.length > 0){
                 this_.LimparTagsFiltro();
                 this_.LimparQueryStringURL();
     
@@ -1896,24 +1897,52 @@ var PesquisaCarro = {
     },
 
     HtmlItemAcordaoCarro: function (item, index) {
+        
+        // Analítico
+        $.ajax({
+            url: localStorage.getItem('api') + '/v1/mobile/analitico/carro?detalhes=' + item.nome,
+            type: "GET", cache: true, async: true, contentData: 'json',
+            contentType: 'application/json;charset=utf-8',
+            success: async function (result, textStatus, request) {
+                $('span#detalhes_' + item.nome.replace(/ /g, '_')).html('(' + result.total + ')');
+            },
+            error: function (request, textStatus, errorThrown) {
+            }
+        });
+
         return `<div class="col-6">
                     <div class="creat_account">
                         <input type="checkbox" id="p-option-carro-${index}" name="selector" checked>
                         <label class="tag_item_check" for="p-option-carro-${index}"
                             tag_legenda='${item.nome}' tag_chave='carro' param_chave='detalhes_ids' param_valor='${item.id}'
-                            >${item.nome}</label>
+                            >${item.nome} <span id="detalhes_${item.nome.replace(/ /g, '_')}">(0)</span></label>
                         <div class="check"></div>
+                        
                     </div>
                 </div>`;
     },
 
     HtmlItemAcordaoFinalDePlaca: function (item, index) {
+
+        
+        // Analítico
+        $.ajax({
+            url: localStorage.getItem('api') + '/v1/mobile/analitico/carro?final_da_placa=' + item.valor,
+            type: "GET", cache: true, async: true, contentData: 'json',
+            contentType: 'application/json;charset=utf-8',
+            success: async function (result, textStatus, request) {
+                $('span#analitico_final_de_placa_' + item.valor.replace(/ /g, '_')).html('(' + result.total + ')');
+            },
+            error: function (request, textStatus, errorThrown) {
+            }
+        });
+
         return `<div class="col-6">
                     <div class="creat_account">
                         <input type="checkbox" id="p-option-final-placa-${index}" name="selector" checked>
                         <label class="tag_item_check" for="p-option-final-placa-${index}"
                             tag_legenda='${item.valor}' tag_chave='${item.chave}' param_chave='especificacoes_ids' param_valor='${item.id}'
-                            >${item.valor}</label>
+                            >${item.valor} <br><span id="analitico_final_de_placa_${item.valor.replace(/ /g, '_')}">(0)</span></label>
                         <div class="check"></div>
                     </div>
                 </div>`;
@@ -2075,7 +2104,7 @@ var PesquisaCarro = {
                 data-parent="">
                 
                 <div class="row card-body"
-                    style="padding-bottom: 0px !important" >
+                    style="padding-bottom: 0px !important height:150px;" >
                     ${htmlItems}
                 </div>
             </div>
@@ -2154,9 +2183,10 @@ var PesquisaCarro = {
         return `
             <li class="page-item ${exibirPagina ? "active" : ""}" numPage="${numPage}"><a class="page-link" href="#">${numPage}</a></li>
         `
-    }
+    },
 
 };
 
 PesquisaCarro.Inicializar();
 TelaCompartilhamento.Inicializar();
+SegmentoCarros.Construtor('carros');
