@@ -25,7 +25,6 @@ var PesquisaCarro = {
     QtdPaginas: 6,
     TotPaginasFor: 6,
     PaginaAtual: 0,
-    UltimaAtivadadeCarregamento : null,
 
     preco_min_padrao : 0,
     ano_min_padrao : 1900,
@@ -495,7 +494,7 @@ var PesquisaCarro = {
 
         });
 
-        $('.nice_select#ordenacao').on('change', function (event) {
+        $('.nice_select#ordenacao').on('change', async function (event) {
             event.preventDefault();
 
             let tag_legenda = $(this).find(":selected").text();
@@ -506,7 +505,7 @@ var PesquisaCarro = {
                 this_.AdicionarTagFiltroOrdenacao(tag_legenda, parseInt(this.value), false);
 
                 this_.AbortarPesquisasEmAndamento();
-                this_.CarregarPaginas(undefined,true, false);
+                await this_.CarregarPaginas(undefined,true, false);
             }
         });
 
@@ -522,7 +521,7 @@ var PesquisaCarro = {
             this_.AdicionarTagFiltroAno(ui);
         });
 
-        $('.nice_select#combo_marca').on('change', function(event){
+        $('.nice_select#combo_marca').on('change', async function(event){
             event.preventDefault();
             let id_marca = $(this).val();
 
@@ -536,7 +535,8 @@ var PesquisaCarro = {
                 this_.RolamentoPesquisa['marcas_ids'] = parseInt(this.value);
 
                 this_.AdicionarTagFiltroMarca(tag_legenda, parseInt(id_marca), false);
-                this_.CarregarPaginas(undefined,true, false);
+                await this_.CarregarPaginas(undefined,true, false);
+                await this_.CarregarPaginas(undefined,false, true);
                 this_.CarregarComboModelos(id_marca);
             }else{
                 this_.DeletarTagQueryStringURL('marca', null);
@@ -553,7 +553,8 @@ var PesquisaCarro = {
 
                 this_.LimparComboMarca();
 
-                this_.CarregarPaginas(undefined,true, false);
+                await this_.CarregarPaginas(undefined,true, false);
+                await this_.CarregarPaginas(undefined,false, true);
             }
 
             let lista = $('.accordion#accordionExample').find('.nice-select>.list');
@@ -562,7 +563,7 @@ var PesquisaCarro = {
 
         });
 
-        $(document.body).on('change','.nice_select#combo_modelo', function(event){
+        $(document.body).on('change','.nice_select#combo_modelo', async function(event){
             let id_modelo = $(this).val();
             
             let combo_versao = $('.accordion#accordionExample').find('#combo_versao');
@@ -575,7 +576,8 @@ var PesquisaCarro = {
                 this_.RolamentoPesquisa['modelos_ids'] = parseInt(this.value);
 
                 this_.AdicionarTagFiltroModelo(tag_legenda, parseInt(id_modelo), false);
-                this_.CarregarPaginas(undefined,true, false);
+                await this_.CarregarPaginas(undefined,true, false);
+                await this_.CarregarPaginas(undefined,false, true);
 
                 this_.CarregarComboVersao(id_modelo);
             }else{
@@ -588,7 +590,8 @@ var PesquisaCarro = {
                 this_.RolamentoPesquisa['versoes_ids'] = null;
 
                 this_.LimparComboModelo();
-                this_.CarregarPaginas(undefined,true, false);
+                await this_.CarregarPaginas(undefined,true, false);
+                await this_.CarregarPaginas(undefined,false, true);
             }
 
             let lista = $('.accordion#accordionExample').find('.nice-select>.list');
@@ -597,7 +600,7 @@ var PesquisaCarro = {
 
         });
 
-        $(document.body).on('change','.nice_select#combo_versao', function(event){
+        $(document.body).on('change','.nice_select#combo_versao', async function(event){
             let id_versao = $(this).val();
 
             let tag_legenda = $(this).find(":selected").text();
@@ -606,12 +609,14 @@ var PesquisaCarro = {
                 this_.RolamentoPesquisa['versoes_ids'] = parseInt(id_versao);
 
                 this_.AdicionarTagFiltroVersao(tag_legenda, parseInt(id_versao), false);
-                this_.CarregarPaginas(undefined,true, false);
+                await this_.CarregarPaginas(undefined,true, false);
+                await this_.CarregarPaginas(undefined,false, true);
             }else{
                 this_.DeletarTagQueryStringURL('versao', null);
                 this_.DeletarTagFiltro('versao');
                 this_.RolamentoPesquisa['versoes_ids'] = null;
-                this_.CarregarPaginas(undefined,true, false);
+                await this_.CarregarPaginas(undefined,true, false);
+                await this_.CarregarPaginas(undefined,false, true);
             }
 
             let lista = $('.accordion#accordionExample').find('.nice-select>.list');
@@ -622,7 +627,7 @@ var PesquisaCarro = {
             niceSelectEspe.css('width', '100%');
         });
 
-        $(document.body).on('change','.nice_select#combo_estado', function(event){
+        $(document.body).on('change','.nice_select#combo_estado', async function(event){
             let id_estado = $(this).val();
 
             let combo_cidade = $('.accordion#accordionExample').find('#combo_cidade');
@@ -635,7 +640,8 @@ var PesquisaCarro = {
                 this_.RolamentoPesquisa['estados_ids'] = parseInt(id_estado);
 
                 this_.AdicionarTagFiltroEstado(tag_legenda, parseInt(id_estado), false);
-                this_.CarregarPaginas(undefined,true, false);
+                await this_.CarregarPaginas(undefined,true, false);
+                await this_.CarregarPaginas(undefined,false, true);
                 this_.CarregarComboCidades(id_estado);
             }else{
                 this_.DeletarTagQueryStringURL('estado', null);
@@ -649,14 +655,15 @@ var PesquisaCarro = {
                 combo_cidade.niceSelect('destroy');
                 combo_cidade.remove();
 
-                this_.CarregarPaginas(undefined,true, false);
+                await this_.CarregarPaginas(undefined,true, false);
+                await this_.CarregarPaginas(undefined,false, true);
             }
             let lista = $('.accordion#accordionExample').find('.nice-select>.list');
             lista.css('width', '100%');
             lista.css('max-height', '150px');
         });
 
-        $(document.body).on('change','.nice_select#combo_cidade', function(event){
+        $(document.body).on('change','.nice_select#combo_cidade', async function(event){
             let id_cidade = $(this).val();
 
             let tag_legenda = $(this).find(":selected").text();
@@ -665,13 +672,15 @@ var PesquisaCarro = {
                 this_.RolamentoPesquisa['cidades_ids'] = parseInt(id_cidade);
 
                 this_.AdicionarTagFiltroCidade(tag_legenda, parseInt(id_cidade), false);
-                this_.CarregarPaginas(undefined,true, false);
+                await this_.CarregarPaginas(undefined,true, false);
+                await this_.CarregarPaginas(undefined,false, true);
             }else{
                 this_.DeletarTagQueryStringURL('cidade', null);
                 this_.DeletarTagFiltro('cidade');
                 this_.RolamentoPesquisa['cidades_ids'] = null;
 
-                this_.CarregarPaginas(undefined,true, false);
+                await this_.CarregarPaginas(undefined,true, false);
+                await this_.CarregarPaginas(undefined,false, true);
             }
             let lista = $('.accordion#accordionExample').find('.nice-select>.list');
             lista.css('width', '100%');
@@ -1000,13 +1009,13 @@ var PesquisaCarro = {
         let elementos = $('.accordion#accordionExample').find('label[tag_chave="Final da placa"]');
         $.each(elementos, function (key, item) {
             let input_check_box = $(item).parent().find("input[type=checkbox]");
-            input_check_box.prop('checked', true);
+            input_check_box.prop('checked', false);
         });
 
         elementos = $('.accordion#accordionExample').find('label[tag_chave="carro"]');
         $.each(elementos, function (key, item) {
             let input_check_box = $(item).parent().find("input[type=checkbox]");
-            input_check_box.prop('checked', true);
+            input_check_box.prop('checked', false);
         });
 
         let lista = $('.accordion#accordionExample').find('.nice-select.nice_select.select-comarison-car');
@@ -1054,11 +1063,12 @@ var PesquisaCarro = {
             }
         });
 
-        let dicEspecificacoes = {};
+        //let dicEspecificacoes = {};
 
         // Converte o filtro em parâmetros para o endpoint de pesquisa
         $.each(this_.Filtro, function (key, value) {
             if (value !== undefined && value !== null) {
+                /*
                 if (value.param_chave == 'especificacoes_ids') {
                     if (dicEspecificacoes.hasOwnProperty(value.tag_chave)) {
                         dicEspecificacoes[value.tag_chave].push(parseInt(value.param_valor));
@@ -1066,7 +1076,8 @@ var PesquisaCarro = {
                     else
                         dicEspecificacoes[value.tag_chave] = [value.param_valor];
                 }
-                else if (value.param_chave.endsWith('_ids')) {
+                */
+                if (value.param_chave.endsWith('_ids')) {
                     if (params.hasOwnProperty(value.param_chave)) {
                         // Valor agregado na Array
                         let arr = JSON.parse(params[value.param_chave]);
@@ -1082,6 +1093,8 @@ var PesquisaCarro = {
                     params[value.param_chave] = value.param_valor; // Não terminados em '_ids' é valor string ou inteiro!
             }
         });
+
+
 
         return new Promise( function (resolve, reject ) {
             var xhr = $.ajax({
@@ -1118,7 +1131,7 @@ var PesquisaCarro = {
                             },
                             error: function (request, textStatus, errorThrown) {
                                 //StorageClear();
-                                alert(JSON.stringify(request));
+                                //alert(JSON.stringify(request));
 
                                 reject(errorThrown)
                                 
@@ -1135,9 +1148,9 @@ var PesquisaCarro = {
                         });
 
             if (analitico)
-                this.xhrAjaxAnalitico = xhr;
+                this_.xhrAjaxAnalitico = xhr;
             else
-                this.xhrAjaxPesquisa = xhr;
+                this_.xhrAjaxPesquisa = xhr;
         });
             
     },
@@ -1154,8 +1167,6 @@ var PesquisaCarro = {
             this_.TotPaginasFor = 6;
         };
 
-        const atividadeLocal = this_.UltimaAtivadadeCarregamento = new Object();
-
         let exibirPagina = true;
 
         let html_meus_carro= $('.product_grid_inner').children('.row');
@@ -1165,15 +1176,11 @@ var PesquisaCarro = {
         }
 
         for (let i = pagina; i <= this_.TotPaginasFor; i++) {
-
+          
             let result = await this_.Pesquisar(analitico, async)
 
             if (analitico) {
                 $('#encontrados').html(result.encontrados);
-                return;
-            }
-
-            if(atividadeLocal !== this_.UltimaAtivadadeCarregamento){
                 return;
             }
 
@@ -1206,7 +1213,7 @@ var PesquisaCarro = {
                 this_.RolamentoPesquisa.skip = this_.RolamentoPesquisa.next_skip;
             }
             if (this_.RolamentoPesquisa.next_skip < 0 || this_.RolamentoPesquisa.next_offset < 0) {
-                break;
+                return;
             }
         }
 
@@ -1962,7 +1969,7 @@ var PesquisaCarro = {
 
         return `<div class="col-6">
                     <div class="creat_account">
-                        <input type="checkbox" id="p-option-carro-${index}" name="selector" checked>
+                        <input type="checkbox" id="p-option-carro-${index}" name="selector">
                         <label class="tag_item_check" for="p-option-carro-${index}"
                             tag_legenda='${item.nome}' tag_chave='carro' param_chave='detalhes_ids' param_valor='${item.id}'
                             >${item.nome} <span id="detalhes_${item.nome.replace(/ /g, '_')}">(0)</span></label>
@@ -1989,7 +1996,7 @@ var PesquisaCarro = {
 
         return `<div class="col-6">
                     <div class="creat_account">
-                        <input type="checkbox" id="p-option-final-placa-${index}" name="selector" checked="true">
+                        <input type="checkbox" id="p-option-final-placa-${index}" name="selector">
                         <label class="tag_item_check" for="p-option-final-placa-${index}"
                             tag_legenda='${item.valor}' tag_chave='${item.chave}' param_chave='especificacoes_ids' param_valor='${item.id}'
                             >${item.valor} <br><span id="analitico_final_de_placa_${item.valor.replace(/ /g, '_')}">(0)</span></label>
