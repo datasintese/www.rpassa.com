@@ -41,10 +41,6 @@ var PesquisaCarro = {
         var this_ = this;
         this_.LimparTagsFiltro();
 
-        this_.AbortarPesquisasEmAndamento();
-        this_.CarregarPaginas(undefined,false,true,true).then();
-        this_.CarregarPaginas(undefined, true, false, false);
-
         // Converte Query String em tags de filtro
         var clock = setInterval(function () {
             let TagsLoaded = false;
@@ -287,6 +283,10 @@ var PesquisaCarro = {
         this.AssinarEventos();
 
         this.LimparItensProdutos();
+
+        this_.AbortarPesquisasEmAndamento();
+        this_.CarregarPaginas(undefined,false,true,true).then();
+        this_.CarregarPaginas(undefined, true, false, false);
     },
 
     AbortarPesquisasEmAndamento() {
@@ -690,7 +690,25 @@ var PesquisaCarro = {
             niceSelectEspe.css('width', '100%');
         });
 
-        this_.EventClickPaginacao()
+        this_.EventClickPaginacao();
+
+        $(document.body).on('keyup','#input_pesquisar_carro', function(event){
+            if(event.keyCode == 13){
+                let valor = $(this).val();
+                if(!(valor.trim() == '')){
+                    this_.AdicionarTagFiltroPesquisar('pesquisa:' + valor , valor, true)
+                }
+                $(this).val('');
+            }
+        });
+
+        $(document.body).on('click','#btn_pesquisar_carro', function(event){
+            let valor = $('#input_pesquisar_carro').val();
+            if(!(valor.trim() == '')){
+                this_.AdicionarTagFiltroPesquisar('pesquisa:' + valor, valor, true)
+            }
+            $('#input_pesquisar_carro').val('');
+        });
     },
 
     LimparQueryStringURL() {
@@ -878,6 +896,18 @@ var PesquisaCarro = {
         this.DeletarTagQueryStringURL('cidade', null);
         this.DeletarTagFiltro('cidade');
         this.AdicionarTagFiltro('cidade', tag_legenda, 'cidade', param_valor, false);
+
+        if (pesquisar) {
+            this.AbortarPesquisasEmAndamento();
+            await this.CarregarPaginas(undefined,true, false);
+            await this.CarregarPaginas(undefined,false, true);
+        }
+    },
+
+    async AdicionarTagFiltroPesquisar(tag_legenda, param_valor, pesquisar = true) {
+        this.DeletarTagQueryStringURL('pesquisar', null);
+        this.DeletarTagFiltro('pesquisar');
+        this.AdicionarTagFiltro('pesquisar', tag_legenda, 'pesquisar', param_valor, false);
 
         if (pesquisar) {
             this.AbortarPesquisasEmAndamento();
@@ -1409,8 +1439,9 @@ var PesquisaCarro = {
     },
 
     CarregarAcordaosFitro() {
-        $('.accordion#accordionExample').empty();
+        //$('.accordion#accordionExample').empty();
         $('#accordionExample').collapse('dispose');
+
         this.CarregarComboEstados('one');
         this.CarregarComboMarcas('two');
         this.CarregarAcordaoFaixaPreco('three');
@@ -1630,13 +1661,6 @@ var PesquisaCarro = {
                 });
                 this_.TagsLoading['estado'] = false;
 
-                htmlItems = '';
-                
-
-                htmlItems += '<select class="nice_select select-comarison-car" id="combo_estado">'
-                htmlItems += '</select>'
-
-                $('.accordion#accordionExample').append(this_.HtmlAcordaoEstadoCidade(htmlItems, collapsedId))
                 let combo_estado = $('.accordion#accordionExample').find('#combo_estado');
      
                 combo_estado.empty();
@@ -1758,14 +1782,6 @@ var PesquisaCarro = {
                 });
                 this_.TagsLoading['marca'] = false;
 
-                htmlItems = '';
-                
-                this_.TagsLoading['marca'] = false;
-
-                htmlItems += '<select class="nice_select select-comarison-car" id="combo_marca">'
-                htmlItems += '</select>'
-
-                $('.accordion#accordionExample').append(this_.HtmlAcordaoMarcaModeloVersao(htmlItems, collapsedId))
                 let combo_marca = $('.accordion#accordionExample').find('#combo_marca');
      
                 combo_marca.empty();
