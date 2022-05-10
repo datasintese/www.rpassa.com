@@ -45,7 +45,6 @@ var SegmentoCarrosBanners = {
                  </div>`);
         });
 
-        
         $(area_slider).slick('unslick');
         
         $(area_slider).slick({
@@ -58,7 +57,7 @@ var SegmentoCarrosBanners = {
                 prevArrow: ".arrow_left",
 		        nextArrow: ".arrow_right",
                 draggable: true,
-                lazyLoad: 'progressive'
+                lazyLoad: 'ondemand'
             });
     }
 }
