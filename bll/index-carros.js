@@ -163,6 +163,7 @@ var SegmentoCarros = {
         this.VitrineCarregarMaisRecentes(true);
         this.VitrineCarregarMelhoresOfertasCarrosel(true);
         this.CarregarCategoriasCarroCarrosel();
+        this.CarregarAnaliticoMarcas();
     },
 
     CarregarCategoriasCarroCarrosel() {
@@ -745,14 +746,17 @@ var SegmentoCarros = {
     },
 
     CarregarMarcasPopulares(){
+        let this_ = this;
         let spa = this.spa;
+        let resultado = null;
 
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/carros/marcas/populares',
-            type: "GET", cache: true, async: true, contentData: 'json',
-            success: function (result, textStatus, request) {
-                return result;
+            type: "GET", cache: true, async: false, contentData: 'json',
+            success: function (result) {
+                resultado = result;
             },
+            contentType: 'application/json;charset=utf-8',
             error: function (request, textStatus, errorThrown) {
                 StorageClear();
                 alert(JSON.stringify(request));
@@ -766,54 +770,80 @@ var SegmentoCarros = {
                 //     }
                 // }
             }
-        })
+        });
+        return resultado;
     },
 
     CarregarAnaliticoMarcas(){
         let this_ = this;
         let marcas_populares = this.CarregarMarcasPopulares();
         if(marcas_populares.length > 0){
+            let regiao_marca_populares = this.spa.find('.car_company_slider.owl-carousel');
+            
+            regiao_marca_populares.empty();
+            regiao_marca_populares.owlCarousel('destroy');
+            this_.InicializarCarouselMarcasPopulares();
+
             $.each(marcas_populares, function (i, marca_popular) {
-                param["marca"] = marca_popular.nome;
                 $.ajax({
-                    url: localStorage.getItem('api') + '/v1/mobile/analitico/carro',
+                    url: localStorage.getItem('api') + '/v1/mobile/analitico/carro?marca=' + marca_popular.nome,
                     type: "GET", cache: true, async: true, contentData: 'json',
-                    data:param,
-                    success: function (result, textStatus, request) {
-                        this_.HtmlAnaliticoMarcas(marca_popular.id, marca_popular.nome, result);
+                    success: function (result) {
+                        this_.HtmlAnaliticoMarcasPopulares(marca_popular.nome,marca_popular.id, result);
                     },
+                    contentType: 'application/json;charset=utf-8',
                     error: function (request, textStatus, errorThrown) {
-                        StorageClear();
                         alert(JSON.stringify(request));
-        
-                        // if (!MensagemErroAjax(request, errorThrown)) {
-                        //     try {
-                        //         var obj = $.parseJSON(request.responseText)
-                        //         Mensagem(obj.mensagem, 'warning');
-                        //     } catch (error) {
-                        //         Mensagem(request.responseText, 'warning');
-                        //     }
-                        // }
                     }
                 })
             });
         }
     },
 
-    HtmlAnaliticoMarcas(id_marca, marca, result_analitico){
+    InicializarCarouselMarcasPopulares(){
+        let regiao_marca_populares = this.spa.find('.car_company_slider.owl-carousel');
+        if($(regiao_marca_populares).length ){
+            $(regiao_marca_populares).owlCarousel({
+                loop:true,
+                margin: 30,
+                items: 8,
+                nav: false,
+                autoplay: false,
+                smartSpeed: 1500,
+                dots:false, 
+				navContainerClass: 'car_arrow',
+                navText: ['<i class="fa fa-angle-left" aria-hidden="true"></i>','<i class="fa fa-angle-right" aria-hidden="true"></i>'],
+                responsiveClass: true,
+                responsive: {
+                    0: {
+                        items: 2,
+                    },
+                    575: {
+                        items: 3,
+                    },
+                    768: {
+                        items: 4,
+                    },
+                    992: {
+                        items: 8,
+                    }
+                }
+            })
+        }
+    },
+
+    HtmlAnaliticoMarcasPopulares(nome_marca, marca_id, result_analitico){
         let regiao_marca_populares = this.spa.find('.car_company_slider.owl-carousel');
 
-        let url_imagem = localStorage.getItem('api') + '/v1/mobile/carros/marcas/imagem?id_marca=' + id_marca;
-        
-        regiao_marca_populares.append(
+        regiao_marca_populares.owlCarousel('add',
             `<div class="item">
                 <div class="car_c_item">
-                    <a href="#"><img src="${url_imagem}" alt=""></a>
-                    <a href="#">
-                        <h5>${marca} <span>(${result_analitico.total})</span></h5>
+                    <a href="#"></a>
+                    <a href="pesquisa-carro.html?marca=${nome_marca}">
+                        <img src="${localStorage.getItem('api') + '/v1/mobile/carros/marcas/imagens/' + marca_id}" alt="">
+                        <h5>${nome_marca} <span>(${result_analitico.total})</span></h5>
                     </a>
                 </div>
-            </div>`
-        );
+            </div>`).owlCarousel('update');
     }
 };
