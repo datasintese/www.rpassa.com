@@ -41,10 +41,6 @@ var PesquisaCarro = {
         var this_ = this;
         this_.LimparTagsFiltro();
 
-        this_.AbortarPesquisasEmAndamento();
-        this_.CarregarPaginas(undefined,false,true,true).then();
-        this_.CarregarPaginas(undefined, true, false, false);
-
         // Converte Query String em tags de filtro
         var clock = setInterval(function () {
             let TagsLoaded = false;
@@ -72,6 +68,7 @@ var PesquisaCarro = {
                 let marca = null;
                 let modelo = null;
                 let versao = null;
+                let pesquisar = null;
 
                 let objSelecaoMult = new Map();
 
@@ -102,6 +99,8 @@ var PesquisaCarro = {
                         modelo = values[0];
                     else if (param == 'versao')
                         versao = values[0];
+                    else if (param == 'pesquisar')
+                        pesquisar = values[0];
                     else {
                         objSelecaoMult.set(param, []);
                         $.each(values, function (idx, valueSplit) {
@@ -199,14 +198,19 @@ var PesquisaCarro = {
                     let valor = combo_estado.find('option:contains("' + estado + '")').val();
 
                     combo_estado.val(valor).niceSelect('update');
-                    $('.nice_select#combo_estado').trigger('change');
+
+                    let tag_legenda = combo_estado.find(":selected").text();
+                    this_.AdicionarTagFiltroEstado(tag_legenda, parseInt(valor), false);
+                    this_.CarregarComboCidades(valor);
 
                     if(cidade != null){
                         let combo_cidade = $('.nice_select#combo_cidade')
-                        valor = combo_cidade.find('option:contains("' + cidade + '")').val();
 
+                        valor = combo_cidade.find('option:contains("' + cidade + '")').val();
                         combo_cidade.val(valor).niceSelect('update');
-                        $('.nice_select#combo_cidade').trigger('change');
+
+                        let tag_legenda = combo_cidade.find(":selected").text();
+                        this_.AdicionarTagFiltroCidade(tag_legenda, parseInt(valor), false);
                     }
                 }
                
@@ -216,25 +220,32 @@ var PesquisaCarro = {
                     let valor = combo_marca.find('option:contains("' + marca + '")').val();
 
                     combo_marca.val(valor).niceSelect('update');
-                    $('.nice_select#combo_marca').trigger('change');
+
+                    let tag_legenda = combo_marca.find(":selected").text();
+                    this_.AdicionarTagFiltroMarca(tag_legenda, parseInt(valor), false);
+                    this_.CarregarComboModelos(valor);
 
                     if(modelo != null){
-
                         let combo_modelo = $('.nice_select#combo_modelo')
                         valor = combo_modelo.find('option:contains("' + modelo + '")').val();
     
                         combo_modelo.val(valor).niceSelect('update');
-                        $('.nice_select#combo_modelo').trigger('change');
+
+                        tag_legenda = combo_modelo.find(":selected").text();
+                        this_.AdicionarTagFiltroModelo(tag_legenda, parseInt(valor), false);
+                        this_.CarregarComboVersao(valor);
 
                         if(versao != null){
                             let combo_versao = $('.nice_select#combo_versao')
                             valor = combo_versao.find('option:contains("' + versao + '")').val();
-        
                             combo_versao.val(valor).niceSelect('update');
-                            $('.nice_select#combo_versao').trigger('change');
+
+                            tag_legenda = combo_versao.find(":selected").text();
+                            this_.AdicionarTagFiltroVersao(tag_legenda, parseInt(valor), false);
                         }
                     }
                 }
+                this_.CarregarConfiguracoesVisuaisNiceSelect();
 
                 if(objSelecaoMult.has('carro')){
                     let elementos = $('.accordion#accordionExample').find('label[tag_chave="carro"]');
@@ -267,6 +278,13 @@ var PesquisaCarro = {
                     });
                 }
 
+                if(pesquisar != null){
+                    let valor = pesquisar.split(':');
+                    if(valor != null && valor. length > 1){
+                        this_.AdicionarTagFiltroPesquisar('pesquisa:' + valor[1], valor[1], false)
+                    }
+                }
+
                 /*
                 if(objSelecaoMult.has("categoria")){
                     
@@ -278,9 +296,13 @@ var PesquisaCarro = {
                 this_.AtualizarLegendaFaixaQuilometragem();
 
                 this_.PosInicializar();
+                this_.AbortarPesquisasEmAndamento();
+                this_.CarregarPaginas(undefined,false,true,true);
+                this_.CarregarPaginas(undefined, true, false, false);
             }
         }, 10); // 10ms
         
+
         this.CarregarComboOrdenacao();
         this.CarregarAcordaosFitro();
         
@@ -521,146 +543,86 @@ var PesquisaCarro = {
             this_.AdicionarTagFiltroAno(ui);
         });
 
-        $('.nice_select#combo_marca').on('change', async function(event){
+        $('.nice_select#combo_marca').on('change', function(event){
             event.preventDefault();
             let id_marca = $(this).val();
-
-            let combo_modelo = $('.accordion#accordionExample').find('#combo_modelo');
-            combo_modelo.val(0).niceSelect('update')
-            combo_modelo.trigger('change');
-
             let tag_legenda = $(this).find(":selected").text();
 
             if (parseInt(this.value) > 0) {
-                this_.RolamentoPesquisa['marcas_ids'] = parseInt(this.value);
-
                 this_.AdicionarTagFiltroMarca(tag_legenda, parseInt(id_marca), false);
-                await this_.CarregarPaginas(undefined,true, false);
-                await this_.CarregarPaginas(undefined,false, true);
                 this_.CarregarComboModelos(id_marca);
             }else{
-                this_.DeletarTagQueryStringURL('marca', null);
-                this_.DeletarTagFiltro('marca');
-                this_.RolamentoPesquisa['marcas_ids'] = null;
-
-                this_.DeletarTagQueryStringURL('modelo', null);
-                this_.DeletarTagFiltro('modelo');
-                this_.RolamentoPesquisa['modelos_ids'] = null;
-
-                this_.DeletarTagQueryStringURL('versao', null);
-                this_.DeletarTagFiltro('versao');
-                this_.RolamentoPesquisa['versoes_ids'] = null;
-
-                this_.LimparComboMarca();
-
-                await this_.CarregarPaginas(undefined,true, false);
-                await this_.CarregarPaginas(undefined,false, true);
+                this_.LimparComboMarca(true);
             }
+            this_.AbortarPesquisasEmAndamento();
+            this_.CarregarPaginas(undefined,true, false);
+            this_.CarregarPaginas(undefined,false, true);
 
-            let lista = $('.accordion#accordionExample').find('.nice-select>.list');
-            lista.css('width', '100%');
-            lista.css('max-height', '150px');
+            this_.CarregarConfiguracoesVisuaisNiceSelect();
 
         });
 
-        $(document.body).on('change','.nice_select#combo_modelo', async function(event){
+        $(document.body).on('change','.nice_select#combo_modelo', function(event){
             let id_modelo = $(this).val();
-            
-            let combo_versao = $('.accordion#accordionExample').find('#combo_versao');
-            combo_versao.val(0).niceSelect('update')
-            combo_versao.trigger('change');
 
             let tag_legenda = $(this).find(":selected").text();
 
             if (parseInt(id_modelo) > 0) {
-                this_.RolamentoPesquisa['modelos_ids'] = parseInt(this.value);
-
                 this_.AdicionarTagFiltroModelo(tag_legenda, parseInt(id_modelo), false);
-                await this_.CarregarPaginas(undefined,true, false);
-                await this_.CarregarPaginas(undefined,false, true);
-
                 this_.CarregarComboVersao(id_modelo);
             }else{
-                this_.DeletarTagQueryStringURL('modelo', null);
-                this_.DeletarTagFiltro('modelo');
-                this_.RolamentoPesquisa['modelos_ids'] = null;
-
-                this_.DeletarTagQueryStringURL('versao', null);
-                this_.DeletarTagFiltro('versao');
-                this_.RolamentoPesquisa['versoes_ids'] = null;
-
-                this_.LimparComboModelo();
-                await this_.CarregarPaginas(undefined,true, false);
-                await this_.CarregarPaginas(undefined,false, true);
+                this_.LimparComboModelo(true);
             }
+            this_.AbortarPesquisasEmAndamento();
+            this_.CarregarPaginas(undefined,true, false);
+            this_.CarregarPaginas(undefined,false, true);
 
-            let lista = $('.accordion#accordionExample').find('.nice-select>.list');
-            lista.css('width', '100%');
-            lista.css('max-height', '150px');
-
+            this_.CarregarConfiguracoesVisuaisNiceSelect();
         });
 
-        $(document.body).on('change','.nice_select#combo_versao', async function(event){
+        $(document.body).on('change','.nice_select#combo_versao', function(event){
             let id_versao = $(this).val();
 
             let tag_legenda = $(this).find(":selected").text();
 
             if (parseInt(id_versao) > 0) {
-                this_.RolamentoPesquisa['versoes_ids'] = parseInt(id_versao);
-
                 this_.AdicionarTagFiltroVersao(tag_legenda, parseInt(id_versao), false);
-                await this_.CarregarPaginas(undefined,true, false);
-                await this_.CarregarPaginas(undefined,false, true);
+                
             }else{
                 this_.DeletarTagQueryStringURL('versao', null);
                 this_.DeletarTagFiltro('versao');
-                this_.RolamentoPesquisa['versoes_ids'] = null;
-                await this_.CarregarPaginas(undefined,true, false);
-                await this_.CarregarPaginas(undefined,false, true);
             }
+            this_.AbortarPesquisasEmAndamento();
+            this_.CarregarPaginas(undefined,true, false);
+            this_.CarregarPaginas(undefined,false, true);
 
-            let lista = $('.accordion#accordionExample').find('.nice-select>.list');
-            lista.css('width', '100%');
-            lista.css('max-height', '150px');
-
-            let niceSelectEspe = $('.accordion#accordionExample').find('.nice-select');
-            niceSelectEspe.css('width', '100%');
+            this_.CarregarConfiguracoesVisuaisNiceSelect();
         });
 
-        $(document.body).on('change','.nice_select#combo_estado', async function(event){
+        $(document.body).on('change','.nice_select#combo_estado', function(event){
             let id_estado = $(this).val();
-
-            let combo_cidade = $('.accordion#accordionExample').find('#combo_cidade');
-            combo_cidade.val(0).niceSelect('update')
-            combo_cidade.trigger('change');
 
             let tag_legenda = $(this).find(":selected").text();
 
             if (parseInt(id_estado) > 0) {
-                this_.RolamentoPesquisa['estados_ids'] = parseInt(id_estado);
-
                 this_.AdicionarTagFiltroEstado(tag_legenda, parseInt(id_estado), false);
-                await this_.CarregarPaginas(undefined,true, false);
-                await this_.CarregarPaginas(undefined,false, true);
                 this_.CarregarComboCidades(id_estado);
             }else{
                 this_.DeletarTagQueryStringURL('estado', null);
                 this_.DeletarTagFiltro('estado');
-                this_.RolamentoPesquisa['estados_ids'] = null;
 
                 this_.DeletarTagQueryStringURL('cidade', null);
                 this_.DeletarTagFiltro('cidade');
-                this_.RolamentoPesquisa['cidades_ids'] = null;
 
+                let combo_cidade = $('.accordion#accordionExample').find('#combo_cidade');
                 combo_cidade.niceSelect('destroy');
                 combo_cidade.remove();
-
-                await this_.CarregarPaginas(undefined,true, false);
-                await this_.CarregarPaginas(undefined,false, true);
             }
-            let lista = $('.accordion#accordionExample').find('.nice-select>.list');
-            lista.css('width', '100%');
-            lista.css('max-height', '150px');
+            this_.AbortarPesquisasEmAndamento();
+            this_.CarregarPaginas(undefined,true, false);
+            this_.CarregarPaginas(undefined,false, true);
+
+            this_.CarregarConfiguracoesVisuaisNiceSelect();
         });
 
         $(document.body).on('change','.nice_select#combo_cidade', async function(event){
@@ -669,28 +631,37 @@ var PesquisaCarro = {
             let tag_legenda = $(this).find(":selected").text();
 
             if (parseInt(id_cidade) > 0) {
-                this_.RolamentoPesquisa['cidades_ids'] = parseInt(id_cidade);
-
                 this_.AdicionarTagFiltroCidade(tag_legenda, parseInt(id_cidade), false);
-                await this_.CarregarPaginas(undefined,true, false);
-                await this_.CarregarPaginas(undefined,false, true);
             }else{
                 this_.DeletarTagQueryStringURL('cidade', null);
                 this_.DeletarTagFiltro('cidade');
-                this_.RolamentoPesquisa['cidades_ids'] = null;
-
-                await this_.CarregarPaginas(undefined,true, false);
-                await this_.CarregarPaginas(undefined,false, true);
             }
-            let lista = $('.accordion#accordionExample').find('.nice-select>.list');
-            lista.css('width', '100%');
-            lista.css('max-height', '150px');
+            this_.AbortarPesquisasEmAndamento();
+            await this_.CarregarPaginas(undefined,true, false);
+            await this_.CarregarPaginas(undefined,false, true);
 
-            let niceSelectEspe = $('.accordion#accordionExample').find('.nice-select');
-            niceSelectEspe.css('width', '100%');
+            this_.CarregarConfiguracoesVisuaisNiceSelect();
         });
 
-        this_.EventClickPaginacao()
+        this_.EventClickPaginacao();
+
+        $(document.body).on('keyup','#input_pesquisar_carro', function(event){
+            if(event.keyCode == 13){
+                let valor = $(this).val();
+                if(!(valor.trim() == '')){
+                    this_.AdicionarTagFiltroPesquisar('pesquisa:' + valor , valor, true)
+                }
+                $(this).val('');
+            }
+        });
+
+        $(document.body).on('click','#btn_pesquisar_carro', function(event){
+            let valor = $('#input_pesquisar_carro').val();
+            if(!(valor.trim() == '')){
+                this_.AdicionarTagFiltroPesquisar('pesquisa:' + valor, valor, true)
+            }
+            $('#input_pesquisar_carro').val('');
+        });
     },
 
     LimparQueryStringURL() {
@@ -700,20 +671,49 @@ var PesquisaCarro = {
         window.history.replaceState({ url: url }, null, url);
     },
 
-    LimparComboMarca(){
-        let combo_modelo = $('.accordion#accordionExample').find('#combo_modelo');
-        combo_modelo.niceSelect('destroy');
-        combo_modelo.remove();
+    CarregarConfiguracoesVisuaisNiceSelect(){
+        let lista = $('.accordion#accordionExample').find('.nice-select>.list');
+        lista.css('width', '100%');
+        lista.css('max-height', '150px');
 
-        let combo_versao = $('.accordion#accordionExample').find('#combo_versao');
-        combo_versao.niceSelect('destroy');
-        combo_versao.remove();
+        let niceSelectEspe = $('.accordion#accordionExample').find('.nice-select');
+        niceSelectEspe.css('width', '100%');
     },
 
-    LimparComboModelo(){
+    LimparComboMarca(destruir_combo){
+        let combo_modelo = $('.accordion#accordionExample').find('#combo_modelo');
+
         let combo_versao = $('.accordion#accordionExample').find('#combo_versao');
-        combo_versao.niceSelect('destroy');
-        combo_versao.remove();
+
+        if(destruir_combo){
+            combo_modelo.niceSelect('destroy');
+            combo_modelo.remove();
+            combo_versao.niceSelect('destroy');
+            combo_versao.remove();
+        }
+
+        this.DeletarTagQueryStringURL('marca', null);
+        this.DeletarTagFiltro('marca');
+
+        this.DeletarTagQueryStringURL('modelo', null);
+        this.DeletarTagFiltro('modelo');
+
+        this.DeletarTagQueryStringURL('versao', null);
+        this.DeletarTagFiltro('versao');
+    },
+
+    LimparComboModelo(destruir_combo){
+        let combo_versao = $('.accordion#accordionExample').find('#combo_versao');
+        if(destruir_combo){
+            combo_versao.niceSelect('destroy');
+            combo_versao.remove();
+        }
+
+        this.DeletarTagQueryStringURL('modelo', null);
+        this.DeletarTagFiltro('modelo');
+
+        this.DeletarTagQueryStringURL('versao', null);
+        this.DeletarTagFiltro('versao');
     },
 
     DeletarTagQueryStringURL(tag_chave, tag_legenda) {
@@ -830,7 +830,7 @@ var PesquisaCarro = {
     async AdicionarTagFiltroMarca(tag_legenda, param_valor, pesquisar = true) {
         this.DeletarTagQueryStringURL('marca', null);
         this.DeletarTagFiltro('marca');
-        this.AdicionarTagFiltro('marca', tag_legenda, 'marca', param_valor, false);
+        this.AdicionarTagFiltro('marca', tag_legenda, 'marcas_ids', param_valor, false);
 
         if (pesquisar) {
             await this.CarregarPaginas(undefined,true, false);
@@ -841,7 +841,7 @@ var PesquisaCarro = {
     async AdicionarTagFiltroModelo(tag_legenda, param_valor, pesquisar = true) {
         this.DeletarTagQueryStringURL('modelo', null);
         this.DeletarTagFiltro('modelo');
-        this.AdicionarTagFiltro('modelo', tag_legenda, 'modelo', param_valor, false);
+        this.AdicionarTagFiltro('modelo', tag_legenda, 'modelos_ids', param_valor, false);
 
         if (pesquisar) {
             this.AbortarPesquisasEmAndamento();
@@ -853,7 +853,7 @@ var PesquisaCarro = {
     async AdicionarTagFiltroVersao(tag_legenda, param_valor, pesquisar = true) {
         this.DeletarTagQueryStringURL('versao', null);
         this.DeletarTagFiltro('versao');
-        this.AdicionarTagFiltro('versao', tag_legenda, 'versao', param_valor, false);
+        this.AdicionarTagFiltro('versao', tag_legenda, 'versoes_ids', param_valor, false);
 
         if (pesquisar) {
             this.AbortarPesquisasEmAndamento();
@@ -878,6 +878,18 @@ var PesquisaCarro = {
         this.DeletarTagQueryStringURL('cidade', null);
         this.DeletarTagFiltro('cidade');
         this.AdicionarTagFiltro('cidade', tag_legenda, 'cidade', param_valor, false);
+
+        if (pesquisar) {
+            this.AbortarPesquisasEmAndamento();
+            await this.CarregarPaginas(undefined,true, false);
+            await this.CarregarPaginas(undefined,false, true);
+        }
+    },
+
+    async AdicionarTagFiltroPesquisar(tag_legenda, param_valor, pesquisar = true) {
+        this.DeletarTagQueryStringURL('pesquisar', null);
+        this.DeletarTagFiltro('pesquisar');
+        this.AdicionarTagFiltro('pesquisar', tag_legenda, 'pesquisar', param_valor, false);
 
         if (pesquisar) {
             this.AbortarPesquisasEmAndamento();
@@ -1409,8 +1421,9 @@ var PesquisaCarro = {
     },
 
     CarregarAcordaosFitro() {
-        $('.accordion#accordionExample').empty();
+        //$('.accordion#accordionExample').empty();
         $('#accordionExample').collapse('dispose');
+
         this.CarregarComboEstados('one');
         this.CarregarComboMarcas('two');
         this.CarregarAcordaoFaixaPreco('three');
@@ -1630,13 +1643,6 @@ var PesquisaCarro = {
                 });
                 this_.TagsLoading['estado'] = false;
 
-                htmlItems = '';
-                
-
-                htmlItems += '<select class="nice_select select-comarison-car" id="combo_estado">'
-                htmlItems += '</select>'
-
-                $('.accordion#accordionExample').append(this_.HtmlAcordaoEstadoCidade(htmlItems, collapsedId))
                 let combo_estado = $('.accordion#accordionExample').find('#combo_estado');
      
                 combo_estado.empty();
@@ -1708,7 +1714,7 @@ var PesquisaCarro = {
                 }
                 
                 combo_cidade.niceSelect('destroy');
-                combo_cidade.append(`<option value="0">Selecione o cidade</option>`);
+                combo_cidade.append(`<option value="0">Selecione a cidade</option>`);
                 $.each(result, function (i, combo) {
                     combo_cidade.append(`<option value="${combo.id}">${combo.nome}</option>`);
                 });
@@ -1758,14 +1764,6 @@ var PesquisaCarro = {
                 });
                 this_.TagsLoading['marca'] = false;
 
-                htmlItems = '';
-                
-                this_.TagsLoading['marca'] = false;
-
-                htmlItems += '<select class="nice_select select-comarison-car" id="combo_marca">'
-                htmlItems += '</select>'
-
-                $('.accordion#accordionExample').append(this_.HtmlAcordaoMarcaModeloVersao(htmlItems, collapsedId))
                 let combo_marca = $('.accordion#accordionExample').find('#combo_marca');
      
                 combo_marca.empty();
@@ -1981,7 +1979,6 @@ var PesquisaCarro = {
 
     HtmlItemAcordaoFinalDePlaca: function (item, index) {
 
-        
         // Analítico
         $.ajax({
             url: localStorage.getItem('api') + '/v1/mobile/analitico/carro?final_da_placa=' + item.valor,
@@ -2188,7 +2185,8 @@ var PesquisaCarro = {
                     </div>
                 </div>`;
     },
-   
+
+    /*
     HtmlAcordaoEstadoCidade : function(htmlItems, collapseId){
         return `<div class="card">
                     <div class="card-header" id="heading${collapseId}">
@@ -2212,6 +2210,7 @@ var PesquisaCarro = {
                 </div>`
     },
 
+    
     HtmlAcordaoMarcaModeloVersao : function(htmlItems, collapseId){
         return `<div class="card">
                     <div class="card-header" id="heading${collapseId}">
@@ -2234,6 +2233,7 @@ var PesquisaCarro = {
                     </div>
                 </div>`
     },
+    */
 
     HtmlPagination: function (numPage, exibirPagina) {
         return `

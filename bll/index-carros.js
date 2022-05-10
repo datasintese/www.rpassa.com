@@ -801,11 +801,11 @@ var SegmentoCarros = {
     },
 
     HtmlAnaliticoMarcas(id_marca, marca, result_analitico){
-        let regiao_marca_populates = this.spa.find('.car_company_slider.owl-carousel');
+        let regiao_marca_populares = this.spa.find('.car_company_slider.owl-carousel');
 
         let url_imagem = localStorage.getItem('api') + '/v1/mobile/carros/marcas/imagem?id_marca=' + id_marca;
         
-        regiao_marca_populates.append(
+        regiao_marca_populares.append(
             `<div class="item">
                 <div class="car_c_item">
                     <a href="#"><img src="${url_imagem}" alt=""></a>

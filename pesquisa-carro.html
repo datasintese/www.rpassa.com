@@ -27,6 +27,7 @@
 	<!-- main css -->
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/responsive.css">
+
 </head>
 
 <body data-scroll-animation="true">
@@ -177,10 +178,6 @@
 							<h4><span id="encontrados"></span> Carros encontrados</h4>
 						</div>
 						<div class="right">
-							<div class="grid">
-								<a class="active" href="#"><i class="icon-th"></i></a>
-								<a href="#"><i class="icon-list-ul"></i></a>
-							</div>
 							<div class="price_filter">
 								<style>
 									div.nice_select.nice_select {
@@ -523,7 +520,6 @@
 							}
 						</style> -->
 						<div class="accordion" id="accordionExample">
-						
 							<div class="card">
 								<div class="card-header" id="heading_pesquisa">
 									<button class="btn btn-link" type="button" data-toggle="collapse"
@@ -533,7 +529,70 @@
 										<i class="ti-plus"></i>
 										<i class="ti-minus"></i>
 									</button>
+									<div style="z-index:0;" id="collapse_pesquisa" class="collapse show" aria-labelledby="collapse_pesquisa" data-parent="">
+										<div class="card-body" style="padding-bottom: 0px !important; height:50px">
+											<aside class="r_widget search_widget">
+												<div class="input-group">
+														
+													<input style="height: 42px ;" type="text" class="form-control" placeholder="Pesquisar carro" id="input_pesquisar_carro"> 
+													<div class="input-group-append">
+														<button style="
+																	color: #fff;
+																	border-radius: 0px;
+																	width: 40px;
+																	font-size: 20px;
+																	outline: none !important;
+																	box-shadow: none !important;
+																	text-align: center;
+																	height: 42px;
+																	padding: 0;" class="btn" id="btn_pesquisar_carro">
+															<span class="icon-search1"></span>
+														</button>
+													</div>
+												</div>
+											</aside>
+										</div>
+									</div>
 								</div>
+							</div>
+
+							<div class="card">
+								<div class="card-header" id="headingone">
+									<button class="btn btn-link" type="button" data-toggle="collapse"
+										data-target="#collapseone" aria-expanded="true" aria-controls="collapseone" 
+										style="padding: 10px 0px !important; font-size: 15px !important">
+										Estado, Cidade
+										<i class="ti-plus"></i>
+										<i class="ti-minus"></i>
+									</button>
+								</div>
+								<div style="z-index:0;" id="collapseone" class="collapse show" aria-labelledby="headingone" data-parent="">
+									<div class="card-body" id="area_selecao_1" style="padding-bottom: 0px !important; height:250px; ">
+										<select class="nice_select select-comarison-car" id="combo_estado">
+										</select>
+									</div>
+								</div>
+							</div>
+
+							<div class="card">
+								<div class="card-header" id="headingtwo">
+									<button class="btn btn-link" type="button" data-toggle="collapse"
+										data-target="#collapsetwo" aria-expanded="true" aria-controls="collapsetwo" 
+										style="padding: 10px 0px !important; font-size: 15px !important">
+										Marca, Modelo, Versão
+										<i class="ti-plus"></i>
+										<i class="ti-minus"></i>
+									</button>
+								</div>
+								<div style="z-index:0;" id="collapsetwo" class="collapse show" aria-labelledby="headingtwo" data-parent="">
+									<div class="card-body" id="area_selecao_2" style="padding-bottom: 0px !important; height:285px; ">
+										<select class="nice_select select-comarison-car" id="combo_marca">'
+										</select>
+									</div>
+								</div>
+							</div>
+
+								<!--
 								<div style="z-index:0;" id="collapse_pesquisa" class="collapse show" aria-labelledby="heading_pesquisa" data-parent="">
 									<div class="card-body" id="area_selecao_2" style="padding-bottom: 0px !important; height:285px; ">
 										<div class="input-group">
@@ -671,6 +730,7 @@
 									</div>
 								</div>
 							</div>
+							-->
 						</div>
 					</div>
 				</div>
