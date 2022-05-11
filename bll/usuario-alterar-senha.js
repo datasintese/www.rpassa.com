@@ -1,15 +1,27 @@
 var UsuarioAlterarSenha = {
     spa : null,
+    menu_tela : null,
 
     Construtor() {
         this_ = this;
         var baseTela = '.spa.our_service_area.service_two.p_100.perfil_usuario';
         this.spa = $(baseTela);
-
+        this.menu_tela = 'alterar-senha';
     },
 
     Inicializar() {
+
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+
         this.EventAlterarSenhaUsuario();
+        this.EventMenuAlterarSenhaClick();
+
+        if('menu' in params){
+            if(params['menu'] == this.menu_tela){
+                this.spa.find('#profile-tab').trigger('click');
+            }
+        }
     },
 
     EventAlterarSenhaUsuario: function () {
@@ -57,4 +69,12 @@ var UsuarioAlterarSenha = {
             });
         });
     },
+
+    EventMenuAlterarSenhaClick : function(){
+        let this_ = this;
+        $(document.body).on('click', '#profile-tab', function(){
+            DeletarTagQueryStringURL('menu', this_.menu_tela);
+            AdicionarTagQueryStringURL('menu', this_.menu_tela);
+        });
+    }
 }

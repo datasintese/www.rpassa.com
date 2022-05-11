@@ -1,6 +1,7 @@
 var DetalhesCarro = {
     spa: null,
     produto_id: null,
+    vendedor_id: null,
 
     Construtor(params) {
         this.produto_id = params.carro;
@@ -91,6 +92,50 @@ var DetalhesCarro = {
             // setTimeout(function () {
             //     $('.nicescroll').getNiceScroll().resize();
             // }, 100);
+        });
+
+        $(document.body).on('submit', '#enviar_mensagem', function(event){
+            event.preventDefault();
+            let mensagem = $('#mensagem').val();
+            $('#mensagem').val('');
+
+            if(!(mensagem.trim() == '')){
+                $.ajax({
+                    url: localStorage.getItem('api') + '/v1/usuarios/proposta/mensagens',
+                    type: "POST", cache: false, async: false, contentData: 'json',
+                    beforeSend: function (xhr) {
+                        if (Logado()) {
+                            xhr.setRequestHeader('Authorization', "Bearer " + StorageGetItem("token"));
+                        }
+                    },
+                    data : {
+                        'produto_id': this_.produto_id,
+                        'usuario_id_para': this_.vendedor_id,
+                        'mensagem':mensagem
+                    },
+                    success: function (result, textStatus, request) {   
+                        let res = result;
+
+                        // Redirecionar para tela area do usuario minhas propostas
+
+                        window.location = 'usuario.html?menu=minhas-propostas&vendedor=' + result.usuario_id_para + "&carro=" + result.produto_id;
+
+                    },
+                    error: function (request, textStatus, errorThrown) {
+                        alert(JSON.stringify(request));
+
+                        // if (!MensagemErroAjax(request, errorThrown)) {
+                        //     try {
+                        //         var obj = $.parseJSON(request.responseText)
+                        //         Mensagem(obj.mensagem, 'warning');
+                        //     } catch (error) {
+                        //         Mensagem(request.responseText, 'warning');
+                        //     }
+                        // }
+                    }
+                });
+            }
+
         });
     },
 
@@ -400,6 +445,9 @@ var DetalhesCarro = {
                 }
             },
             success: function (result, textStatus, request) {
+                this_.vendedor_id = result.usuario_id
+                this_.spa.find('#nome_vendedor').html(result.nome);
+                this_.spa.find('#avaliacao_vendedor').attr('href', 'avaliacao_vendedor.html?id_vendedor=' + result.usuario_id);
                 this_.spa.find('#marca_modelo').html(result.marca + ' - ' + result.modelo);
                 this_.spa.find('#preco').html(result.preco);
                 this_.spa.find('#sobre').html(result.avarias);

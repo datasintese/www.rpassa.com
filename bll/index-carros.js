@@ -44,8 +44,37 @@ var SegmentoCarros = {
         });
 
         // Botão Pesquisar
-        this.spa.find('#formPesquisar').on("submit", function (event) {
+        this.spa.find('#pesquisar_carro').on("click", function (event) {
             event.preventDefault();
+
+            let marca = this_.spa.find('.nice_select#marca option:selected');
+            let modelo = this_.spa.find('.nice_select#modelo option:selected');
+            let km_min =  parseInt(this_.spa.find('.nice_select#quilometragem').val().split('|')[0]);
+            let km_max = parseInt(this_.spa.find('.nice_select#quilometragem').val().split('|')[1]);
+
+            let param_consulta = '';
+
+            if(parseInt(marca.val()) > 0){
+                param_consulta += param_consulta.length > 0 ? '&marca=' + marca.text() : 'marca=' + marca.text();
+                if(parseInt(modelo.val()) > 0){
+                    param_consulta += param_consulta.length > 0 ? '&modelo=' + modelo.text() : 'modelo=' + modelo.text();
+                }
+            }
+
+            if(km_min > 0){
+                param_consulta += param_consulta.length > 0 ? '&km_min=' + km_min : 'km_min=' + km_min;
+            }
+
+            if(km_max != undefined && km_max > 0){
+                param_consulta += param_consulta.length > 0 ? '&km_max=' + km_max : 'km_max=' + km_max;
+            }
+
+            window.location = param_consulta.length > 0 ? 'pesquisa-carro.html?' + param_consulta : 'pesquisa-carro.html';
+
+            /*
+            $(this).attr('href', 'pesquisa-carro.html?')
+            return;
+            
 
             this_.RolamentoPesquisa.categoria_id = parseInt(this_.spa.find('.nice_select#categoria').val());
 
@@ -63,6 +92,7 @@ var SegmentoCarros = {
             $("html, body").animate({ scrollTop: target.offset().top });
 
             this_.Pesquisar(true);
+            */
         });
 
         // Adiciona Botão Carregar Mais
@@ -342,11 +372,6 @@ var SegmentoCarros = {
                     <p>Ano/Modelo: <span>`+ produto.ano + `</span></p>
                     <p>Quilometragem: <span>`+ produto.km + `</span></p>
                 </div>
-                <div class="text_footer">
-                    <a href="#"><i class="icon-engine"></i> 2500</a>
-                    <a href="#"><i class="icon-gear1"></i> Manual</a>
-                    <a href="#"><i class="icon-oil"></i>20/24</a>
-                </div>
             </div>
         </div>`
     },
@@ -369,11 +394,6 @@ var SegmentoCarros = {
                     <h5>` + produto.preco + `</h5>
                     <p>Ano/Modelo: <span>`+ produto.ano + `</span></p>
                     <p>Quilometragem: <span>`+ produto.km + `</span></p>
-                </div>
-                <div class="text_footer">
-                    <a href="#"><i class="icon-engine"></i> 2500</a>
-                    <a href="#"><i class="icon-gear1"></i> Manual</a>
-                    <a href="#"><i class="icon-oil"></i>20/24</a>
                 </div>
             </div>
         </div>`;

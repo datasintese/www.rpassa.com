@@ -166,15 +166,18 @@
                                 <div class="price_title d-flex justify-content-between">
                                     <div class="left">
                                         <h3 id="marca_modelo">La Ferrari Coupe</h3>
+                                        <!--
                                         <div class="d-flex">
                                             <div class="star-rating"></div>
                                             <a href="#review" class="review_link">324 avaliações</a>
                                         </div>
+                                        -->
                                     </div>
                                     <div class="right">
                                         <h4 id="preco" style="inline-size: 250px; text-align:right">R$ 160.000,00</h4>
                                     </div>
                                 </div>
+                                <!--
                                 <div class="product_info">
                                     <a class="popup-with-zoom-anim" href="#getinfoPopup"><i
                                             class="icon-info1"></i>Solicitar Mais Informações</a>
@@ -184,6 +187,7 @@
                                     </a>
                                     <a href="#"><i class="icon-share1"></i>Compartilhar este carro</a>
                                 </div>
+                                -->
                                 <div class="product_d_slider">
                                     <div class="product_main_slider">
                                         <div class="item">
@@ -258,8 +262,14 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="product_list_right">
+                                <!--
                                 <a class="main_btn red popup-with-zoom-anim" href="#offerPopup">Faça uma oferta de
-                                    preço</a>
+                                    preço</a> -->
+
+                                <h6 id="nome_vendedor">Nome Vendedor</h6>
+ 
+                                <a class="red" style="font-size: 10pt;" id="avaliacao_vendedor">Avaliações vendedor</a>
+
                                 <a class="main_btn red popup-with-zoom-anim" href="#tradePopup">Fale com o Vendedor</a>
                                 <ul class="nav flex-column">
                                     <li><a><i class="icon-clock_2"></i>Data <span id="data">12 julho de
@@ -636,6 +646,7 @@
             <!--================End Product Details Area =================-->
             
             <!--================Related Cars Area =================-->
+            <!--
             <section class="related_cars_area p_100">
                 <div class="container">
                     <div class="flag_center_title wow animated fadeInUp" data-wow-delay="0.2s">
@@ -717,6 +728,7 @@
                     </div>
                 </div>
             </section>
+            -->
             <!--================End Related Cars Area =================-->
         </div>
     </div>
@@ -1042,6 +1054,7 @@
     </div>
     <div class="main_contact_inner trade_container zoom-anim-dialog mfp-hide" id="tradePopup">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <!--
             <li class="nav-item">
                 <a class="nav-link active" id="vehicle-tab" data-toggle="tab" href="#vehicle" role="tab"
                     aria-controls="vehicle" aria-selected="true">Vehicle Information</a>
@@ -1050,12 +1063,14 @@
                 <a class="nav-link" id="condition-tab" data-toggle="tab" href="#condition" role="tab"
                     aria-controls="condition" aria-selected="false">Vehicle Condition</a>
             </li>
+            -->
             <li class="nav-item">
                 <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
-                    aria-controls="contact" aria-selected="false">Contact Detials</a>
+                    aria-controls="contact" aria-selected="false">Contatar</a>
             </li>
         </ul>
         <div class="tab-content" id="myTabContent">
+            <!--
             <div class="tab-pane fade show active" id="vehicle" role="tabpanel" aria-labelledby="vehicle-tab">
                 <form class="row contact_form form_trade" action="#" method="post">
                     <div class="form-group col-md-4">
@@ -1392,24 +1407,15 @@
                     <button type="submit" value="submit" class="btn submit_btn red form-control">Contact</button>
                 </form>
             </div>
-            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                <form class="row contact_form form_trade" action="#" method="post">
-                    <div class="form-group col-md-4">
-                        <input type="text" class="form-control" id="name3" name="name" placeholder="Name">
-                    </div>
-                    <div class="form-group col-md-4">
-                        <input type="text" class="form-control" id="phone4" name="phone4" placeholder="Phone">
-                    </div>
-                    <div class="form-group col-md-4">
-                        <input type="number" class="form-control" id="email4" name="email4" placeholder="Email">
+            -->
+            <div class="tab-pane fade show active" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                <form class="row contact_form form_trade" id="enviar_mensagem">
+                    <div class="form-group col-md-12">
+                        <textarea class="form-control" name="messages" id="mensagem" rows="1"
+                            placeholder="Mensagem"></textarea>
                     </div>
                     <div class="form-group col-md-12">
-                        <textarea class="form-control" name="messages" id="messages" rows="1"
-                            placeholder="Message"></textarea>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <button type="submit" value="submit" class="btn submit_btn red form-control">Submit
-                            Information</button>
+                        <button type="submit" value="submit" class="btn submit_btn red form-control" id="">Enviar Mensagem</button>
                     </div>
                 </form>
             </div>

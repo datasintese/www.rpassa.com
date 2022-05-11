@@ -2,15 +2,19 @@
 
 var UsuarioPerfil = {
     spa : null,
-    
+    menu_tela : null,
+
     Construtor() {
         this_ = this;
         var baseTela = '.spa.our_service_area.service_two.p_100.perfil_usuario';
         this.spa = $(baseTela);
-
+        this.menu_tela = 'perfil';
     },
 
     Inicializar() {
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+
         var target = this.spa.find('#usuario_config').offset().top;
         $("html, body").animate({ scrollTop: target - 80 });
 
@@ -40,9 +44,11 @@ var UsuarioPerfil = {
             Redirecionar('autenticacao.html');
             return;
         }
+        
         this.CarregarDadosUsuario();
         this.EventSolicitarCodigoAlteracaoDados();
         this.EventAlterarDadosUsuario();
+        this.EventMenuClickPerfil();
     },
 
     CarregarDadosUsuario: function () {
@@ -168,4 +174,12 @@ var UsuarioPerfil = {
             });
         });
     },
+
+    EventMenuClickPerfil : function(){
+        let this_ = this;
+        $(document.body).on('click', '#perfil-tab', function(){
+            DeletarTagQueryStringURL('menu', this_.menu_tela);
+            AdicionarTagQueryStringURL('menu', this_.menu_tela);
+        });
+    }
 }

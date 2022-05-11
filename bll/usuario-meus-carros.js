@@ -1,5 +1,6 @@
 var UsuarioMeusCarros = {
     spa : null,
+    menu_tela : null,
 
     RolamentoMeusCarros: {
         orderby: 1,
@@ -18,20 +19,34 @@ var UsuarioMeusCarros = {
     Construtor(){
         var baseTela = '.spa.our_service_area.service_two.p_100.perfil_usuario';
         this.spa = $(baseTela);
+        this.menu_tela = 'meus-carros';
     },
 
     Inicializar(){
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+
         this.CarregarComboOrdernacao();
         this.CarregarDetalhes();
         this.EventMenuClick();
         //this.EventImgFavoritoClick();
         this.EventChangeOrdenacao();
         this.EventClickPaginacao()
+
+        if('menu' in params){
+            if(params['menu'] == this.menu_tela){
+                this.spa.find('#nav_meus_carros').trigger('click');
+            }
+        }
     },
 
     EventMenuClick: async function () {
         var this_ = this;
         $(document).on('click', '#nav_meus_carros', function(event) {
+
+            DeletarTagQueryStringURL('menu', this_.menu_tela);
+            AdicionarTagQueryStringURL('menu', this_.menu_tela);
+            
             this_.CarregarComboOrdernacao();
             this_.CarregarRolamentoPadrao();
             this_.TotPaginasFor= this_.QtdPaginas;
