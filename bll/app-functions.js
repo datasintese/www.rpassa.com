@@ -305,3 +305,4 @@ function AdicionarTagQueryStringURL(tag_chave, useParamValor) {
     url = url.toString();
     window.history.replaceState({ url: url }, null, url);
 }
+

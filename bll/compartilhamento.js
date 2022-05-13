@@ -15,6 +15,7 @@ var TelaCompartilhamento = {
     },
 
     Inicializar() {
+
         this.InjectCssFiles(this.DependenciasCss());
         this.InjectJsFiles(this.DependenciasJs());
 
@@ -272,3 +273,5 @@ var TelaCompartilhamento = {
         }
     }
 }
+
+TelaCompartilhamento.Inicializar();

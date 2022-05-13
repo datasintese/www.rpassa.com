@@ -437,7 +437,7 @@ var UsuarioMeusCarros = {
                             <p>Quilometragem: <span>${meu_carro.km.split(' ')[0]}</span></p>
                         </div>
                         <div class="cat_list" style="inline-block">
-                            <a style="background:#FF2A39; color:#fff; text-decoration:none; padding:5px;" href="cadastro_carro.html?id_produto=${meu_carro.id}" class="icon-edit1"> Editar</a>
+                            <a style="background:#FF2A39; color:#fff; text-decoration:none; padding:5px;" href="cadastro-edicao-carro.html?produto=${meu_carro.id}" class="icon-edit1"> Editar</a>
                             <a style="background:#FF2A39; color:#fff; text-decoration:none; padding:5px;" href="#" class="icon-remove" id="excluir-carro" carro="${meu_carro.id}"> Excluir</a>
                         </div>
                     </div>
