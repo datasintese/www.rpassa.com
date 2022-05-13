@@ -192,24 +192,24 @@
         <!--================End Breadcrumb Area =================-->
         
         <!--================Main contact Area =================-->
-        <section class="main_contact_area p_100" style="padding-top: 30px;">
+        <section class="spa main_contact_area p_100 fale-conosco" style="padding-top: 30px;">
         	<div class="container">
         		<div class="flag_center_title wow animated fadeInUp" data-wow-delay="0.2s">
         			<h5>Dúvidas, sugestões ou comentários? Preencha o formulário abaixo que, em breve, entraremos em contato.</h5>
         		</div>
         		<div class="main_contact_inner">
-        			<form class="row contact_form" action="contact_process.php" method="post" id="contactForm" novalidate="novalidate">
+        			<form class="row contact_form" id="fale-conosco-formulario">
 						<div class="form-group col-md-4">
-							<input type="text" class="form-control" id="name" name="name" placeholder="Nome">
+							<input type="text" class="form-control" id="nome" placeholder="Nome" required>
 						</div>
 						<div class="form-group col-md-4">
-							<input type="text" class="form-control" id="number" name="number" placeholder="Telefone">
+							<input type="text" class="form-control" id="telefone" placeholder="Telefone" required>
 						</div>
 						<div class="form-group col-md-4">
-							<input type="email" class="form-control" id="email" name="email" placeholder="Email">
+							<input type="email" class="form-control" id="email" placeholder="Email" required>
 						</div>
 						<div class="form-group col-md-12">
-							<textarea class="form-control" name="message" id="message" rows="1" placeholder="Mensagem"></textarea>
+							<textarea class="form-control" name="message" id="mensagem" rows="1" placeholder="Mensagem" required></textarea>
 						</div>
 						<div class="form-group col-md-12">
 							<button type="submit" value="submit" class="btn submit_btn red form-control">Enviar</button>
@@ -413,5 +413,14 @@
         <script src="js/contact.js"></script>
         
         <script src="js/theme-dist.js"></script>
+
+		<!--RPassa-->
+		<script src="js/sweetalert2.all.min.js"></script>
+		<script src="bll/app-settings.js"></script>
+		<script src="bll/app-functions.js"></script>
+		<script src="js/jquery.inputmask.min.js"></script>
+		<script src="bll/rodape.js"></script>
+		<script src="bll/contato.js"></script>
+		<!--RPassa-->
     </body>
 </html>

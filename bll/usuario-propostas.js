@@ -90,6 +90,7 @@ var UsuarioProposta = {
     EventMenuPropostaClick: function () {
         var this_ = this;
         this_.spa.find("#nav_propostas").click(function () {
+            clearInterval(this_.Intervalo);
 
             DeletarTagQueryStringURL('menu', this_.menu_tela);
             AdicionarTagQueryStringURL('menu', this_.menu_tela);
@@ -97,19 +98,23 @@ var UsuarioProposta = {
             this_.spa.find("#historico_proposta").empty();
             this_.spa.find("#historico_mensagem").empty();
             this_.spa.find("#cabecalho_proposta").empty();
+            this_.spa.find('.envio_mensagem').val('');
+            this_.spa.find('.form-control.envio_mensagem').attr('disabled', true);
 
+            this_.chave = null;
             this_.proposta = [];
 
             this_.RolamentoMensagens.offset = 0;
             this_.RolamentoMensagens.lote = 15;
-            this_.RolamentoMensagens.next_offset = null;
+            this_.RolamentoMensagens.next_offset = 0;
 
             this_.RolamentoHistoricoChat.offset = 0;
             this_.RolamentoHistoricoChat.lote = 15;
-            this_.RolamentoHistoricoChat.next_offset = null;
+            this_.RolamentoHistoricoChat.next_offset = 0;
             this_.RolamentoHistoricoChat.usuario_principal = null;
 
             this_.ObterHistoricoProposta();
+
         });
     },
     
@@ -135,7 +140,7 @@ var UsuarioProposta = {
             let res = this_.proposta[this_.chave];
 
             if(res.status_anuncio != 'PUBLICO'){
-                this_.spa.find('.form-control.envio_mensagem').attr('disabled', false);
+                this_.spa.find('.form-control.envio_mensagem').attr('disabled', true);
             }else{
                 this_.spa.find('.form-control.envio_mensagem').attr('disabled', false);
             }
@@ -165,7 +170,9 @@ var UsuarioProposta = {
     EventEnvioButton : function(){
         let this_ = this;
         $(document).on('click', '#envio-button', function(event){
+            event.preventDefault();
             let mensagem = this_.spa.find('.envio_mensagem').val();
+            mensagem = mensagem.trim();
             if (mensagem != '') {
                 this_.EnviarMensagem(mensagem);
                 this_.spa.find('.envio_mensagem').val('');
@@ -177,8 +184,10 @@ var UsuarioProposta = {
         var this_ = this;
         
         $(document).on('keydown', '.envio_mensagem', function(event){
-            if (event.code === 'Enter') {
+            if (event.code === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
                 let mensagem = $(this).val();
+                mensagem = mensagem.trim();
                 if (mensagem != '') {
                     this_.EnviarMensagem(mensagem);
                     $(this).val('');
@@ -279,6 +288,9 @@ var UsuarioProposta = {
     ObterMensagensProposta: function (chave, isRolamento) {
         var this_ = this;
         let obj = this_.proposta[chave];
+        if(obj == null || obj == undefined){
+            return;
+        }
         $.ajax({
             url: StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/proposta/mensagens/historico?offset=' + this_.RolamentoMensagens.offset + '&lote=' + this_.RolamentoMensagens.lote + '&produto_id=' + obj.id_produto,
             type: 'GET', cache: false, async: false, dataType: 'json',

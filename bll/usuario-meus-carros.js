@@ -31,7 +31,8 @@ var UsuarioMeusCarros = {
         this.EventMenuClick();
         //this.EventImgFavoritoClick();
         this.EventChangeOrdenacao();
-        this.EventClickPaginacao()
+        this.EventClickPaginacao();
+        this.EventClickExcluirCarro();
 
         if('menu' in params){
             if(params['menu'] == this.menu_tela){
@@ -64,6 +65,19 @@ var UsuarioMeusCarros = {
                 return;
             }
             this_.FavoritarDesfavoritar(this);
+        });
+    },
+
+    EventClickExcluirCarro : function(){
+        let this_ = this;
+
+        $(document.body).on('click', '#excluir-carro', function(event){
+            event.preventDefault();
+            let produto_id = $(this).attr('carro');
+            Mensagem('Deseja realmente excluir esse anúncio?', 'question', function(){
+                this_.spa.find(`div[produto_id="${produto_id}"]`).remove();
+                this_.ExcluirCarro(produto_id);
+            });
         });
     },
 
@@ -327,6 +341,33 @@ var UsuarioMeusCarros = {
         this_.PaginaAtual = pagina;
     },
 
+    ExcluirCarro : function(produto_id){
+        $.ajax({
+            url: StorageGetItem("api") + '/v1/mobile/carros/' + produto_id,
+            type: "DELETE", cache: false, async: true, dataType: 'json',
+            headers: {
+                Authorization: 'Bearer ' + StorageGetItem("token")
+            },
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function (result, textStatus, request) {
+                Mensagem('Anúncio excluido com êxito!', 'success');
+            },
+            error: function (request, textStatus, errorThrown) {
+                //console.log(errorThrown);
+                /*
+                if (!MensagemErroAjax(request, errorThrown)) {
+                    try {
+                        var obj = $.parseJSON(request.responseText)
+                        Mensagem(obj.mensagem, 'error');
+                    } catch (error) {
+                        Mensagem(request.responseText, 'error');
+                    }
+                }
+                */
+            }
+        });
+    },
+
     FavoritarDesfavoritar: function (ref) {
         let produto = $(ref).closest('div[produto_id]').attr('produto_id');
         let isfavorito = $(ref).attr('isfavorito') == "true";
@@ -397,7 +438,7 @@ var UsuarioMeusCarros = {
                         </div>
                         <div class="cat_list" style="inline-block">
                             <a style="background:#FF2A39; color:#fff; text-decoration:none; padding:5px;" href="cadastro_carro.html?id_produto=${meu_carro.id}" class="icon-edit1"> Editar</a>
-                            <a style="background:#FF2A39; color:#fff; text-decoration:none; padding:5px;" href="#" class="icon-remove"> Excluir</a>
+                            <a style="background:#FF2A39; color:#fff; text-decoration:none; padding:5px;" href="#" class="icon-remove" id="excluir-carro" carro="${meu_carro.id}"> Excluir</a>
                         </div>
                     </div>
                 </div>`
