@@ -448,6 +448,7 @@ var DetalhesCarro = {
                 this_.vendedor_id = result.usuario_id
                 this_.spa.find('#nome_vendedor').html(result.nome);
                 this_.spa.find('#avaliacao_vendedor').attr('href', 'avaliacao_vendedor.html?id_vendedor=' + result.usuario_id);
+                this_.spa.find('#carros_vendedor').attr('href', 'pesquisa-carro.html?vendedor=' + result.usuario_id + "&nome=" + result.nome);
                 this_.spa.find('#marca_modelo').html(result.marca + ' - ' + result.modelo);
                 this_.spa.find('#preco').html(result.preco);
                 this_.spa.find('#sobre').html(result.avarias);

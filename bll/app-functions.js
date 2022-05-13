@@ -79,7 +79,7 @@ function LogOut(func_exec) {
     });
 }
 
-$('#logout').on('click', function (event) {
+$(document.body).on('click', '#logout', function (event) {
     LogOut(function () { Redirecionar('autenticacao.html'); })
 });
 

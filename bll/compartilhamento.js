@@ -48,6 +48,25 @@ var TelaCompartilhamento = {
             event.preventDefault();
             TelaCompartilhamento.ExibirTela($(this).attr('data-url-compartilhar'));
         });
+
+        // verificar se esta logado
+        let area_autenticacao = $('#area-autenticacao');
+        area_autenticacao.empty();
+        if(Logado()){
+            area_autenticacao.append(
+            `
+                <a class="btn btn-outline-secondary" href="usuario.html">Area do usuário</a>
+            `);
+            area_autenticacao.append(
+            `
+                <a class="btn btn-outline-secondary" id="logout">Sair</a>
+            `);
+        }else{
+            area_autenticacao.append(
+            `
+                <a class="btn btn-outline-secondary" href="autenticacao.html">Entrar ou Cadastrar</a>
+            `);
+        }
     },
 
     DependenciasCss: function () {

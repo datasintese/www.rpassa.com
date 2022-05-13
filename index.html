@@ -7,11 +7,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="icon" href="img/favicon-red.png" type="image/png">
 	<title>Tudo que Passa, RPassa.</title>
+
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/font-awesome.min.css">
 	<link rel="stylesheet" href="vendors/icomoon-icon/style.css">
 	<link rel="stylesheet" href="vendors/themify-icon/themify-icons.css">
+
 	<!-- Extra Plugin CSS -->
 	<link rel="stylesheet" href="vendors/datetimepicker/tempusdominus-bootstrap-4.min.css">
 	<link rel="stylesheet" href="vendors/nice-select/css/nice-select.css">
@@ -20,8 +22,9 @@
 	<link rel="stylesheet" href="vendors/slick/slick.css">
 	<link rel="stylesheet" href="vendors/animation/animate.css">
 	<link rel="stylesheet" href="vendors/popup/magnific-popup.css">
-	<link rel="stylesheet" href="vendors/animate-css/animate.css">
-	<!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"> -->
+	<link rel="stylesheet" href="vendors/animate-css/animate.css">-->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
 
 	<!-- main css -->
 	<link rel="stylesheet" href="css/style.css">
@@ -65,7 +68,7 @@
 						aria-expanded="false" aria-label="Toggle navigation">
 						<span></span>
 					</button>
-					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<div class="collapse navbar-collapse " id="navbarSupportedContent">
 						<ul class="nav navbar-nav menu_nav mr-auto">
 							<li class="dropdown mega_menu active">
 								<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
@@ -87,9 +90,22 @@
 							</li>
 							<li class="dropdown submenu">
 								<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+									aria-haspopup="true" aria-expanded="false">Comprar</a>
+								<ul class="dropdown-menu">
+									<li><a href="pesquisa-carro.html?carro=Carro Novo">Carros novos</a></li>
+									<li><a href="pesquisa-carro.html">Carros novos ou usados</a></li>
+									<li><a href="pesquisa-carro.html?carro=Alienado">Carros alienados</a></li>
+								</ul>
+							</li>
+							<li><a href="cadastro-edicao-carro.html">Vender</a></li>
+							<li><a href="fale-conosco.html">Fale conosco</a></li>
+							<li><a href="sobre-nos.html">Sobre nós</a></li>
+							<!--
+							<li class="dropdown submenu">
+								<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
 									aria-haspopup="true" aria-expanded="false">Navegação</a>
 								<ul class="dropdown-menu">
-									<li><a href="#">Sobre Nós</a></li>
+									<li><a href="sobre-nos.html">Sobre Nós</a></li>
 									<li><a href="#">Financiamento</a></li>
 									<li><a href="#">Perguntas Frequentes</a></li>
 									<li><a href="#">Depoimentos</a></li>
@@ -98,6 +114,8 @@
 									<li><a href="#" id="logout">Sair</a></li>
 								</ul>
 							</li>
+							-->
+							<!--
 							<li class="dropdown submenu">
 								<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
 									aria-haspopup="true" aria-expanded="false">Serviços</a>
@@ -107,18 +125,8 @@
 									<li><a href="#">Serviço 3</a></li>
 								</ul>
 							</li>
-							<li class="dropdown submenu">
-								<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
-									aria-haspopup="true" aria-expanded="false">Comprar</a>
-								<ul class="dropdown-menu">
-									<li><a href="#">Carros</a></li>
-									<li><a href="#">Motocicletas</a></li>
-									<li><a href="#">Embarcações</a></li>
-									<li><a href="#">Aeronaves</a></li>
-									<li><a href="#">Imóveis</a></li>
-								</ul>
-							</li>
-							<li><a href="contato.html">Venda</a></li>
+							-->
+							<!--
 							<li class="dropdown submenu">
 								<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
 									aria-haspopup="true" aria-expanded="false">Repassa</a>
@@ -130,12 +138,14 @@
 									<li><a href="#">Imóveis</a></li>
 								</ul>
 							</li>
+							-->
 						</ul>
+
 						<ul class="nav navbar-nav navbar-right">
-							<li class="search_icon"><a class="search popup-with-zoom-anim" href="#test-search"><i
-								class="icon-search1"></i></a></li>
-							<li class="search_icon"><a href="usuario.html"><i class="icon-user-circle" heigh="32" width="32"></i></a></li>
+							<li class="search_icon woo-top-cart"><a class="cart cart_bag_btn motodeal-woo-top-cart-count" href="#"><i class="icon-user-circle" heigh="32" width="32"></i></a></li>
+							</li>
 						</ul>
+
 					</div>
 				</nav>
 			</div>
@@ -961,12 +971,12 @@
 								<h3>Navegação</h3>
 							</div>
 							<ul class="nav flex-column">
-								<li><a href="#">Sobre Nós</a></li>
-								<li><a href="#">Financiamento</a></li>
-								<li><a href="#">Perguntas Frequentes</a></li>
+								<li><a href="sobre-nos.html">Sobre Nós</a></li>
+								<!--<li><a href="#">Financiamento</a></li>-->
+								<!--<li><a href="#">Perguntas Frequentes</a></li>-->
 								<li><a href="#">Depoimentos</a></li>
-								<li><a href="#">Cadastre-se</a></li>
-								<li><a href="#">Área do Cliente</a></li>
+								<li><a href="cadastro.html">Cadastre-se</a></li>
+								<!--<li><a href="#">Área do Cliente</a></li>-->
 							</ul>
 						</aside>
 					</div>
@@ -976,8 +986,8 @@
 								<h3>Informação Legal</h3>
 							</div>
 							<ul class="nav flex-column">
-								<li><a href="politica_privacidade.html">Política de Privacidade</a></li>
-								<li><a href="termos_uso.html">Termos e Condições</a></li>
+								<li><a href="politica-privacidade.html">Política de Privacidade</a></li>
+								<li><a href="termos-uso.html">Termos e Condições</a></li>
 							</ul>
 						</aside>
 					</div>
@@ -997,10 +1007,10 @@
 									</div>
 								</div>
 								<ul class="nav">
-									<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-									<li><a href="#"><i class="fa fa-youtube"></i></a></li>
-									<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-									<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+									<li><a href="https://www.facebook.com/" target="_blank" rel="nofollow"><i aria-hidden="true" class="fab fa-facebook-f"></i></a></li> 
+									<li><a href="https://www.youtube.com/" target="_blank" rel="nofollow"><i aria-hidden="true" class=" icon-youtube"></i></a></li> 
+									<li><a href="https://twitter.com/?lang=en" target="_blank" rel="nofollow"><i aria-hidden="true" class="fab fa-twitter"></i></a></li> 
+									<li><a href="https://www.google.com/" target="_blank" rel="nofollow"><i aria-hidden="true" class="fab fa-google-plus-g"></i></a></li> 
 								</ul>
 							</aside>
 						</form>
@@ -1008,13 +1018,16 @@
 				</div>
 			</div>
 		</div>
+		<!--
 		<div class="footer_card wow animated fadeIn" data-wow-delay="0.2s">
 			<div class="container">
 				<div class="f_card_inner d-flex justify-content-between">
+					
 					<div class="left">
 						Torne-se usuário premium e tenha acesso as melhores ofertas.<br>Você pode pagar através dos
 						cartões de crédito e débito.
 					</div>
+					
 					<div class="right">
 						<ul class="nav">
 							<li><a href="#"><img src="img/icon/card-1.png" alt=""></a></li>
@@ -1026,6 +1039,7 @@
 				</div>
 			</div>
 		</div>
+		-->
 		<div class="footer_copyright">
 			<div class="container">
 				<div class="copyright_inner d-flex justify-content-between">
@@ -1034,9 +1048,9 @@
 					</div>
 					<div class="right">
 						<ul class="nav">
-							<li><a href="#">Termos e Condições</a></li>
+							<li><a href="termos-uso.html">Termos e Condições</a></li>
 
-							<li><a href="#">Política de Privacidade</a></li>
+							<li><a href="politica-privacidade.html">Política de Privacidade</a></li>
 						</ul>
 					</div>
 				</div>
@@ -1047,38 +1061,19 @@
 
 	<!--================Cart Sidebar Area =================-->
 	<div class="cart_sidebar">
-		<div class="cart_sidebar_inner">
+		<div class="cart_sidebar_inner" style="width:230px; height:30%;">
 			<div class="sidebar_top">
 				<div class="top_bar d-flex justify-content-between">
-					<h3>Shopping Cart</h3>
+					<h3>Usuário</h3>
 					<div class="cart_close_btn">
-						<p>Close <i class="ti-minus"></i></p>
+						<p>Fechar <i class="ti-minus"></i></p>
 					</div>
 				</div>
-				<div class="cart_side_list">
-					<div class="media">
-						<div class="d-flex"><img src="img/product/cart-details/cart-1.jpg" alt=""></div>
-						<div class="media-body">
-							<h4>Smart light wood edition</h4>
-							<p>1 x <span>$40.00</span></p>
-							<i class="ti-close"></i>
-						</div>
-					</div>
-					<div class="media">
-						<div class="d-flex"><img src="img/product/cart-details/cart-1.jpg" alt=""></div>
-						<div class="media-body">
-							<h4>Smart light wood edition</h4>
-							<p>1 x <span>$40.00</span></p>
-							<i class="ti-close"></i>
-						</div>
+				<div class="cart_side_list" >
+					<div class="media" id="area-autenticacao">
+						<a class="btn btn-outline-secondary" href="">Entrar ou Cadastrar</a>
 					</div>
 				</div>
-			</div>
-			<div class="sidebar_bottom">
-				<h5>Sub Total</h5>
-				<h6>$200.00</h6>
-				<a class="main_btn red border" href="#">View Cart</a>
-				<a class="main_btn red" href="#">Checkout</a>
 			</div>
 		</div>
 	</div>

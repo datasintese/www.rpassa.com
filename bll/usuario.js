@@ -18,25 +18,4 @@
     UsuarioProposta.Construtor();
     UsuarioProposta.Inicializar();
 
-
-    $(document.body).on('click', '#perfil-tab', function(){
-
-    });
-
-    $(document.body).on('click', '#profile-tab', function(){
-
-    });
-
-    $(document.body).on('click', '#nav_favorito', function(){
-
-    });
-
-    $(document.body).on('click', '#nav_meus_carros', function(){
-
-    });
-
-    $(document.body).on('click', '#nav_propostas', function(){
-
-    });
-
 })(jQuery)
