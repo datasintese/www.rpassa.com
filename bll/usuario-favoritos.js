@@ -1,5 +1,6 @@
 var UsuarioFavorito = {
     spa : null,
+    menu_tela : null,
 
     RolamentoFavoritos : {
         orderby: 1,
@@ -19,20 +20,34 @@ var UsuarioFavorito = {
     Construtor(){
         var baseTela = '.spa.our_service_area.service_two.p_100.perfil_usuario';
         this.spa = $(baseTela);
+        this.menu_tela = 'favoritos'
     },
 
     Inicializar(){
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+
         this.CarregarComboOrdernacao();
         this.CarregarDetalhesFavorito();
         this.EventMenuFavoritoClick();
         this.EventImgFavoritoClick();
         this.EventChangeOrdenacao();
         this.EventClickPaginacao();
+
+        if('menu' in params){
+            if(params['menu'] == this.menu_tela){
+                this.spa.find('#nav_favorito').trigger('click');
+            }
+        }
     },
 
     EventMenuFavoritoClick: async function () {
         var this_ = this;
         $(document).on('click', '#nav_favorito', function(){
+            
+            DeletarTagQueryStringURL('menu', this_.menu_tela);
+            AdicionarTagQueryStringURL('menu', this_.menu_tela);
+
             this_.CarregarComboOrdernacao();
             this_.CarregarRolamentoFavoritoPadrao();
             this_.TotPaginasFor= this_.QtdPaginasFavoritos;
@@ -379,11 +394,6 @@ var UsuarioFavorito = {
                             <h5>${favorito.preco}</h5>
                             <p>Ano/Modelo: <span>${favorito.ano}</span></p>
                             <p>Quilometragem: <span>${favorito.km.split(' ')[0]}</span></p>
-                        </div>
-                        <div class="text_footer">
-                            <a href="#"><i class="icon-engine"></i> 2500</a>
-                            <a href="#"><i class="icon-gear1"></i> Manual</a>
-                            <a href="#"><i class="icon-oil"></i>20/24</a>
                         </div>
                     </div>
                 </div>`

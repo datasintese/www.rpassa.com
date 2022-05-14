@@ -1,5 +1,6 @@
 var UsuarioMeusCarros = {
     spa : null,
+    menu_tela : null,
 
     RolamentoMeusCarros: {
         orderby: 1,
@@ -18,20 +19,35 @@ var UsuarioMeusCarros = {
     Construtor(){
         var baseTela = '.spa.our_service_area.service_two.p_100.perfil_usuario';
         this.spa = $(baseTela);
+        this.menu_tela = 'meus-carros';
     },
 
     Inicializar(){
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+
         this.CarregarComboOrdernacao();
         this.CarregarDetalhes();
         this.EventMenuClick();
         //this.EventImgFavoritoClick();
         this.EventChangeOrdenacao();
-        this.EventClickPaginacao()
+        this.EventClickPaginacao();
+        this.EventClickExcluirCarro();
+
+        if('menu' in params){
+            if(params['menu'] == this.menu_tela){
+                this.spa.find('#nav_meus_carros').trigger('click');
+            }
+        }
     },
 
     EventMenuClick: async function () {
         var this_ = this;
         $(document).on('click', '#nav_meus_carros', function(event) {
+
+            DeletarTagQueryStringURL('menu', this_.menu_tela);
+            AdicionarTagQueryStringURL('menu', this_.menu_tela);
+            
             this_.CarregarComboOrdernacao();
             this_.CarregarRolamentoPadrao();
             this_.TotPaginasFor= this_.QtdPaginas;
@@ -49,6 +65,19 @@ var UsuarioMeusCarros = {
                 return;
             }
             this_.FavoritarDesfavoritar(this);
+        });
+    },
+
+    EventClickExcluirCarro : function(){
+        let this_ = this;
+
+        $(document.body).on('click', '#excluir-carro', function(event){
+            event.preventDefault();
+            let produto_id = $(this).attr('carro');
+            Mensagem('Deseja realmente excluir esse anúncio?', 'question', function(){
+                this_.spa.find(`div[produto_id="${produto_id}"]`).remove();
+                this_.ExcluirCarro(produto_id);
+            });
         });
     },
 
@@ -312,6 +341,33 @@ var UsuarioMeusCarros = {
         this_.PaginaAtual = pagina;
     },
 
+    ExcluirCarro : function(produto_id){
+        $.ajax({
+            url: StorageGetItem("api") + '/v1/mobile/carros/' + produto_id,
+            type: "DELETE", cache: false, async: true, dataType: 'json',
+            headers: {
+                Authorization: 'Bearer ' + StorageGetItem("token")
+            },
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function (result, textStatus, request) {
+                Mensagem('Anúncio excluido com êxito!', 'success');
+            },
+            error: function (request, textStatus, errorThrown) {
+                //console.log(errorThrown);
+                /*
+                if (!MensagemErroAjax(request, errorThrown)) {
+                    try {
+                        var obj = $.parseJSON(request.responseText)
+                        Mensagem(obj.mensagem, 'error');
+                    } catch (error) {
+                        Mensagem(request.responseText, 'error');
+                    }
+                }
+                */
+            }
+        });
+    },
+
     FavoritarDesfavoritar: function (ref) {
         let produto = $(ref).closest('div[produto_id]').attr('produto_id');
         let isfavorito = $(ref).attr('isfavorito') == "true";
@@ -381,8 +437,8 @@ var UsuarioMeusCarros = {
                             <p>Quilometragem: <span>${meu_carro.km.split(' ')[0]}</span></p>
                         </div>
                         <div class="cat_list" style="inline-block">
-                            <a style="background:#FF2A39; color:#fff; text-decoration:none; padding:5px;" href="cadastro_carro.html?id_produto=${meu_carro.id}" class="icon-edit1"> Editar</a>
-                            <a style="background:#FF2A39; color:#fff; text-decoration:none; padding:5px;" href="#" class="icon-remove"> Excluir</a>
+                            <a style="background:#FF2A39; color:#fff; text-decoration:none; padding:5px;" href="cadastro-edicao-carro.html?produto=${meu_carro.id}" class="icon-edit1"> Editar</a>
+                            <a style="background:#FF2A39; color:#fff; text-decoration:none; padding:5px;" href="#" class="icon-remove" id="excluir-carro" carro="${meu_carro.id}"> Excluir</a>
                         </div>
                     </div>
                 </div>`

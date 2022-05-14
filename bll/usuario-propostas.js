@@ -4,6 +4,7 @@ var UsuarioProposta = {
     proposta : [],
     palavra_chave : "result",
     chave : null,
+    menu_tela : null,
     
     scrollAnterior : null, // Paginação da mensagem
 
@@ -30,23 +31,38 @@ var UsuarioProposta = {
     Construtor(){
         var baseTela = '.spa.our_service_area.service_two.p_100.perfil_usuario';
         this.spa = $(baseTela);
+        this.menu_tela = 'minhas-propostas';
     },
 
     Inicializar(){
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+
         this.spa.find("#historico_proposta").empty();
         this.EventMenuPropostaClick();
         this.EventObterMensagemUsuarioSelecionado();
         this.EventEscutarScrollHistoricoProposta();
         this.EventEscutarScrollHistoricoMensagem();
         this.EventEnviarMensagem();
+        this.EventEnvioButton();
         this.CarregarDetalhesProposta();
+
+        if('menu' in params){
+            if(params['menu'] == this.menu_tela){
+                this.spa.find('#nav_propostas').trigger('click');
+            }
+        }
+
+        if('vendedor' in params && 'carro' in params){
+            $(`li[vendedor="${params['vendedor']}"][carro="${params['carro']}"]`).trigger('click');
+        }
     },
 
     CarregarDetalhesProposta: function () {
         var this_ = this;
         $.ajax({
             url: StorageGetItem("api") + '/v1/usuarios',
-            type: "GET", cache: false, async: true, dataType: 'json',
+            type: "GET", cache: false, async: false, dataType: 'json',
             headers: {
                 Authorization: 'Bearer ' + StorageGetItem("token")
             },
@@ -74,23 +90,31 @@ var UsuarioProposta = {
     EventMenuPropostaClick: function () {
         var this_ = this;
         this_.spa.find("#nav_propostas").click(function () {
+            clearInterval(this_.Intervalo);
+
+            DeletarTagQueryStringURL('menu', this_.menu_tela);
+            AdicionarTagQueryStringURL('menu', this_.menu_tela);
 
             this_.spa.find("#historico_proposta").empty();
             this_.spa.find("#historico_mensagem").empty();
             this_.spa.find("#cabecalho_proposta").empty();
+            this_.spa.find('.envio_mensagem').val('');
+            this_.spa.find('.form-control.envio_mensagem').attr('disabled', true);
 
+            this_.chave = null;
             this_.proposta = [];
 
             this_.RolamentoMensagens.offset = 0;
             this_.RolamentoMensagens.lote = 15;
-            this_.RolamentoMensagens.next_offset = null;
+            this_.RolamentoMensagens.next_offset = 0;
 
             this_.RolamentoHistoricoChat.offset = 0;
             this_.RolamentoHistoricoChat.lote = 15;
-            this_.RolamentoHistoricoChat.next_offset = null;
+            this_.RolamentoHistoricoChat.next_offset = 0;
             this_.RolamentoHistoricoChat.usuario_principal = null;
 
             this_.ObterHistoricoProposta();
+
         });
     },
     
@@ -113,6 +137,14 @@ var UsuarioProposta = {
         $(document).on('click', 'li.clearfix.conversa', function (event) {
             this_.chave = $(this).attr('id');
 
+            let res = this_.proposta[this_.chave];
+
+            if(res.status_anuncio != 'PUBLICO'){
+                this_.spa.find('.form-control.envio_mensagem').attr('disabled', true);
+            }else{
+                this_.spa.find('.form-control.envio_mensagem').attr('disabled', false);
+            }
+            
             this_.RolamentoMensagens.offset = 0;
             this_.RolamentoMensagens.lote = 15;
             this_.RolamentoMensagens.next_offset = null;
@@ -135,12 +167,27 @@ var UsuarioProposta = {
         });
     },
 
+    EventEnvioButton : function(){
+        let this_ = this;
+        $(document).on('click', '#envio-button', function(event){
+            event.preventDefault();
+            let mensagem = this_.spa.find('.envio_mensagem').val();
+            mensagem = mensagem.trim();
+            if (mensagem != '') {
+                this_.EnviarMensagem(mensagem);
+                this_.spa.find('.envio_mensagem').val('');
+            }
+        });
+    },
+
     EventEnviarMensagem: function () {
         var this_ = this;
         
         $(document).on('keydown', '.envio_mensagem', function(event){
-            if (event.keyCode === 13) {
+            if (event.code === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
                 let mensagem = $(this).val();
+                mensagem = mensagem.trim();
                 if (mensagem != '') {
                     this_.EnviarMensagem(mensagem);
                     $(this).val('');
@@ -154,7 +201,7 @@ var UsuarioProposta = {
         const atividadeLocal = this_.UltimaAtivadade = new Object(); 
         $.ajax({
             url: StorageGetItem('api') + '/v1/usuarios/propostas/historico?offset=' + this_.RolamentoHistoricoChat.offset + '&lote=' + this_.RolamentoHistoricoChat.lote,
-            type: 'GET', cache: false, async: true, dataType: 'json',
+            type: 'GET', cache: false, async: false, dataType: 'json',
             headers: {
                 Authorization: 'Bearer ' + StorageGetItem("token")
             },
@@ -241,9 +288,12 @@ var UsuarioProposta = {
     ObterMensagensProposta: function (chave, isRolamento) {
         var this_ = this;
         let obj = this_.proposta[chave];
+        if(obj == null || obj == undefined){
+            return;
+        }
         $.ajax({
             url: StorageGetItem('api') + '/v1/usuarios/' + obj.usuario + '/proposta/mensagens/historico?offset=' + this_.RolamentoMensagens.offset + '&lote=' + this_.RolamentoMensagens.lote + '&produto_id=' + obj.id_produto,
-            type: 'GET', cache: false, async: true, dataType: 'json',
+            type: 'GET', cache: false, async: false, dataType: 'json',
             headers: {
                 Authorization: 'Bearer ' + StorageGetItem("token")
             },
@@ -345,10 +395,11 @@ var UsuarioProposta = {
         this_.proposta[this_.palavra_chave + historico_proposta.id] = {
             id_produto: historico_proposta.id_produto,
             usuario: this_.RolamentoHistoricoChat.usuario_principal === historico_proposta.usuario_id_de ? historico_proposta.usuario_id_para : historico_proposta.usuario_id_de,
-            nome_usuario: this_.RolamentoHistoricoChat.usuario_principal === historico_proposta.usuario_id_de ? historico_proposta.nome_para : historico_proposta.nome_de
+            nome_usuario: this_.RolamentoHistoricoChat.usuario_principal === historico_proposta.usuario_id_de ? historico_proposta.nome_para : historico_proposta.nome_de,
+            status_anuncio: historico_proposta.status_anuncio
         };
 
-        return `<li class="clearfix conversa" id="${this_.palavra_chave + historico_proposta.id}">
+        return `<li class="clearfix conversa" id="${this_.palavra_chave + historico_proposta.id}" carro="${historico_proposta.id_produto}" vendedor="${this_.proposta[this_.palavra_chave + historico_proposta.id].usuario}">
             <img src="${url_imagem}" alt="avatar">
             <div class="about">
                 <div class="name">${this_.proposta[this_.palavra_chave + historico_proposta.id].nome_usuario}</div>

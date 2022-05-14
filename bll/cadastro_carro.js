@@ -69,9 +69,9 @@ var CadastroCarro = {
 
         
 
-        if('id_produto' in param_query){
+        if('produto' in param_query){
             // Edição
-            this.id_produto = param_query['id_produto'];
+            this.id_produto = param_query['produto'];
             this.ObterDetalhesCarro(this.id_produto );
         }
         

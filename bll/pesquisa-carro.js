@@ -69,6 +69,8 @@ var PesquisaCarro = {
                 let modelo = null;
                 let versao = null;
                 let pesquisar = null;
+                let vendedor = null;
+                let nome_vendedor = null;
 
                 let objSelecaoMult = new Map();
 
@@ -101,6 +103,11 @@ var PesquisaCarro = {
                         versao = values[0];
                     else if (param == 'pesquisar')
                         pesquisar = values[0];
+                    else if (param == 'vendedor')
+                        vendedor = values[0];
+                    else if (param == 'nome'){
+                        nome_vendedor = values[0];
+                    }
                     else {
                         objSelecaoMult.set(param, []);
                         $.each(values, function (idx, valueSplit) {
@@ -281,7 +288,14 @@ var PesquisaCarro = {
                 if(pesquisar != null){
                     let valor = pesquisar.split(':');
                     if(valor != null && valor. length > 1){
-                        this_.AdicionarTagFiltroPesquisar('pesquisa:' + valor[1], valor[1], false)
+                        this_.AdicionarTagFiltro('pesquisa:' + valor[1], valor[1], false)
+                    }
+                }
+
+                if(vendedor != null){
+                    this_.AdicionarTagFiltro('vendedor', 'vendedor: ' + (nome_vendedor == null ? '' : nome_vendedor), 'vendedor_id', parseInt(vendedor), true);
+                    if(nome_vendedor != null){
+                        this_.DeletarTagQueryStringURL('nome', nome_vendedor);
                     }
                 }
 
@@ -297,8 +311,9 @@ var PesquisaCarro = {
 
                 this_.PosInicializar();
                 this_.AbortarPesquisasEmAndamento();
-                this_.CarregarPaginas(undefined,false,true,true);
-                this_.CarregarPaginas(undefined, true, false, false);
+
+                this_.CarregarPaginas(undefined,true, false, true);
+                this_.CarregarPaginas(undefined,false, false, false);
             }
         }, 10); // 10ms
         
@@ -720,7 +735,6 @@ var PesquisaCarro = {
         var url = new URL(window.location.href);
         const urlSearchParams = new URLSearchParams(window.location.search);
         const searchParams = new URLSearchParams(urlSearchParams);
-
         if (tag_legenda === null) { // Deleta a chave independente do valor
             searchParams.delete(tag_chave);
         }
@@ -736,9 +750,14 @@ var PesquisaCarro = {
                         }
                     });
                     searchParams.set(tag_chave.toLowerCase(), arr.filter(x => x != '').join(","));
+                    // Caso seja deletado todos os valores, deletar tbm o parâmetro
+                    if(arr.toString() == ''){
+                        searchParams.delete(tag_chave.toLowerCase());
+                    }
                 }
             }
         }
+
         url.search = searchParams.toString();
         url = url.toString();
         window.history.replaceState({ url: url }, null, url);
@@ -989,22 +1008,22 @@ var PesquisaCarro = {
         this.RolamentoPesquisa['orderby'] = 1;
 
         $('.nice_select#combo_estado').val(0).niceSelect('update');
-        this.RolamentoPesquisa['estados_ids'] = null;
+        //this.RolamentoPesquisa['estados_ids'] = null;
 
         $('.nice_select#combo_cidade').niceSelect('destroy');
         $('.nice_select#combo_cidade').remove();
-        this.RolamentoPesquisa['cidades_ids'] = null;
+        //this.RolamentoPesquisa['cidades_ids'] = null;
 
         $('.nice_select#combo_marca').val(0).niceSelect('update');
-        this.RolamentoPesquisa['marcas_ids'] = null;
+        //this.RolamentoPesquisa['marcas_ids'] = null;
 
         $('.nice_select#combo_modelo').niceSelect('destroy');
         $('.nice_select#combo_modelo').remove();
-        this.RolamentoPesquisa['modelos_ids'] = null;
+        //this.RolamentoPesquisa['modelos_ids'] = null;
 
         $('.nice_select#combo_versao').niceSelect('destroy');
         $('.nice_select#combo_versao').remove();
-        this.RolamentoPesquisa['versoes_ids'] = null;
+        //this.RolamentoPesquisa['versoes_ids'] = null;
 
         $("#price_wd").slider("values", 0, this.preco_min_padrao);
         $("#price_wd").slider("values", 1, this.preco_max_padrao);

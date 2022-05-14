@@ -71,6 +71,9 @@ $('.menu-segmento').on('click', function (event) {
 
 var Index = {
     Inicializar() {
+
+        area_autenticacao
+
         this.CarregarDepoimentosClientes();
     },
 

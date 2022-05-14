@@ -17,9 +17,9 @@ var AvaliacaoVendedor = {
         const urlSearchParams = new URLSearchParams(window.location.search);
         const param_query = Object.fromEntries(urlSearchParams.entries());
 
-        if('id_vendedor' in param_query){
+        if('vendedor' in param_query){
             // Edição
-            this.id_vendedor = param_query['id_vendedor'];
+            this.id_vendedor = param_query['vendedor'];
 
             this.ObterReputacaoVendedor(this.id_vendedor);
             this.ObterAvaliacoesVendedor(this.id_vendedor);
